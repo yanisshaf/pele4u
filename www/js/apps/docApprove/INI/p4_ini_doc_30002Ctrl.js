@@ -2,58 +2,39 @@
  * Created by User on 25/08/2016.
  */
 var app = angular.module('pele.p4_ini_doc_30002Ctrl', ['ngStorage']);
-app.controller('p4_ini_doc_30002Ctrl'
-  , function(  $rootScope
-    , $scope
-    , $stateParams
-    , $http
-    , $q
-    , $location
-    , $window
-    , $timeout
-    , $ionicLoading
-    , $ionicActionSheet
-    , $ionicModal
-    , PelApi
-    , $ionicNavBarDelegate
-    , $cordovaNetwork
-    , $ionicPopup
-    , appSettings
-    , $sessionStorage
-    , $cordovaFileTransfer
-    , $cordovaInAppBrowser
+app.controller('p4_ini_doc_30002Ctrl', function($rootScope, $scope, $stateParams, $http, $q, $location, $window, $timeout, $ionicLoading, $ionicActionSheet, $ionicModal, PelApi, $ionicNavBarDelegate, $cordovaNetwork, $ionicPopup, appSettings, $sessionStorage, $cordovaFileTransfer, $cordovaInAppBrowser
     /* rem by R.W 07/11/2016 , $cordovaFileOpener2 */
   ) {
 
     //---------------------------------
     //--       goHome
     //---------------------------------
-    $scope.goHome = function(){
+    $scope.goHome = function() {
       PelApi.goHome();
     }
     //------------------------------------------
     //--      getApproveListActionIcon
     //------------------------------------------
-    $scope.getApproveListActionIcon=function(actionCode , date , note){
+    $scope.getApproveListActionIcon = function(actionCode, date, note) {
 
       var icon_class;
-      if("FORWARD" === actionCode) {
+      if ("FORWARD" === actionCode) {
         icon_class = "ion-checkmark-circled";
-      }else if("FORWARD2" === actionCode) {
-        icon_class = "ion-checkmark-circled";        
-      }else if ("APPROVE" === actionCode){
+      } else if ("FORWARD2" === actionCode) {
         icon_class = "ion-checkmark-circled";
-      }else if("NO ACTION" === actionCode){
+      } else if ("APPROVE" === actionCode) {
+        icon_class = "ion-checkmark-circled";
+      } else if ("NO ACTION" === actionCode) {
         icon_class = "ion-minus-circled";
-      }else if("REJECT" === actionCode){
+      } else if ("REJECT" === actionCode) {
         icon_class = "ion-close-circled";
-      }else if(actionCode === null && date !== null && note !== null) {
+      } else if (actionCode === null && date !== null && note !== null) {
         icon_class = "ion-chatbubble-working";
-      }else if("RESERVE" === actionCode){
+      } else if ("RESERVE" === actionCode) {
         icon_class = "ion-bookmark";
-      }else if("NO_ACTION" === actionCode){
+      } else if ("NO_ACTION" === actionCode) {
         icon_class = "ion-minus-circled";
-      }else {
+      } else {
         icon_class = "";
       }
 
@@ -65,23 +46,20 @@ app.controller('p4_ini_doc_30002Ctrl'
     //---------------------------------------------------------------------------
     //--                         openExistText
     //---------------------------------------------------------------------------
-    $scope.openExistText = function(text){
+    $scope.openExistText = function(text) {
       $scope.data = {};
       $scope.data.docText1 = text;
-      if(text!== null){
+      if (text !== null) {
         var myPopup = $ionicPopup.show({
           template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" readonly="true" ng-model="data.docText1" type="text" >{{data.docText1}}</textarea></label></div>',
           title: '<a class="float-right"></a>',
           subTitle: '',
           scope: $scope,
-          buttons: [
-            {
-              text: '<a class="pele-popup-positive-text-collot">סגור</a>',
-              type: 'button-positive',
-              onTap: function (e) {
-              }
-            },
-          ]
+          buttons: [{
+            text: '<a class="pele-popup-positive-text-collot">סגור</a>',
+            type: 'button-positive',
+            onTap: function(e) {}
+          }, ]
         });
         myPopup.then(function(res) {
 
@@ -91,7 +69,7 @@ app.controller('p4_ini_doc_30002Ctrl'
     //---------------------------------------------------------------------------
     //--                         isGroupShown
     //---------------------------------------------------------------------------
-    $scope.isGroupShown = function(group){
+    $scope.isGroupShown = function(group) {
       return $scope.shownGroup === group;
     } // isGroupShown
 
@@ -110,43 +88,43 @@ app.controller('p4_ini_doc_30002Ctrl'
     //== ----------  ----------  -----------------------------------------------==//
     //== 23/02/2016  R.W.                                                       ==//
     //============================================================================//
-    $scope.addPushFlagToActionHistory = function(arr){
+    $scope.addPushFlagToActionHistory = function(arr) {
       var myArr = [];
       console.log("=============== addPushFlagToActionHistory =====================")
       console.log(arr);
-      if(arr !== null ){
+      if (arr !== null) {
         var j = arr.length;
-        for(var i = 0; i < arr.length ; i++ , j--){
+        for (var i = 0; i < arr.length; i++, j--) {
           var showFlag = false;
           var hideFlag = false;
-          if( arr[j-1].DISPLAY_FLAG === "N"){
+          if (arr[j - 1].DISPLAY_FLAG === "N") {
             showFlag = true;
-          }else if(arr[j-1].NOTE !== "" && arr[j-1].NOTE != undefined){
+          } else if (arr[j - 1].NOTE !== "" && arr[j - 1].NOTE != undefined) {
             showFlag = false;
-          }else{
+          } else {
             showFlag = true
           };
           //---------------------------------------
           //-- Calculate
           //---------------------------------------
-          var l_displayFlag = arr[j-1].DISPLAY_FLAG;
-          var l_actionCode = arr[j-1].ACTION_CODE;
-          if(arr[j-1].DISPLAY_FLAG === "N"){
+          var l_displayFlag = arr[j - 1].DISPLAY_FLAG;
+          var l_actionCode = arr[j - 1].ACTION_CODE;
+          if (arr[j - 1].DISPLAY_FLAG === "N") {
             hideFlag = true;
-          } else if((arr[j-1].ACTION_CODE === "" || arr[j-1].ACTION_CODE === undefined || arr[j-1].ACTION_CODE === null)
-            && (arr[j-1].CHAR_ACTION_DATE === "" || arr[j-1].CHAR_ACTION_DATE === undefined || arr[j-1].CHAR_ACTION_DATE === null)){
+          } else if ((arr[j - 1].ACTION_CODE === "" || arr[j - 1].ACTION_CODE === undefined || arr[j - 1].ACTION_CODE === null) &&
+            (arr[j - 1].CHAR_ACTION_DATE === "" || arr[j - 1].CHAR_ACTION_DATE === undefined || arr[j - 1].CHAR_ACTION_DATE === null)) {
             hideFlag = true
           }
 
           var mayObj = {
-            "DISPLAY_FLAG":arr[j-1].DISPLAY_FLAG,
-            "OBJECT_ID":arr[j-1].OBJECT_ID,
-            "CHAR_ACTION_DATE":arr[j-1].CHAR_ACTION_DATE,
-            "ACTION_CODE":arr[j-1].ACTION_CODE,
-            "ACTION_CODE_DISP":arr[j-1].ACTION_CODE_DISP,
-            "EMPLOYEE_NAME":arr[j-1].EMPLOYEE_NAME,
-            "NOTE":arr[j-1].NOTE,
-            "SEQUENCE_NUM":i+1,
+            "DISPLAY_FLAG": arr[j - 1].DISPLAY_FLAG,
+            "OBJECT_ID": arr[j - 1].OBJECT_ID,
+            "CHAR_ACTION_DATE": arr[j - 1].CHAR_ACTION_DATE,
+            "ACTION_CODE": arr[j - 1].ACTION_CODE,
+            "ACTION_CODE_DISP": arr[j - 1].ACTION_CODE_DISP,
+            "EMPLOYEE_NAME": arr[j - 1].EMPLOYEE_NAME,
+            "NOTE": arr[j - 1].NOTE,
+            "SEQUENCE_NUM": i + 1,
             "SHOW_FLAG": showFlag,
             "HIDEN_FLAG": hideFlag,
             "PUSH_COUNT": 0
@@ -154,45 +132,45 @@ app.controller('p4_ini_doc_30002Ctrl'
 
           myArr.push(mayObj);
 
-        }// for
+        } // for
       }
 
       return myArr;
-    }// addPushFlagToActionHistory
+    } // addPushFlagToActionHistory
     //--------------------------------------------------------------------------//
     //-- When         Who             Description                             --//
     //-- ===========  ==============  ========================================--//
     //-- 29/02/2016   R.W.
     //--------------------------------------------------------------------------//
-    $scope.showIconCollapseInAcctionHistory = function(showFlag , hidenFlag){
+    $scope.showIconCollapseInAcctionHistory = function(showFlag, hidenFlag) {
       var retVal = "";
-      if(hidenFlag === true){
+      if (hidenFlag === true) {
         retVal = "";
-      }else if(showFlag === true){
+      } else if (showFlag === true) {
         retVal = "icon-collapse";
-      }else if(showFlag === false){
+      } else if (showFlag === false) {
         retVal = "icon-expand";
       }
 
       return retVal;
 
     }
-    $scope.hidenAcctionHistoryDetails = function(showFlag , hidenFlag , pushCount , note ){
+    $scope.hidenAcctionHistoryDetails = function(showFlag, hidenFlag, pushCount, note) {
       var retVal = "";
-      if(hidenFlag === true){
+      if (hidenFlag === true) {
         retVal = true;
-      }else if(showFlag === true){
-        if(pushCount === 0 ){
-          if(note !== "" && note !== undefined && note !== null){
+      } else if (showFlag === true) {
+        if (pushCount === 0) {
+          if (note !== "" && note !== undefined && note !== null) {
             retVal = false;
-          }else{
+          } else {
             retVal = true;
           }
-        }else{
+        } else {
           retVal = true;
         }
 
-      }else if(showFlag === false){
+      } else if (showFlag === false) {
         retVal = false;
       }
 
@@ -204,73 +182,73 @@ app.controller('p4_ini_doc_30002Ctrl'
     //-- ===========  ==============  ========================================--//
     //-- 29/02/2016   R.W.
     //--------------------------------------------------------------------------//
-    $scope.getMatchPrice = function(arr){
+    $scope.getMatchPrice = function(arr) {
       var myArr = [];
-      for(var i = 0 ; i < arr.length ; i++ ){
+      for (var i = 0; i < arr.length; i++) {
 
-        if( arr[i].DISPLAY_FLAG === "Y") {
+        if (arr[i].DISPLAY_FLAG === "Y") {
 
           var mayObj = {
-            "SEQ"                : i,
-            "VENDOR_NAME"        : arr[i].VENDOR_NAME,
-            "INITIAL_UNIT_PRICE" : arr[i].INITIAL_UNIT_PRICE,
-            "UNIT_PRICE"         : arr[i].UNIT_PRICE,
-            "TOTAL_PRICE"        : arr[i].TOTAL_PRICE
+            "SEQ": i,
+            "VENDOR_NAME": arr[i].VENDOR_NAME,
+            "INITIAL_UNIT_PRICE": arr[i].INITIAL_UNIT_PRICE,
+            "UNIT_PRICE": arr[i].UNIT_PRICE,
+            "TOTAL_PRICE": arr[i].TOTAL_PRICE
           }
 
           myArr.push(mayObj);
 
         } // if
 
-      }// for
+      } // for
 
       return myArr;
-    };// getMatchPrice
+    }; // getMatchPrice
     //--------------------------------------------------------------------------//
     //-- When         Who             Description                             --//
     //-- ===========  ==============  ========================================--//
     //-- 29/02/2016   R.W.
     //--------------------------------------------------------------------------//
-    $scope.getAttachedDocuments = function(arr){
+    $scope.getAttachedDocuments = function(arr) {
       var myArr = [];
-      for(var i = 0 ; i < arr.length ; i++ ){
+      for (var i = 0; i < arr.length; i++) {
 
-        if( arr[i].DISPLAY_FLAG_1 === "Y") {
+        if (arr[i].DISPLAY_FLAG_1 === "Y") {
           var file_name = "";
 
           file_name = arr[i].FILE_NAME_3;
 
           var mayObj = {
-            "SEQ"                      : i,
-            "CATEGORY_TYPE"            : arr[i].CATEGORY_TYPE_4,
-            "DOCUMENT_ID"              : arr[i].DOCUMENT_ID_2,
-            "FILE_NAME"                : file_name,
-            "FILE_MAOF_TYPE"           : arr[i].FILE_TYPE_6,
-            "FILE_TYPE"                : arr[i].FILE_TYPE_9,
-            "FULL_FILE_NAME"           : arr[i].FULL_FILE_NAME_8,
-            "OPEN_FILE_NAME"           : "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' +  arr[i].FULL_FILE_NAME_8,
+            "SEQ": i,
+            "CATEGORY_TYPE": arr[i].CATEGORY_TYPE_4,
+            "DOCUMENT_ID": arr[i].DOCUMENT_ID_2,
+            "FILE_NAME": file_name,
+            "FILE_MAOF_TYPE": arr[i].FILE_TYPE_6,
+            "FILE_TYPE": arr[i].FILE_TYPE_9,
+            "FULL_FILE_NAME": arr[i].FULL_FILE_NAME_8,
+            "OPEN_FILE_NAME": "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' + arr[i].FULL_FILE_NAME_8,
             //"SHORT_TEXT"               : arr[i].SHORT_TEXT_7,
             //"LONG_TEXT"                : arr[i].LONG_TEXT_VALUE_11,
-            "IS_FILE_OPENED_ON_MOBILE" : arr[i].IS_FILE_OPENED_ON_MOBILE_10,
-            "IOS_OPEN_FILE_NAME"       : "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' + arr[i].IOS_FILE_NAME_12
+            "IS_FILE_OPENED_ON_MOBILE": arr[i].IS_FILE_OPENED_ON_MOBILE_10,
+            "IOS_OPEN_FILE_NAME": "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' + arr[i].IOS_FILE_NAME_12
           }
 
           myArr.push(mayObj);
 
         } // if
 
-      }// for
+      } // for
 
       return myArr;
-    }//getAttachedDocuments
+    } //getAttachedDocuments
     //---------------------------------------------------------------------------
     //--                      getAttachmentLinkStyle
     //---------------------------------------------------------------------------
-    $scope.getAttachmentLinkStyle = function(isFileOpenedOnMobile){
+    $scope.getAttachmentLinkStyle = function(isFileOpenedOnMobile) {
       var l_retVal = {};
-      if("Y" === isFileOpenedOnMobile){
+      if ("Y" === isFileOpenedOnMobile) {
         l_retVal = appSettings.ATTACHMENT_BLUE_STYLE;
-      }else{
+      } else {
         l_retVal = appSettings.ATTACHMENT_GRAY_STYLE;
       }
 
@@ -280,7 +258,7 @@ app.controller('p4_ini_doc_30002Ctrl'
     //---------------------------------------------------------------------------
     //--                      Open Attached Doc
     //---------------------------------------------------------------------------
-    $scope.openAttachedFile = function( p_openFileName, p_fullFileName , p_fileType , p_fileMaofType , p_shortText , p_longText , isOpened, p_iosOpenfileName ){
+    $scope.openAttachedFile = function(p_openFileName, p_fullFileName, p_fileType, p_fileMaofType, p_shortText, p_longText, isOpened, p_iosOpenfileName) {
 
       PelApi.showLoading();
 
@@ -288,15 +266,15 @@ app.controller('p4_ini_doc_30002Ctrl'
 
       var appId = config_app.appId;
 
-      if("Y" === isOpened){
+      if ("Y" === isOpened) {
         var l_fileName = "";
         var isIOS = ionic.Platform.isIOS();
         var isAndroid = ionic.Platform.isAndroid();
-        if(isAndroid){
+        if (isAndroid) {
           l_fileName = p_openFileName;
-        } else if(isIOS){
+        } else if (isIOS) {
           l_fileName = p_iosOpenfileName;
-        }else{
+        } else {
           l_fileName = p_openFileName;
         }
         //---------------------------------------
@@ -307,7 +285,7 @@ app.controller('p4_ini_doc_30002Ctrl'
         var timeOutInMiliseconds = Number(config_app.ATTACHMENT_TIME_OUT);
 
         $timeout(function() {
-          if("N" === loadingComplited){
+          if ("N" === loadingComplited) {
             loadingComplited = "Y";
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
@@ -315,19 +293,18 @@ app.controller('p4_ini_doc_30002Ctrl'
           }
         }, timeOutInMiliseconds);
 
-        var retGetFileURI = PelApi.GetFileURI(links, appId , config_app.Pin , l_fileName);
+        var retGetFileURI = PelApi.GetFileURI(links, appId, config_app.Pin, l_fileName);
 
         retGetFileURI.then(
           //-- SUCCESS --//
-          function()
-          {
-            retGetFileURI.success(function (data, status, headers, config){
+          function() {
+            retGetFileURI.success(function(data, status, headers, config) {
 
               console.log("== GetFileURI.SUCCESS ==");
               var l_data = JSON.stringify(data);
               console.log(l_data);
               var statusCode = PelApi.checkResponceStatus(data);
-              if("S" === statusCode.Status){
+              if ("S" === statusCode.Status) {
                 var url = statusCode.URL;
 
                 //window.open(url, '_system');
@@ -338,44 +315,40 @@ app.controller('p4_ini_doc_30002Ctrl'
 
                 //var targetPath ="file:///storage/emulated/0/po_1534624_210998_3945377.msg";
                 var targetPath = "";
-                if("N" === loadingComplited ) {
+                if ("N" === loadingComplited) {
                   if (isAndroid) {
 
                     var filePath = PelApi.getfull_ATTACHMENT_DIRECTORY_NAME();
                     targetPath = filePath + '/' + filename;
 
-                    $cordovaFileTransfer.download(  url
-                                                  , targetPath
-                                                  , {}
-                                                  , true).then(function (result) {
+                    $cordovaFileTransfer.download(url, targetPath, {}, true).then(function(result) {
 
-                        console.log('Success');
-                        console.log('===================================================');
-                        console.log(result);
-                        var options =
-                        {
-                          location: 'yes',
-                          clearcache: 'yes',
-                          toolbar: 'no'
-                        };
-                        // Work wersion for android but cannot delete file
+                      console.log('Success');
+                      console.log('===================================================');
+                      console.log(result);
+                      var options = {
+                        location: 'yes',
+                        clearcache: 'yes',
+                        toolbar: 'no'
+                      };
+                      // Work wersion for android but cannot delete file
 
-                        if("N" === loadingComplited ) {
-                          loadingComplited = "Y";
-                          window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
-                          $ionicLoading.hide();
-                          $scope.$broadcast('scroll.refreshComplete');
-                        }
-
-                      }, function (error) {
-                        console.log('Error');
-                        console.log('===================================================');
-                        console.log(error);
+                      if ("N" === loadingComplited) {
+                        loadingComplited = "Y";
+                        window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
                         $ionicLoading.hide();
                         $scope.$broadcast('scroll.refreshComplete');
-                        PelApi.showPopup("File Download Complite With Error", error.toString());
-                      }, function (progress) {
-                        // PROGRESS HANDLING GOES HERE
+                      }
+
+                    }, function(error) {
+                      console.log('Error');
+                      console.log('===================================================');
+                      console.log(error);
+                      $ionicLoading.hide();
+                      $scope.$broadcast('scroll.refreshComplete');
+                      PelApi.showPopup("File Download Complite With Error", error.toString());
+                    }, function(progress) {
+                      // PROGRESS HANDLING GOES HERE
                     });
                   } else if (isIOS) {
                     loadingComplited = "Y";
@@ -383,13 +356,13 @@ app.controller('p4_ini_doc_30002Ctrl'
                     $ionicLoading.hide();
                     $scope.$broadcast('scroll.refreshComplete');
 
-                  } else{
+                  } else {
                     $ionicLoading.hide();
                     $scope.$broadcast('scroll.refreshComplete');
                   }
                 }
               } else if ("PDA" === statusCode.Status) {
-                if("N" === loadingComplited ){
+                if ("N" === loadingComplited) {
                   loadingComplited = "Y";
                   $ionicLoading.hide();
                   $scope.$broadcast('scroll.refreshComplete');
@@ -397,8 +370,8 @@ app.controller('p4_ini_doc_30002Ctrl'
                   PelApi.goHome();
                 }
 
-              } else if("EOL" === statusCode.Status){
-                if("N" === loadingComplited ) {
+              } else if ("EOL" === statusCode.Status) {
+                if ("N" === loadingComplited) {
                   loadingComplited = "Y";
                   $ionicLoading.hide();
                   $scope.$broadcast('scroll.refreshComplete');
@@ -407,7 +380,7 @@ app.controller('p4_ini_doc_30002Ctrl'
                 }
 
               } else if ("InValid" === statusCode.Status) {
-                if("N" === loadingComplited ) {
+                if ("N" === loadingComplited) {
                   loadingComplited = "Y";
                   $ionicLoading.hide();
                   $scope.$broadcast('scroll.refreshComplete');
@@ -416,48 +389,48 @@ app.controller('p4_ini_doc_30002Ctrl'
                   PelApi.goHome();
                 }
 
-              } else if("EAI_Status" === statusCode.Status){
-                if("N" === loadingComplited ) {
+              } else if ("EAI_Status" === statusCode.Status) {
+                if ("N" === loadingComplited) {
                   loadingComplited = "Y";
                   $ionicLoading.hide();
                   $scope.$broadcast('scroll.refreshComplete');
                   PelApi.showPopup(config_app.EAI_Status, "");
                 }
-              } else if("Application_Status" === statusCode.Status){
-                if("N" === loadingComplited ) {
+              } else if ("Application_Status" === statusCode.Status) {
+                if ("N" === loadingComplited) {
                   loadingComplited = "Y";
                   $ionicLoading.hide();
                   $scope.$broadcast('scroll.refreshComplete');
                   PelApi.showPopup(config_app.EAI_Status, "");
                 }
 
-              } else if("StatusCode" === statusCode.Status){
-                if("N" === loadingComplited ) {
+              } else if ("StatusCode" === statusCode.Status) {
+                if ("N" === loadingComplited) {
                   loadingComplited = "Y";
                   $ionicLoading.hide();
                   $scope.$broadcast('scroll.refreshComplete');
                   PelApi.showPopup(config_app.EAI_Status, "");
                 }
-              } else if("OLD" === statusCode.Status){
+              } else if ("OLD" === statusCode.Status) {
                 $ionicLoading.hide();
                 $scope.$broadcast('scroll.refreshComplete');
-                PelApi.showPopupVersionUpdate(data.StatusDesc , "");
+                PelApi.showPopupVersionUpdate(data.StatusDesc, "");
               }
 
-          });
-          }
-          , function (response) {
-            PelApi.writeToLog(config_app.LOG_FILE_ERROR_TYPE , "GetFileURI : " + JSON.stringify(response));
+            });
+          },
+          function(response) {
+            PelApi.lagger.error("GetFileURI : " + JSON.stringify(response));
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
-            PelApi.showPopup(config_app.getUserModuleTypesErrorMag , "");
+            PelApi.showPopup(config_app.getUserModuleTypesErrorMag, "");
           }
         );
-      }else{
+      } else {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
         PelApi.showPopup(config_app.ATTACHMENT_TYPE_NOT_SUPORTED_FOR_OPEN, "");
-      }// isOpened
+      } // isOpened
       /*
        }
        */
@@ -466,38 +439,38 @@ app.controller('p4_ini_doc_30002Ctrl'
     //------------------------------------------------------------//
     //--                  getAttachedDocuments
     //------------------------------------------------------------//
-    $scope.getAttachedDocuments = function(arr){
+    $scope.getAttachedDocuments = function(arr) {
       var myArr = [];
-      for(var i = 0 ; i < arr.length ; i++ ){
+      for (var i = 0; i < arr.length; i++) {
 
-        if( arr[i].DISPLAY_FLAG_1 === "Y") {
+        if (arr[i].DISPLAY_FLAG_1 === "Y") {
           var file_name = "";
 
           file_name = arr[i].FILE_NAME_3;
 
           var mayObj = {
-            "SEQ"                      : i,
-            "CATEGORY_TYPE"            : arr[i].CATEGORY_TYPE_4,
-            "DOCUMENT_ID"              : arr[i].DOCUMENT_ID_2,
-            "FILE_NAME"                : file_name,
-            "FILE_MAOF_TYPE"           : arr[i].FILE_TYPE_6,
-            "FILE_TYPE"                : arr[i].FILE_TYPE_9,
-            "FULL_FILE_NAME"           : arr[i].FULL_FILE_NAME_8,
-            "OPEN_FILE_NAME"           : "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' +  arr[i].FULL_FILE_NAME_8,
+            "SEQ": i,
+            "CATEGORY_TYPE": arr[i].CATEGORY_TYPE_4,
+            "DOCUMENT_ID": arr[i].DOCUMENT_ID_2,
+            "FILE_NAME": file_name,
+            "FILE_MAOF_TYPE": arr[i].FILE_TYPE_6,
+            "FILE_TYPE": arr[i].FILE_TYPE_9,
+            "FULL_FILE_NAME": arr[i].FULL_FILE_NAME_8,
+            "OPEN_FILE_NAME": "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' + arr[i].FULL_FILE_NAME_8,
             //"SHORT_TEXT"               : arr[i].SHORT_TEXT_7,
             //"LONG_TEXT"                : arr[i].LONG_TEXT_VALUE_11,
-            "IS_FILE_OPENED_ON_MOBILE" : arr[i].IS_FILE_OPENED_ON_MOBILE_10,
-            "IOS_OPEN_FILE_NAME"       : "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' + arr[i].IOS_FILE_NAME_12
+            "IS_FILE_OPENED_ON_MOBILE": arr[i].IS_FILE_OPENED_ON_MOBILE_10,
+            "IOS_OPEN_FILE_NAME": "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' + arr[i].IOS_FILE_NAME_12
           }
 
           myArr.push(mayObj);
 
         } // if
 
-      }// for
+      } // for
 
       return myArr;
-    }//getAttachedDocuments
+    } //getAttachedDocuments
 
     //---------------------------------------------------------------------------
     //--                         doRefresh
@@ -531,7 +504,7 @@ app.controller('p4_ini_doc_30002Ctrl'
 
       console.log(config_app.INITIATED_DETAILS_CUR);
 
-      if(config_app.docDetails.ERROR !== "NULL" && config_app.docDetails.ERROR != undefined) {
+      if (config_app.docDetails.ERROR !== "NULL" && config_app.docDetails.ERROR != undefined) {
         PelApi.showPopup(config_app.interfaceErrorTitle, config_app.docDetails.ERROR);
         return;
       }
@@ -550,13 +523,13 @@ app.controller('p4_ini_doc_30002Ctrl'
       //----------- Attachment Show ---------
       $scope.INI_ATTACHED_DOCUMENTS_SHOW = true;
       //----------- Buttons ------------
-      if(mode === "VIEW"){
+      if (mode === "VIEW") {
         $scope.INI_BUTTONS_SHOW = false
-      }else{
+      } else {
         $scope.INI_BUTTONS_SHOW = true;
       }
 
-      $scope.buttonsArr      = config_app.docDetails.BUTTONS;
+      $scope.buttonsArr = config_app.docDetails.BUTTONS;
 
 
       // Show the action sheet
@@ -567,11 +540,11 @@ app.controller('p4_ini_doc_30002Ctrl'
 
     }; // doRefresh
 
-    $scope.redStyle = function(flag){
+    $scope.redStyle = function(flag) {
       var retVal;
-      if("Y" ===  flag){
+      if ("Y" === flag) {
         $scope.style.color = "red";
-      }else if("N" === flag){
+      } else if ("N" === flag) {
         $scope.style.color = "black";
       }
       return $scope.style;
@@ -599,28 +572,28 @@ app.controller('p4_ini_doc_30002Ctrl'
     //-- -------------	--------------  -----------------------------------
     //-- 13/10/2015     R.W.            Hide / Show Approval List Rows
     //---------------------------------------------------------------------
-    $scope.pelHideShow = function(note , displayFlag){
+    $scope.pelHideShow = function(note, displayFlag) {
       var retStatus = true;
 
-      if(displayFlag==="Y"){
+      if (displayFlag === "Y") {
 
-        if(note != "" && note != undefined ) {
+        if (note != "" && note != undefined) {
           retStatus = false;
         }
-      }else{
+      } else {
         retStatus = true;
       }
 
       return retStatus;
     };
 
-    $scope.pelHideShow2 = function(displayFlag){
+    $scope.pelHideShow2 = function(displayFlag) {
 
       var retStatus;
 
-      if( displayFlag === "Y" ){
+      if (displayFlag === "Y") {
         retStatus = false;
-      }else{
+      } else {
         retStatus = true;
       }
 
@@ -628,13 +601,13 @@ app.controller('p4_ini_doc_30002Ctrl'
     }
 
 
-    $scope.onSlideMove = function(data){
+    $scope.onSlideMove = function(data) {
       //alert("You have selected " + data.index + " tab");
     };
     //-----------------------------------
     //--         Btn Action
     //-----------------------------------
-    $scope.docApprove = function(){
+    $scope.docApprove = function() {
 
       //PelApi.showLoading();
 
@@ -649,26 +622,25 @@ app.controller('p4_ini_doc_30002Ctrl'
         title: config_app.isAddNoteTitle,
         subTitle: '',
         scope: $scope,
-        buttons: [
-          {
+        buttons: [{
             text: '<a class="pele-popup-positive-text-collot">כן</a>',
             type: 'button-positive',
-            onTap: function (e) {
+            onTap: function(e) {
               return true;
             }
           },
           {
             text: '<a class="pele-popup-positive-text-collot">לא</a>',
             type: 'button-assertive',
-            onTap: function (e) {
+            onTap: function(e) {
 
               return false;
             }
           },
         ]
       });
-      myYesNoPopup.then(function (res) {
-        if(res){
+      myYesNoPopup.then(function(res) {
+        if (res) {
           //===============================================//
           //==                 Get Note                  ==//
           //===============================================//
@@ -678,11 +650,10 @@ app.controller('p4_ini_doc_30002Ctrl'
             title: '<a class="float-right">הערות</a>',
             subTitle: '',
             scope: $scope,
-            buttons: [
-              {
+            buttons: [{
                 text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
                 type: 'button-positive',
-                onTap: function (e) {
+                onTap: function(e) {
                   if (!$scope.data.note) {
                     //don't allow the user to close unless he enters wifi password
                     e.preventDefault();
@@ -692,9 +663,10 @@ app.controller('p4_ini_doc_30002Ctrl'
                   }
                 }
               },
-              {text: 'ביטול',
+              {
+                text: 'ביטול',
                 type: 'button-assertive',
-                onTap: function (e) {
+                onTap: function(e) {
                   $scope.data.note = "";
                   $scope.data.cancel = true;
                   return $scope.data;
@@ -702,8 +674,8 @@ app.controller('p4_ini_doc_30002Ctrl'
               },
             ]
           });
-          myPopup.then(function (res) {
-            if(!res.cancel) {
+          myPopup.then(function(res) {
+            if (!res.cancel) {
               PelApi.showLoading();
               note = res.note;
               note = PelApi.replaceSpecialChr(note);
@@ -712,24 +684,24 @@ app.controller('p4_ini_doc_30002Ctrl'
               var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
               retSubmitNotification.then(
                 //---- SUCCESS -----//
-                function () {
-                  retSubmitNotification.success(function (data, status, headers, config) {
+                function() {
+                  retSubmitNotification.success(function(data, status, headers, config) {
 
-                    PelApi.writeToLog(config_app.LOG_FILE_INFO_TYPE , JSON.stringify(data));
+                      PelApi.lagger.info(JSON.stringify(data));
 
-                    $ionicLoading.hide();
-                    $scope.$broadcast('scroll.refreshComplete');
-                    $ionicNavBarDelegate.back();
-                  }),
-                    retSubmitNotification.error(function (data, status, headers, config) {
+                      $ionicLoading.hide();
+                      $scope.$broadcast('scroll.refreshComplete');
+                      $ionicNavBarDelegate.back();
+                    }),
+                    retSubmitNotification.error(function(data, status, headers, config) {
                       $ionicLoading.hide();
                       $scope.$broadcast('scroll.refreshComplete');
                       $ionicNavBarDelegate.back();
                     });
                 },
                 //---- ERROR -----//
-                function (response) {
-                  PelApi.writeToLog(config_app.LOG_FILE_ERROR_TYPE , "SubmitNotification : " + JSON.stringify(response));
+                function(response) {
+                  PelApi.lagger.error("SubmitNotification : " + JSON.stringify(response));
                   $ionicLoading.hide();
                   $scope.$broadcast('scroll.refreshComplete');
                   $ionicNavBarDelegate.back();
@@ -737,16 +709,16 @@ app.controller('p4_ini_doc_30002Ctrl'
               );
             }
           });
-        }else{
+        } else {
           PelApi.showLoading();
           var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
           var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
           retSubmitNotification.then(
             //---- SUCCESS -----//
-            function () {
-              retSubmitNotification.success(function (data, status, headers, config) {
+            function() {
+              retSubmitNotification.success(function(data, status, headers, config) {
 
-                PelApi.writeToLog(config_app.LOG_FILE_INFO_TYPE , JSON.stringify(data));
+                PelApi.lagger.info(JSON.stringify(data));
 
                 $ionicLoading.hide();
                 $scope.$broadcast('scroll.refreshComplete');
@@ -754,8 +726,8 @@ app.controller('p4_ini_doc_30002Ctrl'
               });
             },
             //---- ERROR -----//
-            function (response) {
-              PelApi.writeToLog(config_app.LOG_FILE_ERROR_TYPE , "retSubmitNotification : " + JSON.stringify(response));
+            function(response) {
+              PelApi.lagger.error("retSubmitNotification : " + JSON.stringify(response));
 
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
@@ -768,7 +740,7 @@ app.controller('p4_ini_doc_30002Ctrl'
     //-----------------------------------
     //--         OK
     //-----------------------------------
-    $scope.docOK = function(){
+    $scope.docOK = function() {
 
       //PelApi.showLoading();
 
@@ -782,10 +754,10 @@ app.controller('p4_ini_doc_30002Ctrl'
       var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
       retSubmitNotification.then(
         //---- SUCCESS -----//
-        function () {
-          retSubmitNotification.success(function (data, status, headers, config) {
+        function() {
+          retSubmitNotification.success(function(data, status, headers, config) {
 
-            PelApi.writeToLog(config_app.LOG_FILE_INFO_TYPE , JSON.stringify(data));
+            PelApi.lagger.info(JSON.stringify(data));
 
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
@@ -793,8 +765,8 @@ app.controller('p4_ini_doc_30002Ctrl'
           });
         },
         //---- ERROR -----//
-        function (response) {
-          PelApi.writeToLog(config_app.LOG_FILE_ERROR_TYPE , "success : " + JSON.stringify(response));
+        function(response) {
+          PelApi.lagger.error("success : " + JSON.stringify(response));
 
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
@@ -806,26 +778,25 @@ app.controller('p4_ini_doc_30002Ctrl'
     //----------------------------------------
     //--         REJECT                     --
     //----------------------------------------
-    $scope.docReject = function(){
+    $scope.docReject = function() {
       var appId = config_app.appId;
       var notificationId = $scope.NOTIFICATION_ID;
       var actionType = "REJECT";
-      if($scope.data.note !== undefined){
+      if ($scope.data.note !== undefined) {
         var note = $scope.data.note;
         note = PelApi.replaceSpecialChr(note);
 
-        $scope.submitNotif(actionType , note)
-      }else {
+        $scope.submitNotif(actionType, note)
+      } else {
         var myPopup = $ionicPopup.show({
           template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" ng-model="data.note" type="text">{{data.note}}</textarea></label></div>',
           title: '<a class="float-right">הערות</a>',
           subTitle: '',
           scope: $scope,
-          buttons: [
-            {
+          buttons: [{
               text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
               type: 'button-positive',
-              onTap: function (e) {
+              onTap: function(e) {
                 if (!$scope.data.note) {
                   //don't allow the user to close unless he enters wifi password
                   e.preventDefault();
@@ -841,7 +812,7 @@ app.controller('p4_ini_doc_30002Ctrl'
             },
           ]
         });
-        myPopup.then(function (res) {
+        myPopup.then(function(res) {
           note = res
           note = PelApi.replaceSpecialChr(note);
           if (note !== undefined) {
@@ -852,27 +823,26 @@ app.controller('p4_ini_doc_30002Ctrl'
     }; // docReject
     //==============================================================
     //==============================================================
-    $scope.docApproveWitnNote = function(){
+    $scope.docApproveWitnNote = function() {
       var appId = config_app.appId;
       var notificationId = $scope.NOTIFICATION_ID;
       var actionType = "APPROVE";
       var note = "";
-      if($scope.data.note !== undefined){
+      if ($scope.data.note !== undefined) {
         note = $scope.data.note;
         note = PelApi.replaceSpecialChr(note);
 
-        $scope.submitNotif(actionType , note)
-      }else {
+        $scope.submitNotif(actionType, note)
+      } else {
         var myPopup = $ionicPopup.show({
           template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" ng-model="data.note" type="text">{{data.note}}</textarea></label></div>',
           title: '<a class="float-right">הערות</a>',
           subTitle: '',
           scope: $scope,
-          buttons: [
-            {
+          buttons: [{
               text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
               type: 'button-positive',
-              onTap: function (e) {
+              onTap: function(e) {
                 if (!$scope.data.note) {
                   //don't allow the user to close unless he enters wifi password
                   e.preventDefault();
@@ -889,7 +859,7 @@ app.controller('p4_ini_doc_30002Ctrl'
             },
           ]
         });
-        myPopup.then(function (res) {
+        myPopup.then(function(res) {
           note = res;
           note = PelApi.replaceSpecialChr(note);
           if (note !== undefined) {
@@ -901,7 +871,7 @@ app.controller('p4_ini_doc_30002Ctrl'
     //--------------------------------------------------------------
     //
     //--------------------------------------------------------------
-    $scope.submitNotif = function(action , note){
+    $scope.submitNotif = function(action, note) {
       var appId = config_app.appId;
       var notificationId = $scope.NOTIFICATION_ID;
       var actionType = action;
@@ -913,10 +883,10 @@ app.controller('p4_ini_doc_30002Ctrl'
       var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
       retSubmitNotification.then(
         //---- SUCCESS -----//
-        function () {
-          retSubmitNotification.success(function (data, status, headers, config) {
+        function() {
+          retSubmitNotification.success(function(data, status, headers, config) {
 
-            PelApi.writeToLog(config_app.LOG_FILE_INFO_TYPE , JSON.stringify(data));
+            PelApi.lagger.info(JSON.stringify(data));
 
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
@@ -924,34 +894,32 @@ app.controller('p4_ini_doc_30002Ctrl'
           });
         },
         //---- ERROR -----//
-        function (response) {
+        function(response) {
 
-          PelApi.writeToLog(config_app.LOG_FILE_ERROR_TYPE , "retSubmitNotification : " + JSON.stringify(response));
+          PelApi.lagger.error("retSubmitNotification : " + JSON.stringify(response));
 
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
           $ionicNavBarDelegate.back();
         }
       );
-    } ;
+    };
     //--------------------------------------------------------------
     //-- When         Who       Description
     //-- -----------  --------  ------------------------------------
     //-- 28/06/2016   R.W.
     //--------------------------------------------------------------
-    $scope.ShortTextPopUp = function(p_text){
+    $scope.ShortTextPopUp = function(p_text) {
       $scope.data.shortText = p_text
       var myPopup = $ionicPopup.show({
         template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea readonly rows="14" ng-model="data.shortText" type="text">{{data.shortText}}</textarea></label></div>',
         title: '<a class="float-right">הערות</a>',
         subTitle: '',
         scope: $scope,
-        buttons: [
-          {
-            text: '<a class="pele-popup-positive-text-collot">אישור</a>',
-            type: 'button-positive',
-          }
-        ]
+        buttons: [{
+          text: '<a class="pele-popup-positive-text-collot">אישור</a>',
+          type: 'button-positive',
+        }]
       });
     } //
     //--------------------------------------------------------------
@@ -959,18 +927,17 @@ app.controller('p4_ini_doc_30002Ctrl'
     //-- -----------  --------  ------------------------------------
     //-- 06/01/2016   R.W.
     //--------------------------------------------------------------
-    $scope.NotePopup = function(){
+    $scope.NotePopup = function() {
       var myPopup = $ionicPopup.show({
         template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" ng-model="data.note" type="text">{{data.note}}</textarea></label></div>',
         title: '<a class="float-right">הערות</a>',
         subTitle: '',
         scope: $scope,
-        buttons: [
-          {
+        buttons: [{
 
             text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
             type: 'button-positive',
-            onTap: function (e) {
+            onTap: function(e) {
               if (!$scope.data.note) {
                 //don't allow the user to close unless he enters wifi password
                 e.preventDefault();
@@ -981,15 +948,16 @@ app.controller('p4_ini_doc_30002Ctrl'
               }
             }
           },
-          {text: 'ביטול',
+          {
+            text: 'ביטול',
             type: 'button-assertive',
-            onTap: function (e) {
+            onTap: function(e) {
               return $scope.data.note;
             }
           },
         ]
       });
-      myPopup.then(function (res) {
+      myPopup.then(function(res) {
         $scope.data.note = res;
       });
     }; // NotePopup
@@ -997,23 +965,23 @@ app.controller('p4_ini_doc_30002Ctrl'
     //--           Button Action
     //--------------------------------------------------------------
     $scope.showBtnActions = function() {
-      var buttons         = PelApi.getButtons($scope.buttonsArr);
+      var buttons = PelApi.getButtons($scope.buttonsArr);
       // Show the action sheet
       var hideSheet = $ionicActionSheet.show({
-        buttons        : buttons,
-        titleText      : 'רשימת פעולות עבור טופס',
-        cancelText     : 'ביטול',
+        buttons: buttons,
+        titleText: 'רשימת פעולות עבור טופס',
+        cancelText: 'ביטול',
         //-----------------------------------------------
         //--               CANCEL
         //-----------------------------------------------
-        cancel: function () {
+        cancel: function() {
           // add cancel code..
           return true;
         },
         //-----------------------------------------------
         //--               BUTTONS
         //-----------------------------------------------
-        buttonClicked: function (index,button) {
+        buttonClicked: function(index, button) {
           var note = $scope.data.note;
           note = PelApi.replaceSpecialChr(note);
 
@@ -1030,7 +998,7 @@ app.controller('p4_ini_doc_30002Ctrl'
 
             $scope.docApproveWitnNote();
 
-          } else if(button === appSettings.REJECT){
+          } else if (button === appSettings.REJECT) {
             $scope.docReject();
           }
           return true;
@@ -1045,5 +1013,5 @@ app.controller('p4_ini_doc_30002Ctrl'
     $scope.doRefresh();
 
   }
-//]
+  //]
 );

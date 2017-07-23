@@ -2,21 +2,21 @@
  * Created by User on 25/08/2016.
  */
 angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
-//=================================================================
-//==                    PAGE_2
-//=================================================================
+  //=================================================================
+  //==                    PAGE_2
+  //=================================================================
   .controller('P2_moduleListCtrl', function($scope,
-                                            $http,
-                                            $stateParams ,
-                                            $state ,
-                                            PelApi,
-                                            $cordovaNetwork,
-                                            $ionicLoading,
-                                            $ionicModal ,
-                                            $timeout ,
-                                            $sessionStorage,
-                                            appSettings,
-                                            srvShareData
+    $http,
+    $stateParams,
+    $state,
+    PelApi,
+    $cordovaNetwork,
+    $ionicLoading,
+    $ionicModal,
+    $timeout,
+    $sessionStorage,
+    appSettings,
+    srvShareData
   ) {
     //----------------------- LOGIN --------------------------//
 
@@ -33,28 +33,27 @@ angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
     //-----------------------------------------------
     //--    Is show BTN
     //-----------------------------------------------
-    $scope.isShowBtn = function(qty){
+    $scope.isShowBtn = function(qty) {
       var retVal = true;
-      if(qty === "-1"){
+      if (qty === "-1") {
         return "ng-hide";
-      }
-      else{
+      } else {
         return "ng-show";
       }
 
       return retVal;
 
     }
-    $scope.pushBtnClass = function(event){
+    $scope.pushBtnClass = function(event) {
 
-      console.log("pushBtnClass : " + event);
 
-      if(event === true){
+
+      if (event === true) {
         return "pele-item-on-release";
-      }else{
+      } else {
         return "pele-item-on-touch";
       }
-    }// pushBtnClass
+    } // pushBtnClass
     // Triggered in the login modal to close it
     $scope.closeLogin = function() {
       $scope.modal.hide();
@@ -68,7 +67,7 @@ angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
     //---------------------------------
     //--       goHome
     //---------------------------------
-    $scope.goHome = function(){
+    $scope.goHome = function() {
       PelApi.goHome();
     }
 
@@ -78,7 +77,11 @@ angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
       var appId = config_app.appId;
       var pin = $scope.loginData.pin;
       var titleDisp = $sessionStorage.title;
-      $state.go("app.p2_moduleList",{AppId : appId , title:titleDisp ,"pin":pin});
+      $state.go("app.p2_moduleList", {
+        AppId: appId,
+        title: titleDisp,
+        "pin": pin
+      });
       // Simulate a login delay. Remove this and replace with your login
       // code if using a login system
       $timeout(function() {
@@ -86,20 +89,24 @@ angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
       }, 1000);
     };
     //======= onClick ========//
-    $scope.onClick = function (formType, docQty) {
-      if(0 < docQty){
+    $scope.onClick = function(formType, docQty) {
+      if (0 < docQty) {
 
         var path = "";
-        if( "HR" === formType ){
+        if ("HR" === formType) {
           path = appSettings.MODULE_TYPES_FORWARD_PATH.HR;
-        }else if( "POAPPRV" === formType){
+        } else if ("POAPPRV" === formType) {
           path = appSettings.MODULE_TYPES_FORWARD_PATH.POAPPRV;
-        }else if( "PELRQAPR" === formType) {
+        } else if ("PELRQAPR" === formType) {
           path = appSettings.MODULE_TYPES_FORWARD_PATH.PELRQAPR;
         }
 
         appId = config_app.appId;
-        $state.go(path , {AppId: appId, FormType: formType, Pin: config_app.Pin});
+        $state.go(path, {
+          AppId: appId,
+          FormType: formType,
+          Pin: config_app.Pin
+        });
       }
     };
 
@@ -108,7 +115,7 @@ angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
     //== ----------  -------  ---------------------------------==//
     //== 23/02/2016  R.W.                                      ==//
     //===========================================================//
-    $scope.ontouch = function(pushFlag){
+    $scope.ontouch = function(pushFlag) {
       pushFlag = !pushFlag;
     };
 
@@ -117,29 +124,29 @@ angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
     //== ----------  -------  ---------------------------------==//
     //== 23/02/2016  R.W.                                      ==//
     //===========================================================//
-    $scope.insertOnTouchFlag = function(arr){
+    $scope.insertOnTouchFlag = function(arr) {
       var myArr = [];
-      for(var i=0; i< arr.length; i++){
+      for (var i = 0; i < arr.length; i++) {
 
         var myObj = {
           DOCUMENT_QTY: arr[i].DOCUMENT_QTY,
           MODULE_DESC: arr[i].MODULE_DESC,
           MODULE_NAME: arr[i].MODULE_NAME,
-          PUSH_FLAG:true
+          PUSH_FLAG: true
         };
 
         myArr.push(myObj);
 
-      }// for;
+      } // for;
       return myArr;
-    }// insertOnTouchFlag
+    } // insertOnTouchFlag
 
     //===================== Refresh ===========================//
-    $scope.doRefresh = function(){
+    $scope.doRefresh = function() {
       //--
 
       console.log("------------------------------------");
-      console.log(      srvShareData.getData()          );
+      console.log(srvShareData.getData());
       console.log("------------------------------------");
       $scope.menuPageData = srvShareData.getData();
       $scope.btn_class = {};
@@ -147,8 +154,8 @@ angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
 
       PelApi.showLoading();
 
-      var appId     = $stateParams.AppId;
-      var pin       = $stateParams.Pin;
+      var appId = $stateParams.AppId;
+      var pin = $stateParams.Pin;
       var titleDisp = $stateParams.Title;
 
       $sessionStorage.DOC_ID = "";
@@ -157,12 +164,12 @@ angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
 
       // var appId = config_app.appId;
 
-      config_app.token        = $sessionStorage.token;
-      config_app.userName     = $sessionStorage.userName;
-      if(config_app.network === "" || config_app.network === undefined){
+      config_app.token = $sessionStorage.token;
+      config_app.userName = $sessionStorage.userName;
+      if (config_app.network === "" || config_app.network === undefined) {
         config_app.network = $scope.menuPageData[0].PeleNetwork;
       }
-      if(config_app.MSISDN_VALUE === "" || config_app.MSISDN_VALUE === undefined){
+      if (config_app.MSISDN_VALUE === "" || config_app.MSISDN_VALUE === undefined) {
         config_app.MSISDN_VALUE = $scope.menuPageData[0].PeleMsisdnValue;
       }
 
@@ -172,12 +179,12 @@ angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
 
       retUserModuleTypes.then(
         //--- SUCCESS ---//
-        function () {
-          retUserModuleTypes.success(function (data, status, headers, config) {
+        function() {
+          retUserModuleTypes.success(function(data, status, headers, config) {
 
             $scope.feeds_categories = [];
 
-            PelApi.writeToLog(config_app.LOG_FILE_INFO_TYPE, JSON.stringify(data));
+            PelApi.lagger.info(JSON.stringify(data));
 
             var stat = PelApi.GetPinCodeStatus2(data, "getUserModuleTypes");
             var pinCodeStatus = stat.status;
@@ -251,30 +258,31 @@ angular.module('pele.P2_moduleListCtrl', ['ngStorage'])
               $scope.$broadcast('scroll.refreshComplete');
               PelApi.showPopup(config_app.EAI_ERROR_DESC, "");
 
-            } else if("EOL" === pinCodeStatus){
+            } else if ("EOL" === pinCodeStatus) {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               config_app.IS_TOKEN_VALID = "N";
               PelApi.goHome();
 
-            } else if ("ERROR_CODE" === pinCodeStatus){
+            } else if ("ERROR_CODE" === pinCodeStatus) {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               PelApi.showPopup(stat.description, "");
-            } else if("OLD" === pinCodeStatus){
+            } else if ("OLD" === pinCodeStatus) {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
-              PelApi.showPopupVersionUpdate(data.StatusDesc , "");
+              PelApi.showPopupVersionUpdate(data.StatusDesc, "");
             }
 
           });
         }
         //--- ERROR ---//
-        , function (response) {
-            PelApi.writeToLog(config_app.LOG_FILE_ERROR_TYPE , "GetUserModuleTypes : " + JSON.stringify(response));
-            $ionicLoading.hide();
-            $scope.$broadcast('scroll.refreshComplete');
-            PelApi.showPopup(config_app.getUserModuleTypesErrorMag , "");
+        ,
+        function(response) {
+          PelApi.lagger.error("GetUserModuleTypes : " + JSON.stringify(response));
+          $ionicLoading.hide();
+          $scope.$broadcast('scroll.refreshComplete');
+          PelApi.showPopup(config_app.getUserModuleTypesErrorMag, "");
         }
       );
     }; // doRefresh
