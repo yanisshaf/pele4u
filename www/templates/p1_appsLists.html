@@ -1,0 +1,48 @@
+<ion-view class="feeds-categories-view " cache-view="false" hide-back-button="true">
+  <ion-nav-buttons side="right"  >
+    <button menu-toggle="left" class="button button-icon icon ion-navicon">
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-title>
+    <div class="bar bar-header bar-light">
+      <div class="title" id="logo">
+        <!--<img src="img/DocApprove/logo.png" style="max-width: 100%;  height: 100%;"/>-->
+      </div>
+    </div>
+  </ion-nav-title>
+
+  <ion-content class="pele-background">
+    <ion-refresher pulling-text="משוך לרענון..." on-refresh="doRefresh()">
+    </ion-refresher>
+
+    <div class="pele-page-title pele-img-size pele-page-title-font">
+      <a class="description">בחירת אפליקציה</a>
+    </div>
+    <div class="row row-bottom">
+      <div class="col"></div>
+    </div>
+    <!-- start ng-repeat -->
+    <div class="row row-bottom" ng-repeat="category in feeds_categories.menuItems"  >
+      <div class="row" ng-click="forwardToApp(category.Path, category.AppId , category.DisplayName)"
+                       ng-model="btn_class.on_release"
+                       on-touch="category.PUSH_FLAG = !category.PUSH_FLAG"
+                       on-release="category.PUSH_FLAG = !category.PUSH_FLAG">
+        <div class="col col-10"></div>
+        <div class="col col-80 item item-icon-right {{pushBtnClass(category.PUSH_FLAG)}}">
+          <div class="row row-center ">
+            <a class="col col-20">
+              <img ng-src="{{category.Image}}" spinner-on-load class="float-right " style="max-width:100%;height:auto; vertical-align: middle" >
+            </a>
+            <a class="col col-80">
+              <p class="description">{{category.DisplayName}}</p>
+            </a>
+          </div>
+        </div>
+
+        <div class="col col-10"></div>
+
+      </div>
+    </div>
+    <!-- end start ng-repeat -->
+  </ion-content>
+</ion-view>

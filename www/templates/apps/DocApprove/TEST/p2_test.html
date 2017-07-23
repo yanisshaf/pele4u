@@ -1,0 +1,49 @@
+<ion-view class="feed-entries-view " cache-view="false">
+
+  <ion-nav-buttons side="right"  >
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-nav-title>
+    <div class="bar bar-header bar-light">
+      <div class="title" id="logo"></div>
+    </div>
+  </ion-nav-title>
+
+  <ion-content class="pele-background" onload="doRefresh()">
+    <!-- Refresh to get the new posts -->
+    <ion-refresher pulling-text="משוך לרענון..."  on-refresh="doRefresh()">
+    </ion-refresher>
+    <div class="pele-page-title pele-img-size pele-page-title-font">
+      <a class="description">אישור הזמנות רכש</a>
+    </div>
+
+    <label class="item item-input item-search"  ng-click="searchBarCreteria()">
+
+      <input type="search" class="search-area" style="color:#fafafa;" placeholder="חיפוש"ng-model="searchText.text">
+      <a class="search-icon" ></a>
+    </label>
+
+    <ion-list>
+      <div ng-repeat="chat in chats">
+        <ion-item class="item-stable"
+                  ng-click="toggleGroup(chat.DOC_NAME)"
+                  ng-class="{active: isGroupShown(chat.DOC_NAME)}">
+          <a ng-class="isGroupShown(chat.ORG_NAME) ? 'icon-expand' : 'icon-collapse'"></a>
+          <span class="item-title">{{chat.DOC_NAME}}&nbsp;({{chat.DOC_QTY}})</span>
+        </ion-item>
+
+        <ion-item class="item-doc-list"  ng-repeat="item in chat.DOC_DETAILS | filter:searchText.text" ng-show="isGroupShown(chat.DOC_NAME)">
+          <img  ng-src="img/DocApprove/document_redirect.png">
+          <div><table><tr><td>{{item.MESSAGE_TYPE}}- </td> <td><b>{{item.DOC2_QTY}}</b></td></tr></table></div>
+        </ion-item>
+
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-view>
+
+
+
+
+
+

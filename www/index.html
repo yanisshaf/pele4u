@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *"> -->
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/pele_style.css" rel="stylesheet">
+    <link href="css/ionic.app.css" rel="stylesheet">
+    <!-- R.W. 11/10/2015 -->
+    <link href="css/tabSlideBox.css" rel="stylesheet">
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+	  <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
+    <script src="lib/ngstorage/ngStorage.min.js"></script>
+    <script src="lib/filelogger/dist/filelogger.min.js"></script>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/factories.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/tabSlideBox.js"></script>
+    <script src="js/services.js"></script>
+    <script src="lib/angular-local-storage/dist/angular-local-storage.min.js"></script>
+    <!-------------------------   MENU  ------------------------>
+    <script src="js/P1_appsListsCtrl.js"></script>
+    <!---------------------- Authentication -------------------->
+    <script src="js/authCtrl.js"></script>
+    <!------------------------- docApprove --------------------->
+    <script src="js/apps/docApprove/P2_moduleListCtrl.js"></script>
+    <!-- docApprove/HR -->
+    <script src="js/apps/docApprove/HR/p3_hr_moduleDocListCtrl.js"></script>
+    <script src="js/apps/docApprove/HR/p4_hr_docCtrl.js"></script>
+    <!-- docApprove/PO -->
+    <script src="js/apps/docApprove/PO/p3_po_moduleDocListCtrl.js"></script>
+    <script src="js/apps/docApprove/PO/p4_po_doc_10002Ctrl.js"></script>
+    <!-- docApprove/RQ -->
+    <script src="js/apps/docApprove/RQ/p3_rq_moduleDocListCtrl.js"></script>
+    <script src="js/apps/docApprove/RQ/p4_rq_doc_20002Ctrl.js"></script>
+    <!-- docApprove/INI -->
+    <script src="js/apps/docApprove/INI/p4_ini_doc_30002Ctrl.js"></script>
+    <!-- scanPrint -->
+    <script src="js/apps/scanPrint/p2_scan_printCtrl.js"></script>
+    <!-- Pele PlugIns -->
+    <script src="js/pelePlugins/LaunchMyApp.js"></script>
+    <!-- TEST -->
+    <script src="js/apps/docApprove/TEST/p2_testCtrl.js"></script>
+
+  </head>
+
+  <body ng-app="pele">
+    <ion-nav-view></ion-nav-view>
+  </body>
+</html>
