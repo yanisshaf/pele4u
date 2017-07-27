@@ -3,45 +3,38 @@
  */
 var app = angular.module('pele.authCtrl', ['ngStorage']);
 
-app.controller('LoginCtrl', function( $scope
-                                    , $state
-                                    , $templateCache
-                                    , $q
-                                    , $rootScope
-                                    , PelApi
-                                    , $localStorage
-                                    , $ionicLoading) {
+app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootScope, PelApi, $localStorage, $ionicLoading) {
   //------------------------------------------------------------//
   //--                    Get AppId                           --//
   //------------------------------------------------------------//
-  $scope.getAppId = function(){
+  $scope.getAppId = function() {
 
-      var menuList = config_app.GetUserMenu;
+    var menuList = config_app.GetUserMenu;
 
-      var pinCodeReq = "N";
-      var appId = "";
+    var pinCodeReq = "N";
+    var appId = "";
 
-      if(menuList.menuItems !== undefined){
-        var appList = menuList.menuItems;
-        var length = appList.length;
+    if (menuList.menuItems !== undefined) {
+      var appList = menuList.menuItems;
+      var length = appList.length;
 
-        for(var i = 0; i < length ; i++ ){
-          var pin = appList[i].Pin
-          if(pin !== false){
-            pinCodeReq = "Y";
-            appId = appList[i].AppId;
-            i = length;
-          }
+      for (var i = 0; i < length; i++) {
+        var pin = appList[i].Pin
+        if (pin !== false) {
+          pinCodeReq = "Y";
+          appId = appList[i].AppId;
+          i = length;
         }
       }
+    }
 
-      return appId;
+    return appId;
 
-  }// getAppId
+  } // getAppId
   //------------------------------------------------------------//
   //--                                                        --//
   //------------------------------------------------------------//
-  $scope.doLogIn = function(){
+  $scope.doLogIn = function() {
 
     console.log("PIN : " + $scope.user.pin);
 
@@ -50,20 +43,20 @@ app.controller('LoginCtrl', function( $scope
     var links = PelApi.getDocApproveServiceUrl("IsSessionValidJson");
 
     var appId = PelApi.getAppId();
-    var pin   = $scope.user.pin;
+    var pin = $scope.user.pin;
     $scope.user.pin = "";
 
-    if(appId !== ""){
-      var retIsSessionValidJson = PelApi.IsSessionValidJson(links , appId , pin );
+    if (appId !== "") {
+      var retIsSessionValidJson = PelApi.IsSessionValidJson(links, appId, pin);
       retIsSessionValidJson.then(
         //--- SUCCESS ---//
-        function () {
+        function() {
 
-          retIsSessionValidJson.success(function (data, status, headers, config) {
+          retIsSessionValidJson.success(function(data, status, headers, config) {
 
             var pinStatus = data;
-            PelApi.writeToLog(config_app.LOG_FILE_INFO_TYPE , "=========== IsSessionValidJson ================");
-            PelApi.writeToLog(config_app.LOG_FILE_INFO_TYPE , JSON.stringify(data));
+            PelApi.lagger.info("=========== IsSessionValidJson ================");
+            PelApi.lagger.info(JSON.stringify(data));
 
             if ("Valid" === pinStatus) {
               $ionicLoading.hide();
@@ -71,7 +64,7 @@ app.controller('LoginCtrl', function( $scope
               config_app.Pin = pin;
               config_app.IS_TOKEN_VALID = "Y";
               $state.go('app.p1_appsLists');
-            } else if("PWA" === pinStatus){
+            } else if ("PWA" === pinStatus) {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               $scope.user.message = config_app.pinCodeSubTitlePWA;
@@ -91,37 +84,38 @@ app.controller('LoginCtrl', function( $scope
               //$state.go("app.p1_appsLists");
               PelApi.goHome();
 
-            } else if ("EAI_ERROR" === pinStatus){
+            } else if ("EAI_ERROR" === pinStatus) {
 
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               PelApi.showPopup(config_app.EAI_ERROR_DESC, "");
 
-            } else if("EOL" === pinStatus){
+            } else if ("EOL" === pinStatus) {
 
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               PelApi.goHome();
 
-            } else if ("ERROR_CODE" === pinStatus){
+            } else if ("ERROR_CODE" === pinStatus) {
 
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               PelApi.showPopup(stat.description, "");
             }
-          }).error(function (data, status, headers, config) {
+          }).error(function(data, status, headers, config) {
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
-            PelApi.showPopup(config_app.getUserModuleTypesErrorMag , "");
+            PelApi.showPopup(config_app.getUserModuleTypesErrorMag, "");
           });
         }
         //--- ERROR ---//
-        , function (response) {
-          PelApi.writeToLog(config_app.LOG_FILE_ERROR_TYPE , "========== IsSessionValidJson ERROR ==========");
-          PelApi.writeToLog(config_app.LOG_FILE_ERROR_TYPE , JSON.stringify(response));
+        ,
+        function(response) {
+          PelApi.lagger.error("========== IsSessionValidJson ERROR ==========");
+          PelApi.lagger.error(JSON.stringify(response));
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
-          PelApi.showPopup(config_app.getUserModuleTypesErrorMag , "");
+          PelApi.showPopup(config_app.getUserModuleTypesErrorMag, "");
         }
       ); /// then
     }
@@ -140,7 +134,7 @@ app.controller('LoginCtrl', function( $scope
 });
 
 app.controller('ForgotPasswordCtrl', function($scope, $state) {
-  $scope.recoverPassword = function(){
+  $scope.recoverPassword = function() {
     $state.go('app.login');
   };
   $scope.TITLE_FORGOT_PASSWORD = config_app.TITLE_FORGOT_PASSWORD;
@@ -150,4 +144,3 @@ app.controller('ForgotPasswordCtrl', function($scope, $state) {
   $scope.user.pin = "";
   $scope.user.phone = config_app.MSISDN_VALUE;
 });
-
