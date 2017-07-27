@@ -16,7 +16,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
     //-----------------------------------------//
     //--        docApprove                   --//
     //-----------------------------------------//
-    , 'pele.P2_moduleListCtrl'
+     , 'pele.P2_moduleListCtrl'
     //-----------------------------------------//
     //--        docApprove/PO                --//
     //-----------------------------------------//
