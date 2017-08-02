@@ -1,5 +1,5 @@
-<ion-view class="feeds-categories-view " cache-view="false" hide-back-button="true">
-  <ion-nav-buttons side="right"  >
+<ion-view class="feeds-categories-view" cache-view="false" hide-back-button="true">
+  <ion-nav-buttons side="right">
     <button menu-toggle="left" class="button button-icon icon ion-navicon">
     </button>
   </ion-nav-buttons>
@@ -22,11 +22,8 @@
       <div class="col"></div>
     </div>
     <!-- start ng-repeat -->
-    <div class="row row-bottom" ng-repeat="category in feeds_categories.menuItems"  >
-      <div class="row" ng-click="forwardToApp(category.Path, category.AppId , category.DisplayName)"
-                       ng-model="btn_class.on_release"
-                       on-touch="category.PUSH_FLAG = !category.PUSH_FLAG"
-                       on-release="category.PUSH_FLAG = !category.PUSH_FLAG">
+    <div class="row row-bottom" ng-repeat="category in feeds_categories.menuItems">
+      <div class="row" ng-click="forwardToApp(category.Path, category.AppId , category.DisplayName)" ng-model="btn_class.on_release" on-touch="category.PUSH_FLAG = !category.PUSH_FLAG" on-release="category.PUSH_FLAG = !category.PUSH_FLAG">
         <div class="col col-10"></div>
         <div class="col col-80 item item-icon-right {{pushBtnClass(category.PUSH_FLAG)}}">
           <div class="row row-center ">

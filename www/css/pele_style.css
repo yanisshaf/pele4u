@@ -188,12 +188,11 @@ div.app-button{
 
 
 .description{
-  font-size: 20px !important;
   color: black !important;
   font-weight: bold;
   text-align: center;
   vertical-align: middle;
-  padding: 30px;
+  padding: 10px;
 }
 
 .row{padding: 0px !important; }
@@ -244,8 +243,9 @@ pele-button{
 /*----------------------------------------------------------------*/
 
 label.item-search{
-    background-color: #3F3F3D;
+    background-color: #64B5F6;
 }
+
 input.search-area{background-image: url("../img/DocApprove/search_box.png");
     background-size: 100% 32px !important;
     background-repeat:no-repeat;
@@ -469,3 +469,37 @@ h2.pele_rtl{
   direction: rtl;
   unicode-bidi: plaintext;
 }
+
+#apps-front-menu {padding: 0 10%}
+#apps-front-menu button {background-color: #E3F2FD;border-radius: 6px;font-weight:bolder;min-height:69px}
+#apps-front-menu button.activated {border-radius: 6px;background:#BBDEFB}
+
+label.item-search-new {;background: #c4c6c7}
+label.item-search-new  {border:1px solid #CCC;background:White;border-radius: 4px;margin:10px !important}
+label.item-search-new i {color:black;font-size:20px;}
+label.item-search-new input {color:black;font-size:20px}
+div.list-item-search {margin:0;background: #E3F2FD}
+div.new-tab-slide-box .tabbed-slidebox {background:#fff}
+
+.triangle-isosceles {
+  border:2px solid #2196F3;
+  position:relative;
+  padding:7px;
+  margin:1em 0 3em;
+  color:#000;
+  background:#fff;
+  border-radius:10px;
+}
+.triangle-isosceles:after {
+  content:"";
+  position:absolute;
+  bottom:-12px; /* value = - border-top-width - border-bottom-width */
+  right:10px; /* controls horizontal position */
+  border-width:12px 12px 0; /* vary these values to change the angle of the vertex */
+  border-style:solid;
+  border-color:#2196F3 transparent;
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
+}
+table.mix-alpha-numeric-table tr td {padding-left:5px}
