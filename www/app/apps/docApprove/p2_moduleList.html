@@ -20,7 +20,7 @@
     <div class="row row-bottom">
       <div class="col"></div>
     </div>
-    <div  id="apps-front-menu">
+    <div  ng-if="1" id="apps-front-menu">
     <div ng-repeat="source in category_sources">
       <button ng-click="onClick(source.MODULE_NAME ,source.DOCUMENT_QTY )"  class="button button-large button-stable button-block">
       {{source.MODULE_DESC}}&nbsp;&nbsp;({{source.DOCUMENT_QTY}})

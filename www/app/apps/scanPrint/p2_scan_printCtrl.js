@@ -8,7 +8,6 @@ app.controller('p2_scan_printCtrl', function($scope, $stateParams, $cordovaBarco
   //-----------------------------------------//
 
   $scope.doRefresh = function() {
-    alert("laztp2_scan_printCtrl")
     $ionicLoading.hide();
     $scope.$broadcast('scroll.refreshComplete');
 

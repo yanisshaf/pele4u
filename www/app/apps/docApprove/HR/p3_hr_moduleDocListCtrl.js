@@ -238,7 +238,7 @@ angular.module('pele')
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
       });
-    } // forwardToDoc
+    } 
 
     $scope.feed = [];
     $scope.searchText = {};

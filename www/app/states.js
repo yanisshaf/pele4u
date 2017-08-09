@@ -80,9 +80,9 @@ angular.module('pele.states', [])
           return "app/apps/docApprove/HR/p4_doc_806.html";
         },
         controller: 'p4_hr_docCtrl'
-      },
+      }
+    },
       src: ["app/apps/docApprove/HR/p4_hr_docCtrl.js"]
-    }
   }, {
     state: 'app.doc_807',
     url: "/doc_807/:AppId/:DocId/:DocInitId",
@@ -132,5 +132,4 @@ angular.module('pele.states', [])
         }
       },
       src: ["app/apps/scanPrint/p2_scan_printCtrl.js"]
-
   }]);
