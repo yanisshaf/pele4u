@@ -1,18 +1,24 @@
-<ion-view cache-view="false">
-  <ion-nav-buttons side="right">
+<ion-view class="feed-entries-view " cache-view="false">
+  <ion-nav-buttons side="right"  >
     <button menu-toggle="left" class="button button-icon icon ion-navicon">
     </button>
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-light">
       <div class="title" id="logo">
+        שגיאה
       </div>
     </div>
   </ion-nav-title>
+
   <ion-content class="pele-background">
-    <ion-refresher pulling-text="סריקה מחדש ..." on-refresh="doRefresh()">
-    </ion-refresher>
-    </button>
-    <h1>Scan print </h1>
+    <div class="card">
+      <div class="item item-body">
+    <p>
+    <strong>{{error}}</strong>
+    </p>
+
+  </div>
+    </div>
   </ion-content>
 </ion-view>

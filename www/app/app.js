@@ -18,8 +18,13 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
     ,'oc.lazyLoad'
   ])
 
-  .run(['$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings',
-    function($ionicPlatform, $state, $ionicLoading, PelApi, appSettings) {
+  .run(['$rootScope','$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings',
+    function($rootScope,$ionicPlatform, $state, $ionicLoading, PelApi, appSettings) {
+
+      $rootScope.$on( '$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+        PelApi.lagger.error( 'State Resolve Error: ', error);
+      });
+
 
       PelApi.init();
       $ionicPlatform.ready(function() {
@@ -161,6 +166,19 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
           }
         }
       })
+      .state('app.error', {
+       url: '/error',
+       params:{category :null,description:null},
+       views: {
+         'menuContent': {
+           templateUrl: 'templates/error.html',
+           controller: function($scope,$stateParams){
+                 $scope.error=$stateParams;
+           }
+         }
+       }
+     })
+
 
 
 

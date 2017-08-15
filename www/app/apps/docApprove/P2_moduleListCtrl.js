@@ -46,7 +46,7 @@ angular.module('pele')
     }
     $scope.pushBtnClass = function(event) {
 
-      
+
 
       if (event === true) {
         return "pele-item-on-release";
@@ -92,21 +92,20 @@ angular.module('pele')
     $scope.onClick = function(formType, docQty) {
       if (0 < docQty) {
 
-        var path = "";
-        if ("HR" === formType) {
-          path = appSettings.MODULE_TYPES_FORWARD_PATH.HR;
-        } else if ("POAPPRV" === formType) {
-          path = appSettings.MODULE_TYPES_FORWARD_PATH.POAPPRV;
-        } else if ("PELRQAPR" === formType) {
-          path = appSettings.MODULE_TYPES_FORWARD_PATH.PELRQAPR;
+
+        var params=  {
+            AppId: appSettings.config.appId,
+            FormType: formType,
+            Pin: appSettings.config.Pin
+        };
+
+        var path = appSettings.MODULE_TYPES_FORWARD_PATH[formType] || "app.error";
+
+        if(path==="app.error") {
+          params = {error:"Failed to locate MODULE_TYPES_FORWARD_PATH for FormType : " + formType }
         }
 
-        appId = appSettings.config.appId;
-        $state.go(path, {
-          AppId: appId,
-          FormType: formType,
-          Pin: appSettings.config.Pin
-        });
+        $state.go(path,params);
       }
     };
 
@@ -182,7 +181,7 @@ angular.module('pele')
 
         PelApi.lagger.info(JSON.stringify(data));
 
-        var stat = PelApi.GetPinCodeStatus2(data, "getUserModuleTypes");
+        var stat = PelApi.checkPinCode(data, "getUserModuleTypes");
         var pinCodeStatus = stat.status;
 
         if ("Valid" === pinCodeStatus) {

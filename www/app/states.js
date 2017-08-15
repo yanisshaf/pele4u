@@ -47,6 +47,18 @@ angular.module('pele.states', [])
       }
     },
     src: ["app/apps/docApprove/HR/p3_hr_moduleDocListCtrl.js"]
+  }, {
+    state: 'app.p3_tsk_moduleDocList',
+    url: "/p3_tsk_moduleDocList/:AppId/:FormType/:Pin",
+    views: {
+      'menuContent': {
+        templateUrl: function() {
+          return "app/apps/docApprove/TSK/p3_moduleDocList.html";
+        },
+        controller: 'p3_tsk_moduleDocListCtrl'
+      }
+    },
+    src: ["app/apps/docApprove/TSK/p3_tsk_moduleDocListCtrl.js"]
   },{
     state: 'app.doc_10002',
     url: "/doc_10002/:DocId/:DocInitId",
@@ -82,7 +94,7 @@ angular.module('pele.states', [])
         controller: 'p4_hr_docCtrl'
       }
     },
-      src: ["app/apps/docApprove/HR/p4_hr_docCtrl.js"]
+     src: ["app/apps/docApprove/HR/p4_hr_docCtrl.js"]
   }, {
     state: 'app.doc_807',
     url: "/doc_807/:AppId/:DocId/:DocInitId",
@@ -132,4 +144,5 @@ angular.module('pele.states', [])
         }
       },
       src: ["app/apps/scanPrint/p2_scan_printCtrl.js"]
+
   }]);

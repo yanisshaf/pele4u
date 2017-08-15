@@ -54,6 +54,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
         this.registerPushNotification();
       },
+
       registerPushNotification: function() {
         //-----------------------------------------
         //--   Registration for Push Notification
@@ -67,7 +68,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
           cordova.plugins.notification.badge.clear();
 
-          var oneSignalConf = appSettings.apiConfig.OneSignal[appSettings.apiConfig.env];
+          var oneSignalConf = appSettings.apiConfig.OneSignal[appSettings.apiConfig.env] ||"notfound";
+          if(oneSignalConf==="notfound") {
+            $state.go("app.error", {
+                      error:"Onesignal conf not found !"
+                });
+          }
 
           self.lagger.info('Open Notification Event');
           window.plugins.OneSignal.setLogLevel({
@@ -447,10 +453,53 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
 
       },
+
+      checkPinCode:function(data,interface) {
+        var stat = {
+          status: "",
+          description: ""
+        };
+
+        //First check EAI ResponseHeader
+        var eaiStatus = _.get(data,"Response.ResponseHeader.EAI_Status");
+        var SessionStatus = _.get(data,"Response.OutParams.SessionStatus");
+
+        if(eaiStatus && eaiStatus != "0") {
+          return  {
+                    status :"EAI_ERROR",
+                    description: "EAI ResponseHeader return with error"
+                  }
+        }
+        // Then we check EAI OutParams (Application error)
+        var P_ERROR_CODE = _.get(data,"Response.OutParams.P_ERROR_CODE","").toString();
+        var P_ERROR_DESC = _.get(data,"Response.OutParams.P_ERROR_DESC");
+
+        if(P_ERROR_CODE && P_ERROR_CODE != "0") {
+          return  {
+                    status :"ERROR_CODE",
+                    description: P_ERROR_DESC
+                  }
+        }
+        // then check specical return data from getMenu API
+        if ("getMenu" === interface) {
+            stat.status = data.Status;
+            if ("OLD" !== stat.status && "PAD" !== stat.status) {
+              stat.status = "Valid";
+            }
+            return stat ;
+        }
+
+        // Then we check if session is Invalid for All other API-s
+        //By default  if we reached here and SessionStatus is undefined - we assume it "Valid" --- aaahhhaaa
+
+        stat.status = _.get(data,"Response.OutParams.SessionStatus","Valid");
+        return stat;
+      },
+
       //-----------------------------------------------------------------------------//
       //--                      GetPinCodeStatus                                   --//
       //-----------------------------------------------------------------------------//
-      GetPinCodeStatus2: function(data, interface) {
+        GetPinCodeStatus2: function(data, interface) {
         var stat = {
           status: "",
           description: ""
@@ -470,6 +519,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           } catch (e) {
             eaiStatus_SubmitNotif = undefined;
           }
+
+
 
           //-- Get SessionStatus -- //
           try {
@@ -532,7 +583,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
                   "GetUserPoOrdGroupGroup" === interface ||
                   "GetUserNotif" === interface ||
                   "GetUserNotifications" === interface
-
                   ||
                   "SubmitNotif" === interface ||
                   "IsSessionValidJson" === interface ||
@@ -778,25 +828,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return $fileLogger;
       },
 
-      writeToLog: function(textType, text, tee) {
-
-        if (tee) {
-          console.log(textType + ' : ' + text);
-        }
-        //$fileLogger.setStorageFilename(appSettings.config.LOG_FILE_NAME);
-
-
-        if ("I" === textType && text !== undefined) {
-          $fileLogger.info(text);
-        } else if ("D" === textType && text !== undefined) {
-          $fileLogger.debug(text)
-        } else if ("W" === textType && text !== undefined) {
-          $fileLogger.warn(text);
-        } else if ("E" === textType && text !== undefined) {
-          $fileLogger.error(text);
-        }
-
-      }, // writeToLog
       goHome: function() {
         //window.location = "./../../index.html" ;
         $state.go("app.p1_appsLists");

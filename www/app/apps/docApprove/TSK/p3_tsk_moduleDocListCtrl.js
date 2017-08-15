@@ -2,7 +2,7 @@
  * Created by User on 25/08/2016.
  */
 angular.module('pele')
-  .controller('p3_hr_moduleDocListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, $cordovaNetwork, $sessionStorage, appSettings) {
+  .controller('p3_tsk_moduleDocListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, $cordovaNetwork, $sessionStorage, appSettings) {
 
     //---------------------------------
     //--       goHome
@@ -27,53 +27,32 @@ angular.module('pele')
 
       var retGetUserFormGroups = PelApi.GetUserFormGroups(links, appId, formType, pin);
 
-      retGetUserFormGroups.success(function(data, status, headers, config) {
+      retGetUserFormGroups.success(function(data) {
+        var apiStat =  PelApi.checkPinCode(data) ;
+        var pinStatus = apiStat.status;
 
+        if(pinStatus=="Valid") {
         PelApi.lagger.info(JSON.stringify(data));
-
-        var stat = PelApi.GetPinCodeStatus2(data, "GetUserFormGroups");
-        var pinStatus = stat.status;
-
-        if ("Valid" === pinStatus) {
-
-          if (data.Response.OutParams.ROW[0].DOC_NAME === null) {
-
-            //$state.go("app.p1_appsLists");
-            //appSettings.config.IS_TOKEN_VALID = "N";
-            PelApi.goHome();
-          } else {
-            $scope.chats = data.Response.OutParams.ROW;
-            console.log($scope.chats);
-            $scope.title = "";
-            var rowLength = $scope.chats.length;
-            if (rowLength > 0) {
-              $scope.title = $scope.chats[0].DOC_TYPE;
-            }
-            $ionicLoading.hide();
-            $scope.$broadcast('scroll.refreshComplete');
+        var result = _.get(data,"Response.OutParams.ROW",[]);
+        if(result.length && result[0].DOC_NAME === null)
+          $state.go("app.error",{category:"help_us",description:"maof retreived : DOC_NAME is NULL"}) ;
+          $scope.docs = result;
+         if ($scope.docs.length) {
+              $scope.title = $scope.docs[0].DOC_TYPE;
           }
         } else if ("PDA" === pinStatus) {
-
           $scope.login();
-
-        } else if ("InValid" === pinStatus) {
-
+        } else if ("InValid" === pinStatus && "EOL" === pinStatus) {
           appSettings.config.IS_TOKEN_VALID = "N";
-          PelApi.goHome();
-
+          $state.go("app.error",{category:"invalid_token",description:"Invalid token , status :" + pinStatus})
         } else if ("EAI_ERROR" === pinStatus) {
-
-          PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
-
-        } else if ("EOL" === pinStatus) {
-          appSettings.config.IS_TOKEN_VALID = "N";
-          PelApi.goHome();
+          $state.go("app.error",{category:"eai_error",description:apiStat.description})
         } else if ("ERROR_CODE" === pinStatus) {
-          PelApi.showPopup(stat.description, "");
+        PelApi.lagger.error("App error : " . apiStat.description)
         }
       }).error(function(error) {
         PelApi.lagger.error("GtUserFormGroups : " + JSON.stringify(error));
-        PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
+          $state.go("app.error",{category:"http_err",description:"http error"})
       }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -101,7 +80,7 @@ angular.module('pele')
     $scope.searchBarCreteria = function() {
       var searchText = $scope.searchText.text;
       if ($scope.searchText.text !== undefined && $scope.searchText.text !== "") {
-        list = $scope.chats;
+        list = $scope.docs;
         for (var i = 0; i < list.length; i++) {
           var sCount = 0;
           for (var j = 0; j < list[i].DOCUMENTS.DOCUMENTS_ROW.length; j++) {
@@ -111,12 +90,12 @@ angular.module('pele')
               sCount++;
             }
           }
-          $scope.chats[i].FORM_QTY = sCount;
+          $scope.docs[i].FORM_QTY = sCount;
         }
       } else {
         for (var i = 0; i < list.length; i++) {
           var sCount = list[i].DOCUMENTS.DOCUMENTS_ROW.length;
-          $scope.chats[i].FORM_QTY = sCount;
+          $scope.docs[i].FORM_QTY = sCount;
         }
       }
     }; //
@@ -164,12 +143,12 @@ angular.module('pele')
       var links = PelApi.getDocApproveServiceUrl("GetUserNotifNew");
 
       var retGetUserNotifications = PelApi.GetUserNotifications(links, appId, docId, docInitId);
-      retGetUserNotifications.success(function(data, status, headers, config) {
+      retGetUserNotifications.success(function(data) {
         data = $scope.fix_json(data)
         PelApi.lagger.info("============= Get User Notification ===============");
         PelApi.lagger.info("PelApi.GetUserNotifications : ",JSON.stringify(data));
 
-        var stat = PelApi.GetPinCodeStatus2(data, "GetUserNotifNew");
+        var stat = PelApi.checkPinCode(data, "GetUserNotifNew");
         var pinStatus = stat.status;
         PelApi.lagger.info("pinStatus after get pin code  : ",pinStatus);
 
@@ -193,10 +172,10 @@ angular.module('pele')
 
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
-	 console.log("state go : " , statePath,{"AppId": appId,
+	        console.log("state go : " , statePath,{"AppId": appId,
             "DocId": docId,
             "DocInitId": docInitId
-          }); 
+          });
 
           $state.go(statePath, {
             "AppId": appId,
@@ -209,7 +188,6 @@ angular.module('pele')
           $scope.login();
 
         } else if ("InValid" === pinStatus) {
-
 
           //$state.go("app.p1_appsLists");
           appSettings.config.IS_TOKEN_VALID = "N";
