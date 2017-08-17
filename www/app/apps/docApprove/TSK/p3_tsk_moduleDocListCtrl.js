@@ -10,6 +10,25 @@ angular.module('pele')
     $scope.goHome = function() {
       PelApi.goHome();
     }
+
+    $scope.parse = function(data) {
+      var mapped = [];
+      data.forEach(function(item) {
+        var docs = _.get(item, "DOCUMENTS.DOCUMENTS_ROW", [])
+        docs.forEach(function(doc) {
+          var task;
+          try {
+            task = JSON.parse(_.get(doc, "MESSAGE", "{}"));
+          } catch (e) {
+            task = {}
+            PelApi.lagger.error("Failed to parse  JSON  string on doc ")
+          }
+          doc.TASK = task;
+        })
+        mapped.push(item)
+      });
+      return mapped;
+    }
     //----------------------- REFRESH ------------------------//
     $scope.doRefresh = function() {
 
@@ -28,31 +47,45 @@ angular.module('pele')
       var retGetUserFormGroups = PelApi.GetUserFormGroups(links, appId, formType, pin);
 
       retGetUserFormGroups.success(function(data) {
-        var apiStat =  PelApi.checkPinCode(data) ;
+        var apiStat = PelApi.checkPinCode(data);
         var pinStatus = apiStat.status;
 
-        if(pinStatus=="Valid") {
-        PelApi.lagger.info(JSON.stringify(data));
-        var result = _.get(data,"Response.OutParams.ROW",[]);
-        if(result.length && result[0].DOC_NAME === null)
-          $state.go("app.error",{category:"help_us",description:"maof retreived : DOC_NAME is NULL"}) ;
-          $scope.docs = result;
-         if ($scope.docs.length) {
-              $scope.title = $scope.docs[0].DOC_TYPE;
+        if (pinStatus == "Valid") {
+          PelApi.lagger.info(JSON.stringify(data));
+          var result = _.get(data, "Response.OutParams.ROW", []);
+          if (result.length && result[0].DOC_NAME === null)
+            $state.go("app.error", {
+              category: "help_us",
+              description: "maof retreived : DOC_NAME is NULL"
+            });
+
+          $scope.docs = $scope.parse(result);
+
+          if ($scope.docs.length) {
+            $scope.title = $scope.docs[0].DOC_TYPE;
           }
         } else if ("PDA" === pinStatus) {
           $scope.login();
         } else if ("InValid" === pinStatus && "EOL" === pinStatus) {
           appSettings.config.IS_TOKEN_VALID = "N";
-          $state.go("app.error",{category:"invalid_token",description:"Invalid token , status :" + pinStatus})
+          $state.go("app.error", {
+            category: "invalid_token",
+            description: "Invalid token , status :" + pinStatus
+          })
         } else if ("EAI_ERROR" === pinStatus) {
-          $state.go("app.error",{category:"eai_error",description:apiStat.description})
+          $state.go("app.error", {
+            category: "eai_error",
+            description: apiStat.description
+          })
         } else if ("ERROR_CODE" === pinStatus) {
-        PelApi.lagger.error("App error : " . apiStat.description)
+          PelApi.lagger.error("App error : ".apiStat.description)
         }
       }).error(function(error) {
         PelApi.lagger.error("GtUserFormGroups : " + JSON.stringify(error));
-          $state.go("app.error",{category:"http_err",description:"http error"})
+        $state.go("app.error", {
+          category: "http_err",
+          description: "http error"
+        })
       }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -146,11 +179,11 @@ angular.module('pele')
       retGetUserNotifications.success(function(data) {
         data = $scope.fix_json(data)
         PelApi.lagger.info("============= Get User Notification ===============");
-        PelApi.lagger.info("PelApi.GetUserNotifications : ",JSON.stringify(data));
+        PelApi.lagger.info("PelApi.GetUserNotifications : ", JSON.stringify(data));
 
         var stat = PelApi.checkPinCode(data, "GetUserNotifNew");
         var pinStatus = stat.status;
-        PelApi.lagger.info("pinStatus after get pin code  : ",pinStatus);
+        PelApi.lagger.info("pinStatus after get pin code  : ", pinStatus);
 
         if ("Valid" === pinStatus) {
 
@@ -172,7 +205,8 @@ angular.module('pele')
 
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
-	        console.log("state go : " , statePath,{"AppId": appId,
+          console.log("state go : ", statePath, {
+            "AppId": appId,
             "DocId": docId,
             "DocInitId": docInitId
           });

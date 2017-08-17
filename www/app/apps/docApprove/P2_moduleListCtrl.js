@@ -93,19 +93,21 @@ angular.module('pele')
       if (0 < docQty) {
 
 
-        var params=  {
-            AppId: appSettings.config.appId,
-            FormType: formType,
-            Pin: appSettings.config.Pin
+        var params = {
+          AppId: appSettings.config.appId,
+          FormType: formType,
+          Pin: appSettings.config.Pin
         };
 
         var path = appSettings.MODULE_TYPES_FORWARD_PATH[formType] || "app.error";
 
-        if(path==="app.error") {
-          params = {error:"Failed to locate MODULE_TYPES_FORWARD_PATH for FormType : " + formType }
+        if (path === "app.error") {
+          params = {
+            error: "Failed to locate MODULE_TYPES_FORWARD_PATH for FormType : " + formType
+          }
         }
 
-        $state.go(path,params);
+        $state.go(path, params);
       }
     };
 
