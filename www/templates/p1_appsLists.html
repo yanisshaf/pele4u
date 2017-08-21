@@ -5,9 +5,7 @@
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
-      <div class="title" id="logo">
-        <!--<img src="img/DocApprove/logo.png" style="max-width: 100%;  height: 100%;"/>-->
-      </div>
+      <h1 class="title">בחירת אפליקציה</h1>
     </div>
   </ion-nav-title>
 
@@ -15,14 +13,19 @@
     <ion-refresher pulling-text="משוך לרענון..." on-refresh="doRefresh()">
     </ion-refresher>
 
-    <div class="pele-page-title pele-img-size pele-page-title-font">
-      <a class="description">בחירת אפליקציה</a>
-    </div>
     <div class="row row-bottom">
       <div class="col"></div>
     </div>
     <!-- start ng-repeat -->
-    <div class="row row-bottom" ng-repeat="category in feeds_categories.menuItems">
+    <div class="apps-front-menu">
+      <div class="menu-item" ng-repeat="category in feeds_categories.menuItems">
+
+        <button ng-click="forwardToApp(category.Path, category.AppId , category.DisplayName)" class="button button-large button-stable button-block">
+         <img class="menu-item-icon" src="{{category.Image}}" />    {{category.DisplayName}}
+        </button>
+      </div>
+    </div>
+    <div ng-if="0" class="row row-bottom" ng-repeat="category in feeds_categories.menuItems">
       <div class="row" ng-click="forwardToApp(category.Path, category.AppId , category.DisplayName)" ng-model="btn_class.on_release" on-touch="category.PUSH_FLAG = !category.PUSH_FLAG" on-release="category.PUSH_FLAG = !category.PUSH_FLAG">
         <div class="col col-10"></div>
         <div class="col col-80 item item-icon-right {{pushBtnClass(category.PUSH_FLAG)}}">

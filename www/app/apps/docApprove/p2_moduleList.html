@@ -6,7 +6,7 @@
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
-      <div class="title"><strong>בחירת טפסים לאישור</strong></div>
+      <h1 class="title">בחירת טפסים לאישור</h1>
     </div>
   </ion-nav-title>
 
@@ -20,10 +20,11 @@
     <div class="row row-bottom">
       <div class="col"></div>
     </div>
-    <div ng-if="1" id="apps-front-menu">
-      <div ng-repeat="source in category_sources">
+    <div ng-if="1" class="apps-front-menu">
+      <div class="menu-item" ng-repeat="source in category_sources">
         <button ng-click="onClick(source.MODULE_NAME ,source.DOCUMENT_QTY )" class="button button-large button-stable button-block">
-      {{source.MODULE_DESC}}&nbsp;&nbsp;({{source.DOCUMENT_QTY}})
+      {{source.MODULE_DESC}} <span class="badge badge-positive">{{source.DOCUMENT_QTY}}</span>
+
     </button>
       </div>
     </div>

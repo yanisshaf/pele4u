@@ -470,9 +470,16 @@ h2.pele_rtl{
   unicode-bidi: plaintext;
 }
 
-#apps-front-menu {padding: 0 10%}
-#apps-front-menu button {background-color: #E3F2FD;border-radius: 6px;font-weight:bolder;min-height:69px}
-#apps-front-menu button.activated {border-radius: 6px;background:#BBDEFB}
+.apps-front-menu {padding: 0 10%}
+.apps-front-menu .menu-item {margin-top:25px}
+.apps-front-menu button { height:90px;;position: relative;background-color: #E3F2FD;border-radius: 6px;font-weight:bolder;min-height:69px;}
+.apps-front-menu button.activated {border-radius: 6px;background:#BBDEFB}
+.apps-front-menu .badge.badge-positive {margin-right:10px}
+.apps-front-menu .menu-item button img {  position: absolute; height:60px;
+            top: 13px;
+            right:10px
+            }
+
 
 label.item-search-new {;background: #c4c6c7}
 label.item-search-new  {border:1px solid #CCC;background:White;border-radius: 4px;margin:10px !important}
@@ -502,7 +509,7 @@ div.new-tab-slide-box .tabbed-slidebox {background:#fff}
   display:none;
   width:0;
 }
-a.triangle-isosceles.active:after { 
+a.triangle-isosceles.active:after {
   content:"";
   position:absolute;
   bottom:-10px; /* value = - border-top-width - border-bottom-width */

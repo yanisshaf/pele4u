@@ -4,8 +4,8 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-nav-title>
-    <div class="bar bar-header bar-light">
-      <div class="title"><strong>אישור הזמנת רכש</strong></div>
+    <div class="bar bar-header bar-positive">
+      <h1 class="title">אישור הזמנת רכש</h1>
     </div>
   </ion-nav-title>
 
@@ -13,18 +13,16 @@
     <!-- Refresh to get the new posts -->
     <ion-refresher pulling-text="משוך לרענון..." on-refresh="doRefresh()">
     </ion-refresher>
-    <div ng-if="0" class="pele-page-title pele-img-size pele-page-title-font">
-      <a class="description">אישור הזמנות רכש</a>
-    </div>
-    <div class="list list-inset list-item-search">
+
+    <div ng-if="0" class="list list-inset list-item-search">
     <label class="item item-input item-search-new">
       <input type="text" placeholder="חיפוש" ng-model="searchText.text" class="" ng-change="searchBarCreteria()">
         <i class="icon ion-search placeholder-icon"></i>
       </input>
     </label>
    </div>
-    <label ng-if="0" class="item item-input item-search" ng-click="searchBarCreteria()">
-      <input type="search" class="search-area" style="color:#fafafa;" placeholder="חיפוש" ng-model="searchText.text">
+    <label ng-if="1" class="item item-input item-search" ng-click="searchBarCreteria()">
+      <input type="search" ng-change="searchBarCreteria() class="search-area" style="color:#fafafa;" placeholder="חיפוש" ng-model="searchText.text">
       <a class="search-icon" ></a>
     </label>
 

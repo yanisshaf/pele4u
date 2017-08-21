@@ -29,7 +29,7 @@
       <div ng-repeat="doc in docs">
         <ion-item class="item-stable" ng-click="toggleGroup(doc.DOC_ID)" ng-class="{active: isGroupShown(doc.DOC_ID)}">
           <a ng-class="isGroupShown(doc.DOC_ID) ? 'icon-expand' : 'icon-collapse'"></a>
-          <span class="item-title">{{doc.DOC_NAME}}&nbsp;({{doc.FORM_QTY}})</span>
+          <span class="item-title"> {{doc.DOC_NAME}}</span>
         </ion-item>
 
         <ion-item class="item-doc-list pele_rtl" ng-repeat="item in doc.DOCUMENTS.DOCUMENTS_ROW | filter:searchText.text" ng-show="isGroupShown(doc.DOC_ID)" ng-click="forwardToDoc(item.DOC_ID, item.DOC_INIT_ID)">
