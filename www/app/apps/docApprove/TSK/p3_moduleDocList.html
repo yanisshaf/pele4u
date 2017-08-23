@@ -5,7 +5,7 @@
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
-      <div class="title" id="logo">
+      <div class="title">{{title}}
         <!--<img src="img/DocApprove/logo.png" style="max-width: 100%;  height: 100%;"/>-->
       </div>
     </div>
@@ -15,9 +15,7 @@
     <!-- Refresh to get the new posts -->
     <ion-refresher pulling-text="משוך לרענון..." on-refresh="doRefresh()">
     </ion-refresher>
-    <div class="pele-page-title pele-img-size pele-page-title-font">
-      <a class="description">{{title}}</a>
-    </div>
+
 
     <label class="item item-input item-search" ng-click="searchBarCreteria()">
 
@@ -26,17 +24,17 @@
     </label>
 
     <ion-list>
-      <div ng-repeat="doc in docs">
-        <ion-item class="item-stable" ng-click="toggleGroup(doc.DOC_ID)" ng-class="{active: isGroupShown(doc.DOC_ID)}">
-          <a ng-class="isGroupShown(doc.DOC_ID) ? 'icon-expand' : 'icon-collapse'"></a>
-          <span class="item-title"> {{doc.DOC_NAME}}</span>
+      <div class="docs-menu" ng-repeat="docsGroup in docsGroups">
+        <ion-item class="docs-menu-head item-stable" ng-click="toggleGroup(docsGroup.DOC_ID)" ng-class="{active: isGroupShown(docsGroup.DOC_ID)}">
+          <a ng-class="isGroupShown(docsGroup.DOC_ID) ? 'icon-expand' : 'icon-collapse'"></a>
+         {{docsGroup.DOC_NAME}} <span class="pel-badge">{{docsGroup.FORM_QTY}}</span>
         </ion-item>
 
-        <ion-item class="item-doc-list pele_rtl" ng-repeat="item in doc.DOCUMENTS.DOCUMENTS_ROW | filter:searchText.text" ng-show="isGroupShown(doc.DOC_ID)" ng-click="forwardToDoc(item.DOC_ID, item.DOC_INIT_ID)">
-          <img ng-src="img/DocApprove/document_redirect.png">
-          <h2 class="pele_rtl">{{item.TASK.json_string[0].TASK_TYPE}}</h2>
-          <h3>{{item.DOC_INIT_ID}}</h3>
-          <!--<i class="icon ion-chevron-right icon-accessory"></i>-->
+        <ion-item class="docs-menu-details item-icon-left pele_rtl" ng-repeat="item in docsGroup.DOCUMENTS.DOCUMENTS_ROW | filter:searchText.text" ng-show="isGroupShown(docsGroup.DOC_ID)" ng-click="forwardToDoc(item.DOC_ID, item.DOC_INIT_ID)">
+          <img class="icon" ng-src="img/DocApprove/document_redirect.png">
+          <div class="docs-menu-item-title"> משימה {{item.DOC_INIT_ID}}  </div>
+          <div><strong>{{item.TASK.BAN_NAME}}</strong></div>
+          <div>סיום משוער לטיפול {{item.PLANNED_END_DATE}}</div>
         </ion-item>
 
       </div>

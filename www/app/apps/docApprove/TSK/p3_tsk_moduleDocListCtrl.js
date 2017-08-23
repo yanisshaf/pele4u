@@ -14,16 +14,17 @@ angular.module('pele')
     $scope.parse = function(data) {
       var mapped = [];
       data.forEach(function(item) {
-        var docs = _.get(item, "DOCUMENTS.DOCUMENTS_ROW", [])
-        docs.forEach(function(doc) {
+        var docsGroups = _.get(item, "DOCUMENTS.DOCUMENTS_ROW", [])
+        docsGroups.forEach(function(g) {
           var task;
           try {
-            task = JSON.parse(_.get(doc, "MESSAGE", "{}"));
+            task = JSON.parse(_.get(g, "MESSAGE", "{}"));
           } catch (e) {
             task = {}
-            PelApi.lagger.error("Failed to parse  JSON  string on doc ")
+            PelApi.lagger.error("Failed to parse  JSON  string on docsGroup ")
           }
-          doc.TASK = task;
+          g.TASK = _.get(task,"ROW.ROW",{});
+          console.log("TASK:",g.TASK)
         })
         mapped.push(item)
       });
@@ -39,8 +40,11 @@ angular.module('pele')
 
       //var appId = $stateParams.AppId,
       var appId = $stateParams.AppId,
-        formType = $stateParams.FormType,
-        pin = $stateParams.Pin;
+          formType = $stateParams.FormType,
+          pin = $stateParams.Pin;
+
+      $scope.appId =  appId;
+
 
       var links = PelApi.getDocApproveServiceUrl("GtUserFormGroups");
 
@@ -59,10 +63,10 @@ angular.module('pele')
               description: "maof retreived : DOC_NAME is NULL"
             });
 
-          $scope.docs = $scope.parse(result);
+          $scope.docsGroups = $scope.parse(result);
 
-          if ($scope.docs.length) {
-            $scope.title = $scope.docs[0].DOC_TYPE;
+          if ($scope.docsGroups.length) {
+            $scope.title = $scope.docsGroups[0].DOC_TYPE;
           }
         } else if ("PDA" === pinStatus) {
           $scope.login();
@@ -113,7 +117,7 @@ angular.module('pele')
     $scope.searchBarCreteria = function() {
       var searchText = $scope.searchText.text;
       if ($scope.searchText.text !== undefined && $scope.searchText.text !== "") {
-        list = $scope.docs;
+        list = $scope.docsGroups;
         for (var i = 0; i < list.length; i++) {
           var sCount = 0;
           for (var j = 0; j < list[i].DOCUMENTS.DOCUMENTS_ROW.length; j++) {
@@ -123,12 +127,12 @@ angular.module('pele')
               sCount++;
             }
           }
-          $scope.docs[i].FORM_QTY = sCount;
+          $scope.docsGroups[i].FORM_QTY = sCount;
         }
       } else {
         for (var i = 0; i < list.length; i++) {
           var sCount = list[i].DOCUMENTS.DOCUMENTS_ROW.length;
-          $scope.docs[i].FORM_QTY = sCount;
+          $scope.docsGroups[i].FORM_QTY = sCount;
         }
       }
     }; //
@@ -168,6 +172,7 @@ angular.module('pele')
     //--------------------------------------------------------------
     $scope.forwardToDoc = function(docId, docInitId) {
       //var appId = $stateParams.AppId;
+
       var appId = appSettings.config.appId;
       var statePath = 'app.doc_' + docId;
 

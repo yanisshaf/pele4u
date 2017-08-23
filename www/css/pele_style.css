@@ -527,3 +527,23 @@ table.mix-alpha-numeric-table tr td {padding-left:5px}
 div#main-apps-menu div.row-bottom {margin-top:15px}
 /* fix ios 10 title  proble*/
 .platform-ios .nav-bar-title .bar .title {margin-top:0 !important}
+.docs-menu-head {font-weight:bolder}
+.docs-menu-item-title {font-size: 18px;}
+.docs-menu .item.docs-menu-details {padding:7px 11px}
+.docs-menu .item.docs-menu-details .icon {height:50%; top:25%}
+.pel-badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #777;
+    border-radius: 10px;
+    margin-right:5px;
+}
+.pel-badge-positive {background-color:#387ef5 }

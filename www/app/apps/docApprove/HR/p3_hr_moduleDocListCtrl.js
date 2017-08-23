@@ -42,12 +42,12 @@ angular.module('pele')
             //appSettings.config.IS_TOKEN_VALID = "N";
             PelApi.goHome();
           } else {
-            $scope.chats = data.Response.OutParams.ROW;
-            console.log($scope.chats);
+            $scope.docsGroups = data.Response.OutParams.ROW;
+            console.log($scope.docsGroups);
             $scope.title = "";
-            var rowLength = $scope.chats.length;
+            var rowLength = $scope.docsGroups.length;
             if (rowLength > 0) {
-              $scope.title = $scope.chats[0].DOC_TYPE;
+              $scope.title = $scope.docsGroups[0].DOC_TYPE;
             }
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
@@ -101,7 +101,7 @@ angular.module('pele')
     $scope.searchBarCreteria = function() {
       var searchText = $scope.searchText.text;
       if ($scope.searchText.text !== undefined && $scope.searchText.text !== "") {
-        list = $scope.chats;
+        list = $scope.docsGroups;
         for (var i = 0; i < list.length; i++) {
           var sCount = 0;
           for (var j = 0; j < list[i].DOCUMENTS.DOCUMENTS_ROW.length; j++) {
@@ -111,12 +111,12 @@ angular.module('pele')
               sCount++;
             }
           }
-          $scope.chats[i].FORM_QTY = sCount;
+          $scope.docsGroups[i].FORM_QTY = sCount;
         }
       } else {
         for (var i = 0; i < list.length; i++) {
           var sCount = list[i].DOCUMENTS.DOCUMENTS_ROW.length;
-          $scope.chats[i].FORM_QTY = sCount;
+          $scope.docsGroups[i].FORM_QTY = sCount;
         }
       }
     }; //
@@ -196,7 +196,7 @@ angular.module('pele')
 	 console.log("state go : " , statePath,{"AppId": appId,
             "DocId": docId,
             "DocInitId": docInitId
-          }); 
+          });
 
           $state.go(statePath, {
             "AppId": appId,
