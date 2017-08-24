@@ -7,5 +7,8 @@
   },
   "watchPatterns": [
     "scss/**/*"
-  ]
+  ],
+  "gulp": {
+    "enabled": false
+  }
 }

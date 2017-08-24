@@ -1,6 +1,7 @@
 angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova', 'pele.messages'])
   .factory('PelApi', function($cordovaNetwork, $http, $rootScope, appSettings, $state, $ionicLoading, $filter, $ionicPopup, $timeout, $fileLogger, $sessionStorage, $localStorage, $cordovaFile, messages) {
     return {
+
       init: function() {
 
         this.messages = messages;
@@ -454,6 +455,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
       },
 
+
+
       checkPinCode:function(data,interface) {
         var stat = {
           status: "",
@@ -495,7 +498,37 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         stat.status = _.get(data,"Response.OutParams.SessionStatus","Valid");
         return stat;
       },
+      checkApiResponse:function(data,interface) {
+        var self = this ;
+        var apiStat = self.checkPinCode(data,interface);
+        var pinStatus = apiStat.status;
 
+        if (pinStatus == "Valid") {
+          self.lagger.info(JSON.stringify(data));
+          var result = _.get(data, "Response.OutParams", []);
+          return result ;
+        } else if (pinStatus === "PDA") {
+            $state.go("app.login");
+        } else if ("InValid" === pinStatus && "EOL" === pinStatus) {
+          appSettings.config.IS_TOKEN_VALID = "N";
+          $state.go("app.error", {
+            category: "invalid_token",
+            description: "Invalid token , status :" + pinStatus
+          })
+        } else if ("EAI_ERROR" === pinStatus) {
+          $state.go("app.error", {
+            category: "eai_error",
+            description: apiStat.description
+          })
+        } else if ("ERROR_CODE" === pinStatus) {
+          $state.go("app.error", {
+            category: "app_error",
+            description: apiStat.description
+          })
+        }
+
+        return this.checkPinCode(data,interface);
+      },
       //-----------------------------------------------------------------------------//
       //--                      GetPinCodeStatus                                   --//
       //-----------------------------------------------------------------------------//
@@ -736,9 +769,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             }
           }, ]
         });
-        myPopup.then(function(res) {
-
-        });
+        return myPopup ;
 
       },
       //===========================================================//
@@ -1072,4 +1103,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return myArr;
       }
     };
-  });
+  })
+  .filter('peldate', function() {
+    return function(dateString ,opt1,opt2) {
+      var date = moment(dateString, "YYYYMMDDHHmmss");
+      return date.unix()*1000;
+  }
+});

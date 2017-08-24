@@ -25,19 +25,20 @@
 
     <ion-list>
       <div class="docs-menu" ng-repeat="docsGroup in docsGroups">
-        <ion-item class="docs-menu-head item-stable" ng-click="toggleGroup(docsGroup.DOC_ID)" ng-class="{active: isGroupShown(docsGroup.DOC_ID)}">
-          <a ng-class="isGroupShown(docsGroup.DOC_ID) ? 'icon-expand' : 'icon-collapse'"></a>
-         {{docsGroup.DOC_NAME}} <span class="pel-badge">{{docsGroup.FORM_QTY}}</span>
+        <ion-item class="docs-menu-head item-stable" ng-click="docsGroup.active=!docsGroup.active" ng-class="{active: docsGroup.active}">
+          <a ng-class="docsGroup.active ? 'icon-expand' : 'icon-collapse'"></a> {{docsGroup.DOC_NAME}} <span class="pel-badge">{{docsGroup.FORM_QTY}}</span>
         </ion-item>
 
-        <ion-item class="docs-menu-details item-icon-left pele_rtl" ng-repeat="item in docsGroup.DOCUMENTS.DOCUMENTS_ROW | filter:searchText.text" ng-show="isGroupShown(docsGroup.DOC_ID)" ng-click="forwardToDoc(item.DOC_ID, item.DOC_INIT_ID)">
+        <ion-item class="docs-menu-details item-icon-left pele_rtl" ng-repeat="item in docsGroup.DOCUMENTS.DOCUMENTS_ROW | filter:searchText.text" ng-show="docsGroup.active" ng-click="forwardToDoc(docsGroup.DOC_ID, item.DOC_INIT_ID)">
           <img class="icon" ng-src="img/DocApprove/document_redirect.png">
-          <div class="docs-menu-item-title"> משימה {{item.DOC_INIT_ID}}  </div>
+          <div class="docs-menu-item-title"> משימה {{item.DOC_INIT_ID}} </div>
           <div><strong>{{item.TASK.BAN_NAME}}</strong></div>
-          <div>סיום משוער לטיפול {{item.PLANNED_END_DATE}}</div>
+          <div>סיום משוער לטיפול בלקוח
+            <span class="peldate">{{item.TASK.PLANNED_END_DATE|peldate | date : 'hh:ss dd-MM-yyyy'}}</span> </div>
         </ion-item>
 
       </div>
     </ion-list>
+    <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-content>
 </ion-view>

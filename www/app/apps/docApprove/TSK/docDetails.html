@@ -1,20 +1,20 @@
 <ion-view class="feed-entries-view">
 
-  <ion-nav-buttons side="right"  >
+  <ion-nav-buttons side="right">
     <button menu-toggle="left" class="button button-icon icon ion-navicon">
     </button>
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-light">
-      <div class="title" id="logo">טופס דיווחי היעדרות
+      <div class="title" id="logo">טופס השלמת שעות
         <!--<img src="img/DocApprove/logo.png" style="max-width: 100%;  height: 100%;"/>-->
       </div>
     </div>
   </ion-nav-title>
 
-  <ion-content scroll="false">
+  <ion-content scroll="false" onload="doRefresh()">
     <div ng-if="0" class="pele-page-title pele-img-size pele-page-title-font">
-      <a class="description">טופס דיווח היעדרות</a>
+      <a class="description">טופס השלמת שעות</a>
     </div>
     <tab-slide-box>
       <div class="tsb-icons">
@@ -26,39 +26,13 @@
           </ion-scroll>
         </div>
       </div>
-      <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)" >
-        <!-- -->
+      <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
+
         <!-------------------------------------------------------------------------------->
         <!----------------------------- Approve List Slide ------------------------------->
         <!-------------------------------------------------------------------------------->
-        <!--
         <ion-slide>
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll" >
-          <div ng-repeat="detail in docDetails.ACTION_HISTORY" type="item-text-wrap" dir="RTL">
-            <a class="item item-divider item-icon-right">
-              <i class="icon ion-android-contact"></i>
-              <p class="text-right pele_rtl">{{detail.USER_NAME}}</p>
-            </a>
-            <label class="item" ng-hide="pelHideShow(detail.ACTION , detail.NOTE)">
-              <div class="row">
-                <div class="col text-right pele_rtl">פעולה : </div>
-                <div class="col col-75 text-right pele_rtl">{{detail.ACTION}}</div>
-              </div>
-              <div class="row">
-                <div class="col text-right pele_rtl">ת. פעולה : </div>
-                <div class="col col-75 text-right pele_rtl">{{detail.ACTION_DATE}}</div>
-              </div>
-              <div class="row">
-                <div class="col text-right pele_rtl">הערות : </div>
-                <textarea class="col col-75 text-right pele_rtl" readonly="true">{{detail.ACTION_NOTE}}</textarea>
-              </div>
-            </label>
-          </div>
-            </ion-scroll>
-        </ion-slide>
-        -->
-        <ion-slide>
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll" >
+          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <div ng-repeat="detail in ACTION_HISTORY" type="item-text-wrap" dir="RTL">
               <!--<div class="item item-divider "> -->
               <a class="item item-divider item-icon-right pele-item-icon-left" ng-click="detail.SHOW_FLAG = !detail.SHOW_FLAG; detail.PUSH_COUNT = PUSH_COUNT +1;">
@@ -69,25 +43,25 @@
               </a>
 
               <label class="item" ng-hide="hidenAcctionHistoryDetails(detail.SHOW_FLAG, detail.HIDEN_FLAG, detail.PUSH_COUNT , detail.NOTE)">
-                <div class="row">
-                  <div class="col text-right pele_rtl">פעולה:</div>
-                  <div class="col col-75 text-right pele_rtl">{{detail.ACTION}}</div>
-                </div>
-                <div class="row">
-                  <div class="col text-right pele_rtl">תאריך:</div>
-                  <div class="col col-75 text-right pele_rtl">{{detail.ACTION_DATE}}</div>
-                </div>
-                <!--
-                <div class="row">
-                  <div class="col text-right pele_rtl">הערה:</div>
-                  <textarea class="col col-75 text-right pele_rtl" readonly="true">{{detail.NOTE}}</textarea>
-                </div>
-                -->
-                <div class="row">
-                  <div class="col text-right pele_rtl">הערות:</div>
-                  <div class="col col-75 pele-item item-text-wrap text-right pele_rtl">{{detail.NOTE}}</div>
-                </div>
-              </label>
+              <div class="row">
+                <div class="col text-right pele_rtl">פעולה:</div>
+                <div class="col col-75 text-right pele_rtl">{{detail.ACTION}}</div>
+              </div>
+              <div class="row">
+                <div class="col text-right pele_rtl">תאריך:</div>
+                <div class="col col-75 text-right pele_rtl">{{detail.ACTION_DATE}}</div>
+              </div>
+              <!--
+              <div class="row">
+                <div class="col text-right pele_rtl">הערה:</div>
+                <textarea class="col col-75 text-right pele_rtl" readonly="true">{{detail.NOTE}}</textarea>
+              </div>
+              -->
+              <div class="row">
+                <div class="col text-right pele_rtl">הערות:</div>
+                <div class="col col-75 pele-item item-text-wrap text-right pele_rtl">{{detail.NOTE}}</div>
+              </div>
+            </label>
             </div>
           </ion-scroll>
         </ion-slide>
@@ -95,9 +69,8 @@
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
         <ion-slide>
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll" >
-    <!-- Refresh to get the new posts -->
-
+          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
+            <!-- Refresh to get the new posts -->
             <label class="item item-thumbnail-left">
               <img src="img/employees/worker.png">
               <h2 class="text-right pele_rtl">שם : {{CREATOR}}</h2>
@@ -107,48 +80,61 @@
               <h2 class="text-right pele_rtl">מחלקה : {{DEPARTMENT}}</h2>
               <h2 class="text-right pele_rtl">חטיבה : {{SECTOR}}</h2>
             </label>
-      <ul class="list">
-        <label class="item" dir="RTL">
-          <!-- Holly Day -->
-          <div class="row">
-            <div class="col text-right pele_rtl">יתרת שעות חופשה</div>
-          </div>
-          <div class="row">
-            <div class="col text-right pele_rtl" style="color:red;">{{HOLIDAY_BALANCE}}</div>
-          </div>
-        </label>
-        <div ng-repeat="detail in docDetails.DOC_LINES" type="item-text-wrap" dir="RTL">
-            <a class="item item-divider item-icon-right" ng-click="toggleGroup(detail.ATTRIBUTE2)">
+            <ul class="list">
+              <!---------------------------- 242 --------------------------------->
+              <div ng-repeat="detail in docDetails.DOC_LINES" type="item-text-wrap" dir="RTL">
+                <a class="item item-divider item-icon-right" ng-click="toggleGroup(detail.EFFECTIVE_DATE)">
               <i class="icon ion-android-calendar"></i>
-              <p class="float-right">מ : {{detail.ATTRIBUTE2}}</p>
-              <p class="float-right tab">עד: {{detail.ATTRIBUTE3}}</p>
-              <i ng-class="isGroupShown(detail.ATTRIBUTE2) ? 'icon-expand' : 'icon-collapse'"></i>
+              <p class="float-right">{{detail.EFFECTIVE_DATE}}</p>
+              <span>יום: {{detail.ATTRIBUTE1}}</span>
+              <span class="tab">סה"כ
+                {{detail.ATTRIBUTE2}}
+              </span>
+              <i ng-class="isGroupShown(detail.EFFECTIVE_DATE) ? 'icon-expand' : 'icon-collapse'"></i>
             </a>
-          <label class="item" ng-show="isGroupShown(detail.ATTRIBUTE2)">
+
+
+                <label class="item" ng-show="isGroupShown(detail.EFFECTIVE_DATE)">
             <div class="row">
-              <div class="col col-30 text-right pele_rtl">סיבה העדרות : </div>
-              <div class="col col-70 text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE4)">
-                <p class="under" style="color:blue">{{detail.ATTRIBUTE4}}</p>
+              <div class="col text-right pele_rtl">כניסה 1</div>
+              <div class="col text-right pele_rtl"><i ng-style="redStyle(detail.ATTRIBUTE4)">{{detail.ATTRIBUTE3}}</i></div>
+              <div class="col text-right pele_rtl">יציאה 1</div>
+              <div class="col text-right pele_rtl"><i ng-style="redStyle(detail.ATTRIBUTE6)">{{detail.ATTRIBUTE5}}</i></div>
+            </div>
+            <div class="row">
+              <div class="col text-right pele_rtl">כניסה 2</div>
+              <div class="col text-right pele_rtl"><i ng-style="redStyle(detail.ATTRIBUTE8)">{{detail.ATTRIBUTE7}}</i></div>
+              <div class="col text-right pele_rtl">יציאה 2</div>
+              <div class="col text-right pele_rtl"><i ng-style="redStyle(detail.ATTRIBUTE10)">{{detail.ATTRIBUTE9}}</i></div>
+            </div>
+            <div class="row">
+              <div class="col col-30 text-right pele_rtl">סיבת אי דיווח : </div>
+              <div class="col col-70 text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE11)">
+                <p class="under" style="color:blue">{{detail.ATTRIBUTE11}}</p>
               </div>
             </div>
             <div class="row">
               <div class="col col-30 text-right pele_rtl">הערה : </div>
-              <div class="col col-70 text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE5)">
-                <p class="under" style="color:blue">{{detail.ATTRIBUTE5}}</p>
+              <div class="col col-70 text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE12)">
+                <p class="under" style="color:blue">{{detail.ATTRIBUTE12}}</p>
+              </div>
+            </div>
+            <div class="row" ng-show="isHourException12Shown(detail.ATTRIBUTE13)">
+              <div class="col text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE13)">
+                <p class="under" style="color:red">{{detail.ATTRIBUTE13}}</p>
               </div>
             </div>
           </label>
-        </div>
-      </ul>
-     </ion-scroll>
-    </ion-slide>
-   </ion-slide-box>
+              </div>
+            </ul>
+          </ion-scroll>
+        </ion-slide>
+      </ion-slide-box>
   </ion-content>
   <!-- Footer Actions -->
   <ion-footer-bar align-title="right">
 
     <div class="row">
-
       <div class="col">
         <button class="button button-block button-large button-positive  icon-right ion-paper-airplane" ng-click="showBtnActions()">פעולות</button>
       </div>

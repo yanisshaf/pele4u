@@ -5,13 +5,15 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('p4_hr_docCtrl', ['$rootScope', '$scope', '$stateParams', '$http', '$q', '$location', '$window', '$timeout', '$ionicLoading', '$ionicActionSheet', '$ionicModal', 'PelApi', '$ionicNavBarDelegate', '$cordovaNetwork', '$ionicPopup', 'appSettings', '$sessionStorage', function($rootScope, $scope, $stateParams, $http, $q, $location, $window, $timeout, $ionicLoading, $ionicActionSheet, $ionicModal, PelApi, $ionicNavBarDelegate, $cordovaNetwork, $ionicPopup, appSettings, $sessionStorage) {
+  .controller('docDetailsCtrl', ['$state', '$rootScope', '$scope', '$stateParams', '$http', '$location', '$window', '$timeout', '$ionicLoading', '$ionicActionSheet', '$ionicModal', 'PelApi', '$ionicNavBarDelegate', '$cordovaNetwork', '$ionicPopup', 'appSettings', '$sessionStorage', function($state, $rootScope, $scope, $stateParams, $http, $location, $window, $timeout, $ionicLoading, $ionicActionSheet, $ionicModal, PelApi, $ionicNavBarDelegate, $cordovaNetwork, $ionicPopup, appSettings, $sessionStorage) {
     //---------------------------------
     //--       goHome
     //---------------------------------
     $scope.goHome = function() {
       PelApi.goHome();
     }
+
+
     //---------------------------------------------------------------------------
     //--                         openExistText
     //---------------------------------------------------------------------------
@@ -176,6 +178,39 @@ angular.module('pele')
     //--                         doRefresh
     //---------------------------------------------------------------------------
     $scope.doRefresh = function() {
+      console.log('stateParams :', $stateParams)
+
+      PelApi.showLoading();
+      var links = PelApi.getDocApproveServiceUrl("GetUserNotifNew");
+      var retGetUserNotifications = PelApi.GetUserNotifications(links, $stateParams.appId, $stateParams.docId, $stateParams.docInitId);
+      retGetUserNotifications.success(function(data) {
+        PelApi.lagger.info("============= Get User Notification ===============");
+        var apiData = PelApi.checkApiResponse(data);
+        PelApi.lagger.info("PelApi.GetUserNotifications : ", JSON.stringify(apiData));
+        var result = apiData.Result;
+        $scope.docDetails = result;
+
+        /*  if ("Valid" === pinStatus) {
+          var newData = data.Response.OutParams.Result;
+          appSettings.config.docDetails = newData;
+          var buttonsLength = 0;
+          if (appSettings.config.docDetails.BUTTONS.length !== undefined) {
+            buttonsLength = appSettings.config.docDetails.BUTTONS.length;
+          }
+          if (2 === buttonsLength) {
+            appSettings.config.ApprovRejectBtnDisplay = true;
+          } else {
+            appSettings.config.ApprovRejectBtnDisplay = false;
+          }
+          */
+      }).error(function(error) {
+        PelApi.lagger.error("GetUserNotifNew : " + JSON.stringify(error));
+        PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
+      }).finally(function() {
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+      });
+      // forwardToDoc
       $scope.data = {};
       $scope.feed = [];
       $scope.tabs = appSettings.tabs;
@@ -195,32 +230,34 @@ angular.module('pele')
 
       $sessionStorage.DOC_ID = docId;
 
-      if (appSettings.config.docDetails.DOC_LINES && appSettings.config.docDetails.DOC_LINES.length > 1) {
+      $scope.docDetails.DOC_LINES = [];
+
+      if ($scope.docDetails.DOC_LINES && $scope.docDetails.DOC_LINES.length > 1) {
         $scope.shownGroup = null;
       } else {
         if (docId === "807") {
-          $scope.shownGroup = appSettings.config.docDetails.DOC_LINES[0].ATTRIBUTE2;
+          $scope.shownGroup = $scope.docDetails.DOC_LINES[0].ATTRIBUTE2;
         } else {
-          $scope.shownGroup = appSettings.config.docDetails.DOC_LINES[0].EFFECTIVE_DATE;
+          $scope.shownGroup = $scope.docDetails.DOC_LINES[0].EFFECTIVE_DATE;
         }
       }
-      $scope.buttonsArr = appSettings.config.docDetails.BUTTONS;
-      $scope.docDetails = appSettings.config.docDetails;
-      $scope.sourceTitle = appSettings.config.docDetails.DOC_NAME;
-      $scope.CREATOR = appSettings.config.docDetails.CREATOR;
-      $scope.EMP_NUMBER = appSettings.config.docDetails.EMP_NUMBER;
-      $scope.SECTOR = appSettings.config.docDetails.SECTOR;
-      $scope.DEPARTMENT = appSettings.config.docDetails.DEPARTMENT;
-      $scope.DOC_INIT_ID = appSettings.config.docDetails.DOC_INIT_ID;
-      $scope.SENT_DATE = appSettings.config.docDetails.SENT_DATE;
-      $scope.NOTIFICATION_ID = appSettings.config.docDetails.NOTIFICATION_ID;
-      $scope.HOLIDAY_BALANCE = appSettings.config.docDetails.HOLIDAY_BALANCE;
+      $scope.buttonsArr = $scope.docDetails.BUTTONS;
+      $scope.docDetails = $scope.docDetails;
+      $scope.sourceTitle = $scope.docDetails.DOC_NAME;
+      $scope.CREATOR = $scope.docDetails.CREATOR;
+      $scope.EMP_NUMBER = $scope.docDetails.EMP_NUMBER;
+      $scope.SECTOR = $scope.docDetails.SECTOR;
+      $scope.DEPARTMENT = $scope.docDetails.DEPARTMENT;
+      $scope.DOC_INIT_ID = $scope.docDetails.DOC_INIT_ID;
+      $scope.SENT_DATE = $scope.docDetails.SENT_DATE;
+      $scope.NOTIFICATION_ID = $scope.docDetails.NOTIFICATION_ID;
+      $scope.HOLIDAY_BALANCE = $scope.docDetails.HOLIDAY_BALANCE;
 
       console.log("========================  ACTION_HISTORY SOURCE  ====================================")
-      console.log(JSON.stringify(appSettings.config.docDetails.ACTION_HISTORY));
+      console.log(JSON.stringify($scope.docDetails.ACTION_HISTORY));
       console.log("=============================================================================")
 
-      $scope.ACTION_HISTORY = $scope.addPushFlagToActionHistory(appSettings.config.docDetails.ACTION_HISTORY);
+      $scope.ACTION_HISTORY = $scope.addPushFlagToActionHistory($scope.docDetails.ACTION_HISTORY);
 
       console.log("========================  ACTION_HISTORY ====================================")
       console.log(JSON.stringify($scope.ACTION_HISTORY));

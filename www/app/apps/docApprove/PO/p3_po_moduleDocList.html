@@ -21,10 +21,11 @@
       </input>
     </label>
    </div>
-    <label ng-if="1" class="item item-input item-search" ng-click="searchBarCreteria()">
-      <input type="search" ng-change="searchBarCreteria() class="search-area" style="color:#fafafa;" placeholder="חיפוש" ng-model="searchText.text">
-      <a class="search-icon" ></a>
-    </label>
+   <label class="item item-input item-search" ng-click="searchBarCreteria()">
+
+     <input type="search" class="search-area" style="color:#fafafa;" placeholder="חיפוש" ng-model="searchText.text">
+     <a class="search-icon" ></a>
+   </label>
 
     <ion-list>
       <div ng-repeat="chat in chats">

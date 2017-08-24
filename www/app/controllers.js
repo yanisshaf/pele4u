@@ -41,7 +41,7 @@ angular.module('pele.controllers', ['ngStorage'])
   //=====================================================================//
   //==                        homeCtrl                                 ==//
   //=====================================================================//
-  .controller('homeCtrl', function($scope, $http, $state, $ionicLoading, PelApi, $cordovaNetwork, $rootScope, $ionicPopup, $stateParams) {
+  .controller('homeCtrl', function($scope, $http, $state, $ionicLoading, PelApi, $rootScope, $ionicPopup, $stateParams) {
     var showLoading = $stateParams.showLoading;
 
     if ("Y" === showLoading) {
@@ -58,15 +58,18 @@ angular.module('pele.controllers', ['ngStorage'])
           $ionicPopup.alert({
             title: PelApi.messages.no_cordova
           });
-          return false;
+          return false; 
         }
 
         $cordovaFile.readAsDataURL(cordova.file.dataDirectory, appSettings.config.LOG_FILE_NAME)
           .then(function(data) {
+            var env =  appSettings.config.env ;
+            var recipient = appSettings.config.LOG_FILE_MAIL_RECIPIENT[env] || "" ;
+
             data = data.replace(";base64", ".txt;base64");
             $cordovaSocialSharing
               .shareViaEmail("pele4u log",
-                appSettings.config.LOG_FILE_NAME, appSettings.config.LOG_FILE_MAIL_RECIPIENT, null, null, data)
+                appSettings.config.LOG_FILE_NAME, recipient, null, null, data)
               //.share('Share my file', 'some topic', data, null)
               .then(function(result) {
                 console.log("Shared successfully")

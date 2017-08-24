@@ -103,7 +103,8 @@ angular.module('pele')
 
         if (path === "app.error") {
           params = {
-            error: "Failed to locate MODULE_TYPES_FORWARD_PATH for FormType : " + formType
+            category: "client_err",
+            description: "Failed to locate MODULE_TYPES_FORWARD_PATH for FormType : " + formType
           }
         }
 

@@ -1,5 +1,5 @@
 angular.module('pele.states', [])
-.constant('appStates', [{
+  .constant('appStates', [{
     state: "app.p2_moduleList",
     url: '/p2_moduleList/:AppId/:Title/:Pin',
     views: {
@@ -48,18 +48,31 @@ angular.module('pele.states', [])
     },
     src: ["app/apps/docApprove/HR/p3_hr_moduleDocListCtrl.js"]
   }, {
-    state: 'app.p3_tsk_moduleDocList',
-    url: "/p3_tsk_moduleDocList/:AppId/:FormType/:Pin",
+    state: 'app.task_list',
+    url: "/task_list/:AppId/:FormType/:Pin",
     views: {
       'menuContent': {
         templateUrl: function() {
-          return "app/apps/docApprove/TSK/p3_moduleDocList.html";
+          return "app/apps/docApprove/TSK/list.html";
         },
-        controller: 'p3_tsk_moduleDocListCtrl'
+        controller: 'taskListDetailsCtrl',
       }
     },
-    src: ["app/apps/docApprove/TSK/p3_tsk_moduleDocListCtrl.js"]
-  },{
+    src: ["app/apps/docApprove/TSK/listCtrl.js"]
+  }, {
+    state: 'app.task_details',
+    url: "/task_details/:formType/:appId/:docId/:docInitId",
+    views: {
+      'menuContent': {
+        templateUrl: function() {
+          return "app/apps/docApprove/TSK/docDetails.html";
+        },
+        controller: 'docDetailsCtrl',
+        controllerAs: "vm",
+      }
+    },
+    src: ["app/apps/docApprove/TSK/docDetailsCtrl.js"]
+  }, {
     state: 'app.doc_10002',
     url: "/doc_10002/:DocId/:DocInitId",
     views: {
@@ -94,7 +107,7 @@ angular.module('pele.states', [])
         controller: 'p4_hr_docCtrl'
       }
     },
-     src: ["app/apps/docApprove/HR/p4_hr_docCtrl.js"]
+    src: ["app/apps/docApprove/HR/p4_hr_docCtrl.js"]
   }, {
     state: 'app.doc_807',
     url: "/doc_807/:AppId/:DocId/:DocInitId",
@@ -132,17 +145,17 @@ angular.module('pele.states', [])
       }
     },
     src: ["app/apps/docApprove/INI/p4_ini_doc_30002Ctrl.js"]
-  },{
-    state:'app.p2_scan_print',
+  }, {
+    state: 'app.p2_scan_print',
     url: '/scan_print',
-      views: {
-        'menuContent': {
-          templateUrl: function() {
-            return 'app/apps/scanPrint/p2_scan_print.html';
-          },
-          controller:'p2_scan_printCtrl'
-        }
-      },
-      src: ["app/apps/scanPrint/p2_scan_printCtrl.js"]
+    views: {
+      'menuContent': {
+        templateUrl: function() {
+          return 'app/apps/scanPrint/p2_scan_print.html';
+        },
+        controller: 'p2_scan_printCtrl'
+      }
+    },
+    src: ["app/apps/scanPrint/p2_scan_printCtrl.js"]
 
   }]);

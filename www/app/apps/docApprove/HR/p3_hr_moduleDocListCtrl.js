@@ -198,7 +198,7 @@ angular.module('pele')
             "DocInitId": docInitId
           });
 
-          $state.go(statePath, {
+             $state.go(statePath, {
             "AppId": appId,
             "DocId": docId,
             "DocInitId": docInitId
@@ -209,7 +209,6 @@ angular.module('pele')
           $scope.login();
 
         } else if ("InValid" === pinStatus) {
-
 
           //$state.go("app.p1_appsLists");
           appSettings.config.IS_TOKEN_VALID = "N";
