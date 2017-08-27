@@ -548,4 +548,5 @@ div#main-apps-menu div.row-bottom {margin-top:15px}
     margin-right:5px;
 }
 .pel-badge-positive {background-color:#387ef5 }
-.item-section {padding:10px}
+.item-section {padding:6px}
+.no-border { border:0  !important}
