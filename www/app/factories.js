@@ -69,11 +69,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
           cordova.plugins.notification.badge.clear();
 
-          var oneSignalConf = appSettings.apiConfig.OneSignal[appSettings.apiConfig.env] ||"notfound";
-          if(oneSignalConf==="notfound") {
+          var oneSignalConf = appSettings.apiConfig.OneSignal[appSettings.apiConfig.env] || "notfound";
+          if (oneSignalConf === "notfound") {
             $state.go("app.error", {
-                      error:"Onesignal conf not found !"
-                });
+              error: "Onesignal conf not found !"
+            });
           }
 
           self.lagger.info('Open Notification Event');
@@ -457,58 +457,58 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
 
 
-      checkPinCode:function(data,interface) {
+      checkPinCode: function(data, interface) {
         var stat = {
           status: "",
           description: ""
         };
 
         //First check EAI ResponseHeader
-        var eaiStatus = _.get(data,"Response.ResponseHeader.EAI_Status");
-        var SessionStatus = _.get(data,"Response.OutParams.SessionStatus");
+        var eaiStatus = _.get(data, "Response.ResponseHeader.EAI_Status");
+        var SessionStatus = _.get(data, "Response.OutParams.SessionStatus");
 
-        if(eaiStatus && eaiStatus != "0") {
-          return  {
-                    status :"EAI_ERROR",
-                    description: "EAI ResponseHeader return with error"
-                  }
+        if (eaiStatus && eaiStatus != "0") {
+          return {
+            status: "EAI_ERROR",
+            description: "EAI ResponseHeader return with error"
+          }
         }
         // Then we check EAI OutParams (Application error)
-        var P_ERROR_CODE = _.get(data,"Response.OutParams.P_ERROR_CODE","").toString();
-        var P_ERROR_DESC = _.get(data,"Response.OutParams.P_ERROR_DESC");
+        var P_ERROR_CODE = _.get(data, "Response.OutParams.P_ERROR_CODE", "").toString();
+        var P_ERROR_DESC = _.get(data, "Response.OutParams.P_ERROR_DESC");
 
-        if(P_ERROR_CODE && P_ERROR_CODE != "0") {
-          return  {
-                    status :"ERROR_CODE",
-                    description: P_ERROR_DESC
-                  }
+        if (P_ERROR_CODE && P_ERROR_CODE != "0") {
+          return {
+            status: "ERROR_CODE",
+            description: P_ERROR_DESC
+          }
         }
         // then check specical return data from getMenu API
         if ("getMenu" === interface) {
-            stat.status = data.Status;
-            if ("OLD" !== stat.status && "PAD" !== stat.status) {
-              stat.status = "Valid";
-            }
-            return stat ;
+          stat.status = data.Status;
+          if ("OLD" !== stat.status && "PAD" !== stat.status) {
+            stat.status = "Valid";
+          }
+          return stat;
         }
 
         // Then we check if session is Invalid for All other API-s
         //By default  if we reached here and SessionStatus is undefined - we assume it "Valid" --- aaahhhaaa
 
-        stat.status = _.get(data,"Response.OutParams.SessionStatus","Valid");
+        stat.status = _.get(data, "Response.OutParams.SessionStatus", "Valid");
         return stat;
       },
-      checkApiResponse:function(data,interface) {
-        var self = this ;
-        var apiStat = self.checkPinCode(data,interface);
+      checkApiResponse: function(data, interface) {
+        var self = this;
+        var apiStat = self.checkPinCode(data, interface);
         var pinStatus = apiStat.status;
 
         if (pinStatus == "Valid") {
           self.lagger.info(JSON.stringify(data));
           var result = _.get(data, "Response.OutParams", []);
-          return result ;
+          return result;
         } else if (pinStatus === "PDA") {
-            $state.go("app.login");
+          $state.go("app.login");
         } else if ("InValid" === pinStatus && "EOL" === pinStatus) {
           appSettings.config.IS_TOKEN_VALID = "N";
           $state.go("app.error", {
@@ -527,12 +527,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           })
         }
 
-        return this.checkPinCode(data,interface);
+        return this.checkPinCode(data, interface);
       },
       //-----------------------------------------------------------------------------//
       //--                      GetPinCodeStatus                                   --//
       //-----------------------------------------------------------------------------//
-        GetPinCodeStatus2: function(data, interface) {
+      GetPinCodeStatus2: function(data, interface) {
         var stat = {
           status: "",
           description: ""
@@ -615,8 +615,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
                   "GetUserFormGroups" === interface ||
                   "GetUserPoOrdGroupGroup" === interface ||
                   "GetUserNotif" === interface ||
-                  "GetUserNotifications" === interface
-                  ||
+                  "GetUserNotifications" === interface ||
                   "SubmitNotif" === interface ||
                   "IsSessionValidJson" === interface ||
                   "GetUserPoOrdGroupGroup" === interface ||
@@ -769,7 +768,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             }
           }, ]
         });
-        return myPopup ;
+        return myPopup;
 
       },
       //===========================================================//
@@ -1101,12 +1100,54 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         } // for
 
         return myArr;
+      },
+
+      /*****************************************************************
+        function : getJsonString
+        parameters :
+        string : The Json string to be parse
+        path : a path of resolved keys .. e,g "stodents[0].info"
+        redirect : bollean , true -> redirect to error page else return undefined
+      */
+
+      getJsonString: function(string, path, redirect) {
+        var jsVar = this.jsonParse(string, redirect)
+        if (typeof jsVar == "undefined")
+          return undefined;
+        var subJsVar = _.get(jsVar, path);
+        if (typeof subJsVar == "undefined" && redirect) {
+          $state.go("app.error", {
+            category: "invalid_json_string",
+            description: "Failed to parse  JSON  string :" + string
+          })
+        }
+        return subJsVar;
+      },
+
+      jsonParse: function(str, redirect) {
+        if (typeof redirect == "undefined")
+          redirect = true;
+        var jsVar;
+        try {
+          jsVar = JSON.parse(str);
+        } catch (e) {
+          if (redirect)
+            $state.go("app.error", {
+              category: "invalid_json_string",
+              description: "Failed to parse  JSON  string :" + str
+            })
+          else
+            PelApi.lagger.error("Failed to parse  JSON  string   : " + str)
+          return undefined;
+        }
+        return jsVar;
       }
     };
+
   })
   .filter('peldate', function() {
-    return function(dateString ,opt1,opt2) {
+    return function(dateString, opt1, opt2) {
       var date = moment(dateString, "YYYYMMDDHHmmss");
-      return date.unix()*1000;
-  }
-});
+      return date.unix() * 1000;
+    }
+  });

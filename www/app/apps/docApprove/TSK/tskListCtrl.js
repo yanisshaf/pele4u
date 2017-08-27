@@ -2,7 +2,7 @@
  * Created by User on 25/08/2016.
  */
 angular.module('pele')
-  .controller('taskListDetailsCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
+  .controller('tskListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
     $scope.parse = function(data) {
       var mapped = [];
       data.forEach(function(item) {
@@ -97,7 +97,7 @@ angular.module('pele')
     $scope.forwardToDoc = function(docId, docInitId) {
 
 
-      var statePath = 'app.task_details';
+      var statePath = 'app.tsk_details';
 
       $state.go(statePath, {
         formType: $scope.formType,

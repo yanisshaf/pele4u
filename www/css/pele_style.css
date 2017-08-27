@@ -457,13 +457,14 @@ p.under {
   font-weight:bold;
   text-decoration:none;
 }
-div.pele_rtl {
+.pele_rtl,div.pele_rtl {
   direction: rtl;
   unicode-bidi :plaintext ;
 }
 ion-item.pele_rtl {
   direction: rtl;
   unicode-bidi: plaintext;
+
 }
 h2.pele_rtl{
   direction: rtl;
@@ -547,3 +548,4 @@ div#main-apps-menu div.row-bottom {margin-top:15px}
     margin-right:5px;
 }
 .pel-badge-positive {background-color:#387ef5 }
+.item-section {padding:10px}

@@ -48,30 +48,31 @@ angular.module('pele.states', [])
     },
     src: ["app/apps/docApprove/HR/p3_hr_moduleDocListCtrl.js"]
   }, {
-    state: 'app.task_list',
+    state: 'app.tsk_list',
     url: "/task_list/:AppId/:FormType/:Pin",
     views: {
       'menuContent': {
         templateUrl: function() {
-          return "app/apps/docApprove/TSK/list.html";
+          return "app/apps/docApprove/TSK/tskList.html";
         },
-        controller: 'taskListDetailsCtrl',
+        controller: 'tskListCtrl',
+        controllerAs: "vm",
       }
     },
-    src: ["app/apps/docApprove/TSK/listCtrl.js"]
+    src: ["app/apps/docApprove/TSK/tskListCtrl.js"]
   }, {
-    state: 'app.task_details',
+    state: 'app.tsk_details',
     url: "/task_details/:formType/:appId/:docId/:docInitId",
     views: {
       'menuContent': {
         templateUrl: function() {
-          return "app/apps/docApprove/TSK/docDetails.html";
+          return "app/apps/docApprove/TSK/tskDetails.html";
         },
-        controller: 'docDetailsCtrl',
+        controller: 'tskDetailsCtrl',
         controllerAs: "vm",
       }
     },
-    src: ["app/apps/docApprove/TSK/docDetailsCtrl.js"]
+    src: ["app/apps/docApprove/TSK/tskDetailsCtrl.js"]
   }, {
     state: 'app.doc_10002',
     url: "/doc_10002/:DocId/:DocInitId",

@@ -5,10 +5,22 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('docDetailsCtrl', ['$state', '$rootScope', '$scope', '$stateParams', '$http', '$location', '$window', '$timeout', '$ionicLoading', '$ionicActionSheet', '$ionicModal', 'PelApi', '$ionicNavBarDelegate', '$cordovaNetwork', '$ionicPopup', 'appSettings', '$sessionStorage', function($state, $rootScope, $scope, $stateParams, $http, $location, $window, $timeout, $ionicLoading, $ionicActionSheet, $ionicModal, PelApi, $ionicNavBarDelegate, $cordovaNetwork, $ionicPopup, appSettings, $sessionStorage) {
-    //---------------------------------
-    //--       goHome
-    //---------------------------------
+  .controller('tskDetailsCtrl', ['$state', '$rootScope', '$scope', '$stateParams', '$http', '$location', '$window', '$timeout', '$ionicLoading', '$ionicActionSheet', '$ionicModal', 'PelApi', '$ionicNavBarDelegate', '$cordovaNetwork', '$ionicPopup', 'appSettings', '$sessionStorage', function($state, $rootScope, $scope, $stateParams, $http, $location, $window, $timeout, $ionicLoading, $ionicActionSheet, $ionicModal, PelApi, $ionicNavBarDelegate, $cordovaNetwork, $ionicPopup, appSettings, $sessionStorage) {
+    //init
+    var vm = this;
+
+    PelApi.lagger.info("start controller")
+
+    vm.title = "אישור משימה " + $stateParams.docInitId
+    //    vm.tabs = appSettings.tabs;
+    vm.tabs = [{
+      "text": "סבב מאשרים"
+    }, {
+      "text": "תיאור משימה"
+    }, {
+      "text": "תוכן משימה"
+    }];
+
     $scope.goHome = function() {
       PelApi.goHome();
     }
@@ -167,17 +179,15 @@ angular.module('pele')
         } else {
           retVal = true;
         }
-
       } else if (showFlag === false) {
         retVal = false;
       }
       return retVal;
-
     }
     //---------------------------------------------------------------------------
     //--                         doRefresh
     //---------------------------------------------------------------------------
-    $scope.doRefresh = function() {
+    vm.getData = function() {
       console.log('stateParams :', $stateParams)
 
       PelApi.showLoading();
@@ -187,9 +197,9 @@ angular.module('pele')
         PelApi.lagger.info("============= Get User Notification ===============");
         var apiData = PelApi.checkApiResponse(data);
         PelApi.lagger.info("PelApi.GetUserNotifications : ", JSON.stringify(apiData));
-        var result = apiData.Result;
-        $scope.docDetails = result;
+        vm.docDetails = PelApi.getJsonString(apiData.Result, "JSON[0]", true);
 
+        PelApi.lagger.info("vm.docDetails : ", JSON.stringify(vm.docDetails))
         /*  if ("Valid" === pinStatus) {
           var newData = data.Response.OutParams.Result;
           appSettings.config.docDetails = newData;
@@ -210,7 +220,8 @@ angular.module('pele')
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
       });
-      // forwardToDoc
+
+      /*// forwardToDoc
       $scope.data = {};
       $scope.feed = [];
       $scope.tabs = appSettings.tabs;
@@ -268,6 +279,7 @@ angular.module('pele')
 
       $ionicLoading.hide();
       $scope.$broadcast('scroll.refreshComplete');
+      */
     }; // doRefresh
 
     $scope.redStyle = function(flag) {
@@ -641,5 +653,7 @@ angular.module('pele')
       });
     }
 
-    $scope.doRefresh();
+
+    vm.getData();
+
   }]);

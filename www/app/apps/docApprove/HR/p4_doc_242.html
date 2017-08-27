@@ -1,6 +1,6 @@
 <ion-view class="feed-entries-view">
 
-  <ion-nav-buttons side="right"  >
+  <ion-nav-buttons side="right">
     <button menu-toggle="left" class="button button-icon icon ion-navicon">
     </button>
   </ion-nav-buttons>
@@ -32,17 +32,17 @@
         <!----------------------------- Approve List Slide ------------------------------->
         <!-------------------------------------------------------------------------------->
         <ion-slide>
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll" >
-          <div ng-repeat="detail in ACTION_HISTORY" type="item-text-wrap" dir="RTL">
-            <!--<div class="item item-divider "> -->
-            <a class="item item-divider item-icon-right pele-item-icon-left" ng-click="detail.SHOW_FLAG = !detail.SHOW_FLAG; detail.PUSH_COUNT = PUSH_COUNT +1;">
-              <!-- <i ng-class="detail.SHOW_FLAG ? 'icon-collapse' : 'icon-expand'"></i> -->
-              <i ng-class="showIconCollapseInAcctionHistory(detail.SHOW_FLAG , detail.HIDEN_FLAG)"></i>
-              <p class="text-right pele_rtl">{{detail.SEQUENCE_NUM}}. {{detail.USER_NAME}}</p>
-              <i class="icon icon-left {{getApproveListActionIcon(detail.ACTION , detail.ACTION_DATE , detail.NOTE)}}"></i>
-            </a>
+          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
+            <div ng-repeat="detail in ACTION_HISTORY" type="item-text-wrap" dir="RTL">
+              <!--<div class="item item-divider "> -->
+              <a class="item item-divider item-icon-right pele-item-icon-left" ng-click="detail.SHOW_FLAG = !detail.SHOW_FLAG; detail.PUSH_COUNT = PUSH_COUNT +1;">
+                <!-- <i ng-class="detail.SHOW_FLAG ? 'icon-collapse' : 'icon-expand'"></i> -->
+                <i ng-class="showIconCollapseInAcctionHistory(detail.SHOW_FLAG , detail.HIDEN_FLAG)"></i>
+                <p class="text-right pele_rtl">{{detail.SEQUENCE_NUM}}. {{detail.USER_NAME}}</p>
+                <i class="icon icon-left {{getApproveListActionIcon(detail.ACTION , detail.ACTION_DATE , detail.NOTE)}}"></i>
+              </a>
 
-            <label class="item" ng-hide="hidenAcctionHistoryDetails(detail.SHOW_FLAG, detail.HIDEN_FLAG, detail.PUSH_COUNT , detail.NOTE)">
+              <label class="item" ng-hide="hidenAcctionHistoryDetails(detail.SHOW_FLAG, detail.HIDEN_FLAG, detail.PUSH_COUNT , detail.NOTE)">
               <div class="row">
                 <div class="col text-right pele_rtl">פעולה:</div>
                 <div class="col col-75 text-right pele_rtl">{{detail.ACTION}}</div>
@@ -62,15 +62,15 @@
                 <div class="col col-75 pele-item item-text-wrap text-right pele_rtl">{{detail.NOTE}}</div>
               </div>
             </label>
-          </div>
-            </ion-scroll>
+            </div>
+          </ion-scroll>
         </ion-slide>
         <!------------------------------------------------------------------------------->
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
         <ion-slide>
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll" >
-    <!-- Refresh to get the new posts -->
+          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
+            <!-- Refresh to get the new posts -->
             <label class="item item-thumbnail-left">
               <img src="img/employees/worker.png">
               <h2 class="text-right pele_rtl">שם : {{CREATOR}}</h2>
@@ -80,10 +80,10 @@
               <h2 class="text-right pele_rtl">מחלקה : {{DEPARTMENT}}</h2>
               <h2 class="text-right pele_rtl">חטיבה : {{SECTOR}}</h2>
             </label>
-      <ul class="list">
-        <!---------------------------- 242 --------------------------------->
-        <div ng-repeat="detail in docDetails.DOC_LINES" type="item-text-wrap" dir="RTL">
-            <a class="item item-divider item-icon-right" ng-click="toggleGroup(detail.EFFECTIVE_DATE)">
+            <ul class="list">
+              <!---------------------------- 242 --------------------------------->
+              <div ng-repeat="detail in docDetails.DOC_LINES" type="item-text-wrap" dir="RTL">
+                <a class="item item-divider item-icon-right" ng-click="toggleGroup(detail.EFFECTIVE_DATE)">
               <i class="icon ion-android-calendar"></i>
               <p class="float-right">{{detail.EFFECTIVE_DATE}}</p>
               <span>יום: {{detail.ATTRIBUTE1}}</span>
@@ -94,7 +94,7 @@
             </a>
 
 
-          <label class="item" ng-show="isGroupShown(detail.EFFECTIVE_DATE)">
+                <label class="item" ng-show="isGroupShown(detail.EFFECTIVE_DATE)">
             <div class="row">
               <div class="col text-right pele_rtl">כניסה 1</div>
               <div class="col text-right pele_rtl"><i ng-style="redStyle(detail.ATTRIBUTE4)">{{detail.ATTRIBUTE3}}</i></div>
@@ -125,11 +125,11 @@
               </div>
             </div>
           </label>
-        </div>
-      </ul>
-     </ion-scroll>
-    </ion-slide>
-   </ion-slide-box>
+              </div>
+            </ul>
+          </ion-scroll>
+        </ion-slide>
+      </ion-slide-box>
   </ion-content>
   <!-- Footer Actions -->
   <ion-footer-bar align-title="right">

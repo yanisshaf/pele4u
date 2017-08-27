@@ -1,0 +1,178 @@
+<ion-view cache-view="false">
+  <ion-nav-buttons side="right">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon">
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-title>
+    <div class="bar bar-header bar-positive">
+      <div class="title">{{vm.title}}</div>
+    </div>
+  </ion-nav-title>
+  <ion-content scroll="false">
+    <tab-slide-box tab="2">
+      <div class="tsb-icons">
+        <div class="tsb-ic-wrp">
+          <ion-scroll scrollX="false" direction="x" scrollY="false" class="tsb-hscroll">
+            <a href="javascript:;" class="triangle-isosceles {{tab.icon}}" ng-repeat="tab in vm.tabs" on-finish-render="test()">
+              {{tab.text}} {{$index}}
+            </a>
+          </ion-scroll>
+        </div>
+      </div>
+      <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
+
+        <!-------------------------------------------------------------------------------->
+        <!----------------------------- Approve List Slide ------------------------------->
+        <!-------------------------------------------------------------------------------->
+        <ion-slide>
+          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
+            <div ng-repeat="detail in ACTION_HISTORY" type="item-text-wrap">
+              <a class="item item-divider item-icon-right pele-item-icon-left">
+                <!-- <i ng-class="detail.SHOW_FLAG ? 'icon-collapse' : 'icon-expand'"></i> -->
+                <i ng-class="showIconCollapseInAcctionHistory(detail.SHOW_FLAG , detail.HIDEN_FLAG)"></i>
+                <p class="text-right pele_rtl">{{detail.SEQUENCE_NUM}}. {{detail.USER_NAME}}</p>
+                <i class="icon icon-left {{getApproveListActionIcon(detail.ACTION , detail.ACTION_DATE , detail.NOTE)}}"></i>
+              </a>
+
+              <label class="item" ng-hide="hidenAcctionHistoryDetails(detail.SHOW_FLAG, detail.HIDEN_FLAG, detail.PUSH_COUNT , detail.NOTE)">
+              <div class="row">
+                <div class="col text-right pele_rtl">פעולה:</div>
+                <div class="col col-75 text-right pele_rtl">{{detail.ACTION}}</div>
+              </div>
+              <div class="row">
+                <div class="col text-right pele_rtl">תאריך:</div>
+                <div class="col col-75 text-right pele_rtl">{{detail.ACTION_DATE}}</div>
+              </div>
+              <div class="row">
+                <div class="col text-right pele_rtl">הערות:</div>
+                <div class="col col-75 pele-item item-text-wrap text-right pele_rtl">{{detail.NOTE}}</div>
+              </div>
+            </label>
+            </div>
+          </ion-scroll>
+        </ion-slide>
+        <ion-slide>
+          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
+            <div ng-repeat="detail in ACTION_HISTORY" type="item-text-wrap" dir="RTL">
+              <a class="item item-divider item-icon-right pele-item-icon-left">
+                <!-- <i ng-class="detail.SHOW_FLAG ? 'icon-collapse' : 'icon-expand'"></i> -->
+                <i ng-class="showIconCollapseInAcctionHistory(detail.SHOW_FLAG , detail.HIDEN_FLAG)"></i>
+                <p class="text-right pele_rtl">{{detail.SEQUENCE_NUM}}. {{detail.USER_NAME}}</p>
+                <i class="icon icon-left {{getApproveListActionIcon(detail.ACTION , detail.ACTION_DATE , detail.NOTE)}}"></i>
+              </a>
+
+              <label class="item" ng-hide="hidenAcctionHistoryDetails(detail.SHOW_FLAG, detail.HIDEN_FLAG, detail.PUSH_COUNT , detail.NOTE)">
+              <div class="row">
+                <div class="col text-right pele_rtl">פעולה:</div>
+                <div class="col col-75 text-right pele_rtl">{{detail.ACTION}}</div>
+              </div>
+              <div class="row">
+                <div class="col text-right pele_rtl">תאריך:</div>
+                <div class="col col-75 text-right pele_rtl">{{detail.ACTION_DATE}}</div>
+              </div>
+              <div class="row">
+                <div class="col text-right pele_rtl">הערות:</div>
+                <div class="col col-75 pele-item item-text-wrap text-right pele_rtl">{{detail.NOTE}}</div>
+              </div>
+            </label>
+            </div>
+          </ion-scroll>
+        </ion-slide>
+        <!------------------------------------------------------------------------------->
+        <!----------------------------- Doc Details Slide ------------------------------->
+        <!------------------------------------------------------------------------------->
+        <ion-slide>
+          <ion-scroll class="pele_rtl text-right" style="height:80%" delegate-handle="slide1Scroll">
+            <!-- Refresh to get the new posts -->
+            <ul class="list">
+              <li class="item">
+                <div class="item item-divider item-icon-right">
+                  <i class="icon ion-clipboard"></i>
+                  <h2 class="text-right pele_rtl">פרטי המשימה</h2>
+                </div>
+                <div class="item-section pele_rtl">
+                  <h2>שם : {{vm.docDetails.BAN_NAME}}</h2>
+                  <h2>מספר לקוח : {{vm.docDetails.BAN}}</h2>
+                  <h2>נושא משימה : {{vm.docDetails.TASK_TYPE}}</h2>
+                  <h2>תת נושא : {{vm.docDetails.SUB_TASK_TYPE}}</h2>
+                  <h2>תאריך יצירה : {{vm.docDetails.CREATION_DATE}}</h2>
+                  <h2>האם משימה חוזרת : {{vm.docDetails.RETURN_TASK}}</h2>
+                </div>
+              </li>
+              <li class="item">
+                <div class="item item-divider item-icon-right">
+                  <i class="icon ion-clipboard"></i>
+                  <h2 class="text-right pele_rtl">נתוני מערכת</h2>
+                </div>
+                <div class="item-section pele_rtl">
+                  <div class="" ng-repeat="item in vm.docDetails.SYSTEM_INFORMATION">
+                    <span>{{item.VALUE}}</span> : <span>{{item.PROMPT}}</span>
+                  </div>
+                </div>
+              </li>
+              <li class="item">
+                <div class="item item-divider item-icon-right">
+                  <i class="icon ion-clipboard"></i>
+                  <h2 class="text-right pele_rtl">נתונים נוספים</h2>
+                </div>
+                <div class="item-section pele_rtl">
+                  <div class="pele_rtl" ng-repeat="item in vm.docDetails.EXTRA_INFORMATION">
+                    <span>{{item.VALUE}}</span> : <span>{{item.PROMPT}}</span>
+                  </div>
+                </div>
+              </li>
+              <li class="item">
+                <div class="item item-divider item-icon-right">
+                  <i class="icon ion-clipboard"></i>
+                  <h2 class="text-right pele_rtl">תיאור</h2>
+                </div>
+              </li>
+              <li class="item">
+                <div class="item item-divider item-icon-right">
+                  <i class="icon ion-clipboard"></i>
+                  <h2 class="text-right pele_rtl">נספחי משימה</h2>
+                </div>
+                <div class="item-section pele_rtl">
+                  <div class="pele_rtl" ng-repeat="file in vm.docDetails.attachments">
+                    <span>{{file.name}}</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+
+          </ion-scroll>
+        </ion-slide>
+      </ion-slide-box>
+  </ion-content>
+  <!-- Footer Actions -->
+  <ion-footer-bar align-title="right">
+
+    <div class="row">
+      <div class="col">
+        <button class="button button-block button-large button-positive  icon-right ion-paper-airplane" ng-click="showBtnActions()">פעולות</button>
+      </div>
+
+      <div class="col">
+        <button class="button button-block button-large button-balanced icon-right ion-document-text" ng-click="NotePopup()">הערה</button>
+      </div>
+
+    </div>
+
+  </ion-footer-bar>
+  <script id="templates/modal.html" type="text/ng-template">
+    <ion-modal-view>
+      <ion-header-bar class="bar bar-header bar-positive">
+        <h1 class="title">הערה חדשה</h1>
+        <button class="button button-clear button-primary" ng-click="modal.hide()">ביטול</button>
+      </ion-header-bar>
+      <ion-content class="padding">
+        <div class="list" dir="RTL">
+          <label class="item item-input">
+            <textarea rows="8" ng-model="newNote.Note" type="text"></textarea>
+          </label>
+          <button class="button button-full button-positive" ng-click="createNote(newNote)">שמירה</button>
+        </div>
+      </ion-content>
+    </ion-modal-view>
+  </script>
+</ion-view>
