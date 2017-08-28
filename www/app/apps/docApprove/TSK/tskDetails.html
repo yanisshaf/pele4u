@@ -27,12 +27,12 @@
         <ion-slide>
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <div class="list">
-              <div ng-repeat="action in vm.docDetails.ACTION_HISTORY" class="item pele_rtl" href="#">
-                <div class="item-icon-left item-icon-right text-right">
-                  <i class="icon ion-chatbubble-working"></i> {{action.APPROVAL_SEQ}}. {{action.USER_NAME}}
-                  <i class="icon ion-clipboard"></i>
+              <div ng-repeat="action in vm.docDetails.ACTION_HISTORY" class="pele_rtl" href="#">
+                <div class="item item-divider item-icon-left item-icon-right text-right action-history-item">
+                  <i class="icon" ng-click="vm.toggleActionItem(action)" ng-class="action.left_icon"></i> {{action.APPROVAL_SEQ}}. {{action.USER_NAME}}
+                  <i class="icon" ng-class="action.right_icon"></i>
                 </div>
-                <div class="item hide">
+                <div class="item bo-border pele_rtl text-right item-icon-left item-icon-right text-right" ng-show="action.display">
                   <div class="row">
                     <div class="col">פעולה:</div>
                     <div class="col col-75">{{action.ACTION}}</div>
@@ -142,11 +142,11 @@
 
     <div class="row">
       <div class="col">
-        <button class="button button-block button-large button-positive  icon-right ion-paper-airplane" ng-click="showBtnActions()">פעולות</button>
+        <button class="button button-block button-large button-positive  icon-right ion-paper-airplane" ng-click="vm.showBtnActions()">פעולות</button>
       </div>
 
       <div class="col">
-        <button class="button button-block button-large button-balanced icon-right ion-document-text" ng-click="NotePopup()">הערה</button>
+        <button class="button button-block button-large button-balanced icon-right ion-document-text" ng-click="vm.NotePopup()">הערה</button>
       </div>
 
     </div>
@@ -163,7 +163,7 @@
           <label class="item item-input">
             <textarea rows="8" ng-model="newNote.Note" type="text"></textarea>
           </label>
-          <button class="button button-full button-positive" ng-click="createNote(newNote)">שמירה</button>
+          <button class="button button-full button-positive" ng-click="vm.createNote(newNote)">שמירה</button>
         </div>
       </ion-content>
     </ion-modal-view>

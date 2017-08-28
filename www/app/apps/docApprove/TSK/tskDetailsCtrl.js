@@ -9,8 +9,6 @@ angular.module('pele')
     //init
     var vm = this;
 
-    PelApi.lagger.info("start controller")
-
     vm.title = "אישור משימה " + $stateParams.docInitId
     //    vm.tabs = appSettings.tabs;
     vm.tabs = [{
@@ -46,16 +44,12 @@ angular.module('pele')
         });
 
       }
-    } // openExistText
-    //---------------------------------------------------------------------------
-    //--                         isGroupShown
-    //---------------------------------------------------------------------------
+    }
+
     $scope.isGroupShown = function(group) {
       return $scope.shownGroup === group;
-    } // isGroupShown
-    //---------------------------------------------------------------------------
-    //--                         isGroupShown
-    //---------------------------------------------------------------------------
+    }
+
     $scope.isHourException12Shown = function(exception_note) {
       var retVal = true;
 
@@ -64,52 +58,8 @@ angular.module('pele')
       }
 
       return retVal;
-    } // isGroupShown
-    //---------------------------------------------------------------------------
-    //--                         getApproveListActionIcon
-    //---------------------------------------------------------------------------
-
-    $scope.getApproveListActionIcon = function(action, date, note) {
-
-      var icon_class;
-      if (appSettings.ACTION_HISTORY.FORWARD === action) {
-        icon_class = "ion-checkmark-circled";
-      } else if (appSettings.ACTION_HISTORY.NO_ACTION === action) {
-        icon_class = "ion-minus-circled";
-      } else if (appSettings.ACTION_HISTORY.REJECT === action) {
-        icon_class = "ion-close-circled";
-      } else if (appSettings.ACTION_HISTORY.WAITING === action) {
-        //icon_class = "ion-pause";
-        icon_class = "";
-      } else {
-        icon_class = "";
-      }
-
-      return icon_class;
-
-
-    } // getApproveListActionIcon
-    //--------------------------------------------------------------------------//
-    //-- When         Who             Description                             --//
-    //-- ===========  ==============  ========================================--//
-    //-- 29/02/2016   R.W.
-    //--------------------------------------------------------------------------//
-    $scope.showIconCollapseInAcctionHistory = function(showFlag, hidenFlag) {
-      var retVal = "";
-      if (hidenFlag === true) {
-        retVal = "";
-      } else if (showFlag === true) {
-        retVal = "icon-collapse";
-      } else if (showFlag === false) {
-        retVal = "icon-expand";
-      }
-
-      return retVal;
-
     }
-    //---------------------------------------------------------------------------
-    //--                         isGroupShown
-    //---------------------------------------------------------------------------
+
     $scope.toggleGroup = function(group) {
       if ($scope.isGroupShown(group)) {
         $scope.shownGroup = null;
@@ -117,73 +67,8 @@ angular.module('pele')
         $scope.shownGroup = group;
       }
     };
-    //----------------------------------------------------------------------------
-    //----------------------------------------------------------------------------
-    $scope.addPushFlagToActionHistory = function(arr) {
-      var myArr = [];
-      var j = arr.length;
-      for (var i = 0; i < arr.length; i++, j--) {
-        var showFlag = false;
-        var hideFlag = false
-        if (arr[i].NOTE !== "" && arr[i].NOTE != undefined) {
-          showFlag = false;
-        } else {
-          showFlag = true;
-        };
-
-        var l_displayFlag = arr[j - 1].DISPLAY_FLAG;
-        var l_actionCode = arr[j - 1].ACTION_CODE;
-        if ((arr[i].ACTION === "" || arr[i].ACTION === undefined || arr[i].ACTION === null) &&
-          (arr[i].ACTION_DATE === "" || arr[i].ACTION_DATE === undefined || arr[i].ACTION_DATE === null)) {
-          hideFlag = true
-        }
 
 
-        var mayObj = {
-          "DISPLAY_FLAG": arr[i].DISPLAY_FLAG,
-          "DOC_INIT_ID": arr[i].DOC_INIT_ID,
-          "APPROVAL_SEQ": arr[i].APPROVAL_SEQ,
-          "CREATION_DATE": arr[i].CREATION_DATE,
-          "USER_NAME": arr[i].USER_NAME,
-          "ACTION": arr[i].ACTION,
-          "ACTION_DATE": arr[i].ACTION_DATE,
-          "NOTE": arr[i].NOTE,
-          "SEQUENCE_NUM": i + 1,
-          "SHOW_FLAG": showFlag,
-          "HIDEN_FLAG": hideFlag,
-          "PUSH_COUNT": 0
-        }
-
-        myArr.push(mayObj);
-
-      } // for
-
-      return myArr;
-    } // addPushFlagToActionHistory
-    //----------------------------------------------------------------
-    //-- When         Who       Description
-    //-- ===========  ========  ======================================
-    //-- 17/03/2016   R.W.
-    //----------------------------------------------------------------
-    $scope.hidenAcctionHistoryDetails = function(showFlag, hidenFlag, pushCount, note) {
-      var retVal = "";
-      if (hidenFlag === true) {
-        retVal = true;
-      } else if (showFlag === true) {
-        if (pushCount === 0) {
-          if (note !== "" && note !== undefined && note !== null) {
-            retVal = false;
-          } else {
-            retVal = true;
-          }
-        } else {
-          retVal = true;
-        }
-      } else if (showFlag === false) {
-        retVal = false;
-      }
-      return retVal;
-    }
     //---------------------------------------------------------------------------
     //--                         doRefresh
     //---------------------------------------------------------------------------
@@ -198,21 +83,8 @@ angular.module('pele')
         var apiData = PelApi.checkApiResponse(data);
         PelApi.lagger.info("PelApi.GetUserNotifications : ", JSON.stringify(apiData));
         vm.docDetails = PelApi.getJsonString(apiData.Result, "JSON[0]", true);
-
         PelApi.lagger.info("vm.docDetails : ", JSON.stringify(vm.docDetails))
-        /*  if ("Valid" === pinStatus) {
-          var newData = data.Response.OutParams.Result;
-          appSettings.config.docDetails = newData;
-          var buttonsLength = 0;
-          if (appSettings.config.docDetails.BUTTONS.length !== undefined) {
-            buttonsLength = appSettings.config.docDetails.BUTTONS.length;
-          }
-          if (2 === buttonsLength) {
-            appSettings.config.ApprovRejectBtnDisplay = true;
-          } else {
-            appSettings.config.ApprovRejectBtnDisplay = false;
-          }
-          */
+        vm.extendActionHistory(vm.docDetails);
       }).error(function(error) {
         PelApi.lagger.error("GetUserNotifNew : " + JSON.stringify(error));
         PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
@@ -220,82 +92,8 @@ angular.module('pele')
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
       });
-
-      /*// forwardToDoc
-      $scope.data = {};
-      $scope.feed = [];
-      $scope.tabs = appSettings.tabs;
-
-      var buttons = {};
-      //buttons.approve = true;
-
-
-      $scope.style = {
-        color: 'red'
-      };
-
-      //var appId = $stateParams.AppId,
-      var appId = $stateParams.AppId,
-        docId = $stateParams.DocId,
-        docInitId = $stateParams.DocInitId;
-
-      $sessionStorage.DOC_ID = docId;
-
-      $scope.docDetails.DOC_LINES = [];
-
-      if ($scope.docDetails.DOC_LINES && $scope.docDetails.DOC_LINES.length > 1) {
-        $scope.shownGroup = null;
-      } else {
-        if (docId === "807") {
-          $scope.shownGroup = $scope.docDetails.DOC_LINES[0].ATTRIBUTE2;
-        } else {
-          $scope.shownGroup = $scope.docDetails.DOC_LINES[0].EFFECTIVE_DATE;
-        }
-      }
-      $scope.buttonsArr = $scope.docDetails.BUTTONS;
-      $scope.docDetails = $scope.docDetails;
-      $scope.sourceTitle = $scope.docDetails.DOC_NAME;
-      $scope.CREATOR = $scope.docDetails.CREATOR;
-      $scope.EMP_NUMBER = $scope.docDetails.EMP_NUMBER;
-      $scope.SECTOR = $scope.docDetails.SECTOR;
-      $scope.DEPARTMENT = $scope.docDetails.DEPARTMENT;
-      $scope.DOC_INIT_ID = $scope.docDetails.DOC_INIT_ID;
-      $scope.SENT_DATE = $scope.docDetails.SENT_DATE;
-      $scope.NOTIFICATION_ID = $scope.docDetails.NOTIFICATION_ID;
-      $scope.HOLIDAY_BALANCE = $scope.docDetails.HOLIDAY_BALANCE;
-
-      console.log("========================  ACTION_HISTORY SOURCE  ====================================")
-      console.log(JSON.stringify($scope.docDetails.ACTION_HISTORY));
-      console.log("=============================================================================")
-
-      $scope.ACTION_HISTORY = $scope.addPushFlagToActionHistory($scope.docDetails.ACTION_HISTORY);
-
-      console.log("========================  ACTION_HISTORY ====================================")
-      console.log(JSON.stringify($scope.ACTION_HISTORY));
-      console.log("=============================================================================")
-
-      // Show the action sheet
-      $scope.approve = appSettings.config.ApprovRejectBtnDisplay;
-
-      $ionicLoading.hide();
-      $scope.$broadcast('scroll.refreshComplete');
-      */
-    }; // doRefresh
-
-    $scope.redStyle = function(flag) {
-      var retVal;
-      if ("Y" === flag) {
-        $scope.style.color = "red";
-      } else if ("N" === flag) {
-        $scope.style.color = "black";
-      }
-      return $scope.style;
     };
-    //---------------------------------------------------------------------
-    //-- When           Who             Description
-    //-- -------------	--------------  -----------------------------------
-    //-- 13/10/2015     R.W.            Hide / Show Approval List Rows
-    //---------------------------------------------------------------------
+
     $ionicModal.fromTemplateUrl('templates/modal.html', {
       scope: $scope
     }).then(function(modal) {
@@ -306,24 +104,50 @@ angular.module('pele')
       $scope.Note = u.Note;
       $scope.modal.hide();
     };
-    //---------------------------------------------------------------------
-    //-- When           Who             Description
-    //-- -------------	--------------  -----------------------------------
-    //-- 13/10/2015     R.W.            Hide / Show Approval List Rows
-    //---------------------------------------------------------------------
-    $scope.pelHideShow = function(action, note) {
-      var retStatus;
-      if (action != "" && action != undefined) {
-        retStatus = false;
-      } else {
-        retStatus = true;
-      }
 
-      if (retStatus && note != "" && note != undefined) {
-        retStatus = false;
-      }
-      return retStatus;
-    };
+
+    vm.toggleActionItem = function(action) {
+      action.display = !action.display;
+      if (action.display) action.left_icon = 'ion-chevron-down';
+      else action.left_icon = 'ion-chevron-left';
+    }
+    vm.extendActionHistory = function(doc) {
+      //set action.display
+      //set action.right_icon
+      //set left_icon
+      //"{'ion-checkmark-circled':action.ACTION_CODE !== 'REJECT','ion-close-circled':action.ACTION_CODE === 'REJECT'}"
+      if (!doc.ACTION_HISTORY) return [];
+      doc.ACTION_HISTORY.forEach(function(action) {
+        action.display = false;
+        action.right_icon = "";
+        action.left_icon = "";
+
+        if (typeof action.NOTE != "undefined" && action.NOTE.length) {
+          action.display = true;
+          action.left_icon = 'ion-chevron-down';
+          if (action.ACTION_CODE == "REJECT") {
+            action.right_icon = 'ion-close-circled';
+          }
+        }
+
+        if (action.ACTION_CODE === "FORWARD" || action.ACTION_CODE === "APPROVE") {
+          alert(action.ACTION_CODE)
+          action.left_icon = 'ion-chevron-left';
+          action.right_icon = 'ion-checkmark-circled'
+        }
+
+        if (action.ACTION_CODE === "NO_ACTION") {
+          action.left_icon = 'ion-chevron-left';
+          action.right_icon = 'ion-minus-circled';
+        }
+        if (!action.ACTION_CODE) {
+          action.display = false;
+          action.right_icon = "";
+          action.left_icon = "";
+        }
+      })
+    }
+
 
     $scope.onSlideMove = function(data) {
       //alert("You have selected " + data.index + " tab");
@@ -611,6 +435,7 @@ angular.module('pele')
           },
         ]
       });
+
       myPopup.then(function(res) {
         $scope.data.note = res;
       });

@@ -96,7 +96,6 @@ angular.module('pele')
     //--------------------------------------------------------------
     $scope.forwardToDoc = function(docId, docInitId) {
 
-
       var statePath = 'app.tsk_details';
 
       $state.go(statePath, {
