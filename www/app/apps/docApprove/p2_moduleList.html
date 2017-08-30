@@ -5,7 +5,7 @@
     </button>
   </ion-nav-buttons>
   <ion-nav-title>
-    <div class="bar bar-header bar-light">
+    <div class="bar bar-header bar-positive">
       <div class="title"><strong>בחירת טפסים לאישור</strong></div>
     </div>
   </ion-nav-title>
@@ -20,15 +20,15 @@
     <div class="row row-bottom">
       <div class="col"></div>
     </div>
-    <div  ng-if="1" id="apps-front-menu">
-    <div ng-repeat="source in category_sources">
-      <button ng-click="onClick(source.MODULE_NAME ,source.DOCUMENT_QTY )"  class="button button-large button-stable button-block">
+    <div ng-if="1" id="apps-front-menu">
+      <div ng-repeat="source in category_sources">
+        <button ng-click="onClick(source.MODULE_NAME ,source.DOCUMENT_QTY )" class="button button-large button-stable button-block">
       {{source.MODULE_DESC}}&nbsp;&nbsp;({{source.DOCUMENT_QTY}})
     </button>
+      </div>
     </div>
-  </div>
     <div ng-if="0" ng-repeat="source in category_sources" class="text-center apps-menu">
-      <div class="row {{isShowBtn(source.DOCUMENT_QTY)}}" ng-click="onClick(source.MODULE_NAME ,source.DOCUMENT_QTY )"  ng-model="btn_class.on_release" on-touch="source.PUSH_FLAG = !source.PUSH_FLAG " on-release="source.PUSH_FLAG = !source.PUSH_FLAG">
+      <div class="row {{isShowBtn(source.DOCUMENT_QTY)}}" ng-click="onClick(source.MODULE_NAME ,source.DOCUMENT_QTY )" ng-model="btn_class.on_release" on-touch="source.PUSH_FLAG = !source.PUSH_FLAG " on-release="source.PUSH_FLAG = !source.PUSH_FLAG">
         <div class="col col-10"></div>
         <div class="col col-80 item item-icon-right {{pushBtnClass(source.PUSH_FLAG)}}">
           <div class="app-button">
