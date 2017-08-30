@@ -6,6 +6,9 @@ angular.module('pele')
       /* rem by R.W 07/11/2016 , $cordovaFileOpener2 */
     ) {
 
+      $scope.slideHasChanged = function(slideIdx) {
+        alert(slideIdx)
+      }
       //---------------------------------
       //--       goHome
       //---------------------------------
