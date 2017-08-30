@@ -5,7 +5,7 @@
     </button>
   </ion-nav-buttons>
   <ion-nav-title>
-    <div class="bar bar-header bar-light">
+    <div class="bar bar-header bar-positive">
       <div class="title" id="logo">טופס השלמת שעות
         <!--<img src="img/DocApprove/logo.png" style="max-width: 100%;  height: 100%;"/>-->
       </div>
@@ -31,7 +31,7 @@
         <!-------------------------------------------------------------------------------->
         <!----------------------------- Approve List Slide ------------------------------->
         <!-------------------------------------------------------------------------------->
-        <ion-slide>
+        <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <div ng-repeat="detail in ACTION_HISTORY" type="item-text-wrap" dir="RTL">
               <!--<div class="item item-divider "> -->
@@ -68,7 +68,7 @@
         <!------------------------------------------------------------------------------->
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
-        <ion-slide>
+        <ion-slide on-drag-right="enable('drag')" on-drag-left="disable('drag')">
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
             <label class="item item-thumbnail-left">

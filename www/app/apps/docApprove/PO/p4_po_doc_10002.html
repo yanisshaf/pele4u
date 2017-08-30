@@ -1,10 +1,10 @@
 <ion-view class="feed-entries-view">
-  <ion-nav-buttons side="right"  >
+  <ion-nav-buttons side="right">
     <button menu-toggle="left" class="button button-icon icon ion-navicon">
     </button>
   </ion-nav-buttons>
   <ion-nav-title>
-    <div class="bar bar-header bar-light">
+    <div class="bar bar-header bar-positive">
       <div class="title" id="logo">
         {{PO_ORDER_NUMBER}} הזמנות רכש
       </div>
@@ -30,11 +30,11 @@
         <!-------------------------------------------------------------------------------->
         <!----------------------------- Approve List Slide ------------------------------->
         <!-------------------------------------------------------------------------------->
-        <ion-slide>
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll" >
+        <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
+          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <div ng-repeat="detail in ACTION_HISTORY" type="item-text-wrap" dir="RTL">
               <!--<div class="item item-divider "> -->
-              <a class="item item-divider item-icon-right pele-item-icon-left" ng-hide="pelHideShow2( detail.DISPLAY_FLAG )"  ng-click="detail.SHOW_FLAG = !detail.SHOW_FLAG; detail.PUSH_COUNT = PUSH_COUNT +1; " >
+              <a class="item item-divider item-icon-right pele-item-icon-left" ng-hide="pelHideShow2( detail.DISPLAY_FLAG )" ng-click="detail.SHOW_FLAG = !detail.SHOW_FLAG; detail.PUSH_COUNT = PUSH_COUNT +1; ">
                 <!-- <i class="icon icon-left {{getApproveListActionIcon(detail.ACTION_CODE)}}"></i> -->
                 <!--<i ng-class="detail.SHOW_FLAG ? 'icon-collapse' : 'icon-expand'"></i>-->
                 <i ng-class="showIconCollapseInAcctionHistory(detail.SHOW_FLAG , detail.HIDEN_FLAG)"></i>
@@ -67,7 +67,7 @@
         <!------------------------------------------------------------------------------->
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
-        <ion-slide>
+        <ion-slide on-drag-right="enable('drag')" on-drag-left="disable('drag')">
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
             <!--
@@ -100,23 +100,33 @@
               </div>
               <div class="pele-row" ng-show="PO_DETAILS_SHOW">
                 <div class="col col-75 text-right pele_rtl">{{PO_AMOUNT}} {{CURRENCY}}</div>
-                <div class="col col-25 text-right pele_rtl"><p class="under">סה"כ</p></div>
+                <div class="col col-25 text-right pele_rtl">
+                  <p class="under">סה"כ</p>
+                </div>
               </div>
               <div class="pele-row" ng-show="PO_DETAILS_SHOW">
                 <div class="col col-75 text-right pele_rtl">{{VENDOR_NAME}}</div>
-                <div class="col col-25 text-right pele_rtl"><p class="under">ספק</p></div>
+                <div class="col col-25 text-right pele_rtl">
+                  <p class="under">ספק</p>
+                </div>
               </div>
               <div class="pele-row" ng-show="PO_DETAILS_SHOW">
                 <div class="col col-75 text-right pele_rtl">{{SUBMIT_DATE}}</div>
-                <div class="col col-35 text-right pele_rtl"><p class="under">תאריך יצירה</p></div>
+                <div class="col col-35 text-right pele_rtl">
+                  <p class="under">תאריך יצירה</p>
+                </div>
               </div>
               <div class="pele-row" ng-show="PO_DETAILS_SHOW">
                 <div class="col col-75 text-right pele_rtl">{{BUYER_NAME}}</div>
-                <div class="col col-35 text-right pele_rtl"><p class="under">קנין</p></div>
+                <div class="col col-35 text-right pele_rtl">
+                  <p class="under">קנין</p>
+                </div>
               </div>
               <div class="pele-row" ng-show="PO_DETAILS_SHOW">
                 <div class="col col-75 text-right pele_rtl">{{MANAGER_NAME}}</div>
-                <div class="col col-35 text-right pele_rtl"><p class="under">סמנכ"ל דורש</p></div>
+                <div class="col col-35 text-right pele_rtl">
+                  <p class="under">סמנכ"ל דורש</p>
+                </div>
               </div>
 
               <!------------------------------------------------>
@@ -143,7 +153,7 @@
               </div>
 
               <!-- Match Price -->
-              <div type="item-text-wrap" ng-click="PO_MATCH_PRICE_SHOW=!PO_MATCH_PRICE_SHOW" >
+              <div type="item-text-wrap" ng-click="PO_MATCH_PRICE_SHOW=!PO_MATCH_PRICE_SHOW">
                 <a class="item item-divider item-icon-right">
                   <i class="icon ion-calculator"></i>
                   <h2 class="text-right pele_rtl">השוואת מחירים</h2>

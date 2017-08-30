@@ -24,7 +24,7 @@
         <!-------------------------------------------------------------------------------->
         <!----------------------------- Approve List Slide ------------------------------->
         <!-------------------------------------------------------------------------------->
-        <ion-slide>
+        <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <div class="list">
               <div ng-repeat="action in vm.docDetails.ACTION_HISTORY" class="pele_rtl" href="#">
@@ -74,7 +74,7 @@
         <!------------------------------------------------------------------------------->
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
-        <ion-slide>
+        <ion-slide on-drag-right="enable('drag')" on-drag-left="disable('drag')">
           <ion-scroll class="pele_rtl text-right" style="height:80%" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
             <ul class="list">
