@@ -64,9 +64,10 @@ angular.module('pele.controllers', ['ngStorage'])
         $cordovaFile.readAsDataURL(cordova.file.dataDirectory, appSettings.config.LOG_FILE_NAME)
           .then(function(data) {
             data = data.replace(";base64", ".txt;base64");
+            var recipient = appSettings.config.LOG_FILE_MAIL_RECIPIENT[appSettings.env] || appSettings.config.LOG_FILE_MAIL_RECIPIENT.DEFAULT;
             $cordovaSocialSharing
               .shareViaEmail("pele4u log",
-                appSettings.config.LOG_FILE_NAME, appSettings.config.LOG_FILE_MAIL_RECIPIENT, null, null, data)
+                appSettings.config.LOG_FILE_NAME, recipient, null, null, data)
               //.share('Share my file', 'some topic', data, null)
               .then(function(result) {
                 console.log("Shared successfully")
