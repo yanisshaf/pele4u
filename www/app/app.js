@@ -55,6 +55,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
     }
   ])
   .config(function($stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
+
     $ionicConfigProvider.backButton.text('')
 
     $stateProvider
