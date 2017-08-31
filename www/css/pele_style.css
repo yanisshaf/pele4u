@@ -519,5 +519,6 @@ a.triangle-isosceles.active { font-weight:bolder}
 table.mix-alpha-numeric-table tr td {padding-left:5px}
 div#main-apps-menu div.row-bottom {margin-top:15px; }
 div#main-apps-menu .description {font-size: 20px;}
+div#main-apps-menu div img  {height: 60px !important;margin:10px}
 /* fix ios 10 title  position*/
 .platform-ios .nav-bar-title .bar .title {margin-top:0 !important}
