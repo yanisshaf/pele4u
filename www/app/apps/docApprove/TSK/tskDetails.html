@@ -156,12 +156,12 @@
     <ion-modal-view>
       <ion-header-bar class="bar bar-header bar-positive">
         <h1 class="title">הערה חדשה</h1>
-        <button class="button button-clear button-primary" ng-click="modal.hide()">ביטול</button>
+        <button class="button button-clear button-primary" ng-click="vm.modal.hide()">ביטול</button>
       </ion-header-bar>
       <ion-content class="padding">
         <div class="list" dir="RTL">
           <label class="item item-input">
-            <textarea rows="8" ng-model="newNote.Note" type="text"></textarea>
+            <textarea rows="8" ng-model="vm.newNote.Note" type="text"></textarea>
           </label>
           <button class="button button-full button-positive" ng-click="vm.createNote(newNote)">שמירה</button>
         </div>

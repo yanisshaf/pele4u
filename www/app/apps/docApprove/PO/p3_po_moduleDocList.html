@@ -1,4 +1,4 @@
-<ion-view class="feed-entries-view " cache-view="false" ng-show="title">
+<ion-view class="feed-entries-view " cache-view="false">
 
   <ion-nav-buttons side="right">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
@@ -15,13 +15,13 @@
     </ion-refresher>
 
     <div ng-if="0" class="list list-inset list-item-search">
-    <label class="item item-input item-search-new">
+      <label class="item item-input item-search-new">
       <input type="text" placeholder="חיפוש" ng-model="searchText.text" class="" ng-change="searchBarCreteria()">
         <i class="icon ion-search placeholder-icon"></i>
       </input>
     </label>
-   </div>
-   <label class="item item-input item-search" ng-click="searchBarCreteria()">
+    </div>
+    <label class="item item-input item-search" ng-click="searchBarCreteria()">
 
      <input type="search" class="search-area" style="color:#fafafa;" placeholder="חיפוש" ng-model="searchText.text">
      <a class="search-icon" ></a>

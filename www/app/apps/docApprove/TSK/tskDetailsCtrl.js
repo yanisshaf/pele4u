@@ -19,7 +19,7 @@ angular.module('pele')
       "text": "תוכן משימה"
     }];
 
-    $scope.goHome = function() {
+    vm.goHome = function() {
       PelApi.goHome();
     }
 
@@ -27,15 +27,15 @@ angular.module('pele')
     //---------------------------------------------------------------------------
     //--                         openExistText
     //---------------------------------------------------------------------------
-    $scope.openExistText = function(text) {
-      $scope.data = {};
-      $scope.data.docText1 = text;
+    vm.openExistText = function(text) {
+      vm.data = {};
+      vm.data.docText1 = text;
       if (text !== null) {
         var myPopup = $ionicPopup.show({
-          template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" readonly="true" ng-model="data.docText1" type="text" >{{data.docText1}}</textarea></label></div>',
+          template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" readonly="true" ng-model="vm.data.docText1" type="text" >{{vm.data.docText1}}</textarea></label></div>',
           title: '<a class="float-right"></a>',
           subTitle: '',
-          scope: $scope,
+          scope: vm,
           buttons: [{
             text: '<a class="pele-popup-positive-text-collot">סגור</a>',
             type: 'button-positive',
@@ -46,11 +46,11 @@ angular.module('pele')
       }
     }
 
-    $scope.isGroupShown = function(group) {
-      return $scope.shownGroup === group;
+    vm.isGroupShown = function(group) {
+      return vm.shownGroup === group;
     }
 
-    $scope.isHourException12Shown = function(exception_note) {
+    vm.isHourException12Shown = function(exception_note) {
       var retVal = true;
 
       if (exception_note === undefined || exception_note === " ") {
@@ -60,11 +60,11 @@ angular.module('pele')
       return retVal;
     }
 
-    $scope.toggleGroup = function(group) {
-      if ($scope.isGroupShown(group)) {
-        $scope.shownGroup = null;
+    vm.toggleGroup = function(group) {
+      if (vm.isGroupShown(group)) {
+        vm.shownGroup = null;
       } else {
-        $scope.shownGroup = group;
+        vm.shownGroup = group;
       }
     };
 
@@ -90,19 +90,19 @@ angular.module('pele')
         PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
       }).finally(function() {
         $ionicLoading.hide();
-        $scope.$broadcast('scroll.refreshComplete');
+        vm.$broadcast('scroll.refreshComplete');
       });
     };
 
     $ionicModal.fromTemplateUrl('templates/modal.html', {
-      scope: $scope
+      scope: vm
     }).then(function(modal) {
-      $scope.modal = modal;
+      vm.modal = modal;
     });
 
-    $scope.createNote = function(u) {
-      $scope.Note = u.Note;
-      $scope.modal.hide();
+    vm.createNote = function(u) {
+      vm.Note = u.Note;
+      vm.modal.hide();
     };
 
 
@@ -131,7 +131,7 @@ angular.module('pele')
         }
 
         if (action.ACTION_CODE === "FORWARD" || action.ACTION_CODE === "APPROVE") {
-          alert(action.ACTION_CODE)
+
           action.left_icon = 'ion-chevron-left';
           action.right_icon = 'ion-checkmark-circled'
         }
@@ -149,17 +149,17 @@ angular.module('pele')
     }
 
 
-    $scope.onSlideMove = function(data) {
+    vm.onSlideMove = function(data) {
       //alert("You have selected " + data.index + " tab");
     };
     //-----------------------------------
     //--         Btn Action
     //-----------------------------------
-    $scope.docApprove = function() {
+    vm.docApprove = function() {
 
       //var appId = $stateParams.AppId;
       var appId = appSettings.config.appId;
-      var notificationId = $scope.NOTIFICATION_ID;
+      var notificationId = vm.NOTIFICATION_ID;
       var actionType = 'APPROVE';
       var note = '';
       //===================================================//
@@ -168,7 +168,7 @@ angular.module('pele')
       var myYesNoPopup = $ionicPopup.show({
         title: appSettings.config.isAddNoteTitle,
         subTitle: '',
-        scope: $scope,
+        scope: vm,
         buttons: [{
             text: '<a class="pele-popup-positive-text-collot">כן</a>',
             type: 'button-positive',
@@ -191,23 +191,23 @@ angular.module('pele')
           //===============================================//
           //==                 Get Note                  ==//
           //===============================================//
-          $scope.data = {};
+          vm.data = {};
           var myPopup = $ionicPopup.show({
-            template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" ng-model="data.note" type="text"></textarea></label></div>',
+            template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" ng-model="vm.data.note" type="text"></textarea></label></div>',
             title: '<a class="float-right">הערות</a>',
             subTitle: '',
-            scope: $scope,
+            scope: vm,
             buttons: [{
                 text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
                 type: 'button-positive',
                 onTap: function(e) {
-                  if (!$scope.data.note) {
+                  if (!vm.data.note) {
                     //don't allow the user to close unless he enters wifi password
                     e.preventDefault();
                     PelApi.showPopup("יש להזין הערה", "");
                   } else {
-                    $scope.data.cancel = false;
-                    return $scope.data;
+                    vm.data.cancel = false;
+                    return vm.data;
                   }
                 }
               },
@@ -215,9 +215,9 @@ angular.module('pele')
                 text: 'ביטול',
                 type: 'button-assertive',
                 onTap: function(e) {
-                  $scope.data.note = "";
-                  $scope.data.cancel = true;
-                  return $scope.data;
+                  vm.data.note = "";
+                  vm.data.cancel = true;
+                  return vm.data;
                 }
               },
             ]
@@ -235,7 +235,7 @@ angular.module('pele')
 
                 if ("EOL" === pinStatus) {
                   appSettings.config.IS_TOKEN_VALID = "N";
-                  $scope.goHome();
+                  vm.goHome();
                 } else if ("EAI_ERROR" === pinStatus) {
                   PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
                 } else if ("ERROR_CODE" === pinStatus) {
@@ -249,7 +249,7 @@ angular.module('pele')
                   PelApi.lagger.error("SubmitNotif : " + JSON.stringify(responce));
                 }).finally(function() {
                 $ionicLoading.hide();
-                $scope.$broadcast('scroll.refreshComplete');
+                vm.$broadcast('scroll.refreshComplete');
                 $ionicNavBarDelegate.back();
               });
             }
@@ -264,10 +264,10 @@ angular.module('pele')
             var pinStatus = stat.status;
 
             if ("EOL" === pinStatus) {
-              $scope.goHome();
+              vm.goHome();
             } else if ("EAI_ERROR" === pinStatus) {
               $ionicLoading.hide();
-              $scope.$broadcast('scroll.refreshComplete');
+              vm.$broadcast('scroll.refreshComplete');
               PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
             }
             PelApi.lagger.info(JSON.stringify(data));
@@ -276,7 +276,7 @@ angular.module('pele')
 
           }).finally(function() {
             $ionicLoading.hide();
-            $scope.$broadcast('scroll.refreshComplete');
+            vm.$broadcast('scroll.refreshComplete');
             $ionicNavBarDelegate.back();
           });
         };
@@ -285,11 +285,11 @@ angular.module('pele')
     //-----------------------------------
     //--         OK
     //-----------------------------------
-    $scope.docOK = function() {
+    vm.docOK = function() {
 
       //var appId = $stateParams.AppId;
       var appId = appSettings.config.appId;
-      var notificationId = $scope.NOTIFICATION_ID;
+      var notificationId = vm.NOTIFICATION_ID;
       var actionType = 'OK';
       var note = '';
 
@@ -301,7 +301,7 @@ angular.module('pele')
         var stat = PelApi.GetPinCodeStatus(data, "SubmitNotif");
         var pinStatus = stat.status;
         if ("EOL" === pinStatus) {
-          $scope.goHome();
+          vm.goHome();
         } else if ("EAI_ERROR" === pinStatus) {
           PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
         } else if ("ERROR_CODE" === pinStatus) {
@@ -314,39 +314,39 @@ angular.module('pele')
           PelApi.lagger.error("SubmitNotif : " + JSON.stringify(response));
         }).finally(function() {
         $ionicLoading.hide();
-        $scope.$broadcast('scroll.refreshComplete');
+        vm.$broadcast('scroll.refreshComplete');
         $ionicNavBarDelegate.back();
       });
     };
     //----------------------------------------
     //--         REJECT                     --
     //----------------------------------------
-    $scope.docReject = function() {
+    vm.docReject = function() {
       //var appId = $stateParams.AppId;
       var appId = appSettings.config.appId;
-      var notificationId = $scope.NOTIFICATION_ID;
+      var notificationId = vm.NOTIFICATION_ID;
       var actionType = "REJECT";
 
-      if ($scope.data.note !== undefined) {
-        $scope.submitNotif(actionType, $scope.data.note)
+      if (vm.data.note !== undefined) {
+        vm.submitNotif(actionType, vm.data.note)
       } else {
         var myPopup = $ionicPopup.show({
-          template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" ng-model="data.note" type="text">{{data.note}}</textarea></label></div>',
+          template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" ng-model="vm.data.note" type="text">{{data.note}}</textarea></label></div>',
           title: '<a class="float-right">הערות</a>',
           subTitle: '',
-          scope: $scope,
+          scope: vm,
           buttons: [{
 
               text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
               type: 'button-positive',
               onTap: function(e) {
-                if (!$scope.data.note) {
+                if (!vm.data.note) {
                   //don't allow the user to close unless he enters wifi password
                   e.preventDefault();
                   PelApi.showPopup("יש להזין הערה", "");
                 } else {
 
-                  return $scope.data.note;
+                  return vm.data.note;
                 }
               }
             },
@@ -359,7 +359,7 @@ angular.module('pele')
         myPopup.then(function(res) {
           note = res
           if (note !== undefined) {
-            $scope.submitNotif(actionType, note);
+            vm.submitNotif(actionType, note);
           }
         });
       }
@@ -367,11 +367,11 @@ angular.module('pele')
     //--------------------------------------------------------------
     //
     //--------------------------------------------------------------
-    $scope.submitNotif = function(action, note) {
+    vm.submitNotif = function(action, note) {
       //var appId = $stateParams.AppId;
       var appId = appSettings.config.appId;
 
-      var notificationId = $scope.NOTIFICATION_ID;
+      var notificationId = vm.NOTIFICATION_ID;
       var actionType = action;
 
       PelApi.showLoading();
@@ -383,7 +383,7 @@ angular.module('pele')
         var stat = PelApi.GetPinCodeStatus(data, "SubmitNotif");
         var pinStatus = stat.status;
         if ("EOL" === pinStatus) {
-          $scope.goHome();
+          vm.goHome();
         } else if ("EAI_ERROR" === pinStatus) {
           PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
         } else if ("ERROR_CODE" === pinStatus) {
@@ -396,7 +396,7 @@ angular.module('pele')
         $ionicNavBarDelegate.back();
       }).finally(function() {
         $ionicLoading.hide();
-        $scope.$broadcast('scroll.refreshComplete');
+        vm.$broadcast('scroll.refreshComplete');
       });
 
     };
@@ -405,24 +405,24 @@ angular.module('pele')
     //-- -----------  --------  ------------------------------------
     //-- 06/01/2016   R.W.
     //--------------------------------------------------------------
-    $scope.NotePopup = function() {
+    vm.NotePopup = function() {
       var myPopup = $ionicPopup.show({
-        template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" ng-model="data.note" type="text">{{data.note}}</textarea></label></div>',
+        template: '<div class="list pele-note-background" dir="RTL"><label class="item item-input"><textarea rows="8" ng-model="vm.data.note" type="text">{{vm.data.note}}</textarea></label></div>',
         title: '<a class="float-right">הערות</a>',
         subTitle: '',
-        scope: $scope,
+        scope: vm,
         buttons: [{
 
             text: '<a class="pele-popup-positive-text-collot">המשך</a>',
             type: 'button-positive',
             onTap: function(e) {
-              if (!$scope.data.note) {
+              if (!vm.data.note) {
                 //don't allow the user to close unless he enters wifi password
                 e.preventDefault();
                 PelApi.showPopup("יש להזין הערה", "");
               } else {
 
-                return $scope.data.note;
+                return vm.data.note;
               }
             }
           },
@@ -430,21 +430,21 @@ angular.module('pele')
             text: 'ביטול',
             type: 'button-assertive',
             onTap: function(e) {
-              return $scope.data.note;
+              return vm.data.note;
             }
           },
         ]
       });
 
       myPopup.then(function(res) {
-        $scope.data.note = res;
+        vm.data.note = res;
       });
     }; // NotePopup
     //--------------------------------------------------------------
     //--           Button Action
     //--------------------------------------------------------------
-    $scope.showBtnActions = function() {
-      var buttons = PelApi.getButtons($scope.buttonsArr);
+    vm.showBtnActions = function() {
+      var buttons = PelApi.getButtons(vm.buttonsArr);
       // Show the action sheet
       var hideSheet = $ionicActionSheet.show({
         buttons: buttons,
@@ -461,17 +461,17 @@ angular.module('pele')
         //--               BUTTONS
         //-----------------------------------------------
         buttonClicked: function(index, button) {
-          var note = $scope.data.note;
+          var note = vm.data.note;
           // add buttons code..
           if (button === appSettings.OK) {
-            $scope.submitNotif("OK", note);
+            vm.submitNotif("OK", note);
           }
           if (button === appSettings.APPROVE) {
 
-            $scope.submitNotif("APPROVE", note);
+            vm.submitNotif("APPROVE", note);
           }
           if (button === appSettings.REJECT) {
-            $scope.docReject();
+            vm.docReject();
           }
           return true;
         },
