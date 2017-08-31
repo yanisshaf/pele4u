@@ -62,7 +62,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         //-----------------------------------------
         var self = this;
         if (window.plugins !== undefined) {
-
           cordova.plugins.notification.badge.configure({
             autoClear: true
           });

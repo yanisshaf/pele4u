@@ -71,13 +71,22 @@
         <ion-slide on-drag-right="enable('drag')" on-drag-left="disable('drag')">
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
-            <label class="item item-thumbnail-left">
+
+            <label class="item item-thumbnail-left text-right">
               <img src="img/employees/worker.png">
-              <h2 class="text-right pele_rtl">שם : {{CREATOR}}</h2>
+              <table class="text-right pele_rtl">
+                <tr>
+                  <td>שם :</td>
+                  <td> {{CREATOR}}</td>
+                </tr>
+              </table>
+              <div class="row class="text-right pele_rtl"><div class="col col-20">
+                שם : </div>
+                <div class="col COL-80">{{CREATOR}}</div></div>
               <h2 class="text-right pele_rtl">ת.ז. : {{EMP_NUMBER}}</h2>
               <h2 class="text-right pele_rtl">מספר טופס : {{DOC_INIT_ID}}</h2>
               <h2 class="text-right pele_rtl">ת. יצירה : {{SENT_DATE}}</h2>
-              <h2 class="text-right pele_rtl">מחלקה : {{DEPARTMENT}}</h2>
+              <div class="text-right pele_rtl item-text-wrap">מחלקה : {{DEPARTMENT}}</div>
               <h2 class="text-right pele_rtl">חטיבה : {{SECTOR}}</h2>
             </label>
             <ul class="list">
