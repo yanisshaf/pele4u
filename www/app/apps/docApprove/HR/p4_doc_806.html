@@ -75,12 +75,16 @@
 
             <label class="item item-thumbnail-left">
               <img src="img/employees/worker.png">
-              <h2 class="text-right pele_rtl">שם : {{CREATOR}}</h2>
-              <h2 class="text-right pele_rtl">ת.ז. : {{EMP_NUMBER}}</h2>
-              <h2 class="text-right pele_rtl">מספר טופס : {{DOC_INIT_ID}}</h2>
-              <h2 class="text-right pele_rtl">ת. יצירה : {{SENT_DATE}}</h2>
-              <h2 class="text-right pele_rtl">מחלקה : {{DEPARTMENT}}</h2>
-              <h2 class="text-right pele_rtl">חטיבה : {{SECTOR}}</h2>
+              <table class="pele_rtl text-right">
+                <tbody>
+                  <tr><td class="label">שם: </td><td class="info"> {{CREATOR}}</td></tr>
+                  <tr><td class="label">ת.ז.: </td><td class="info"> {{EMP_NUMBER}}</td></tr>
+                  <tr><td class="label">מספר טופס: </td><td class="info"> {{DOC_INIT_ID}}</td></tr>
+                  <tr><td class="label">ת. יצירה: </td><td class="info"> {{SENT_DATE}}</td></tr>
+                  <tr><td class="label">מחלקה: </td><td class="info"> {{DEPARTMENT}}</td></tr>
+                  <tr><td class="label">חטיבה: </td><td class="info"> {{SECTOR}}</td></tr>
+                </tbody>
+              </table>
             </label>
             <ul class="list">
               <!---------------------------- 242 --------------------------------->
@@ -96,31 +100,41 @@
           <i ng-class="isGroupShown(detail.EFFECTIVE_DATE) ? 'icon-expand' : 'icon-collapse'"></i>
           </a>
                 <label class="item" ng-show="isGroupShown(detail.EFFECTIVE_DATE)">
-            <div class="row">
-              <div class="col col-30 text-right pele_rtl">שעת התחלה : </div>
-              <div class="col col-78 text-right pele_rtl">{{detail.ATTRIBUTE2}}</div>
-            </div>
-            <div class="row">
-              <div class="col col-30 text-right pele_rtl">שעת סיום : </div>
-              <div class="col col-70 text-right pele_rtl">{{detail.ATTRIBUTE3}}</div>
-            </div>
-            <div class="row">
-              <div class="col col-30 text-right pele_rtl">סוג דיווח : </div>
-              <div class="col col-70 text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE5)">
-                <p class="under" style="color:blue">{{detail.ATTRIBUTE5}}</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col col-30 text-right pele_rtl">מטרת עבודה : </div>
-              <div class="col col-70 text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE6)" >
-                <p class="under" style="color:blue">{{detail.ATTRIBUTE6}}</p>
-              </div>
-            </div>
-            <div class="row" ng-show="isHourException12Shown(detail.ATTRIBUTE7)">
-              <div class="col text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE7)">
-                <p class="under" style="color:red">{{detail.ATTRIBUTE7}}</p>
-              </div>
-            </div>
+                  <div class="row">
+                    <div class="col">
+                      <table class="pele_rtl text-right">
+                        <tbody>
+                      <tr>
+                        <td class="label">שעת התחלה: </td>
+                        <td class="info">{{detail.ATTRIBUTE2}}</td>
+                      </tr>
+                      <tr>
+                        <td class="label">שעת סיום: </td>
+                        <td class="info">
+                          {{detail.ATTRIBUTE3}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="label">סוג דיווח: </td>
+                        <td class="info">
+                          {{detail.ATTRIBUTE5}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="label">מטרת העבודה: </td>
+                        <td class="info">
+                          {{detail.ATTRIBUTE6}}
+                        </td>
+                      </tr>
+                      <tr ng-show="isHourException12Shown(detail.ATTRIBUTE7)">
+                       <td colspan="2" class="info alert">
+                          {{detail.ATTRIBUTE7}}
+                        </td>
+                      </tr>
+                    </tbody>
+                    </table>
+                  </div>
+                </div>
           </label>
               </div>
             </ul>

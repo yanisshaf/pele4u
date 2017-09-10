@@ -457,10 +457,36 @@ p.under {
   font-weight:bold;
   text-decoration:none;
 }
-div.pele_rtl {
+table.pele_rtl , div.pele_rtl {
   direction: rtl;
   unicode-bidi :plaintext ;
+
 }
+
+table.pele_rtl {
+  direction: rtl;
+  unicode-bidi :plaintext ;
+  float:right;
+  white-space: normal;
+}
+
+table.pele_rtl td.label {
+  white-space: nowrap;
+  text-decoration: underline;
+}
+
+table.pele_rtl td.info {
+  padding-right:8px
+}
+
+table.pele_rtl td.info.alert {
+  color:red;
+}
+
+table.pele_rtl:after {
+  clear:both;
+}
+
 ion-item.pele_rtl {
   direction: rtl;
   unicode-bidi: plaintext;
@@ -522,3 +548,13 @@ div#main-apps-menu .description {font-size: 20px;}
 div#main-apps-menu div img  {height: 60px !important;margin:10px}
 /* fix ios 10 title  position*/
 .platform-ios .nav-bar-title .bar .title {margin-top:0 !important}
+
+.info-item {}
+.info-label:after {
+  -content: '\A';
+  -white-space: pre;
+}
+.info-content.wrap {
+-white-space: normal;
+-marging-right:25px;
+}
