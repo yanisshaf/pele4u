@@ -5,7 +5,7 @@
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
-      <div class="title">{{vm.title}}</div>
+      <div class="title">{{title}}</div>
     </div>
   </ion-nav-title>
   <ion-content scroll="false">
@@ -13,7 +13,7 @@
       <div class="tsb-icons">
         <div class="tsb-ic-wrp">
           <ion-scroll scrollX="false" direction="x" scrollY="false" class="tsb-hscroll">
-            <a href="javascript:;" class="triangle-isosceles {{tab.icon}}" ng-repeat="tab in vm.tabs" on-finish-render="test()">
+            <a href="javascript:;" class="triangle-isosceles {{tab.icon}}" ng-repeat="tab in tabs" on-finish-render="test()">
               {{tab.text}}
             </a>
           </ion-scroll>
@@ -27,9 +27,9 @@
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <div class="list">
-              <div ng-repeat="action in vm.docDetails.ACTION_HISTORY" class="pele_rtl" href="#">
+              <div ng-repeat="action in docDetails.ACTION_HISTORY" class="pele_rtl" href="#">
                 <div class="item item-divider item-icon-left item-icon-right text-right action-history-item">
-                  <i class="icon" ng-click="vm.toggleActionItem(action)" ng-class="action.left_icon"></i> {{action.APPROVAL_SEQ}}. {{action.USER_NAME}}
+                  <i class="icon" ng-click="toggleActionItem(action)" ng-class="action.left_icon"></i> {{action.APPROVAL_SEQ}}. {{action.USER_NAME}}
                   <i class="icon" ng-class="action.right_icon"></i>
                 </div>
                 <div class="item bo-border pele_rtl text-right item-icon-left item-icon-right text-right" ng-show="action.display">
@@ -84,12 +84,12 @@
                   <h2 class="text-right pele_rtl">פרטי המשימה</h2>
                 </div>
                 <div class="item-section pele_rtl">
-                  <h2>שם : {{vm.docDetails.BAN_NAME}}</h2>
-                  <h2>מספר לקוח : {{vm.docDetails.BAN}}</h2>
-                  <h2>נושא משימה : {{vm.docDetails.TASK_TYPE}}</h2>
-                  <h2>תת נושא : {{vm.docDetails.SUB_TASK_TYPE}}</h2>
-                  <h2>תאריך יצירה : {{vm.docDetails.CREATION_DATE}}</h2>
-                  <h2>האם משימה חוזרת : {{vm.docDetails.RETURN_TASK}}</h2>
+                  <h2>שם : {{docDetails.BAN_NAME}}</h2>
+                  <h2>מספר לקוח : {{docDetails.BAN}}</h2>
+                  <h2>נושא משימה : {{docDetails.TASK_TYPE}}</h2>
+                  <h2>תת נושא : {{docDetails.SUB_TASK_TYPE}}</h2>
+                  <h2>תאריך יצירה : {{docDetails.CREATION_DATE}}</h2>
+                  <h2>האם משימה חוזרת : {{docDetails.RETURN_TASK}}</h2>
                 </div>
               </li>
               <li class="item no-border">
@@ -98,7 +98,7 @@
                   <h2 class="text-right pele_rtl">נתוני מערכת</h2>
                 </div>
                 <div class="item-section">
-                  <div class="pele_rtl" ng-repeat="item in vm.docDetails.SYSTEM_INFORMATION">
+                  <div class="pele_rtl" ng-repeat="item in docDetails.SYSTEM_INFORMATION">
                     <span>{{item.PROMPT}} : <span>{{item.VALUE}}</span></span>
                   </div>
                 </div>
@@ -109,7 +109,7 @@
                   <h2 class="text-right pele_rtl">נתונים נוספים</h2>
                 </div>
                 <div class="item-section">
-                  <div class="pele_rtl" ng-repeat="item in vm.docDetails.EXTRA_INFORMATION">
+                  <div class="pele_rtl" ng-repeat="item in docDetails.EXTRA_INFORMATION">
                     <span>{{item.PROMPT}} : <span>{{item.VALUE}}</span></span>
                   </div>
                 </div>
@@ -126,7 +126,7 @@
                   <h2 class="text-right pele_rtl">נספחי משימה</h2>
                 </div>
                 <div class="item-section pele_rtl">
-                  <div class="pele_rtl" ng-repeat="file in vm.docDetails.attachments">
+                  <div class="pele_rtl" ng-repeat="file in docDetails.attachments">
                     <span>{{file.name}}</span>
                   </div>
                 </div>
@@ -142,11 +142,11 @@
 
     <div class="row">
       <div class="col">
-        <button class="button button-block button-large button-positive  icon-right ion-paper-airplane" ng-click="vm.showBtnActions()">פעולות</button>
+        <button class="button button-block button-large button-positive  icon-right ion-paper-airplane" ng-click="showBtnActions()">פעולות</button>
       </div>
 
       <div class="col">
-        <button class="button button-block button-large button-balanced icon-right ion-document-text" ng-click="vm.NotePopup()">הערה</button>
+        <button class="button button-block button-large button-balanced icon-right ion-document-text" ng-click="NotePopup()">הערה</button>
       </div>
 
     </div>
@@ -156,14 +156,14 @@
     <ion-modal-view>
       <ion-header-bar class="bar bar-header bar-positive">
         <h1 class="title">הערה חדשה</h1>
-        <button class="button button-clear button-primary" ng-click="vm.modal.hide()">ביטול</button>
+        <button class="button button-clear button-primary" ng-click="modal.hide()">ביטול</button>
       </ion-header-bar>
       <ion-content class="padding">
         <div class="list" dir="RTL">
           <label class="item item-input">
-            <textarea rows="8" ng-model="vm.newNote.Note" type="text"></textarea>
+            <textarea rows="8" ng-model="newNote.Note" type="text"></textarea>
           </label>
-          <button class="button button-full button-positive" ng-click="vm.createNote(newNote)">שמירה</button>
+          <button class="button button-full button-positive" ng-click="createNote(newNote)">שמירה</button>
         </div>
       </ion-content>
     </ion-modal-view>

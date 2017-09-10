@@ -68,8 +68,7 @@ angular.module('pele.states', [])
         templateUrl: function() {
           return "app/apps/docApprove/TSK/tskDetails.html";
         },
-        controller: 'tskDetailsCtrl',
-        controllerAs: "vm",
+        controller: 'tskDetailsCtrl'
       }
     },
     src: ["app/apps/docApprove/TSK/tskDetailsCtrl.js"]
