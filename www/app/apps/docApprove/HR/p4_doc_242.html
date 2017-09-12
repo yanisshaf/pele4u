@@ -71,24 +71,19 @@
         <ion-slide on-drag-right="enable('drag')" on-drag-left="disable('drag')">
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
-
-            <label class="item item-thumbnail-left text-right">
+            <label class="item item-thumbnail-left">
               <img src="img/employees/worker.png">
-              <table class="text-right pele_rtl">
-                <tr>
-                  <td>שם :</td>
-                  <td> {{CREATOR}}</td>
-                </tr>
+              <table class="pele_rtl text-right">
+                <tbody>
+                  <tr><td class="label">שם: </td><td class="info"> {{CREATOR}}</td></tr>
+                  <tr><td class="label">ת.ז.: </td><td class="info"> {{EMP_NUMBER}}</td></tr>
+                  <tr><td class="label">מספר טופס: </td><td class="info"> {{DOC_INIT_ID}}</td></tr>
+                  <tr><td class="label">ת. יצירה: </td><td class="info"> {{SENT_DATE}}</td></tr>
+                  <tr><td class="label">מחלקה: </td><td class="info"> {{DEPARTMENT}}</td></tr>
+                  <tr><td class="label">חטיבה: </td><td class="info"> {{SECTOR}}</td></tr>
+                </tbody>
               </table>
-              <div class="row class="text-right pele_rtl"><div class="col col-20">
-                שם : </div>
-                <div class="col COL-80">{{CREATOR}}</div></div>
-              <h2 class="text-right pele_rtl">ת.ז. : {{EMP_NUMBER}}</h2>
-              <h2 class="text-right pele_rtl">מספר טופס : {{DOC_INIT_ID}}</h2>
-              <h2 class="text-right pele_rtl">ת. יצירה : {{SENT_DATE}}</h2>
-              <div class="text-right pele_rtl item-text-wrap">מחלקה : {{DEPARTMENT}}</div>
-              <h2 class="text-right pele_rtl">חטיבה : {{SECTOR}}</h2>
-            </label>
+              </label>
             <ul class="list">
               <!---------------------------- 242 --------------------------------->
               <div ng-repeat="detail in docDetails.DOC_LINES" type="item-text-wrap" dir="RTL">
@@ -96,10 +91,10 @@
               <i class="icon ion-android-calendar"></i>
               <p class="float-right">{{detail.EFFECTIVE_DATE}}</p>
               <span>יום: {{detail.ATTRIBUTE1}}</span>
-              <span class="tab">סה"כ
+            <span class="tab">סה"כ
                 {{detail.ATTRIBUTE2}}
               </span>
-              <i ng-class="isGroupShown(detail.EFFECTIVE_DATE) ? 'icon-expand' : 'icon-collapse'"></i>
+            <i ng-class="isGroupShown(detail.EFFECTIVE_DATE) ? 'icon-expand' : 'icon-collapse'"></i>
             </a>
 
 
@@ -117,22 +112,28 @@
               <div class="col text-right pele_rtl"><i ng-style="redStyle(detail.ATTRIBUTE10)">{{detail.ATTRIBUTE9}}</i></div>
             </div>
             <div class="row">
-              <div class="col col-30 text-right pele_rtl">סיבת אי דיווח : </div>
-              <div class="col col-70 text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE11)">
-                <p class="under" style="color:blue">{{detail.ATTRIBUTE11}}</p>
-              </div>
+              <div class="col">
+                <table class="pele_rtl text-right">
+                  <tbody>
+                <tr>
+                  <td class="label">סיבת אי דיווח : </td>
+                  <td class="info">{{detail.ATTRIBUTE11}}</td>
+                </tr>
+                <tr>
+                  <td class="label">הערה : </td>
+                  <td class="info">
+                    {{detail.ATTRIBUTE12}}
+                  </td>
+                </tr>
+                <tr ng-show="isHourException12Shown(detail.ATTRIBUTE13)">
+                  <td colspan="2" class="info alert">
+                    {{detail.ATTRIBUTE13}}
+                  </td>
+                </tr>
+              </tbody>
+              </table>
             </div>
-            <div class="row">
-              <div class="col col-30 text-right pele_rtl">הערה : </div>
-              <div class="col col-70 text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE12)">
-                <p class="under" style="color:blue">{{detail.ATTRIBUTE12}}</p>
-              </div>
-            </div>
-            <div class="row" ng-show="isHourException12Shown(detail.ATTRIBUTE13)">
-              <div class="col text-right pele_rtl" readonly="true" on-touch="openExistText(detail.ATTRIBUTE13)">
-                <p class="under" style="color:red">{{detail.ATTRIBUTE13}}</p>
-              </div>
-            </div>
+          </div>
           </label>
               </div>
             </ul>

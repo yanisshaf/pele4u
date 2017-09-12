@@ -27,7 +27,7 @@
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <div class="list">
-              <div ng-repeat="action in docDetails.ACTION_HISTORY" class="pele_rtl" href="#">
+              <div ng-repeat="action in docDetails.ACTION_HISTORY" class="pele_rtl">
                 <div class="item item-divider item-icon-left item-icon-right text-right action-history-item">
                   <i class="icon" ng-click="toggleActionItem(action)" ng-class="action.left_icon"></i> {{action.APPROVAL_SEQ}}. {{action.USER_NAME}}
                   <i class="icon" ng-class="action.right_icon"></i>
@@ -54,18 +54,16 @@
         <ion-slide>
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <ul class="list">
-              <li class="item no-border item-text-wrap">
-                <div class="item item-divider item-icon-right">
-                  <i class="icon ion-clipboard"></i>
+              <li class="item item-info no-border">
+                <div class="item item-divider item-icon-left item-icon-right">
                   <h2 class="text-right pele_rtl">תיאור משימה</h2>
+                  <i class="icon ion-clipboard"></i>
                 </div>
-                <div class="item no-border item-section pele_rtl item-text-wrap text-right">
-
+                <div class="item-section pele_rtl item-text-wrap text-right">
                   ויקינגים (באנגלית: Vikings) היא דרמה היסטורית קנדית-אירית שנוצרה ונכתבה על ידי מייקל הירסט עבור ערוץ ההיסטוריה.הסדרה עלתה לשידור ב-3 במרץ 2013 בארצות הברית ובקנדה. הסדרה צולמה באירלנד בהשראת הסיפורים על הויקינג רגנאר לודברוק, אחד מגיבורי התרבות הנורדית
                   הנודעים ביותר. הסדרה מציגה את רגנאר כחקלאי שעולה לגדולה לאחר פשיטות מוצלחות באנגליה ובסופו של דבר הופך למלך סקנדינביה בתמיכת משפחתו וחבריו הלוחמים - אחיו רולו, בנו ביורן צד-ברזל ונשותיו בתולת המגן לגרטה והנסיכה אסלוג. הסדרה חודשה במרץ
                   2015 לעונה רביעית ארוכה מהרגיל הכוללת 20 פרקים, שעלתה לשידור ב-18 בפברואר 2016. ערוץ ההיסטוריה חידש את הסדרה לעונה חמישית במרץ 2016, שגם היא תכלול 20 פרקים. הסדרה הייתה מועמדת לפרסים רבים, בהם פרס אמי לאפקטים חזותיים לשנים 2013-‏2015,
                   וזכתה בארבעה פרסי המסך הקנדיים לשנים 2015-‏2016 וכן ארבעה פרסי גילדת הבמאים של קנדה לשנים 2014-‏2015.
-
                 </div>
               </li>
             </ul>
@@ -83,44 +81,80 @@
                   <i class="icon ion-clipboard"></i>
                   <h2 class="text-right pele_rtl">פרטי המשימה</h2>
                 </div>
-                <div class="item-section pele_rtl">
-                  <h2>שם : {{docDetails.BAN_NAME}}</h2>
-                  <h2>מספר לקוח : {{docDetails.BAN}}</h2>
-                  <h2>נושא משימה : {{docDetails.TASK_TYPE}}</h2>
-                  <h2>תת נושא : {{docDetails.SUB_TASK_TYPE}}</h2>
-                  <h2>תאריך יצירה : {{docDetails.CREATION_DATE}}</h2>
-                  <h2>האם משימה חוזרת : {{docDetails.RETURN_TASK}}</h2>
+                <div class="item-section">
+                  <table class="pele_rtl text-right">
+                    <tbody>
+                      <tr>
+                        <td class="label">שם: </td>
+                        <td class="info"> {{docDetails.BAN_NAME}}</td>
+                      </tr>
+                      <tr>
+                        <td class="label">מספר לקוח: </td>
+                        <td class="info"> {{docDetails.BAN}}</td>
+                      </tr>
+                      <tr>
+                        <td class="label">נושא משימה: </td>
+                        <td class="info"> {{docDetails.TASK_TYPE}}</td>
+                      </tr>
+                      <tr>
+                        <td class="label">תת נושא: </td>
+                        <td class="info"> {{docDetails.SUB_TASK_TYPE}}</td>
+                      </tr>
+                      <tr>
+                        <td class="label">תאריך יצירה: </td>
+                        <td class="info"> {{docDetails.CREATION_DATE}}</td>
+                      </tr>
+                      <tr>
+                        <td class="label">האם משימה חוזרת: </td>
+                        <td class="info"> {{docDetails.RETURN_TASK}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </li>
-              <li class="item no-border">
-                <div class="item item-divider item-icon-right">
-                  <i class="icon ion-clipboard"></i>
+              <li class="item item-info no-border" ng-init="toggleInit('sys_data',true)">
+                <div class="item item-divider item-icon-left item-icon-right">
+
+                  <i class="icon" ng-class="sys_data.icon" ng-click="toggle(sys_data)"></i>
                   <h2 class="text-right pele_rtl">נתוני מערכת</h2>
-                </div>
-                <div class="item-section">
-                  <div class="pele_rtl" ng-repeat="item in docDetails.SYSTEM_INFORMATION">
-                    <span>{{item.PROMPT}} : <span>{{item.VALUE}}</span></span>
-                  </div>
-                </div>
-              </li>
-              <li class="item no-border">
-                <div class="item item-divider item-icon-right">
                   <i class="icon ion-clipboard"></i>
-                  <h2 class="text-right pele_rtl">נתונים נוספים</h2>
                 </div>
-                <div class="item-section">
-                  <div class="pele_rtl" ng-repeat="item in docDetails.EXTRA_INFORMATION">
-                    <span>{{item.PROMPT}} : <span>{{item.VALUE}}</span></span>
-                  </div>
+                <div class="item-section" ng-show="sys_data.display">
+                  <table class="pele_rtl text-right">
+                    <tbody>
+                      <tr class="pele_rtl" ng-repeat="item in docDetails.SYSTEM_INFORMATION">
+                        <td class="label">{{item.PROMPT}}: </td>
+                        <td class="info"> {{item.VALUE}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </li>
-              <li class="item no-border">
-                <div class="item item-divider item-icon-right">
+              <li class="item item-info no-border">
+                <div class="item item-divider item-icon-right item-icon-left" ng-init="toggleInit('extra_elm')">
+                  <i class="icon" ng-class="extra_elm.icon" ng-click="toggle(extra_elm)"></i>
+                  <h2 class="text-right pele_rtl">נתונים נוספים</h2>
+                  <i class="icon ion-clipboard"></i>
+                </div>
+                <div class="item-section" ng-show="extra_elm.display">
+                  <table class="pele_rtl text-right">
+                    <tbody>
+                      <tr class="pele_rtl" ng-repeat="item in docDetails.EXTRA_INFORMATION">
+                        <td class="label">{{item.PROMPT}}: </td>
+                        <td class="info"> {{item.VALUE}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+              <li class="item item-info no-border">
+                <div class="item item-divider item-icon-right item-icon-left" ng-init="toggleInit('desc_elm')">
+                  <i class="icon" ng-class="desc_elm.icon" ng-click="toggle(desc_elm)"></i>
                   <i class="icon ion-clipboard"></i>
                   <h2 class="text-right pele_rtl">תיאור</h2>
                 </div>
               </li>
-              <li class="item no-border">
+              <li class="item item-info no-border">
                 <div class="item item-divider item-icon-right">
                   <i class="icon ion-clipboard"></i>
                   <h2 class="text-right pele_rtl">נספחי משימה</h2>
@@ -146,7 +180,7 @@
       </div>
 
       <div class="col">
-        <button class="button button-block button-large button-balanced icon-right ion-document-text" ng-click="NotePopup()">הערה</button>
+        <button class="button button-block button-large button-balanced icon-right ion-document-text" ng-click="displayNotePopup()">הערה</button>
       </div>
 
     </div>

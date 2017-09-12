@@ -11,7 +11,7 @@
     </div>
   </ion-nav-title>
 
-  <ion-content scroll="false" onload="doRefresh()">
+  <ion-content scroll="false">
     <div ng-if="0" class="pele-page-title pele-img-size pele-page-title-font">
       <a class="description"> {{PO_ORDER_NUMBER}} הזמנות רכש</a>
     </div>
@@ -25,7 +25,7 @@
           </ion-scroll>
         </div>
       </div>
-      <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
+      <ion-slide-box show-pager="false" on-drag-right="alert(1)" on-slide-changed="enable();slideHasChanged(index)">
 
         <!-------------------------------------------------------------------------------->
         <!----------------------------- Approve List Slide ------------------------------->
@@ -67,7 +67,7 @@
         <!------------------------------------------------------------------------------->
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
-        <ion-slide on-drag-right="enable('drag')" on-drag-left="disable('drag')">
+        <ion-slide on-drag-left="disable('drag')" on-drag-right="enable('drag')">
           <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
             <!--

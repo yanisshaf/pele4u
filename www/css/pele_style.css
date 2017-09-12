@@ -457,10 +457,40 @@ p.under {
   font-weight:bold;
   text-decoration:none;
 }
-.pele_rtl,div.pele_rtl {
+table.pele_rtl , .pele_rtl,div.pele_rtl {
   direction: rtl;
   unicode-bidi :plaintext ;
 }
+table.pele_rtl {
+  direction: rtl;
+  unicode-bidi :plaintext ;
+  float:right;
+  white-space: normal;
+}
+
+table.pele_rtl td.label {
+  white-space: nowrap;
+  text-decoration: underline;
+}
+
+table.pele_rtl td.info {
+  padding-right:8px
+}
+
+table.pele_rtl td.info.alert {
+  color:red;
+}
+
+table.pele_rtl:after {
+  clear:both;
+}
+
+ion-item.pele_rtl {
+  direction: rtl;
+  unicode-bidi: plaintext;
+}
+
+
 ion-item.pele_rtl {
   direction: rtl;
   unicode-bidi: plaintext;
@@ -472,12 +502,12 @@ h2.pele_rtl{
 }
 
 .apps-front-menu {padding: 0 10%}
-.apps-front-menu .menu-item {margin-top:25px}
-.apps-front-menu button { height:90px;;position: relative;background-color: #E3F2FD;border-radius: 6px;font-weight:bolder;min-height:69px;}
+.apps-front-menu .menu-item {margin-top:15px}
+.apps-front-menu button { height:70px;;position: relative;background-color: #E3F2FD;border-radius: 6px;font-weight:bolder;min-height:70px;}
 .apps-front-menu button.activated {border-radius: 6px;background:#BBDEFB}
 .apps-front-menu .badge.badge-positive {margin-right:10px}
-.apps-front-menu .menu-item button img {  position: absolute; height:60px;
-            top: 13px;
+.apps-front-menu .menu-item button img {  position: absolute; height:50px;min-height:50px;
+            top: 10px;
             right:10px
             }
 
@@ -551,3 +581,9 @@ div#main-apps-menu div.row-bottom {margin-top:15px}
 .item-section {padding:6px}
 .no-border { border:0  !important}
 .item.action-history-item {line-height:30px}
+div.loading-container div.loading {background-color: #2980B9 !important;}
+img.spinner-svg {height:60px}
+.item.item-info { padding:10px}
+.platform-android .action-sheet-cancel {
+    display: block !important;
+}

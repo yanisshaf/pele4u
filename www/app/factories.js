@@ -476,6 +476,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var P_ERROR_CODE = _.get(data, "Response.OutParams.P_ERROR_CODE", "").toString();
         var P_ERROR_DESC = _.get(data, "Response.OutParams.P_ERROR_DESC");
 
+
         if (P_ERROR_CODE && P_ERROR_CODE != "0") {
           return {
             status: "ERROR_CODE",
@@ -813,14 +814,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //====================================================//
       //==            Show Loading                        ==//
       //====================================================//
-      showLoading: function() {
-        $ionicLoading.show({
-
-          animation: 'fade-in',
-          showBackdrop: true,
-          maxWidth: 200,
-          showDelay: 0
-        });
+      showLoading: function(options) {
+        // you can configure default ionicLoadingConfig in  config.js   file
+        $ionicLoading.show();
       },
       hideLoading: function() {
         $ionicLoading.hide();
@@ -833,22 +829,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       getButtons: function(buttonsArr) {
 
         var buttons = [];
-        var arrLength = buttonsArr.length;
-        for (var i = 0; i < arrLength; i++) {
-
-          if ("OK" === buttonsArr[i].LOOKUP_CODE) {
-            buttons.push(appSettings.OK);
-          }
-          if ("APPROVE" === buttonsArr[i].LOOKUP_CODE) {
-            buttons.push(appSettings.APPROVE);
-          }
-          if ("APPROVE_AND_NOTE" === buttonsArr[i].LOOKUP_CODE) {
-            buttons.push(appSettings.APPROVE_AND_NOTE);
-          }
-          if ("REJECT" === buttonsArr[i].LOOKUP_CODE) {
-            buttons.push(appSettings.REJECT);
-          }
-        } // for
+        buttonsArr.forEach(function(b) {
+          buttons.push(appSettings[b.LOOKUP_CODE]);
+        })
         return buttons;
       },
 
