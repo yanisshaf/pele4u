@@ -19,11 +19,19 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
     function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings) {
 
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-        PelApi.lagger.error('State Resolve Error: ', error);
+        PelApi.lagger.error('State Resolve on ' + toState.name + ' -> Error: ', error);
       });
 
+      $rootScope.$on('$stateChangeStart',
+        function(event, toState, toParams, fromState, fromParams) {
+          PelApi.lagger.info("start StateChange ->  from :  " + fromState.name + " to: ", toState.name);
+          PelApi.lagger.info(" new State params :  ", toParams);
+        });
+
+      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {});
 
       PelApi.init();
+
       $ionicPlatform.ready(function() {
         //----------------------------------------
         //--    Get Version from config.xml
@@ -57,6 +65,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
   .config(function($stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
 
     $ionicConfigProvider.backButton.text('')
+    $ionicConfigProvider.views.swipeBackEnabled(false);
 
     $stateProvider
       .state('app', {
@@ -174,9 +183,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         views: {
           'menuContent': {
             templateUrl: 'templates/error.html',
-            controller: function($scope, $stateParams) {
-              $scope.error = $stateParams;
-            }
+            controller: 'ErrorCtrl'
           }
         }
       })
@@ -204,5 +211,30 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
     $urlRouterProvider.otherwise('/apps/home.html', {
       'showLoading': 'Y'
     });
+  })
+  .factory('httpRequestInterceptor', function($injector) {
+    return {
+      request: function(config) {
 
+        config.headers = config.headers || {};
+        if (config.url.match(/^http/)) {
+          var PelApi = $injector.get('PelApi');
+          PelApi.lagger.info(config.method + " API request : " + config.url)
+          PelApi.lagger.info("    -> headers : ", config.headers)
+          PelApi.lagger.info("    -> data : ", config.data)
+        }
+        return config;
+      },
+      response: function(response) {
+        if (response.config.url.match(/^http/)) {
+          var PelApi = $injector.get('PelApi');
+          PelApi.lagger.info("API response  status : ", response.status)
+          PelApi.lagger.info("   -> response data : ", response.data)
+        }
+        return response;
+      }
+    };
+  })
+  .config(function($httpProvider) {
+    $httpProvider.interceptors.push('httpRequestInterceptor');
   })

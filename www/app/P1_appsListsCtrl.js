@@ -105,9 +105,6 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
         //-- Send User Tag for push notifications
         //---------------------------------------------
         if (window.plugins !== undefined) {
-
-          console.log("ENVIRONMENT : " + appSettings.env);
-
           window.plugins.OneSignal.sendTags({
             "User": data.userName,
             "Env": appSettings.env
@@ -131,39 +128,33 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
         }
 
       } else if ("PAD" === pinCodeStatus) {
-        $ionicLoading.hide();
-        $scope.$broadcast('scroll.refreshComplete');
+
         if (appSettings.config.PIN_CODE_AUTHENTICATION_REQUIRED_CODE === appSettings.config.Pin) {
           $state.go('app.login');
         }
 
       } else if ("PCR" === pinCodeStatus) {
-        $ionicLoading.hide();
-        $scope.$broadcast('scroll.refreshComplete');
         errorMsg = appSettings.PIN_STATUS.PAD;
         //PelApi.showPopup(appSettings.config.pinCodeSubTitlePCR , "");
         appSettings.config.IS_TOKEN_VALID = "N";
         PelApi.goHome();
       } else if ("PWA" === pinCodeStatus) {
-        $ionicLoading.hide();
-        $scope.$broadcast('scroll.refreshComplete');
         appSettings.config.IS_TOKEN_VALID = "N";
         PelApi.goHome();
         //PelApi.showPopup(appSettings.config.pinCodeSubTitlePWA , "");
       } else if ("OLD" === pinCodeStatus) {
-        $ionicLoading.hide();
-        $scope.$broadcast('scroll.refreshComplete');
         PelApi.showPopupVersionUpdate(data.StatusDesc, "");
       }
     }).error(
       function(response) {
-        PelApi.lagger.error(" Interface getUserMenu FAILD");
-        PelApi.lagger.error(JSON.stringify(response));
-        $ionicLoading.hide();
-        $scope.$broadcast('scroll.refreshComplete');
-        PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
+
+        PelApi.goError("api", "GetUserMenu", JSON.stringify(response));
+        //PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
       }
-    );
+    ).finally(function() {
+      $ionicLoading.hide();
+      $scope.$broadcast('scroll.refreshComplete');
+    });
   } //  GetUserMenuMain
 
   $scope.setMSISDN = function(pin) {

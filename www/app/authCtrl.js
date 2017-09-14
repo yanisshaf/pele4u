@@ -3,7 +3,7 @@
  */
 var app = angular.module('pele.authCtrl', ['ngStorage']);
 
-app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootScope, PelApi, $localStorage, $ionicLoading,appSettings) {
+app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootScope, PelApi, $localStorage, $ionicLoading, appSettings) {
   //------------------------------------------------------------//
   //--                    Get AppId                           --//
   //------------------------------------------------------------//
@@ -36,7 +36,6 @@ app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootSc
   //------------------------------------------------------------//
   $scope.doLogIn = function() {
 
-    console.log("PIN : " + $scope.user.pin);
 
     PelApi.showLoading();
 

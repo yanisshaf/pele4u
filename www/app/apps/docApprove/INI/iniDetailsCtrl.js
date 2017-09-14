@@ -5,8 +5,8 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('tskDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup',
-    function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup) {
+  .controller('tskDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicActionSheet', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup',
+    function($scope, $stateParams, $ionicLoading, $ionicActionSheet, $ionicModal, PelApi, $ionicHistory, $ionicPopup) {
 
       $scope.actionNote = {
         text: ""
@@ -33,9 +33,9 @@ angular.module('pele')
         var retGetUserNotifications = PelApi.GetUserNotifications(links, $stateParams.appId, $stateParams.docId, $stateParams.docInitId);
         retGetUserNotifications.success(function(data) {
           var apiData = PelApi.checkApiResponse(data);
-
+          PelApi.lagger.info("PelApi.GetUserNotifications : ");
           $scope.docDetails = PelApi.getJsonString(apiData.Result, "JSON[0]", true);
-
+          PelApi.lagger.info("$scope.docDetails : ", JSON.stringify($scope.docDetails))
           $scope.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
         }).error(function(error) {
@@ -126,7 +126,7 @@ angular.module('pele')
 
       $scope.updateDoc = function(btn) {
         if (btn.note) {
-          PelApi.displayNotePopup($scope, btn)
+          $scope.displayNotePopup(btn)
         } else {
           $scope.submitUpdateInfo(btn, $scope.actionNote.text);
         }
@@ -137,23 +137,68 @@ angular.module('pele')
         PelApi.SubmitNotification($scope.notifLinks, $scope.params.appId, $scope.docDetails.NOTIFICATION_ID, note, btn.action)
           .success(function(data) {
             var apiData = PelApi.checkApiResponse(data);
-
-            $ionicHistory.goBack();
+            PelApi.lagger.info(JSON.stringify(apiData));
           }).error(
-            function(error) {
-              PelApi.goError("api", "SubmitNotif", JSON.stringify(error))
+            function(response) {
+              PelApi.lagger.error("SubmitNotif : " + JSON.stringify(response));
             }).finally(function() {
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
+            $ionicHistory.goBack();
           });
       };
 
-      $scope.displayNotePopup = function() {
-        PelApi.displayNotePopup($scope);
+      $scope.displayNotePopup = function(btn) {
+        var noteModal = $ionicPopup.show({
+          template: '<div class="list pele-note-background pele_rtl">' +
+            '<label class="item item-input"><textarea rows="8" ng-model="actionNote.text" type="text">{{actionNote.text}}</textarea></label>' +
+            '</div>',
+          title: '<strong class="float-right">הערות</strong>',
+          subTitle: '',
+          scope: $scope,
+          buttons: [{
+              text: '<a class="pele-popup-positive-text-collot">המשך</a>',
+              type: 'button-positive',
+              onTap: function(e) {
+                if (!$scope.actionNote.text) {
+                  e.preventDefault();
+                  PelApi.showPopup("יש להזין הערה", "");
+                } else {
+                  return $scope.actionNote.text;
+                }
+              }
+            },
+            {
+              text: 'ביטול',
+              type: 'button-assertive',
+              onTap: function(e) {
+                return $scope.actionNote.text;
+              }
+            },
+          ]
+        });
+        noteModal.then(function(res) {
+          $scope.actionNote.text = res;
+          if (btn)
+            $scope.submitUpdateInfo(btn, res);
+        });
       }
 
       $scope.showBtnActions = function() {
-        PelApi.showBtnActions($scope, $scope.buttonsArr);
+        var buttons = PelApi.getButtons($scope.buttonsArr);
+
+        var hideSheet = $ionicActionSheet.show({
+          buttons: buttons,
+          titleText: 'רשימת פעולות עבור טופס',
+          cancelText: 'ביטול',
+          cancel: function() {
+            return true;
+          },
+          buttonClicked: function(index, button) {
+            $scope.updateDoc(buttons[index]);
+            return true;
+          },
+        });
       }
 
       $scope.getData();

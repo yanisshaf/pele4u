@@ -90,8 +90,7 @@ angular.module('pele')
       //============================================================================//
       $scope.addPushFlagToActionHistory = function(arr) {
         var myArr = [];
-        console.log("=============== addPushFlagToActionHistory =====================")
-        console.log(arr);
+
         if (arr !== null) {
           var j = arr.length;
           for (var i = 0; i < arr.length; i++, j--) {
@@ -298,9 +297,9 @@ angular.module('pele')
 
           retGetFileURI.success(function(data, status) {
 
-            console.log("== GetFileURI.SUCCESS ==");
+
             var l_data = JSON.stringify(data);
-            console.log(l_data);
+
             var statusCode = PelApi.checkResponceStatus(data);
             if ("S" === statusCode.Status) {
               var url = statusCode.URL;
@@ -321,16 +320,12 @@ angular.module('pele')
 
                   $cordovaFileTransfer.download(url, targetPath, {}, true).then(function(result) {
 
-                    console.log('Success');
-                    console.log('===================================================');
-                    console.log(result);
                     var options = {
                       location: 'yes',
                       clearcache: 'yes',
                       toolbar: 'no'
                     };
                     // Work wersion for android but cannot delete file
-
                     if ("N" === loadingComplited) {
                       loadingComplited = "Y";
                       window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
@@ -339,9 +334,6 @@ angular.module('pele')
                     }
 
                   }, function(error) {
-                    console.log('Error');
-                    console.log('===================================================');
-                    console.log(error);
                     $ionicLoading.hide();
                     $scope.$broadcast('scroll.refreshComplete');
                     PelApi.showPopup("File Download Complite With Error", error.toString());
@@ -498,17 +490,14 @@ angular.module('pele')
         $scope.INI_DOC_INIT_ID = IniDocInitId
         $sessionStorage.DOC_ID = docId;
 
-        console.log(appSettings.config.INITIATED_DETAILS_CUR);
+
 
         if (appSettings.config.docDetails.ERROR !== "NULL" && appSettings.config.docDetails.ERROR != undefined) {
           PelApi.showPopup(appSettings.config.interfaceErrorTitle, appSettings.config.docDetails.ERROR);
           return;
         }
 
-        console.log("===============================================================");
-        console.log("===                   P4                                    ===");
-        console.log("===============================================================");
-        console.log(appSettings.config.docDetails);
+
 
         $scope.APP_ID = appId;
         $scope.NOTIFICATION_ID = appSettings.config.docDetails.NOTIFICATION_ID;
@@ -681,7 +670,6 @@ angular.module('pele')
 
                 retSubmitNotification.success(function(data, status, headers, config) {
 
-                    PelApi.lagger.info(JSON.stringify(data));
 
                     $ionicLoading.hide();
                     $scope.$broadcast('scroll.refreshComplete');
@@ -693,7 +681,7 @@ angular.module('pele')
                     $ionicNavBarDelegate.back();
                   }).error(
                     function(response) {
-                      PelApi.lagger.error("SubmitNotification : " + JSON.stringify(response));
+
                       $ionicLoading.hide();
                       $scope.$broadcast('scroll.refreshComplete');
                       $ionicNavBarDelegate.back();
@@ -706,10 +694,10 @@ angular.module('pele')
             var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
             var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
             retSubmitNotification.success(function(data, status, headers, config) {
-              PelApi.lagger.info(JSON.stringify(data));
+
             }).error(
               function(response) {
-                PelApi.lagger.error("retSubmitNotification : " + JSON.stringify(response));
+
               }).finally(function() {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
@@ -734,10 +722,10 @@ angular.module('pele')
         var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
         var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
         retSubmitNotification.success(function(data, status, headers, config) {
-          PelApi.lagger.info(JSON.stringify(data));
+
         }).error(
           function(response) {
-            PelApi.lagger.error("success : " + JSON.stringify(response));
+
           }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
@@ -852,10 +840,10 @@ angular.module('pele')
         var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
 
         retSubmitNotification.success(function(data, status) {
-          PelApi.lagger.info(JSON.stringify(data));
+
         }).error(
           function(response) {
-            PelApi.lagger.error("retSubmitNotification : " + JSON.stringify(response));
+
           }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');

@@ -5,16 +5,7 @@ angular.module('pele')
   //====================================================================================
   //==                                  PAGE_3
   //====================================================================================
-  .controller('p3_po_moduleDocListCtrl', function($scope,
-    $stateParams,
-    $http,
-    $q,
-    $ionicLoading,
-    $state,
-    PelApi,
-    $cordovaNetwork,
-    $sessionStorage,
-    appSettings) {
+  .controller('p3_po_moduleDocListCtrl', function($scope, $stateParams, $ionicLoading, $state, PelApi, $sessionStorage) {
 
     //---------------------------------
     //--       goHome
@@ -30,7 +21,7 @@ angular.module('pele')
       var sessionDocId = $sessionStorage.DOC_ID;
       $scope.toggleGroup(sessionDocId);
 
-      $scope.shownGroup = appSettings.config.PO_ORG_NAME;
+      $scope.shownGroup = PelApi.appSettings.config.PO_ORG_NAME;
 
       var appId = $stateParams.AppId,
         formType = $stateParams.FormType,
@@ -43,7 +34,7 @@ angular.module('pele')
       var retGetUserFormGroups = PelApi.GetUserPoOrdGroupGroup(links, appId, formType, pin);
 
       retGetUserFormGroups.success(function(data, status, headers, config) {
-        PelApi.lagger.info(JSON.stringify(data));
+
         var stat = PelApi.GetPinCodeStatus2(data, "GetUserPoOrdGroupGroup");
         var pinStatus = stat.status;
 
@@ -53,7 +44,7 @@ angular.module('pele')
             PelApi.showPopup(errorMsg, "");
           } else {
             $scope.chats = data.Response.OutParams.ROW;
-            console.log($scope.chats);
+
             $scope.title = "אישור הזמנות רכש";
             var rowLength = $scope.chats.length;
 
@@ -87,27 +78,23 @@ angular.module('pele')
         } else if ("PDA" === pinStatus) {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
-          appSettings.config.IS_TOKEN_VALID = "N";
+          PelApi.appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("EOL" === pinStatus) {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
-          appSettings.config.IS_TOKEN_VALID = "N";
+          PelApi.appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("InValid" === pinStatus) {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
           //$state.go("app.p1_appsLists");
-          appSettings.config.IS_TOKEN_VALID = "N";
+          PelApi.appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("EAI_ERROR" === pinStatus) {
-          $ionicLoading.hide();
-          $scope.$broadcast('scroll.refreshComplete');
-          PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
+          PelApi.goError("eai", "GetUserPoOrdGroupGroup", JSON.stringify(data))
         } else if ("ERROR_CODE" === pinStatus) {
-          $ionicLoading.hide();
-          $scope.$broadcast('scroll.refreshComplete');
-          PelApi.showPopup(stat.description, "");
+          PelApi.goError("app", "GetUserPoOrdGroupGroup", JSON.stringify(data))
         } else if ("OLD" === pinStatus) {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
@@ -115,12 +102,12 @@ angular.module('pele')
         }
       }).error(
         function(response) {
-          PelApi.lagger.error("GetUserPoOrdGroupGroup : " + JSON.stringify(response));
-          $ionicLoading.hide();
-          $scope.$broadcast('scroll.refreshComplete');
-          PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
+          PelApi.goError("api", "GetUserPoOrdGroupGroup", JSON.stringify(response))
         }
-      );
+      ).finally(function() {
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+      });
       /*
        }
        */
@@ -204,11 +191,9 @@ angular.module('pele')
     //-- 01/11/2015  R.W.        function forward to page by DOC_ID
     //--------------------------------------------------------------
     $scope.forwardToDoc = function(docId, docInitId, orgName) {
-      console.log("========================");
-      console.log(orgName);
-      console.log("========================");
-      var appId = appSettings.config.appId;
-      $scope.appId = appSettings.config.appId;
+
+      var appId = PelApi.appSettings.config.appId;
+      $scope.appId = PelApi.appSettings.config.appId;
       var statePath = 'app.doc_' + docId;
       PelApi.showLoading();
 
@@ -216,35 +201,27 @@ angular.module('pele')
 
       var retGetUserNotifications = PelApi.GetUserNotifications(links, appId, docId, docInitId);
       retGetUserNotifications.success(function(data, status, headers, config) {
-        console.log("orig data", data);
-
         data = $scope.fix_json(data);
-
         newData = data.Response.OutParams.Result;
-        //data.Response.OutParams.push()
-
         var stat = PelApi.GetPinCodeStatus2(data, "GetUserNotifNew");
         var pinStatus = stat.status;
         if ("Valid" === pinStatus) {
-          PelApi.lagger.info(JSON.stringify(data));
-          appSettings.config.docDetails = newData;
-
-          var buttonsLength = appSettings.config.docDetails.BUTTONS.length;
+          PelApi.appSettings.config.docDetails = newData;
+          var buttonsLength = PelApi.appSettings.config.docDetails.BUTTONS.length;
           // Show the action sheet
           if (2 === buttonsLength) {
-            appSettings.config.ApprovRejectBtnDisplay = true;
+            PelApi.appSettings.config.ApprovRejectBtnDisplay = true;
           } else {
-            appSettings.config.ApprovRejectBtnDisplay = false;
+            PelApi.appSettings.config.ApprovRejectBtnDisplay = false;
           }
 
-          if (appSettings.config.docDetails.ATTACHMENT_DOWNLOAD_TIME_OUT !== undefined) {
-            appSettings.config.ATTACHMENT_TIME_OUT = appSettings.config.docDetails.ATTACHMENT_DOWNLOAD_TIME_OUT;
+          if (PelApi.appSettings.config.docDetails.ATTACHMENT_DOWNLOAD_TIME_OUT !== undefined) {
+            PelApi.appSettings.config.ATTACHMENT_TIME_OUT = PelApi.appSettings.config.docDetails.ATTACHMENT_DOWNLOAD_TIME_OUT;
           } else {
-            appSettings.config.ATTACHMENT_TIME_OUT = 10000;
+            PelApi.appSettings.config.ATTACHMENT_TIME_OUT = 10000;
           }
-          $ionicLoading.hide();
-          $scope.$broadcast('scroll.refreshComplete');
-          appSettings.config.PO_ORG_NAME = orgName;
+
+          PelApi.appSettings.config.PO_ORG_NAME = orgName;
           $state.go(statePath, {
             "AppId": $scope.appId,
             "DocId": docId,
@@ -254,20 +231,15 @@ angular.module('pele')
         } else if ("EOL" === pinStatus) {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
-          appSettings.config.IS_TOKEN_VALID = "N";
+          PelApi.appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("EAI_ERROR" === pinStatus) {
-          $ionicLoading.hide();
-          $scope.$broadcast('scroll.refreshComplete');
-          PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
+          PelApi.goError("eai", "GetUserNotificationsNew", JSON.stringify(data))
         } else if ("ERROR_CODE" === pinStatus) {
-          $ionicLoading.hide();
-          $scope.$broadcast('scroll.refreshComplete');
-          PelApi.showPopup(stat.description, "");
+          PelApi.goError("app", "GetUserNotificationsNew", JSON.stringify(data))
+
         } else if ("PCR" === pinStatus) {
-          $ionicLoading.hide();
-          $scope.$broadcast('scroll.refreshComplete');
-          appSettings.config.IS_TOKEN_VALID = "N";
+          PelApi.appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("OLD" === pinStatus) {
           $ionicLoading.hide();
@@ -275,12 +247,14 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(response) {
-          PelApi.lagger.error("GetUserNotificationsNew : " + JSON.stringify(response));
-          $ionicLoading.hide();
-          $scope.$broadcast('scroll.refreshComplete');
-          PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
-        });
+        function(error) {
+
+          PelApi.goError("api", "GetUserNotificationsNew", JSON.stringify(error))
+          //PelApi.showPopup(PelApi.appSettings.config.getUserModuleTypesErrorMag, "");
+        }).finally(function() {
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+      });
     } // forwardToDoc
     //----------------------------------------------//
     //--                 Main                     --//

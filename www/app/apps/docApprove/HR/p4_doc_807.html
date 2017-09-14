@@ -19,8 +19,8 @@
     <tab-slide-box>
       <div class="tsb-icons">
         <div class="tsb-ic-wrp">
-          <ion-scroll direction="x" class="tsb-hscroll">
-            <a href="javascript:;" class="triangle-isosceles {{tab.icon}}" ng-repeat="tab in tabs" on-finish-render="test()">
+          <ion-scroll has-bouncing="false" scrollX="false" direction="x" scrollY="false" class="tsb-hscroll">
+            <a class="triangle-isosceles {{tab.icon}}" ng-repeat="tab in tabs" on-finish-render="test()">
               {{tab.text}}
             </a>
           </ion-scroll>

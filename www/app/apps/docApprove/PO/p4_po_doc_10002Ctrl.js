@@ -285,9 +285,8 @@ angular.module('pele')
 
           retGetFileURI.success(function(data, status, headers, config) {
 
-            console.log("== GetFileURI.SUCCESS ==");
             var l_data = JSON.stringify(data);
-            console.log(l_data);
+
             var statusCode = PelApi.checkResponceStatus(data);
             if ("S" === statusCode.Status) {
               var url = statusCode.URL;
@@ -307,10 +306,6 @@ angular.module('pele')
                   targetPath = filePath + '/' + filename;
 
                   $cordovaFileTransfer.download(url, targetPath, {}, true).then(function(result) {
-
-                    console.log('Success');
-                    console.log('===================================================');
-                    console.log(result);
                     var options = {
                       location: 'yes',
                       clearcache: 'yes',
@@ -326,9 +321,6 @@ angular.module('pele')
                     }
 
                   }, function(error) {
-                    console.log('Error');
-                    console.log('===================================================');
-                    console.log(error);
                     $ionicLoading.hide();
                     $scope.$broadcast('scroll.refreshComplete');
                     PelApi.showPopup("File Download Complite With Error", error.toString());
@@ -452,7 +444,7 @@ angular.module('pele')
           return;
         }
 
-        console.log(appSettings.config.docDetails);
+
         //----------- Order Header -------------
         $scope.APP_ID = appId;
         $scope.NOTIFICATION_ID = appSettings.config.docDetails.NOTIFICATION_ID;
@@ -470,26 +462,14 @@ angular.module('pele')
 
         //----------- Match Price --------
         $scope.MATCH_PRICE = $scope.getMatchPrice(appSettings.config.docDetails.MATCH_PRICE);
-        console.log("================== MATCH PRICE ====================");
-        console.log($scope.MATCH_PRICE);
-
         //----------- Attachments --------
         $scope.ATTACHED_DOCUMENTS = $scope.getAttachedDocuments(appSettings.config.docDetails.ATTACHED_DOCUMENTS);
-        console.log("================== ATTACHED_DOCUMENTS ====================");
-        console.log(JSON.stringify($scope.ATTACHED_DOCUMENTS));
-
         //----------- Buttons ------------
         $scope.buttonsArr = appSettings.config.docDetails.BUTTONS;
 
         //----------- Action History -----
         var actionHistory = $scope.addPushFlagToActionHistory(appSettings.config.docDetails.ACTION_HISTORY);
         $scope.ACTION_HISTORY = actionHistory;
-        console.log("length : " + $scope.ACTION_HISTORY.length);
-
-        console.log("====================================================");
-        console.log(JSON.stringify($scope.ACTION_HISTORY));
-        console.log("====================================================");
-
         // Show the action sheet
         $scope.approve = appSettings.config.ApprovRejectBtnDisplay;
 
@@ -641,9 +621,9 @@ angular.module('pele')
                 var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
                 var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
                 retSubmitNotification.success(function(data, status, headers, config) {
-                  PelApi.PelApi.lagger.info(JSON.stringify(data));
+
                 }).error(function(response) {
-                  PelApi.lagger.error("SubmitNotification : " + JSON.stringify(response));
+
                 }).finally(function() {
                   $ionicLoading.hide();
                   $scope.$broadcast('scroll.refreshComplete');
@@ -656,9 +636,9 @@ angular.module('pele')
             var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
             var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
             retSubmitNotification.success(function(data, status) {
-              PelApi.lagger.info(JSON.stringify(data));
+
             }).error(function(error) {
-              PelApi.lagger.error("retSubmitNotification : " + JSON.stringify(error));
+
             }).finally(function() {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
@@ -684,10 +664,10 @@ angular.module('pele')
         var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
 
         retSubmitNotification.success(function(data, status) {
-          PelApi.lagger.info(JSON.stringify(data));
+
         }).error(
           function(response) {
-            PelApi.lagger.info("success : " + JSON.stringify(response));
+
           }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
@@ -801,10 +781,10 @@ angular.module('pele')
         var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
         var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
         retSubmitNotification.success(function(data, status, headers, config) {
-          PelApi.lagger.info(JSON.stringify(data));
+
         }).error(
           function(error) {
-            PelApi.lagger.error("retSubmitNotification : " + JSON.stringify(error));
+
           }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');

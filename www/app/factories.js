@@ -1,5 +1,5 @@
 angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova', 'pele.messages'])
-  .factory('PelApi', function($cordovaNetwork, $http, $rootScope, appSettings, $state, $ionicLoading, $filter, $ionicPopup, $timeout, $fileLogger, $sessionStorage, $localStorage, $cordovaFile, messages) {
+  .factory('PelApi', function($cordovaNetwork, $ionicActionSheet, $http, $rootScope, appSettings, $state, $ionicLoading, $filter, $ionicPopup, $timeout, $fileLogger, $sessionStorage, $localStorage, $cordovaFile, messages) {
     return {
 
       init: function() {
@@ -51,7 +51,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
         $fileLogger.setStorageFilename(appSettings.config.LOG_FILE_NAME)
         this.lagger.deleteLogfile().then(function() {
-          this.lagger.info('Logfile deleted - start new log');
+          this.lagger.info('Flush log ->  start new log');
         });
         this.registerPushNotification();
       },
@@ -70,9 +70,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
           var oneSignalConf = appSettings.apiConfig.OneSignal[appSettings.apiConfig.env] || "notfound";
           if (oneSignalConf === "notfound") {
-            $state.go("app.error", {
-              error: "Onesignal conf not found !"
-            });
+            self.goError("client", "registerPushNotification", "Onesignal conf not found !");
           }
 
           self.lagger.info('Open Notification Event');
@@ -81,7 +79,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             visualLevel: oneSignalConf.visualLevel || 0
           });
           var notificationOpenedCallback = function(jsonData) {
-            self.lagger.info('notificationOpenedCallback: ' + JSON.stringify(jsonData));
+            self.lagger.info('notificationOpenedCallback: ', jsonData);
           };
           window.plugins.OneSignal
             //.startInit(conf.appId, conf.googleProjectNumber)
@@ -172,9 +170,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           };
         }
 
-        this.lagger.info("URL : " + envUrl);
-        this.lagger.info("headers : " + headers);
-
         return $http({
           url: envUrl,
           method: "GET",
@@ -204,9 +199,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             "VERSION": version
           };
         }
-
-        this.lagger.info("======== factories.IsSessionValidJson() ===========");
-        this.lagger.info(envUrl);
 
         return $http({
           url: envUrl,
@@ -248,7 +240,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             }
           }
         };
-        this.lagger.info("post data :" + JSON.stringify(data));
+
         return $http({
           url: links.url,
           method: "POST",
@@ -279,7 +271,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             }
           }
         };
-        this.lagger.info("post data :" + JSON.stringify(data))
+
         return $http({
           url: links.url,
           method: "POST",
@@ -310,7 +302,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             }
           }
         };
-        this.lagger.info("post data :" + JSON.stringify(data))
+
         return $http({
           url: links.url,
           method: "POST",
@@ -339,7 +331,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             }
           }
         };
-        this.lagger.info("post data :" + JSON.stringify(data))
+
         return $http({
           url: links.url,
           method: "POST",
@@ -378,7 +370,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             }
           }
         };
-        this.lagger.info("post data :" + JSON.stringify(data))
+
         return $http({
           url: links.url,
           method: "POST",
@@ -409,7 +401,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             }
           }
         };
-        this.lagger.info("post data :" + JSON.stringify(data))
+
         return $http({
           url: links.url,
           method: "POST",
@@ -442,7 +434,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             }
           }
         };
-        this.lagger.info("post data :" + JSON.stringify(data))
+
 
         return $http({
           url: links.url,
@@ -454,8 +446,18 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
       },
 
+      goError: function(category, from, errorString) {
 
+        var message = errorString;
+        if (category.match(/api|eai|app/i)) {
+          message = "API request " + from + " endedd with failure : " + errorString;
+        }
 
+        $state.go("app.error", {
+          category: category,
+          description: message
+        })
+      },
       checkPinCode: function(data, interface) {
         var stat = {
           status: "",
@@ -504,27 +506,19 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var pinStatus = apiStat.status;
 
         if (pinStatus == "Valid") {
-          self.lagger.info(JSON.stringify(data));
+          self.lagger.info(data);
           var result = _.get(data, "Response.OutParams", []);
           return result;
         } else if (pinStatus === "PDA") {
           $state.go("app.login");
         } else if ("InValid" === pinStatus && "EOL" === pinStatus) {
           appSettings.config.IS_TOKEN_VALID = "N";
-          $state.go("app.error", {
-            category: "invalid_token",
-            description: "Invalid token , status :" + pinStatus
-          })
+          self.goError("app", "checkApiResponse", "Invalid token , status :" + pinStatus)
         } else if ("EAI_ERROR" === pinStatus) {
-          $state.go("app.error", {
-            category: "eai_error",
-            description: apiStat.description
-          })
+          self.goError("eai", "checkApiResponse", apiStat.description)
+
         } else if ("ERROR_CODE" === pinStatus) {
-          $state.go("app.error", {
-            category: "app_error",
-            description: apiStat.description
-          })
+          self.goError("app", "checkApiResponse", apiStat.description)
         }
 
         return this.checkPinCode(data, interface);
@@ -710,12 +704,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           serviceConf.url = appSettings.apiConfig.uri + serviceConf.endpoint;
         }
         serviceConf.headers = headers;
-
-
-        this.lagger.info("====== " + serviceName + " ======");
-        this.lagger.info("URL :" + serviceConf.url);
-        //this.writeToLog(appSettings.config.LOG_FILE_INFO_TYPE, "DATA : " + JSON.stringify(data));
-
         return serviceConf;
       },
       //===========================================================//
@@ -830,7 +818,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
         var buttons = [];
         buttonsArr.forEach(function(b) {
-          buttons.push(appSettings[b.LOOKUP_CODE]);
+          if (b.DISPLAY_FLAG !== "N")
+            buttons.push(appSettings[b.LOOKUP_CODE]);
         })
         return buttons;
       },
@@ -899,18 +888,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             $cordovaFile.removeRecursively(platformPath, appSettings.config.ATTACHMENT_DIRECTORY_NAME)
               .then(function(success) {
                 // successdd
-                console.log("$cordovaFile.removeRecursively SUCCESS 4: " + success);
                 $cordovaFile.createDir(platformPath, appSettings.config.SETTINGS_DIRECTORY_NAME, false)
                   .then(function(success) {
                     // success
-                    console.log("$cordovaFile.createDir SUCCESS 5: " + success);
                   }, function(error) {
                     // error
-                    console.log("$cordovaFile.createDir ERROR : " + error);
                   });
               }, function(error) {
                 // error
-                console.log("$cordovaFile.removeRecursively ERROR : " + error);
               });
           }, function(error) {
             // error
@@ -918,13 +903,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
               $cordovaFile.createDir(platformPath, appSettings.config.ATTACHMENT_DIRECTORY_NAME, true)
                 .then(function(success) {
                   // success
-                  console.log("$cordovaFile.createDir SUCCESS 6: " + success);
                 }, function(error) {
                   // error
-                  console.log("$cordovaFile.createDir ERROR : " + error);
                 });
             }
-            console.log("ERROR : " + error);
           });
 
       },
@@ -1014,7 +996,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
           return myArr;
         } //getAttachedDocuments
-
         ,
       getAttachedDocuments: function(arr) {
         var myArr = [];
@@ -1093,20 +1074,19 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       */
 
       getJsonString: function(string, path, redirect) {
-        var jsVar = this.jsonParse(string, redirect)
+        var self = this;
+        var jsVar = self.jsonParse(string, redirect)
         if (typeof jsVar == "undefined")
           return undefined;
         var subJsVar = _.get(jsVar, path);
         if (typeof subJsVar == "undefined" && redirect) {
-          $state.go("app.error", {
-            category: "invalid_json_string",
-            description: "Failed to parse  JSON  string :" + string
-          })
+          self.goError("api", "getJsonString", "Failed to parse  JSON  string :" + string)
         }
         return subJsVar;
       },
 
       jsonParse: function(str, redirect) {
+        var self = this;
         if (typeof redirect == "undefined")
           redirect = true;
         var jsVar;
@@ -1114,15 +1094,69 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           jsVar = JSON.parse(str);
         } catch (e) {
           if (redirect)
-            $state.go("app.error", {
-              category: "invalid_json_string",
-              description: "Failed to parse  JSON  string :" + str
-            })
+            self.goError("api", "jsonParse", "Failed to parse  JSON  string :" + str)
           else
             PelApi.lagger.error("Failed to parse  JSON  string   : " + str)
           return undefined;
         }
         return jsVar;
+      },
+
+      showBtnActions: function(scope, butttons) {
+        var self = this;
+        var buttons = self.getButtons(butttons);
+        var hideSheet = $ionicActionSheet.show({
+          buttons: buttons,
+          titleText: 'רשימת פעולות עבור טופס',
+          cancelText: 'ביטול',
+          cancel: function() {
+            return true;
+          },
+          buttonClicked: function(index, button) {
+            scope.updateDoc(buttons[index]);
+            return true;
+          },
+        });
+      },
+
+      displayNotePopup: function(scope, btn) {
+        var self = this;
+        var noteModal = $ionicPopup.show({
+          template: '<div class="list pele-note-background pele_rtl">' +
+            '<label class="item item-input"><textarea rows="8" ng-model="actionNote.text" type="text">{{actionNote.text}}</textarea></label>' +
+            '</div>',
+          title: '<strong class="float-right">הערות</strong>',
+          subTitle: '',
+          scope: scope,
+          buttons: [{
+              text: '<a class="pele-popup-positive-text-collot">המשך</a>',
+              type: 'button-positive',
+              onTap: function(e) {
+                if (!scope.actionNote.text) {
+                  e.preventDefault();
+                  self.showPopup("יש להזין הערה", "");
+                } else {
+                  return scope.actionNote.text;
+                }
+              }
+            },
+            {
+              text: 'ביטול',
+              type: 'button-assertive',
+              onTap: function(e) {
+                return scope.actionNote.text;
+              }
+            },
+          ]
+        });
+        noteModal.then(function(res) {
+          scope.actionNote.text = res;
+          if (typeof btn === "undefined")
+            return true;
+
+          if ((btn.note && res) || (!btn.note))
+            scope.submitUpdateInfo(btn, res);
+        });
       }
     };
 

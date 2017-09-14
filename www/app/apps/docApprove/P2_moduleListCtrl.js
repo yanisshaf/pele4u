@@ -103,7 +103,7 @@ angular.module('pele')
 
         if (path === "app.error") {
           params = {
-            category: "client_err",
+            category: "client",
             description: "Failed to locate MODULE_TYPES_FORWARD_PATH for FormType : " + formType
           }
         }
@@ -145,11 +145,7 @@ angular.module('pele')
 
     //===================== Refresh ===========================//
     $scope.doRefresh = function() {
-      //--
 
-      console.log("------------------------------------");
-      console.log(srvShareData.getData());
-      console.log("------------------------------------");
       $scope.menuPageData = srvShareData.getData();
       $scope.btn_class = {};
       $scope.btn_class.on_release = true;
@@ -161,10 +157,6 @@ angular.module('pele')
       var titleDisp = $stateParams.Title;
 
       $sessionStorage.DOC_ID = "";
-
-      console.log("appId : " + appId);
-
-      // var appId = appSettings.config.appId;
 
       appSettings.config.token = $sessionStorage.token;
       appSettings.config.userName = $sessionStorage.userName;
@@ -181,8 +173,6 @@ angular.module('pele')
       retUserModuleTypes.success(function(data, status) {
 
         $scope.feeds_categories = [];
-
-        PelApi.lagger.info(JSON.stringify(data));
 
         var stat = PelApi.checkPinCode(data, "getUserModuleTypes");
         var pinCodeStatus = stat.status;
@@ -225,20 +215,22 @@ angular.module('pele')
           appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("EAI_ERROR" === pinCodeStatus) {
-          PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
+          //PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
+          PelApi.goError("eai", "GetUserModuleTypes", JSON.stringify(data));
         } else if ("EOL" === pinCodeStatus) {
           appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("ERROR_CODE" === pinCodeStatus) {
-          PelApi.showPopup(stat.description, "");
+          PelApi.goError("app", "GetUserModuleTypes", JSON.stringify(data));
+          //PelApi.showPopup(stat.description, "");
         } else if ("OLD" === pinCodeStatus) {
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
 
       }).error(
-        function(response) {
-          PelApi.lagger.error("GetUserModuleTypes : " + JSON.stringify(response));
-          PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
+        function(error) {
+          //PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
+          PelApi.goError("api", "GetUserModuleTypes", JSON.stringify(error));
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');

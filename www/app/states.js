@@ -73,6 +73,30 @@ angular.module('pele.states', [])
     },
     src: ["app/apps/docApprove/TSK/tskDetailsCtrl.js"]
   }, {
+    state: 'app.ini_list',
+    url: "/ini_list/:AppId/:FormType/:Pin",
+    views: {
+      'menuContent': {
+        templateUrl: function() {
+          return "app/apps/docApprove/INI/iniList.html";
+        },
+        controller: 'iniListCtrl'
+      }
+    },
+    src: ["app/apps/docApprove/INI/iniListCtrl.js"]
+  }, {
+    state: 'app.ini_details',
+    url: "/ini_details/:formType/:appId/:docId/:docInitId",
+    views: {
+      'menuContent': {
+        templateUrl: function() {
+          return "app/apps/docApprove/INI/iniDetails.html";
+        },
+        controller: 'iniDetailsCtrl'
+      }
+    },
+    src: ["app/apps/docApprove/INI/iniDetailsCtrl.js"]
+  }, {
     state: 'app.doc_10002',
     url: "/doc_10002/:DocId/:DocInitId",
     views: {
@@ -157,5 +181,4 @@ angular.module('pele.states', [])
       }
     },
     src: ["app/apps/scanPrint/p2_scan_printCtrl.js"]
-
   }]);

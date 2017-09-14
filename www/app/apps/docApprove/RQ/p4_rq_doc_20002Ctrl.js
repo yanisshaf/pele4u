@@ -322,10 +322,7 @@ angular.module('pele')
 
           var retGetFileURI = PelApi.GetFileURI(links, appId, appSettings.config.Pin, l_fileName);
           retGetFileURI.success(function(data, status) {
-
-            console.log("== GetFileURI.SUCCESS ==");
             var l_data = JSON.stringify(data);
-            console.log(l_data);
             var statusCode = PelApi.checkResponceStatus(data);
             if ("S" === statusCode.Status) {
               var url = statusCode.URL;
@@ -345,10 +342,6 @@ angular.module('pele')
                   targetPath = filePath + '/' + filename;
 
                   $cordovaFileTransfer.download(url, targetPath, {}, true).then(function(result) {
-
-                    console.log('Success');
-                    console.log('===================================================');
-                    console.log(result);
                     var options = {
                       location: 'yes',
                       clearcache: 'yes',
@@ -363,10 +356,7 @@ angular.module('pele')
                     }
 
                   }, function(error) {
-                    console.log('Error');
-                    console.log('===================================================');
-                    console.log(error);
-
+                    PelApi.lagger.error("File Download Complite With Error", error.toString())
                     PelApi.showPopup("File Download Complite With Error", error.toString());
                   }, function(progress) {
                     // PROGRESS HANDLING GOES HERE
@@ -554,7 +544,6 @@ angular.module('pele')
       //---------------------------------------------------------------------------
       //---------------------------------------------------------------------------
       $scope.forwardToINI = function() {
-        console.log("INI_DOC_INIT_ID : " + $scope.INI_DOC_INIT_ID);
         if ($scope.INI_DOC_INIT_ID !== undefined) {
           var iniDocInitId = $scope.INI_DOC_INIT_ID;
           var iniDocId = $scope.INI_DOC_ID;
@@ -613,10 +602,6 @@ angular.module('pele')
             PelApi.showPopup(appSettings.config.interfaceErrorTitle, appSettings.config.docDetails.ERROR);
             return;
           }
-          console.log("===============================================================");
-          console.log("===                   P4                                    ===");
-          console.log("===============================================================");
-          console.log(appSettings.config.docDetails);
 
           $scope.APP_ID = appId;
           $scope.NOTIFICATION_ID = appSettings.config.docDetails.NOTIFICATION_ID;
@@ -649,12 +634,6 @@ angular.module('pele')
           //----------- Action History -----
           var actionHistory = $scope.addPushFlagToActionHistory(appSettings.config.docDetails.REQ_APPROVAL_LIST_CUR);
           $scope.ACTION_HISTORY = actionHistory;
-          console.log("length : " + $scope.ACTION_HISTORY.length);
-
-          console.log("====================================================");
-          console.log(JSON.stringify($scope.ACTION_HISTORY));
-          console.log("====================================================");
-
           // Show the action sheet
           $scope.approve = appSettings.config.ApprovRejectBtnDisplay;
 
@@ -811,8 +790,8 @@ angular.module('pele')
 
                 retSubmitNotification.success(function(data, status) {
                   PelApi.lagger.info(JSON.stringify(data));
-                }).error(function(response) {
-                  PelApi.lagger.error("SubmitNotification : " + JSON.stringify(response));
+                }).error(function(error) {
+                  PelApi.goError("api", "SubmitNotification", JSON.stringify(error))
                 }).finally(function() {
                   $ionicLoading.hide();
                   $scope.$broadcast('scroll.refreshComplete');
@@ -827,8 +806,8 @@ angular.module('pele')
 
             retSubmitNotification.success(function(data, status, headers, config) {
               PelApi.lagger.info(JSON.stringify(data));
-            }).error(function(response) {
-              PelApi.lagger.error("retSubmitNotification : " + JSON.stringify(response));
+            }).error(function(error) {
+              PelApi.goError("api", "SubmitNotification", JSON.stringify(error))
             }).finally(function() {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
@@ -854,8 +833,8 @@ angular.module('pele')
         var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
         retSubmitNotification.success(function(data, status, headers, config) {
           PelApi.lagger.info(JSON.stringify(data));
-        }).error(function(response) {
-          PelApi.lagger.error("success : " + JSON.stringify(response));
+        }).error(function(error) {
+          PelApi.goError("api", "SubmitNotif", JSON.stringify(error))
         }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
@@ -970,8 +949,8 @@ angular.module('pele')
         var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
         retSubmitNotification.success(function(data, status) {
           PelApi.lagger.info(JSON.stringify(data));
-        }).error(function(response) {
-          PelApi.lagger.info("retSubmitNotification : " + JSON.stringify(response));
+        }).error(function(error) {
+          PelApi.goError("api", "SubmitNotif", JSON.stringify(error))
         }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');

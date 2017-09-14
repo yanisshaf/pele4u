@@ -6,11 +6,13 @@
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
       <div class="title">{{title}}
+        <!--<img src="img/DocApprove/logo.png" style="max-width: 100%;  height: 100%;"/>-->
       </div>
     </div>
   </ion-nav-title>
 
   <ion-content class="pele-background" onload="doRefresh()">
+    <!-- Refresh to get the new posts -->
     <ion-refresher pulling-text="משוך לרענון..." on-refresh="doRefresh()">
     </ion-refresher>
 

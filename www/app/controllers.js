@@ -1,21 +1,26 @@
 angular.module('pele.controllers', ['ngStorage'])
 
-  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, appSettings, $state) {
-    if (appSettings.env === "PD") {
-      $scope.myClass = "envPD";
+  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory) {
+    $scope.clearLogFile = function() {
+      PelApi.lagger.deleteLogfile().then(function() {
+        PelApi.lagger.info('Logfile deleted - start new log');
+        $scope.checkClear = true;
+        $timeout(function() {
+          $scope.checkClear = false;
+        }, 1000)
+      });
     }
-    if (appSettings.env === "QA") {
-      $scope.myClass = "envQA";
-      //$scope.myClass = "envPD";
-    }
-    if (appSettings.env === "DV") {
-      $scope.myClass = "envDV";
-    }
+
+    $scope.appSettings = PelApi.appSettings;
     //===============================================//
     //== Forward to selected option from menu list ==//
     //===============================================//
     $scope.forwardTo = function(statePath) {
       $state.go(statePath);
+    }
+
+    $scope.goBack = function() {
+      $ionicHistory.goBack();
     }
     //===============================================
     //==             isShowLogOut
@@ -58,13 +63,13 @@ angular.module('pele.controllers', ['ngStorage'])
           $ionicPopup.alert({
             title: PelApi.messages.no_cordova
           });
-          return false; 
+          return false;
         }
 
         $cordovaFile.readAsDataURL(cordova.file.dataDirectory, appSettings.config.LOG_FILE_NAME)
           .then(function(data) {
-            var env =  appSettings.config.env ;
-            var recipient = appSettings.config.LOG_FILE_MAIL_RECIPIENT[env] || "" ;
+            var env = appSettings.config.env;
+            var recipient = appSettings.config.LOG_FILE_MAIL_RECIPIENT[env] || "";
 
             data = data.replace(";base64", ".txt;base64");
             $cordovaSocialSharing
@@ -153,6 +158,16 @@ angular.module('pele.controllers', ['ngStorage'])
     }
 
   }])
+  .controller('ErrorCtrl', function($scope, $rootScope, PelApi, $stateParams) {
+    $scope.error = $stateParams;
+    $rootScope.lastError = $stateParams;
+    $rootScope.lastError.created = new Date();
+    PelApi.lagger.error('############# ERROR #################\n\r' +
+      " Category : " + $scope.error.category + "\n\r" +
+      " Description  : " + $scope.error.description + "\n\r" +
+      //" Created  : " + $rootScope.lastError.created + "\n\r" +
+      '############# END OF ERROR #################\n\r');
+  })
   .controller('FileCtrl', function($scope, $cordovaFile, PelApi) {
     console.log("======== FileCtrl =========");
     $scope.CHECK_FILE = "";

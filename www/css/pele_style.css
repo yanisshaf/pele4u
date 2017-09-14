@@ -587,3 +587,9 @@ img.spinner-svg {height:60px}
 .platform-android .action-sheet-cancel {
     display: block !important;
 }
+.item.develeoper-info {background:#85eeff}
+.card.error {margin:30px;}
+.item.error-top  {background :#e95350}
+.item.error-top i.icon  { font-size:130px;color:#FFF}
+.item.error-bottom { background :#FFF}
+.card.error .button { border:1px solid #CCC}

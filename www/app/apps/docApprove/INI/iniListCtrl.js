@@ -25,6 +25,7 @@ angular.module('pele')
     //----------------------- REFRESH ------------------------//
     $scope.doRefresh = function() {
 
+
       PelApi.showLoading();
       $scope.appId = $stateParams.AppId;
       $scope.formType = $stateParams.FormType;
@@ -36,21 +37,22 @@ angular.module('pele')
 
       retGetUserFormGroups.success(function(data) {
           var apiData = PelApi.checkApiResponse(data);
-
+          PelApi.lagger.info(JSON.stringify(apiData));
           var result = apiData.ROW || [];
 
-          if (result.length && result[0].DOC_NAME === null) {
-            PelApi.goError("app", "GetUserNotifNew", "maof retreived : DOC_NAME is NULL : " + JSON.stringify(data))
-          }
-
-
+          if (result.length && result[0].DOC_NAME === null)
+            $state.go("app.error", {
+              category: "help_us",
+              description: "maof retreived : DOC_NAME is NULL"
+            });
           $scope.docsGroups = $scope.parse(result);
           if ($scope.docsGroups.length) {
             $scope.title = $scope.docsGroups[0].DOC_TYPE;
           }
         })
         .error(function(error) {
-          PelApi.goError("api", "GetUserNotifNew", JSON.stringify(error))
+          PelApi.lagger.error("GetUserNotifNew : " + JSON.stringify(error));
+          PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
         })
         .finally(function() {
           $ionicLoading.hide();

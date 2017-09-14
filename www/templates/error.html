@@ -5,20 +5,32 @@
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
-      <div class="title" id="logo">
+      <div class="title">
         שגיאה
       </div>
     </div>
   </ion-nav-title>
 
   <ion-content class="pele-background">
-    <div class="card">
-      <div class="item item-body">
-        <p>
-          <strong>{{error}}</strong>
-        </p>
-
+    <div class="card error">
+      <div class="item item-body error-top text-center">
+        <i class="icon ion-android-alert"></i>
       </div>
-    </div>
+      <div class="item item-body">
+        <strong>אופס .. משהו השתבש </strong> תוכלו לנסות שוב לבצע את הפעולה ואם היא שוב מתרחשת נשמח אם תסייעו לנו לשפר את האפליקציה
+        <div class="row">
+          <div class="col col-100">
+            <button class="button  button-full item-icon-right"> שלחו לנו קובץ ארועי מערכת
+                <i class="icon ion-paper-airplane"></i>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-50"><button class="button  button-full item-icon-right">תפריט ראשי
+            <i class="icon ion-navicon"></i>  </button></div>
+          <div class="col col-50"><button class="button button-gray button-full item-icon-right">
+            <i class="icon ion-reply"></i>נסו שוב </button></div>
+        </div>
+      </div>
   </ion-content>
 </ion-view>

@@ -5,7 +5,7 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('p4_hr_docCtrl', ['$rootScope', '$scope', '$stateParams', '$http', '$q', '$location', '$window', '$timeout', '$ionicLoading', '$ionicActionSheet', '$ionicModal', 'PelApi', '$ionicNavBarDelegate', '$cordovaNetwork', '$ionicPopup', 'appSettings', '$sessionStorage', function($rootScope, $scope, $stateParams, $http, $q, $location, $window, $timeout, $ionicLoading, $ionicActionSheet, $ionicModal, PelApi, $ionicNavBarDelegate, $cordovaNetwork, $ionicPopup, appSettings, $sessionStorage) {
+  .controller('p4_hr_docCtrl', ['$rootScope', '$scope', '$stateParams', '$http', '$q', '$location', '$window', '$timeout', '$ionicLoading', '$ionicActionSheet', '$ionicModal', 'PelApi', '$ionicHistory', '$cordovaNetwork', '$ionicPopup', 'appSettings', '$sessionStorage', function($rootScope, $scope, $stateParams, $http, $q, $location, $window, $timeout, $ionicLoading, $ionicActionSheet, $ionicModal, PelApi, $ionicHistory, $cordovaNetwork, $ionicPopup, appSettings, $sessionStorage) {
     //---------------------------------
     //--       goHome
     //---------------------------------
@@ -216,17 +216,8 @@ angular.module('pele')
       $scope.NOTIFICATION_ID = appSettings.config.docDetails.NOTIFICATION_ID;
       $scope.HOLIDAY_BALANCE = appSettings.config.docDetails.HOLIDAY_BALANCE;
 
-      console.log("========================  ACTION_HISTORY SOURCE  ====================================")
-      console.log(JSON.stringify(appSettings.config.docDetails.ACTION_HISTORY));
-      console.log("=============================================================================")
-
       $scope.ACTION_HISTORY = $scope.addPushFlagToActionHistory(appSettings.config.docDetails.ACTION_HISTORY);
 
-      console.log("========================  ACTION_HISTORY ====================================")
-      console.log(JSON.stringify($scope.ACTION_HISTORY));
-      console.log("=============================================================================")
-
-      // Show the action sheet
       $scope.approve = appSettings.config.ApprovRejectBtnDisplay;
 
       $ionicLoading.hide();
@@ -364,20 +355,23 @@ angular.module('pele')
                   appSettings.config.IS_TOKEN_VALID = "N";
                   $scope.goHome();
                 } else if ("EAI_ERROR" === pinStatus) {
-                  PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
+                  //PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
+                  PelApi.goError("eai", "SubmitNotif", JSON.stringify(data))
                 } else if ("ERROR_CODE" === pinStatus) {
-                  PelApi.showPopup(stat.description, "");
+                  PelApi.goError("app", "SubmitNotif", JSON.stringify(data))
+                  //PelApi.showPopup(stat.description, "");
                 } else if ("OLD" === pinStatus) {
                   PelApi.showPopupVersionUpdate(data.StatusDesc, "");
                 }
-                PelApi.lagger.info(JSON.stringify(data));
+
               }).error(
-                function(responce) {
-                  PelApi.lagger.error("SubmitNotif : " + JSON.stringify(responce));
+                function(error) {
+                  PelApi.goError("api", "SubmitNotif", JSON.stringify(error));
+
                 }).finally(function() {
                 $ionicLoading.hide();
                 $scope.$broadcast('scroll.refreshComplete');
-                $ionicNavBarDelegate.back();
+                //$ionicNavBarDelegate.back();
               });
             }
           });
@@ -395,16 +389,17 @@ angular.module('pele')
             } else if ("EAI_ERROR" === pinStatus) {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
-              PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
-            }
-            PelApi.lagger.info(JSON.stringify(data));
-          }).error(function(response) {
-            PelApi.lagger.error("SubmitNotif : " + JSON.stringify(response));
+              //  PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
+              PelApi.goError("eai", "SubmitNotif", JSON.stringify(data));
 
+            }
+
+          }).error(function(error) {
+            PelApi.goError("api", "SubmitNotif", JSON.stringify(error));
           }).finally(function() {
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
-            $ionicNavBarDelegate.back();
+            $ionicHistory.goBack();
           });
         };
       });
@@ -424,25 +419,27 @@ angular.module('pele')
       var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
       var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
       retSubmitNotification.success(function(data, status) {
-        PelApi.lagger.info(JSON.stringify(data));
+
         var stat = PelApi.GetPinCodeStatus(data, "SubmitNotif");
         var pinStatus = stat.status;
         if ("EOL" === pinStatus) {
           $scope.goHome();
         } else if ("EAI_ERROR" === pinStatus) {
-          PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
+          //PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
+          PelApi.goError("eai", "SubmitNotif", JSON.stringify(data))
         } else if ("ERROR_CODE" === pinStatus) {
-          PelApi.showPopup(stat.description, "");
+          //PelApi.showPopup(stat.description, "");
+          PelApi.goError("app", "SubmitNotif", JSON.stringify(data))
         } else {
-          $ionicNavBarDelegate.back();
+          $ionicHistory.goBack();
         }
       }).error(
-        function(response) {
-          PelApi.lagger.error("SubmitNotif : " + JSON.stringify(response));
+        function(error) {
+          PelApi.goError("eai", "SubmitNotif", JSON.stringify(error))
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
-        $ionicNavBarDelegate.back();
+        //$ionicNavBarDelegate.back();
       });
     };
     //----------------------------------------
@@ -505,22 +502,23 @@ angular.module('pele')
       var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
       var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
       retSubmitNotification.success(function(data, status, headers, config) {
-        PelApi.lagger.info(JSON.stringify(data));
+
 
         var stat = PelApi.GetPinCodeStatus(data, "SubmitNotif");
         var pinStatus = stat.status;
         if ("EOL" === pinStatus) {
           $scope.goHome();
         } else if ("EAI_ERROR" === pinStatus) {
-          PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
+          PelApi.goError("eai", "SubmitNotif", JSON.stringify(data))
+
         } else if ("ERROR_CODE" === pinStatus) {
-          PelApi.showPopup(stat.description, "");
+          PelApi.goError("app", "SubmitNotif", JSON.stringify(data))
         } else {
-          $ionicNavBarDelegate.back();
+
+          $ionicHistory.goBack();
         }
-      }).error(function(response) {
-        PelApi.lagger.error("SubmitNotif : " + JSON.stringify(response));
-        $ionicNavBarDelegate.back();
+      }).error(function(error) {
+        PelApi.goError("api", "SubmitNotif", JSON.stringify(error))
       }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
