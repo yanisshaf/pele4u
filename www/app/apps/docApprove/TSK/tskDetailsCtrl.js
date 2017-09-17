@@ -5,8 +5,8 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('tskDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup',
-    function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup) {
+  .controller('tskDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaFileTransfer',
+    function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaFileTransfer) {
 
       $scope.actionNote = {
         text: ""
@@ -61,6 +61,7 @@ angular.module('pele')
         $scope.modal.hide();
       };
 
+
       $scope.openAttachment = function(file) {
 
         if (file.SHOW_CONTENT !== 'Y') {
@@ -71,8 +72,9 @@ angular.module('pele')
 
         PelApi.showLoading();
         var pinCode = PelApi.pinState.get().code;
-        //var full_path = PelApi.appSettings.shareFileDirectory + file.TARGET_PATH + "/" + file.TARGET_FILENAME;
-        var full_path = PelApi.appSettings.shareFileDirectory + "/DV/TASK/TEST" + "/" + "pdf.pdf";
+        //var full_path = PelApi.appSettings.shareFileDirectory + "/DV/TASK/TEST" + "/" + "pdf.pdf";
+        var full_path = PelApi.appSettings.shareFileDirectory + file.TARGET_PATH + "/" + file.TARGET_FILENAME;
+
         console.log("full_path :", full_path)
 
         var getFilePromise = PelApi.GetFileURI(links, $scope.params.appId, PelApi.pinState.get().code, full_path);
@@ -80,17 +82,19 @@ angular.module('pele')
           var fileApiData = PelApi.checkApiResponse(data);
 
           targetPath = PelApi.getAttchDirectory() + '/' + file.TARGET_FILENAME;
-          alert(window.cordova)
+
+
           if (!window.cordova) {
-            console.log(fileApiData)
+            PelApi.showPopup("הקובץ ירד לספריית ההורדות במחשב זה", "");
             window.open(fileApiData.URI, "_system", "location=yes,enableViewportScale=yes,hidden=no");
-          } else {
-            PelApi.showPopup("start download", "");
+          } else if (PelApi.isIOS) {
+            window.open(fileApiData.URI, "_system", "charset=utf-8,location=yes,enableViewportScale=yes,hidden=no");
+          } else if (PelApi.isAndroid) {
+            PelApi.showLoading();
             $cordovaFileTransfer.download(fileApiData.URI, targetPath, {}, true)
               .then(
                 //success
                 function(result) {
-                  PelApi.showPopup(JSON.stringify(result), "");
                   window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
                 },
                 //error

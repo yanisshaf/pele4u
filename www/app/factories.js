@@ -15,6 +15,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
       cordovaInit: function() {
         //file in device file system
+        this.isAndroid = ionic.Platform.isAndroid();
+        this.isIOS = ionic.Platform.isIOS();
         appSettings.config.network = $cordovaNetwork.getNetwork();
         appSettings.config.isOnline = $cordovaNetwork.isOnline();
         //$scope.$apply();
