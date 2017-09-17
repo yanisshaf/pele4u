@@ -11,6 +11,10 @@ angular.module('pele.controllers', ['ngStorage'])
       });
     }
 
+    $scope.displayErrors = function() {
+      $state.go("app.errors");
+    }
+
     $scope.appSettings = PelApi.appSettings;
     //===============================================//
     //== Forward to selected option from menu list ==//
@@ -158,10 +162,16 @@ angular.module('pele.controllers', ['ngStorage'])
     }
 
   }])
-  .controller('ErrorCtrl', function($scope, $rootScope, PelApi, $stateParams) {
+  .controller('ErrorCtrl', function($scope, $rootScope, PelApi, $stateParams, $localStorage) {
     $scope.error = $stateParams;
     $rootScope.lastError = $stateParams;
     $rootScope.lastError.created = new Date();
+    console.log("ERR STROAGE", $localStorage.appErrors);
+    if (typeof $localStorage.appErrors === "undefined") {
+      $localStorage.appErrors = []
+    }
+
+    $localStorage.appErrors.push($rootScope.lastError)
     PelApi.lagger.error('############# ERROR #################\n\r' +
       " Category : " + $scope.error.category + "\n\r" +
       " Description  : " + $scope.error.description + "\n\r" +

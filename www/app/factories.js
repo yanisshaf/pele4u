@@ -458,7 +458,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           description: message
         })
       },
-      checkPinCode: function(data, interface) {
+
+      getApiStatus: function(data, interface) {
         var stat = {
           status: "",
           description: ""
@@ -500,13 +501,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         stat.status = _.get(data, "Response.OutParams.SessionStatus", "Valid");
         return stat;
       },
+
       checkApiResponse: function(data, interface) {
         var self = this;
-        var apiStat = self.checkPinCode(data, interface);
+        var apiStat = self.getApiStatus(data, interface);
         var pinStatus = apiStat.status;
 
         if (pinStatus == "Valid") {
-          self.lagger.info(data);
           var result = _.get(data, "Response.OutParams", []);
           return result;
         } else if (pinStatus === "PDA") {
@@ -516,12 +517,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           self.goError("app", "checkApiResponse", "Invalid token , status :" + pinStatus)
         } else if ("EAI_ERROR" === pinStatus) {
           self.goError("eai", "checkApiResponse", apiStat.description)
-
         } else if ("ERROR_CODE" === pinStatus) {
           self.goError("app", "checkApiResponse", apiStat.description)
         }
-
-        return this.checkPinCode(data, interface);
+        return apiStat;
       },
       //-----------------------------------------------------------------------------//
       //--                      GetPinCodeStatus                                   --//
@@ -851,7 +850,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
 
 
-      getfull_ATTACHMENT_DIRECTORY_NAME: function() {
+      getAttchDirectory: function() {
         var retVal = "";
         var platformPath = "";
 
@@ -868,7 +867,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return retVal;
       },
 
-      delete_ATTACHMENT_DIRECTORY_NAME: function() {
+      deleteAttachDirecoty: function() {
         var self = this;
         if (!window.cordova) return false;
 
@@ -953,6 +952,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         retVal.URL = data.Response.OutParams.URI;
         return retVal;
       },
+
       getChevronIcon: function(flag) {
         var ret_val;
         if (flag) {
@@ -961,74 +961,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           ret_val = "ion-chevron-down";
         }
       },
-      //------------------------------------------------------------//
-      //--                  getAttachedDocuments
-      //------------------------------------------------------------//
-      getAttachedDocuments: function(arr) {
-          var myArr = [];
-          for (var i = 0; i < arr.length; i++) {
 
-            if (arr[i].DISPLAY_FLAG_1 === "Y") {
-              var file_name = "";
 
-              file_name = arr[i].FILE_NAME_3;
-
-              var mayObj = {
-                "SEQ": i,
-                "CATEGORY_TYPE": arr[i].CATEGORY_TYPE_4,
-                "DOCUMENT_ID": arr[i].DOCUMENT_ID_2,
-                "FILE_NAME": file_name,
-                "FILE_MAOF_TYPE": arr[i].FILE_TYPE_6,
-                "FILE_TYPE": arr[i].FILE_TYPE_9,
-                "FULL_FILE_NAME": arr[i].FULL_FILE_NAME_8,
-                "OPEN_FILE_NAME": "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' + arr[i].FULL_FILE_NAME_8,
-                //"SHORT_TEXT"               : arr[i].SHORT_TEXT_7,
-                //"LONG_TEXT"                : arr[i].LONG_TEXT_VALUE_11,
-                "IS_FILE_OPENED_ON_MOBILE": arr[i].IS_FILE_OPENED_ON_MOBILE_10,
-                "IOS_OPEN_FILE_NAME": "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' + arr[i].IOS_FILE_NAME_12
-              }
-
-              myArr.push(mayObj);
-
-            } // if
-
-          } // for
-
-          return myArr;
-        } //getAttachedDocuments
-        ,
-      getAttachedDocuments: function(arr) {
-        var myArr = [];
-        for (var i = 0; i < arr.length; i++) {
-
-          if (arr[i].DISPLAY_FLAG_1 === "Y") {
-            var file_name = "";
-
-            file_name = arr[i].FILE_NAME_3;
-
-            var mayObj = {
-              "SEQ": i,
-              "CATEGORY_TYPE": arr[i].CATEGORY_TYPE_4,
-              "DOCUMENT_ID": arr[i].DOCUMENT_ID_2,
-              "FILE_NAME": file_name,
-              "FILE_MAOF_TYPE": arr[i].FILE_TYPE_6,
-              "FILE_TYPE": arr[i].FILE_TYPE_9,
-              "FULL_FILE_NAME": arr[i].FULL_FILE_NAME_8,
-              "OPEN_FILE_NAME": "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' + arr[i].FULL_FILE_NAME_8,
-              //"SHORT_TEXT"               : arr[i].SHORT_TEXT_7,
-              //"LONG_TEXT"                : arr[i].LONG_TEXT_VALUE_11,
-              "IS_FILE_OPENED_ON_MOBILE": arr[i].IS_FILE_OPENED_ON_MOBILE_10,
-              "IOS_OPEN_FILE_NAME": "/My Files &amp; Folders/" + arr[i].OPEN_FOLDER_5 + '/' + arr[i].IOS_FILE_NAME_12
-            }
-
-            myArr.push(mayObj);
-
-          } // if
-
-        } // for
-
-        return myArr;
-      },
       //------------------------------------------------------------//
       //--                  getAttachedDocuments
       //------------------------------------------------------------//
@@ -1117,6 +1051,34 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             return true;
           },
         });
+      },
+
+      pinState: {
+        get: function() {
+          if (typeof this.pinStateData !== "undefined") {
+            return this.pinStateData;
+          }
+          if (typeof $localStorage.pinStateData !== "undefined") {
+            this.pinStateData = $localStorage.pinStateData
+            return this.pinStateData;
+          }
+
+          $localStorage.pinStateData = {
+            valid: false,
+            code: ""
+          }
+
+          this.pinStateData = $localStorage.pinStateData;
+
+        },
+        set: function(newState) {
+          this.pinStateData = newState;
+          $localStorage.pinStateData = newState;
+        },
+        clear: function() {
+          this.pinStateData = undefined;
+          $localStorage.pinStateData = undefined;
+        }
       },
 
       displayNotePopup: function(scope, btn) {

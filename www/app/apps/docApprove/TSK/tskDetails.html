@@ -157,8 +157,8 @@
                   <h2 class="text-right pele_rtl">נספחי משימה</h2>
                 </div>
                 <div class="item-section pele_rtl">
-                  <div class="pele_rtl" ng-repeat="file in docDetails.attachments">
-                    <span>{{file.name}}</span>
+                  <div class="pele_rtl" ng-click="openAttachment(file)" class="pele_rtl" ng-class="'show_content_'+file.SHOW_CONTENT" ng-show="file.DISPLAY=='Y'" ng-repeat="file in docDetails.attachments">
+                    {{file.DISPLAY_NAME}}
                   </div>
                 </div>
               </li>

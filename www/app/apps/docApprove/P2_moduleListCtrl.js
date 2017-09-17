@@ -174,7 +174,7 @@ angular.module('pele')
 
         $scope.feeds_categories = [];
 
-        var stat = PelApi.checkPinCode(data, "getUserModuleTypes");
+        var stat = PelApi.getApiStatus(data, "getUserModuleTypes");
         var pinCodeStatus = stat.status;
 
         if ("Valid" === pinCodeStatus) {

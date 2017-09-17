@@ -315,7 +315,7 @@ angular.module('pele')
               if ("N" === loadingComplited) {
                 if (isAndroid) {
 
-                  var filePath = PelApi.getfull_ATTACHMENT_DIRECTORY_NAME();
+                  var filePath = PelApi.getAttchDirectory();
                   targetPath = filePath + '/' + filename;
 
                   $cordovaFileTransfer.download(url, targetPath, {}, true).then(function(result) {

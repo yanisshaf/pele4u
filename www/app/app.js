@@ -186,6 +186,14 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
             controller: 'ErrorCtrl'
           }
         }
+      }).state('app.errors', {
+        url: '/errors',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/errors.html',
+            controller: 'ErrorCtrl'
+          }
+        }
       })
 
 
@@ -215,7 +223,6 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
   .factory('httpRequestInterceptor', function($injector) {
     return {
       request: function(config) {
-
         config.headers = config.headers || {};
         if (config.url.match(/^http/)) {
           var PelApi = $injector.get('PelApi');
@@ -228,6 +235,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       response: function(response) {
         if (response.config.url.match(/^http/)) {
           var PelApi = $injector.get('PelApi');
+          PelApi.hideLoading();
           PelApi.lagger.info("API response  status : ", response.status)
           PelApi.lagger.info("   -> response data : ", response.data)
         }

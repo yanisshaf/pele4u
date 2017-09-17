@@ -36,7 +36,7 @@ angular.module('pele')
         formType = $stateParams.FormType,
         pin = $stateParams.Pin;
 
-      PelApi.delete_ATTACHMENT_DIRECTORY_NAME();
+      PelApi.deleteAttachDirecoty();
 
       var links = PelApi.getDocApproveServiceUrl("GetUserRqGroups");
 
