@@ -72,17 +72,20 @@ angular.module('pele')
 
         PelApi.showLoading();
         var pinCode = PelApi.pinState.get().code;
-        //var full_path = PelApi.appSettings.shareFileDirectory + "/DV/TASK/TEST" + "/" + "pdf.pdf";
+
+    //    file.TARGET_PATH = "/DV/TASK/TEST";
+    //    file.TARGET_FILENAME = "rtf.rtf";
+
         var full_path = PelApi.appSettings.shareFileDirectory + file.TARGET_PATH + "/" + file.TARGET_FILENAME;
 
         console.log("full_path :", full_path)
+
 
         var getFilePromise = PelApi.GetFileURI(links, $scope.params.appId, PelApi.pinState.get().code, full_path);
         getFilePromise.success(function(data) {
           var fileApiData = PelApi.checkApiResponse(data);
 
           targetPath = PelApi.getAttchDirectory() + '/' + file.TARGET_FILENAME;
-
 
           if (!window.cordova) {
             PelApi.showPopup("הקובץ ירד לספריית ההורדות במחשב זה", "");

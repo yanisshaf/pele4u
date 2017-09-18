@@ -1,0 +1,28 @@
+<ion-view  cache-view="false">
+  <ion-nav-buttons side="right">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon">
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-title>
+    <div class="bar bar-header bar-positive">
+      <div class="title">
+        Errors stack
+      </div>
+    </div>
+  </ion-nav-title>
+  <ion-content>
+
+    <ion-list>
+      <ion-item ng-show="!errors.length">
+        <strong>Errors Stack is empty         <i class="icon ion-android-happy"></i> </strong>
+      </ion-item>
+      <ion-item class="item item-body" ng-repeat="e in errors">
+        lastStateInfo
+      
+        <div><strong>Network :</strong> {{e.network.network|| "No network"}} |  <strong>Online :</strong> {{e.network.online}}</div>
+        <div><strong>Created :</strong> {{e.created|date :'dd/M/yyyy HH:mm'}}</div>
+        <div><strong>Description :</strong> {{e.description}}</div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

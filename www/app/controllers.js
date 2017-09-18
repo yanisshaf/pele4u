@@ -166,12 +166,15 @@ angular.module('pele.controllers', ['ngStorage'])
     $scope.error = $stateParams;
     $rootScope.lastError = $stateParams;
     $rootScope.lastError.created = new Date();
-    console.log("ERR STROAGE", $localStorage.appErrors);
+    $rootScope.lastError.network = PelApi.network ;
+
     if (typeof $localStorage.appErrors === "undefined") {
       $localStorage.appErrors = []
     }
 
     $localStorage.appErrors.push($rootScope.lastError)
+    $localStorage.appErrors = _.slice($localStorage.appErrors,0,9);
+
     PelApi.lagger.error('############# ERROR #################\n\r' +
       " Category : " + $scope.error.category + "\n\r" +
       " Description  : " + $scope.error.description + "\n\r" +

@@ -20,6 +20,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
 
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         PelApi.lagger.error('State Resolve on ' + toState.name + ' -> Error: ', error);
+
       });
 
       $rootScope.$on('$stateChangeStart',
@@ -73,6 +74,14 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         abstract: true,
         templateUrl: 'templates/menu.html',
         controller: 'AppCtrl'
+      }).state('app.dev', {
+        url: '/dev',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/devmenu.html',
+            controller: 'AppCtrl'
+          }
+        }
       })
       //---------------------------------------------------------------------------//
       //--                           MENU                                        --//
@@ -186,17 +195,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
             controller: 'ErrorCtrl'
           }
         }
-      }).state('app.errors', {
-        url: '/errors',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/errors.html',
-            controller: 'ErrorCtrl'
-          }
-        }
       })
-
-
 
 
     appStates.forEach(function(state) {

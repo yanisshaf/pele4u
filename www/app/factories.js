@@ -3,18 +3,18 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     return {
 
       init: function() {
-
+        this.network =  {};
         this.messages = messages;
         this.appSettings = appSettings;
         this.topconfig = appSettings.apiConfig;
         this.env = appSettings.env;
-
         //file "located" in Borwser localStorage
         this.lagger = $fileLogger;
 
       },
       cordovaInit: function() {
         //file in device file system
+        var self = this ;
         this.isAndroid = ionic.Platform.isAndroid();
         this.isIOS = ionic.Platform.isIOS();
         appSettings.config.network = $cordovaNetwork.getNetwork();
@@ -25,6 +25,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         $rootScope.$on('$cordovaNetwork:online', function(event, networkState) {
           appSettings.config.isOnline = true;
           appSettings.config.network = $cordovaNetwork.getNetwork();
+          self.network ={ isOnline : true ,network : $cordovaNetwork.getNetwork() };
           if (appSettings.env == "DV") {
             var alertPopup = $ionicPopup.alert({
               title: 'Network Changed',
@@ -39,7 +40,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         $rootScope.$on('$cordovaNetwork:offline', function(event, networkState) {
           appSettings.config.isOnline = false;
           appSettings.config.network = $cordovaNetwork.getNetwork();
-
+          self.network ={ isOnline : false ,network : $cordovaNetwork.getNetwork() };
           if (appSettings.env == "DV") {
             var alertPopup = $ionicPopup.alert({
               title: 'Network Changed',
@@ -1055,7 +1056,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
       },
 
-      pinState: {
+      getErrorsStack : function() {
+          return _.reverse(($localStorage.appErrors || []))
+      } ,
+        pinState: {
         get: function() {
           if (typeof this.pinStateData !== "undefined") {
             return this.pinStateData;
@@ -1081,6 +1085,57 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           this.pinStateData = undefined;
           $localStorage.pinStateData = undefined;
         }
+      },
+      openAttachment : function(file) {
+
+        var self = this ;
+
+        if (file.SHOW_CONTENT !== 'Y') {
+          self.showPopup(self.appSettings.config.ATTACHMENT_TYPE_NOT_SUPORTED_FOR_OPEN, "");
+          return true;
+        }
+        var links = self.getDocApproveServiceUrl("GetFileURI");
+
+        self.showLoading();
+        var pinCode = self.pinState.get().code;
+        var full_path = self.appSettings.shareFileDirectory + file.TARGET_PATH + "/" + file.TARGET_FILENAME;
+
+        var getFilePromise = self.GetFileURI(links, "1234", self.pinState.get().code, full_path);
+        getFilePromise.success(function(data) {
+          var fileApiData = self.checkApiResponse(data);
+
+          targetPath = self.getAttchDirectory() + '/' + file.TARGET_FILENAME;
+
+          if (!window.cordova) {
+            self.showPopup("הקובץ ירד לספריית ההורדות במחשב זה", "");
+            window.open(fileApiData.URI, "_system", "location=yes,enableViewportScale=yes,hidden=no");
+          } else if (self.isIOS) {
+            window.open(fileApiData.URI, "_system", "charset=utf-8,location=yes,enableViewportScale=yes,hidden=no");
+          } else if (self.isAndroid) {
+            self.showLoading();
+            $cordovaFileTransfer.download(fileApiData.URI, targetPath, {}, true)
+              .then(
+                //success
+                function(result) {
+                  window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
+                },
+                //error
+                function(error) {
+                  self.showPopup(JSON.stringify(error), "");
+                },
+                // in progress
+                function(progress) {
+                  //  $timeout(function() {
+                  //    $scope.downloadProgress = (progress.loaded / progress.total) * 100;
+                  //  });
+                })
+          }
+        }).error(function(error) {
+          self.showPopup("שגיאה בהורדת קובץ", "");
+        }).finally(function() {
+          self.hideLoading();
+        });
+
       },
 
       displayNotePopup: function(scope, btn) {
