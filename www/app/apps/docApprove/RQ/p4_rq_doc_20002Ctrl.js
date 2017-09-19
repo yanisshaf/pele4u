@@ -7,6 +7,10 @@ angular.module('pele')
       /* rem by R.W 07/11/2016 , $cordovaFileOpener2 */
     ) {
 
+      $scope.actionNote = {
+        text: ""
+      };
+
       //---------------------------------
       //--       goHome
       //---------------------------------
@@ -787,15 +791,13 @@ angular.module('pele')
 
                 var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
                 var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
-
                 retSubmitNotification.success(function(data, status) {
-                  PelApi.lagger.info(JSON.stringify(data));
-                }).error(function(error) {
-                  PelApi.goError("api", "SubmitNotification", JSON.stringify(error))
+                    $ionicNavBarDelegate.back();
+                }).error(function(error,httpStatus) {
+                    PelApi.throwError("api", "SubmitNotification", "httpStatus : "+httpStatus)
                 }).finally(function() {
                   $ionicLoading.hide();
                   $scope.$broadcast('scroll.refreshComplete');
-                  $ionicNavBarDelegate.back();
                 });
               }
             });
@@ -806,8 +808,8 @@ angular.module('pele')
 
             retSubmitNotification.success(function(data, status, headers, config) {
               PelApi.lagger.info(JSON.stringify(data));
-            }).error(function(error) {
-              PelApi.goError("api", "SubmitNotification", JSON.stringify(error))
+            }).error(function(error,httpStatus) {
+                PelApi.throwError("api", "SubmitNotification", "httpStatus : "+httpStatus)
             }).finally(function() {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
@@ -832,13 +834,13 @@ angular.module('pele')
         var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
         var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
         retSubmitNotification.success(function(data, status, headers, config) {
-          PelApi.lagger.info(JSON.stringify(data));
-        }).error(function(error) {
-          PelApi.goError("api", "SubmitNotif", JSON.stringify(error))
+            $ionicNavBarDelegate.back();
+        }).error(function(error,httpStatus) {
+          PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
         }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
-          $ionicNavBarDelegate.back();
+
         });
       };
       //----------------------------------------
@@ -948,13 +950,12 @@ angular.module('pele')
         var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
         var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
         retSubmitNotification.success(function(data, status) {
-          PelApi.lagger.info(JSON.stringify(data));
-        }).error(function(error) {
-          PelApi.goError("api", "SubmitNotif", JSON.stringify(error))
+          $ionicNavBarDelegate.back();
+        }).error(function(error,httpStatus) {
+          PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
         }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
-          $ionicNavBarDelegate.back();
         });
       };
       //--------------------------------------------------------------
@@ -1019,16 +1020,16 @@ angular.module('pele')
       //--------------------------------------------------------------
       $scope.showBtnActions = function() {
         var buttons = PelApi.getButtons($scope.buttonsArr);
+
+        console.log("var buttons = self.getButtons(butttons):",buttons)
         // Show the action sheet
         var hideSheet = $ionicActionSheet.show({
           buttons: buttons,
           titleText: 'רשימת פעולות עבור טופס',
           cancelText: 'ביטול',
-          //-----------------------------------------------
-          //--               CANCEL
-          //-----------------------------------------------
+
           cancel: function() {
-            // add cancel code..
+
             return true;
           },
           //-----------------------------------------------

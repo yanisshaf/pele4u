@@ -637,12 +637,12 @@ angular.module('pele')
             var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
             retSubmitNotification.success(function(data, status) {
 
-            }).error(function(error) {
+            }).error(function(error,httpStatus) {
+                PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
 
             }).finally(function() {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
-              $ionicNavBarDelegate.back();
             });
           };
         });
@@ -664,14 +664,13 @@ angular.module('pele')
         var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
 
         retSubmitNotification.success(function(data, status) {
-
+            $ionicNavBarDelegate.back();
         }).error(
-          function(response) {
-
+            function(error,httpStatus) {
+            PelApi.throwError("api", "GetUserNotificationsNew", "httpStatus : "+httpStatus)
           }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
-          $ionicNavBarDelegate.back();
         });
       };
       //----------------------------------------
@@ -781,14 +780,13 @@ angular.module('pele')
         var links3 = PelApi.getDocApproveServiceUrl("SubmitNotif");
         var retSubmitNotification = PelApi.SubmitNotification(links3, appId, notificationId, note, actionType);
         retSubmitNotification.success(function(data, status, headers, config) {
-
+          $ionicNavBarDelegate.back();
         }).error(
-          function(error) {
-
+          function(error,httpStatus) {
+            PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
           }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
-          $ionicNavBarDelegate.back();
         });
       };
       //--------------------------------------------------------------

@@ -40,17 +40,15 @@ angular.module('pele')
           var result = apiData.ROW || [];
 
           if (result.length && result[0].DOC_NAME === null) {
-            PelApi.goError("app", "GetUserNotifNew", "maof retreived : DOC_NAME is NULL : " + JSON.stringify(data))
+            PelApi.throwError("app", "GetUserNotifNew", "maof retreived : DOC_NAME is NULL : " + JSON.stringify(data))
           }
-
-
           $scope.docsGroups = $scope.parse(result);
           if ($scope.docsGroups.length) {
             $scope.title = $scope.docsGroups[0].DOC_TYPE;
           }
         })
-        .error(function(error) {
-          PelApi.goError("api", "GetUserNotifNew", JSON.stringify(error))
+        .error(function(error,httpStatus) {
+          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : "+httpStatus)
         })
         .finally(function() {
           $ionicLoading.hide();

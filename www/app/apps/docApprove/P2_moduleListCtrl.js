@@ -216,22 +216,21 @@ angular.module('pele')
           PelApi.goHome();
         } else if ("EAI_ERROR" === pinCodeStatus) {
           //PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
-          PelApi.goError("eai", "GetUserModuleTypes", JSON.stringify(data));
+          PelApi.throwError("eai", "GetUserModuleTypes", JSON.stringify(data));
         } else if ("EOL" === pinCodeStatus) {
           appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("ERROR_CODE" === pinCodeStatus) {
-          PelApi.goError("app", "GetUserModuleTypes", JSON.stringify(data));
+          PelApi.throwError("app", "GetUserModuleTypes", JSON.stringify(data));
           //PelApi.showPopup(stat.description, "");
         } else if ("OLD" === pinCodeStatus) {
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
 
       }).error(
-        function(error) {
-          //PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
-          PelApi.goError("api", "GetUserModuleTypes", JSON.stringify(error));
-        }).finally(function() {
+        function(error,httpStatus) {
+          PelApi.throwError("api", "GetUserModuleTypes", "httpStatus : "+httpStatus)
+          }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
       });

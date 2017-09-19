@@ -1,4 +1,4 @@
-<ion-view class="feed-entries-view " cache-view="false">
+<ion-view class="feed-entries-view " cache-view="false" ng-controller="SettingsListCtrl">
   <ion-nav-buttons side="right">
     <button menu-toggle="left" class="button button-icon icon ion-navicon">
     </button>
@@ -20,17 +20,17 @@
         <strong>אופס .. משהו השתבש </strong> תוכלו לנסות שוב לבצע את הפעולה ואם היא שוב מתרחשת נשמח אם תסייעו לנו לשפר את האפליקציה
         <div class="row">
           <div class="col col-100">
-            <button class="button  button-full item-icon-right"> שלחו לנו קובץ ארועי מערכת
+            <button class="button  button-full item-icon-right" ng-click="sendMail()">שלחו לנו דו"ח לתיחקור
                 <i class="icon ion-paper-airplane"></i>
             </button>
           </div>
         </div>
         <div class="row">
-          <div class="col col-100"><button class="button  button-full item-icon-right">תפריט ראשי
+          <div class="col col-100"><button class="button  button-full item-icon-right" ui-sref="app.p1_appsLists">תפריט ראשי
             <i class="icon ion-navicon"></i>  </button></div>
         </div>
         <div class="row">
-          <div class="col col-100"><button class="button button-gray button-full item-icon-right">
+          <div class="col col-100"><button class="button button-gray button-full item-icon-right" ng-Click="goBack()">
             <i class="icon ion-reply"></i>נסו שוב </button></div>
         </div>
       </div>

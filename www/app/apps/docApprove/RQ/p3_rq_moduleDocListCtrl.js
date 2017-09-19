@@ -128,8 +128,8 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(error) {
-          PelApi.goError("api", "GetUserPoOrdGroupGroup", JSON.stringify(error))
+        function(error,httpStatus) {
+          PelApi.throwError("api", "GetUserPoOrdGroupGroup", "httpStatus : "+httpStatus)
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -264,8 +264,8 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(error) {
-          PelApi.goError("api", "GetUserNotificationsNew", JSON.stringify(error))
+        function(error,httpStatus) {
+            PelApi.throwError("api", "GetUserNotificationsNew", "httpStatus : "+httpStatus)
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');

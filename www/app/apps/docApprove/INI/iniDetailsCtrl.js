@@ -38,8 +38,8 @@ angular.module('pele')
           PelApi.lagger.info("$scope.docDetails : ", JSON.stringify($scope.docDetails))
           $scope.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
-        }).error(function(error) {
-          PelApi.goError("api", "GetUserNotifNew", JSON.stringify(error))
+        }).error(function(error,httpStatus) {
+            PelApi.throwError("api", "GetUserNotifNew", "httpStatus : "+httpStatus)
         }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');

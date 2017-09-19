@@ -13,8 +13,8 @@
 
     <ion-list>
       <div class="docs-menu" ng-repeat="file  in attachments">
-        <ion-item class="docs-menu-head item-stable" ng-click="openAttachment(file)">
-         {{file.DISPLAY_NAME}}
+        <ion-item class="docs-menu-head item-stable" ng-click="openAttachment(file)" ng-bind-html="file.DISPLAY_NAME">
+
        </ion-item>
       </div>
     </ion-list>

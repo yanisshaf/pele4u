@@ -186,13 +186,12 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       .state('app.error', {
         url: '/error',
         params: {
-          category: null,
-          description: null
+          error:{}
         },
         views: {
           'menuContent': {
             templateUrl: 'templates/error.html',
-            controller: 'ErrorCtrl'
+            controller: 'SettingsListCtrl'
           }
         }
       })
@@ -219,7 +218,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       'showLoading': 'Y'
     });
   })
-  .factory('httpRequestInterceptor', function($injector) {
+  .factory('httpRequestInterceptor', function($q,$injector,$rootScope) {
     return {
       request: function(config) {
         config.headers = config.headers || {};
@@ -240,6 +239,11 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         }
         return response;
       }
+      /* 'responseError': function(error) {
+                console.log("response",error)
+                return $q.reject(response);
+            }
+      */
     };
   })
   .config(function($httpProvider) {

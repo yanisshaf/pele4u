@@ -92,17 +92,17 @@ angular.module('pele')
           PelApi.appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("EAI_ERROR" === pinStatus) {
-          PelApi.goError("eai", "GetUserPoOrdGroupGroup", JSON.stringify(data))
+          PelApi.throwError("eai", "GetUserPoOrdGroupGroup", JSON.stringify(data))
         } else if ("ERROR_CODE" === pinStatus) {
-          PelApi.goError("app", "GetUserPoOrdGroupGroup", JSON.stringify(data))
+          PelApi.throwError("app", "GetUserPoOrdGroupGroup", JSON.stringify(data))
         } else if ("OLD" === pinStatus) {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(response) {
-          PelApi.goError("api", "GetUserPoOrdGroupGroup", JSON.stringify(response))
+        function(error,httpStatus) {
+            PelApi.throwError("api", "GetUserPoOrdGroupGroup", "httpStatus : "+httpStatus)
         }
       ).finally(function() {
         $ionicLoading.hide();
@@ -234,9 +234,9 @@ angular.module('pele')
           PelApi.appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("EAI_ERROR" === pinStatus) {
-          PelApi.goError("eai", "GetUserNotificationsNew", JSON.stringify(data))
+          PelApi.throwError("eai", "GetUserNotificationsNew", JSON.stringify(data))
         } else if ("ERROR_CODE" === pinStatus) {
-          PelApi.goError("app", "GetUserNotificationsNew", JSON.stringify(data))
+          PelApi.throwError("app", "GetUserNotificationsNew", JSON.stringify(data))
 
         } else if ("PCR" === pinStatus) {
           PelApi.appSettings.config.IS_TOKEN_VALID = "N";
@@ -247,10 +247,8 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(error) {
-
-          PelApi.goError("api", "GetUserNotificationsNew", JSON.stringify(error))
-          //PelApi.showPopup(PelApi.appSettings.config.getUserModuleTypesErrorMag, "");
+        function(error,httpStatus) {
+            PelApi.throwError("api", "GetUserNotificationsNew", "httpStatus : "+httpStatus)
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');

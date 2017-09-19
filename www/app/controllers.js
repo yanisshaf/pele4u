@@ -89,47 +89,6 @@ angular.module('pele.controllers', ['ngStorage'])
             console.log(error);
           });
       }
-
-      $scope.sendMail__old_roman = function() {
-
-        if (!window.cordova) {
-          $ionicPopup.alert({
-            title: PelApi.messages.no_cordova
-          });
-          return false;
-        }
-        window.cordova.plugins.email.isAvailable(function(isAvailable) {
-          if (isAvailable) {
-            //$fileLogger.setStorageFilename(appSettings.config.LOG_FILE_NAME);
-
-            $fileLogger.info("==================== END ====================");
-
-            $timeout(function() {
-
-              $fileLogger.checkFile().then(function(d) {
-                resolveLocalFileSystemURL(d.localURL.toString(), function(entry) {
-
-                  window.cordova.plugins.email.open({
-                    to: appSettings.config.LOG_FILE_MAIL_RECIPIENT, //'Mobile_Admins_HR@pelephone.co.il',
-                    subject: appSettings.config.LOG_FILE_MAIL_SUBJECT,
-                    body: '',
-                    attachments: entry.toURL()
-                  });
-
-                  PelApi.lagger.info('=============== Send Email ==============');
-
-                }); // resolveLocalFileSystemURL
-              });
-            }, 8000);
-          } else {
-            var confirmPopup = $ionicPopup.confirm({
-              title: PelApi.messages.mail.no_mail_account
-            });
-          }
-        });
-
-      }; // sendMail
-
       //----------------------------------------------
       //--             forwardTo
       //----------------------------------------------
@@ -162,25 +121,6 @@ angular.module('pele.controllers', ['ngStorage'])
     }
 
   }])
-  .controller('ErrorCtrl', function($scope, $rootScope, PelApi, $stateParams, $localStorage) {
-    $scope.error = $stateParams;
-    $rootScope.lastError = $stateParams;
-    $rootScope.lastError.created = new Date();
-    $rootScope.lastError.network = PelApi.network ;
-
-    if (typeof $localStorage.appErrors === "undefined") {
-      $localStorage.appErrors = []
-    }
-
-    $localStorage.appErrors.push($rootScope.lastError)
-    $localStorage.appErrors = _.slice($localStorage.appErrors,0,9);
-
-    PelApi.lagger.error('############# ERROR #################\n\r' +
-      " Category : " + $scope.error.category + "\n\r" +
-      " Description  : " + $scope.error.description + "\n\r" +
-      //" Created  : " + $rootScope.lastError.created + "\n\r" +
-      '############# END OF ERROR #################\n\r');
-  })
   .controller('FileCtrl', function($scope, $cordovaFile, PelApi) {
     console.log("======== FileCtrl =========");
     $scope.CHECK_FILE = "";

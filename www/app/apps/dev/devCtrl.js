@@ -12,7 +12,15 @@ angular.module('pele')
       $scope.errors = PelApi.getErrorsStack();
 
 
-      $scope.attachments =  [	{
+      $scope.attachments =  [		{
+			"DISPLAY": "Y",
+			"DISPLAY_NAME": "<span class='alert' style='color:red'>notexists.notexists</span>",
+			"TARGET_PATH": "DV/TASK/TEST",
+			"EXT": "rtf",
+			"TARGET_FILENAME": "notexists.notexists",
+			"SHOW_CONTENT": "Y",
+			"IOS_TARGET_FILENAME": "notexists.notexists"
+		},{
 			"DISPLAY": "Y",
 			"DISPLAY_NAME": "rtf.rtf",
 			"TARGET_PATH": "DV/TASK/TEST",

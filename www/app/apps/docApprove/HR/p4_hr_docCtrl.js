@@ -356,18 +356,16 @@ angular.module('pele')
                   $scope.goHome();
                 } else if ("EAI_ERROR" === pinStatus) {
                   //PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
-                  PelApi.goError("eai", "SubmitNotif", JSON.stringify(data))
+                  PelApi.throwError("eai", "SubmitNotif", JSON.stringify(data))
                 } else if ("ERROR_CODE" === pinStatus) {
-                  PelApi.goError("app", "SubmitNotif", JSON.stringify(data))
+                  PelApi.throwError("app", "SubmitNotif", JSON.stringify(data))
                   //PelApi.showPopup(stat.description, "");
                 } else if ("OLD" === pinStatus) {
                   PelApi.showPopupVersionUpdate(data.StatusDesc, "");
                 }
 
-              }).error(
-                function(error) {
-                  PelApi.goError("api", "SubmitNotif", JSON.stringify(error));
-
+              }).error(function(error,httpStatus) {
+                  PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
                 }).finally(function() {
                 $ionicLoading.hide();
                 $scope.$broadcast('scroll.refreshComplete');
@@ -390,12 +388,12 @@ angular.module('pele')
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               //  PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
-              PelApi.goError("eai", "SubmitNotif", JSON.stringify(data));
+              PelApi.throwError("eai", "SubmitNotif", JSON.stringify(data));
 
             }
 
-          }).error(function(error) {
-            PelApi.goError("api", "SubmitNotif", JSON.stringify(error));
+          }).error(function(error,httpStatus) {
+              PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
           }).finally(function() {
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
@@ -426,16 +424,16 @@ angular.module('pele')
           $scope.goHome();
         } else if ("EAI_ERROR" === pinStatus) {
           //PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
-          PelApi.goError("eai", "SubmitNotif", JSON.stringify(data))
+          PelApi.throwError("eai", "SubmitNotif", JSON.stringify(data))
         } else if ("ERROR_CODE" === pinStatus) {
           //PelApi.showPopup(stat.description, "");
-          PelApi.goError("app", "SubmitNotif", JSON.stringify(data))
+          PelApi.throwError("app", "SubmitNotif", JSON.stringify(data))
         } else {
           $ionicHistory.goBack();
         }
       }).error(
-        function(error) {
-          PelApi.goError("eai", "SubmitNotif", JSON.stringify(error))
+        function(error,httpStatus) {
+            PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -509,16 +507,16 @@ angular.module('pele')
         if ("EOL" === pinStatus) {
           $scope.goHome();
         } else if ("EAI_ERROR" === pinStatus) {
-          PelApi.goError("eai", "SubmitNotif", JSON.stringify(data))
+          PelApi.throwError("eai", "SubmitNotif", JSON.stringify(data))
 
         } else if ("ERROR_CODE" === pinStatus) {
-          PelApi.goError("app", "SubmitNotif", JSON.stringify(data))
+          PelApi.throwError("app", "SubmitNotif", JSON.stringify(data))
         } else {
 
           $ionicHistory.goBack();
         }
-      }).error(function(error) {
-        PelApi.goError("api", "SubmitNotif", JSON.stringify(error))
+      }).error(function(error,httpStatus) {
+          PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
       }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');

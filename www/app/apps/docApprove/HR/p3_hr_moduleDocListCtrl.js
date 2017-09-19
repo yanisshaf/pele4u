@@ -62,16 +62,16 @@ angular.module('pele')
 
         } else if ("EAI_ERROR" === pinStatus) {
 
-          PelApi.goError("eai", "GetUserFormGroups", JSON.stringify(data));
+          PelApi.throwError("eai", "GetUserFormGroups", JSON.stringify(data));
 
         } else if ("EOL" === pinStatus) {
           appSettings.config.IS_TOKEN_VALID = "N";
           PelApi.goHome();
         } else if ("ERROR_CODE" === pinStatus) {
-          PelApi.goError("app", "GetUserFormGroups", JSON.stringify(data));
+          PelApi.throwError("app", "GetUserFormGroups", JSON.stringify(data));
         }
-      }).error(function(error) {
-        PelApi.goError("api", "GetUserFormGroups", JSON.stringify(error));
+      }).error(function(error,httpStatus) {
+        PelApi.throwError("api", "GetUserFormGroups", "httpStatus : "+httpStatus)
       }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -213,11 +213,11 @@ angular.module('pele')
           PelApi.goHome();
 
         } else if ("EAI_ERROR" === pinStatus) {
-          PelApi.goError("eai", "GetUserNotifNew", JSON.stringify(data));
+          PelApi.throwError("eai", "GetUserNotifNew", JSON.stringify(data));
           //PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
 
         } else if ("ERROR_CODE" === pinStatus) {
-          PelApi.goError("app", "GetUserNotifNew", JSON.stringify(data));
+          PelApi.throwError("app", "GetUserNotifNew", JSON.stringify(data));
           //PelApi.showPopup(stat.description, "");
 
         } else if ("OLD" === pinStatus) {
@@ -227,7 +227,7 @@ angular.module('pele')
         }
       }).error(function(error) {
 
-        PelApi.goError("api", "GetUserNotifNew", JSON.stringify(error));
+        PelApi.throwError("api", "GetUserNotifNew", JSON.stringify(error));
 
       }).finally(function() {
         $ionicLoading.hide();

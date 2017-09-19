@@ -8,9 +8,6 @@ angular.module('pele')
   .controller('tskDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaFileTransfer',
     function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaFileTransfer) {
 
-      $scope.actionNote = {
-        text: ""
-      };
       $scope.params = $stateParams;
       $scope.title = "אישור משימה " + $stateParams.docInitId
       //    $scope.tabs = appSettings.tabs;
@@ -36,14 +33,13 @@ angular.module('pele')
         var retGetUserNotifications = PelApi.GetUserNotifications(links, $stateParams.appId, $stateParams.docId, $stateParams.docInitId);
         retGetUserNotifications.success(function(data) {
           var apiData = PelApi.checkApiResponse(data);
-
           $scope.docDetails = PelApi.getJsonString(apiData.Result, "JSON[0]", true);
           $scope.docDetails.attachments = $scope.docDetails.TASK_ATTACHMENTS_CUR || [];
           $scope.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
           PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
-        }).error(function(error) {
-          PelApi.goError("api", "GetUserNotifNew", JSON.stringify(error))
+        }).error(function(error,httpStatus) {
+          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : "+httpStatus)
         }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
@@ -63,64 +59,9 @@ angular.module('pele')
 
 
       $scope.openAttachment = function(file) {
-
-        if (file.SHOW_CONTENT !== 'Y') {
-          PelApi.showPopup(PelApi.appSettings.config.ATTACHMENT_TYPE_NOT_SUPORTED_FOR_OPEN, "");
-          return true;
-        }
-        var links = PelApi.getDocApproveServiceUrl("GetFileURI");
-
-        PelApi.showLoading();
-        var pinCode = PelApi.pinState.get().code;
-
-    //    file.TARGET_PATH = "/DV/TASK/TEST";
-    //    file.TARGET_FILENAME = "rtf.rtf";
-
-        var full_path = PelApi.appSettings.shareFileDirectory + file.TARGET_PATH + "/" + file.TARGET_FILENAME;
-
-        console.log("full_path :", full_path)
-
-
-        var getFilePromise = PelApi.GetFileURI(links, $scope.params.appId, PelApi.pinState.get().code, full_path);
-        getFilePromise.success(function(data) {
-          var fileApiData = PelApi.checkApiResponse(data);
-
-          targetPath = PelApi.getAttchDirectory() + '/' + file.TARGET_FILENAME;
-
-          if (!window.cordova) {
-            PelApi.showPopup("הקובץ ירד לספריית ההורדות במחשב זה", "");
-            window.open(fileApiData.URI, "_system", "location=yes,enableViewportScale=yes,hidden=no");
-          } else if (PelApi.isIOS) {
-            window.open(fileApiData.URI, "_system", "charset=utf-8,location=yes,enableViewportScale=yes,hidden=no");
-          } else if (PelApi.isAndroid) {
-            PelApi.showLoading();
-            $cordovaFileTransfer.download(fileApiData.URI, targetPath, {}, true)
-              .then(
-                //success
-                function(result) {
-                  window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
-                },
-                //error
-                function(error) {
-                  PelApi.showPopup(JSON.stringify(error), "");
-                },
-                // in progress
-                function(progress) {
-                  //  $timeout(function() {
-                  //    $scope.downloadProgress = (progress.loaded / progress.total) * 100;
-                  //  });
-                })
-          }
-        }).error(function(error) {
-          PelApi.showPopup("שגיאה בהורדת קובץ", "");
-        }).finally(function() {
-          PelApi.hideLoading();
-        });
-
-        return true;
-
-        PelApi.lagger.info(" file info : ", file)
+        PelApi.openAttachment(file,$scope.params.appId) ;
       }
+
 
       $scope.toggle = function(element) {
         element.display = !element.display;
@@ -170,7 +111,6 @@ angular.module('pele')
             action.left_icon = 'ion-chevron-left';
             action.right_icon = 'ion-checkmark-circled'
           }
-
           if (action.ACTION_CODE === "NO_ACTION") {
             action.left_icon = 'ion-chevron-left';
             action.right_icon = 'ion-minus-circled';
@@ -203,8 +143,8 @@ angular.module('pele')
             var apiData = PelApi.checkApiResponse(data);
             $ionicHistory.goBack();
           }).error(
-            function(error) {
-              PelApi.goError("api", "SubmitNotif", JSON.stringify(error))
+            function(error,httpStatus) {
+              PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
             }).finally(function() {
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');

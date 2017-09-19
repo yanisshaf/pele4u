@@ -75,9 +75,6 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
 
       $ionicLoading.hide();
       $scope.$broadcast('scroll.refreshComplete');
-      PelApi.lagger.info(" Interface getUserMenu return SUCCESS");
-      PelApi.lagger.info(JSON.stringify(data));
-
       if (headers('msisdn_res') !== undefined && headers('msisdn_res') !== null && headers('msisdn_res') != null) {
         appSettings.config.MSISDN_VALUE = headers('msisdn_res');
       } else {
@@ -158,9 +155,8 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
         PelApi.showPopupVersionUpdate(data.StatusDesc, "");
       }
     }).error(
-      function(response) {
-
-        PelApi.goError("api", "GetUserMenu", JSON.stringify(response));
+      function(errorStr,httpStatus) {
+        PelApi.throwError("api", "GetUserMenu", "httpStatus : "+httpStatus)
         //PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
       }
     ).finally(function() {
@@ -171,7 +167,6 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
 
   $scope.setMSISDN = function(pin) {
 
-    PelApi.lagger.info("START $scope.setMSISDN");
     try {
       var msisdn = window.localStorage.getItem("PELE4U_MSISDN");
 
@@ -186,7 +181,6 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
     } catch (e) {
       PelApi.lagger.error(" $scope.setMSISDN() - " + e);
     }
-    PelApi.lagger.info(" END $scope.setMSISDN");
   }; // setMSISDN
   $scope.getMSISDN = function() {
     var value = window.localStorage.getItem("PELE4U_MSISDN");
