@@ -103,7 +103,7 @@ angular.module('pele')
     } // forwardToDoc
 
     $scope.feed = [];
-    $scope.searchText = {};
+    $scope.searchText ="";
     $scope.doRefresh();
 
   });

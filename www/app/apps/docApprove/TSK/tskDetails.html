@@ -158,7 +158,7 @@
                 </div>
                 <div class="item-section">
                   <div ng-click="openAttachment(file)" class="attach_file pele_rtl" ng-show="file.DISPLAY=='Y'" ng-repeat="file in docDetails.attachments">
-                    <span ng-class="'show_content_'+file.SHOW_CONTENT"> {{file.DISPLAY_NAME}}</span> <span>.{{$index}} </span>
+                    <span ng-class="'show_content_'+file.SHOW_CONTENT"> {{file.DISPLAY_NAME + ' . ' + ($index+1)}}
                   </div>
                 </div>
               </li>

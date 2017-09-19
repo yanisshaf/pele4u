@@ -593,6 +593,6 @@ img.spinner-svg {height:60px}
 .item.error-top i.icon  { font-size:130px;color:#FFF}
 .item.error-bottom { background :#FFF}
 .card.error .button { border:1px solid #CCC}
-.show_content_Y { color:blue;text-decoration: underline;}
+.show_content_Y { color:blue;text-decoration:none;}
 .attach_file {line-height:25px}
 .alert { color:red}
