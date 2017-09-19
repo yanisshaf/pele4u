@@ -7,7 +7,7 @@ angular.module('pele')
   //=================================================================
   .controller('tskDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaFileTransfer',
     function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaFileTransfer) {
-
+      $scope.actionNote =  {} ;
       $scope.params = $stateParams;
       $scope.title = "אישור משימה " + $stateParams.docInitId
       //    $scope.tabs = appSettings.tabs;

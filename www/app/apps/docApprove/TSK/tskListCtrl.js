@@ -58,38 +58,6 @@ angular.module('pele')
     };
 
 
-
-    //----------------------------------------------------------
-    //-- Search bar JSON rebild
-    //----------------------------------------------------------
-    $scope.searchBarCreteria = function() {
-      var searchText = $scope.searchText.text;
-      if ($scope.searchText.text !== undefined && $scope.searchText.text !== "") {
-        list = $scope.docsGroups;
-        for (var i = 0; i < list.length; i++) {
-          var sCount = 0;
-          for (var j = 0; j < list[i].DOCUMENTS.DOCUMENTS_ROW.length; j++) {
-            var owner = list[i].DOCUMENTS.DOCUMENTS_ROW[j].MESSAGE;
-            var n = owner.indexOf(searchText);
-            if (-1 !== n) {
-              sCount++;
-            }
-          }
-          $scope.docsGroups[i].FORM_QTY = sCount;
-        }
-      } else {
-        for (var i = 0; i < list.length; i++) {
-          var sCount = list[i].DOCUMENTS.DOCUMENTS_ROW.length;
-          $scope.docsGroups[i].FORM_QTY = sCount;
-        }
-      }
-    };
-
-    //--------------------------------------------------------------
-    //-- When        Who         Description
-    //-- ----------  ----------  -----------------------------------
-    //-- 01/11/2015  R.W.        function forward to page by DOC_ID
-    //--------------------------------------------------------------
     $scope.forwardToDoc = function(docId, docInitId) {
 
       var statePath = 'app.tsk_details';
@@ -100,7 +68,7 @@ angular.module('pele')
         docId: docId,
         docInitId: docInitId
       });
-    } // forwardToDoc
+    }
 
     $scope.feed = [];
     $scope.searchText ="";
