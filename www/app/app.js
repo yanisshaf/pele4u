@@ -12,7 +12,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
     //-----------------------------------------//
     //--       Authentication                --//
     //-----------------------------------------//
-    , 'pele.authCtrl', 'pele.states', , 'fileLogger', 'oc.lazyLoad'
+    , 'pele.authCtrl', 'pele.states', 'fileLogger', 'oc.lazyLoad'
   ])
 
   .run(['$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings',
@@ -52,6 +52,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
   .config(function($stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
 
     $ionicConfigProvider.backButton.text('')
+    $ionicConfigProvider.views.swipeBackEnabled(false);
     $stateProvider
       .state('app', {
         url: '/app',
