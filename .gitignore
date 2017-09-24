@@ -1,4 +1,9 @@
-node_modules/
 www.zip
-www_mini/
+www_minimfied/
+scss/
+resources/
+hooks/
+node_modules/
+res/
+platforms/
 plugins/
