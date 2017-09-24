@@ -81,12 +81,12 @@ angular.module('pele.controllers', ['ngStorage'])
                 appSettings.config.LOG_FILE_NAME, recipient, null, null, data)
               //.share('Share my file', 'some topic', data, null)
               .then(function(result) {
-                console.log("Shared successfully")
+
               }, function(err) {
-                console.log("Share:Error - " + err);
+
               });
           }, function(error) {
-            console.log(error);
+
           });
       }
       //----------------------------------------------
@@ -122,7 +122,7 @@ angular.module('pele.controllers', ['ngStorage'])
 
   }])
   .controller('FileCtrl', function($scope, $cordovaFile, PelApi) {
-    console.log("======== FileCtrl =========");
+
     $scope.CHECK_FILE = "";
     $scope.CREATE_FILE = "";
     $scope.REMOVE_FILE = "";
@@ -221,7 +221,7 @@ angular.module('pele.controllers', ['ngStorage'])
     }
   })
   .controller('DirCtrl', function($scope, $cordovaFile, PelApi) {
-    console.log("======== DirCtrl =========");
+
     $scope.FREE_DISK_SPACE = "";
     $scope.CHECK_DIR = "";
     $scope.CREATE_DIR = "";
@@ -241,13 +241,13 @@ angular.module('pele.controllers', ['ngStorage'])
       $cordovaFile.getFreeDiskSpace()
         .then(function(success) {
           // success in kilobytes
-          console.log(success);
+
           $scope.FREE_DISK_SPACE = success;
         }, function(error) {
           // error
           PelPelApi.lagger.error("getFreeDiskSpace() ");
           PelApi.lagger.error(error);
-          console.log(error);
+          
           $scope.FREE_DISK_SPACE = "-1";
         });
     }; // getFreeDiskSpace

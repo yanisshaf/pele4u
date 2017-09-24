@@ -1021,7 +1021,7 @@ angular.module('pele')
       $scope.showBtnActions = function() {
         var buttons = PelApi.getButtons($scope.buttonsArr);
 
-        console.log("var buttons = self.getButtons(butttons):",buttons)
+        
         // Show the action sheet
         var hideSheet = $ionicActionSheet.show({
           buttons: buttons,

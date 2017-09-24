@@ -2,8 +2,8 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('devCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup',
-    function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup) {
+  .controller('devCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup','$fileLogger',
+    function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup,$fileLogger) {
 
       $scope.title ="בדיקת צרופות" ;
       $scope.openAttachment = function(file) {
@@ -11,6 +11,10 @@ angular.module('pele')
       }
       $scope.errors = PelApi.getErrorsStack();
 
+
+      $fileLogger.getLogfile().then(function(log) {
+         $scope.logContent = log
+     });
 
       $scope.attachments =  [		{
 			"DISPLAY": "Y",

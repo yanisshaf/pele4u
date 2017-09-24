@@ -848,7 +848,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
         var buttons = [];
         buttonsArr.forEach(function(b) {
-          console.log("b:",b)
+
           if (b.DISPLAY_FLAG !== "N" && appSettings[b.LOOKUP_CODE])
             buttons.push(appSettings[b.LOOKUP_CODE]);
         })
@@ -1139,7 +1139,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var getFilePromise = self.GetFileURI(links, appId, self.pinState.get().code, full_path);
         getFilePromise.success(function(data) {
           var fileApiData = self.checkApiResponse(data);
-            console.log("fileApiData:", fileApiData)
+
           if(typeof fileApiData.URI === "undefined" || !fileApiData.URI )  {
               self.showPopup(self.appSettings.config.FILE_NOT_FOUND, "");
               return false;
@@ -1159,8 +1159,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
               .then(
                 //success
                 function(result) {
-                  $timeout.cancel(filetimeout);
-                 window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
+                $timeout.cancel(filetimeout);
+                if(!result.nativeURL)  {
+                  self.throwError("api", "cordovaFileTransfer.download", JSON.stringify(result),false);
+                }
+                 else {
+                   window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
+                 }
                 },
                 //error
                 function(error) {

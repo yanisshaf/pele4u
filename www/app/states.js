@@ -1,5 +1,17 @@
 angular.module('pele.states', [])
   .constant('appStates', [{
+    state: "app.dev.log",
+    url: '/log',
+    views: {
+      'menuContent@app': {
+        templateUrl: function() {
+          return 'app/apps/dev/log.html';
+        },
+        controller: 'devCtrl',
+      }
+    },
+    src: ["app/apps/dev/devCtrl.js"]
+  },{
     state: "app.dev.errors",
     url: '/errors',
     views: {
