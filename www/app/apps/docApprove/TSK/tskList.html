@@ -22,7 +22,7 @@
     </label>
 
     <ion-list>
-      <div class="docs-menu" ng-show="filtered.length" ng-repeat="docsGroup in docsGroups">
+      <div class="docs-menu"  ng-repeat="docsGroup in docsGroups">
         <ion-item class="docs-menu-head item-stable" ng-click="docsGroup.active=!docsGroup.active" ng-class="{active: docsGroup.active}">
           <a ng-class="docsGroup.active ? 'icon-expand' : 'icon-collapse'"></a> {{docsGroup.DOC_NAME}} <span class="pel-badge">{{filtered.length}}</span>
         </ion-item>

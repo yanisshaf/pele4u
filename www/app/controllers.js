@@ -62,6 +62,9 @@ angular.module('pele.controllers', ['ngStorage'])
   }) // homeCtrl
   .controller('SettingsListCtrl', ['$scope', '$fileLogger', '$cordovaFile', '$timeout', '$state', 'PelApi', '$ionicPopup', '$cordovaSocialSharing', 'appSettings',
     function($scope, $fileLogger, $cordovaFile, $timeout, $state, PelApi, $ionicPopup, $cordovaSocialSharing, appSettings) {
+
+      $scope.stateParams = $state.params;
+
       $scope.sendMail = function() {
         if (!window.cordova) {
           $ionicPopup.alert({
@@ -247,7 +250,7 @@ angular.module('pele.controllers', ['ngStorage'])
           // error
           PelPelApi.lagger.error("getFreeDiskSpace() ");
           PelApi.lagger.error(error);
-          
+
           $scope.FREE_DISK_SPACE = "-1";
         });
     }; // getFreeDiskSpace

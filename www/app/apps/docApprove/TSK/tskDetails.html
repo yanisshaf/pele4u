@@ -157,9 +157,16 @@
                   <h2 class="text-right pele_rtl">נספחי משימה</h2>
                 </div>
                 <div class="item-section">
-                  <div ng-click="openAttachment(file)" class="attach_file pele_rtl" ng-show="file.DISPLAY=='Y'" ng-repeat="file in docDetails.attachments">
-                    <span ng-class="'show_content_'+file.SHOW_CONTENT"> {{file.DISPLAY_NAME + ' . ' + ($index+1)}}
-                  </div>
+                  <table class="pele_rtl attachments-table text-right">
+                    <tbody>
+                      <tr  class="pele_rtl" ng-repeat="file in docDetails.attachments | filter:{ DISPLAY: 'Y' }">
+                        <td class="num_index"> {{$index+1}} . </td> 
+                        <td class="info pele_ltr">
+                            <span ng-click="openAttachment(file)" ng-class="'show_content_'+file.SHOW_CONTENT"> {{file.DISPLAY_NAME}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </li>
             </ul>

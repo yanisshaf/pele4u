@@ -461,6 +461,10 @@ table.pele_rtl , .pele_rtl,div.pele_rtl {
   direction: rtl;
   unicode-bidi :plaintext ;
 }
+.pele_ltr {
+  direction: ltr;
+  unicode-bidi :plaintext ;
+ }
 table.pele_rtl {
   direction: rtl;
   unicode-bidi :plaintext ;
@@ -596,3 +600,6 @@ img.spinner-svg {height:60px}
 .show_content_Y { color:blue;text-decoration:none;}
 .attach_file {line-height:25px}
 .alert { color:red}
+.attachments-table {width:100%}
+.attachments-table tr  { border-bottom: 1px solid #CCC ; line-height: 30px}
+.attachments-table tr td.num_index  { width:30px;}

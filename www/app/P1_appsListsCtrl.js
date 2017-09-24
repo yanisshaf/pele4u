@@ -156,7 +156,7 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
       }
     }).error(
       function(errorStr,httpStatus) {
-        PelApi.throwError("api", "GetUserMenu", "httpStatus : "+httpStatus)
+        PelApi.throwError("api-400", "GetUserMenu", "httpStatus : "+ httpStatus)
         //PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
       }
     ).finally(function() {

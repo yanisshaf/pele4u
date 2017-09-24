@@ -452,7 +452,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
       throwError: function(category, from, errorString,redirectInd) {
         var self = this ;
-
+        var redirect  = redirectInd || true ;
         if (category.match(/api|eai|app/i)) {
           errorString = "API request " + from + " endedd with failure : " + errorString;
         }
@@ -463,7 +463,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             network: self.network,
             category:category,
             from:from,
-            description:errorString
+            description:errorString,
+            redirect:redirect
           } ;
 
         var errStr = "" ;
@@ -475,12 +476,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           $localStorage.appErrors = []
         }
         var errorsArr  = $localStorage.appErrors ;
-        errorsArr.push(lastError);
-        var Last10errors =   errorsArr.slice(Math.max(errorsArr.length - 10, 1))
-        $localStorage.appErrors  = Last10errors ;
 
+        errorsArr.push(lastError);
+
+        $localStorage.appErrors =   _.slice(errorsArr,Math.max(errorsArr.length - 10, 0))
         self.lagger.error(errStr);
-        var redirect  = redirectInd || true ;
+
         var message = errorString;
         if (category.match(/api|eai|app/i)) {
           message = "API request " + from + " endedd with failure : " + errorString;
@@ -1046,7 +1047,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           return undefined;
         var subJsVar = _.get(jsVar, path);
         if (typeof subJsVar == "undefined" && redirect) {
-          self.throwError("api", "getJsonString", "Failed to parse  JSON  string :" + string)
+          self.throwError("api", "getJsonString", "Failed to parse  JSON  string :" + string,redirect)
         }
         return subJsVar;
       },
@@ -1060,7 +1061,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           jsVar = JSON.parse(str);
         } catch (e) {
           if (redirect)
-            self.throwError("api", "jsonParse", "Failed to parse  JSON  string :" + str)
+            self.throwError("api", "jsonParse", "Failed to parse  JSON  string :" + str,redirect)
           else
             PelApi.lagger.error("Failed to parse  JSON  string   : " + str)
           return undefined;

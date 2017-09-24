@@ -18,6 +18,8 @@
       </div>
       <div class="item item-body">
         <strong>אופס .. משהו השתבש </strong> תוכלו לנסות שוב לבצע את הפעולה ואם היא שוב מתרחשת נשמח אם תסייעו לנו לשפר את האפליקציה
+        <p style="color:red" ng-show="stateParams.error.category=='api-400'">המערכת לא הצליחה לזהות אותך כעובד פלאפון</p>
+
         <div class="row">
           <div class="col col-100">
             <button class="button  button-full item-icon-right" ng-click="sendMail()">שלחו לנו דו"ח לתיחקור
