@@ -73,7 +73,7 @@
           <ion-scroll class="pele_rtl text-right" style="height:80%" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
             <ul class="list">
-              <li class="item no-border">
+              <li class="item item-info no-border">
                 <div class="item item-divider item-icon-right">
                   <i class="icon ion-clipboard"></i>
                   <h2 class="text-right pele_rtl">פרטי המשימה</h2>
@@ -159,10 +159,10 @@
                 <div class="item-section">
                   <table class="pele_rtl attachments-table text-right">
                     <tbody>
-                      <tr  class="pele_rtl" ng-repeat="file in docDetails.attachments | filter:{ DISPLAY: 'Y' }">
-                        <td class="num_index"> {{$index+1}} . </td> 
+                      <tr class="pele_rtl" ng-repeat="file in docDetails.attachments | filter:{ DISPLAY: 'Y' }">
+                        <td class="num_index"> {{$index+1}} . </td>
                         <td class="info pele_ltr">
-                            <span ng-click="openAttachment(file)" ng-class="'show_content_'+file.SHOW_CONTENT"> {{file.DISPLAY_NAME}}</span>
+                          <span ng-click="openAttachment(file)" ng-class="'show_content_'+file.SHOW_CONTENT"> {{file.DISPLAY_NAME}}</span>
                         </td>
                       </tr>
                     </tbody>

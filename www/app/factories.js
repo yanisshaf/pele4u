@@ -1,9 +1,9 @@
 angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova', 'pele.messages'])
-  .factory('PelApi', function($cordovaNetwork, $ionicActionSheet, $http, $rootScope, appSettings, $state, $ionicLoading, $filter, $ionicPopup, $timeout, $fileLogger, $sessionStorage, $localStorage, $cordovaFile, messages) {
+  .factory('PelApi', function($cordovaFileTransfer, $cordovaNetwork, $ionicActionSheet, $http, $rootScope, appSettings, $state, $ionicLoading, $filter, $ionicPopup, $timeout, $fileLogger, $sessionStorage, $localStorage, $cordovaFile, messages) {
     return {
 
       init: function() {
-        this.network =  {};
+        this.network = {};
         this.messages = messages;
         this.appSettings = appSettings;
         this.topconfig = appSettings.apiConfig;
@@ -15,7 +15,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
       cordovaInit: function() {
         //file in device file system
-        var self = this ;
+        var self = this;
         this.isAndroid = ionic.Platform.isAndroid();
         this.isIOS = ionic.Platform.isIOS();
         appSettings.config.network = $cordovaNetwork.getNetwork();
@@ -26,7 +26,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         $rootScope.$on('$cordovaNetwork:online', function(event, networkState) {
           appSettings.config.isOnline = true;
           appSettings.config.network = $cordovaNetwork.getNetwork();
-          self.network ={ isOnline : true ,network : $cordovaNetwork.getNetwork() };
+          self.network = {
+            isOnline: true,
+            network: $cordovaNetwork.getNetwork()
+          };
           if (appSettings.env == "DV") {
             var alertPopup = $ionicPopup.alert({
               title: 'Network Changed',
@@ -34,21 +37,24 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             });
           }
 
-          $scope.$apply();
+          $rootScope.$apply();
         })
 
         // listen for Offline event
         $rootScope.$on('$cordovaNetwork:offline', function(event, networkState) {
           appSettings.config.isOnline = false;
           appSettings.config.network = $cordovaNetwork.getNetwork();
-          self.network ={ isOnline : false ,network : $cordovaNetwork.getNetwork() };
+          self.network = {
+            isOnline: false,
+            network: $cordovaNetwork.getNetwork()
+          };
           if (appSettings.env == "DV") {
             var alertPopup = $ionicPopup.alert({
               title: 'Network Changed',
               template: 'network - DEV only : ' + appSettings.config.network
             });
           }
-          $scope.$apply();
+          $rootScope.$apply();
         })
 
         this.lagger = $fileLogger;
@@ -74,7 +80,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
           var oneSignalConf = appSettings.apiConfig.OneSignal[appSettings.apiConfig.env] || "notfound";
           if (oneSignalConf === "notfound") {
-            self.throwError("client", "registerPushNotification", "Onesignal conf not found !",false);
+            self.throwError("client", "registerPushNotification", "Onesignal conf not found !", false);
           }
 
           self.lagger.info('Open Notification Event');
@@ -450,44 +456,46 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
       },
 
-      throwError: function(category, from, errorString,redirectInd) {
-        var self = this ;
-        var redirect  = redirectInd || true ;
+      throwError: function(category, from, errorString, redirectInd) {
+        var self = this;
+        var redirect = redirectInd || true;
         if (category.match(/api|eai|app/i)) {
           errorString = "API request " + from + " endedd with failure : " + errorString;
         }
 
-        var lastError =  {
-            state:$state.current.name,
-            created: new Date(),
-            network: self.network,
-            category:category,
-            from:from,
-            description:errorString,
-            redirect:redirect
-          } ;
+        var lastError = {
+          state: $state.current.name,
+          created: new Date(),
+          network: self.network,
+          category: category,
+          from: from,
+          description: errorString,
+          redirect: redirect
+        };
 
-        var errStr = "" ;
+        var errStr = "";
         Object.keys(lastError).forEach(function(k) {
-            errStr += k + ":" + lastError[k] +"\n\r";
+          errStr += k + ":" + lastError[k] + "\n\r";
         })
 
         if (typeof $localStorage.appErrors === "undefined") {
           $localStorage.appErrors = []
         }
-        var errorsArr  = $localStorage.appErrors ;
+        var errorsArr = $localStorage.appErrors;
 
         errorsArr.push(lastError);
 
-        $localStorage.appErrors =   _.slice(errorsArr,Math.max(errorsArr.length - 10, 0))
+        $localStorage.appErrors = _.slice(errorsArr, Math.max(errorsArr.length - 10, 0))
         self.lagger.error(errStr);
 
         var message = errorString;
         if (category.match(/api|eai|app/i)) {
           message = "API request " + from + " endedd with failure : " + errorString;
         }
-          if(redirect) {
-          $state.go("app.error", { error: lastError })
+        if (redirect) {
+          $state.go("app.error", {
+            error: lastError
+          })
         }
       },
 
@@ -1046,8 +1054,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         if (typeof jsVar == "undefined")
           return undefined;
         var subJsVar = _.get(jsVar, path);
-        if (typeof subJsVar == "undefined" && redirect) {
-          self.throwError("api", "getJsonString", "Failed to parse  JSON  string :" + string,redirect)
+        if (typeof subJsVar === "undefined" && redirect) {
+          subJsVar = {};
+          self.throwError("api", "getJsonString", "Failed to parse  JSON  string :" + string, redirect)
         }
         return subJsVar;
       },
@@ -1061,7 +1070,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           jsVar = JSON.parse(str);
         } catch (e) {
           if (redirect)
-            self.throwError("api", "jsonParse", "Failed to parse  JSON  string :" + str,redirect)
+            self.throwError("api", "jsonParse", "Failed to parse  JSON  string :" + str, redirect)
           else
             PelApi.lagger.error("Failed to parse  JSON  string   : " + str)
           return undefined;
@@ -1086,10 +1095,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
       },
 
-      getErrorsStack : function() {
-          return _.reverse(($localStorage.appErrors || []))
-      } ,
-        pinState: {
+      getErrorsStack: function() {
+        return _.reverse(($localStorage.appErrors || []))
+      },
+      pinState: {
         get: function() {
           if (typeof this.pinStateData !== "undefined") {
             return this.pinStateData;
@@ -1117,16 +1126,16 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         }
       },
 
-      openAttachment : function(file,appId) {
-        appId = appId || "123456" ;
-        var self = this ;
-        self.appSettings.config.ATTACHMENT_TIME_OUT =1000;
+      openAttachment: function(file, appId) {
+        appId = appId || "123456";
+        var self = this;
+        self.appSettings.config.ATTACHMENT_TIME_OUT = 1000;
 
-        var timeoutFunction =  function() {
-            $ionicLoading.hide();
-            $scope.$broadcast('scroll.refreshComplete');
-            PelApi.showPopup(self.appSettings.config.FILE_TIMEOUT, "");
-          } ;
+        var timeoutFunction = function() {
+          $ionicLoading.hide();
+          $rootScope.$broadcast('scroll.refreshComplete');
+          PelApi.showPopup(self.appSettings.config.FILE_TIMEOUT, "");
+        };
 
         if (file.SHOW_CONTENT !== 'Y') {
           self.showPopup(self.appSettings.config.ATTACHMENT_TYPE_NOT_SUPORTED_FOR_OPEN, "");
@@ -1141,9 +1150,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         getFilePromise.success(function(data) {
           var fileApiData = self.checkApiResponse(data);
 
-          if(typeof fileApiData.URI === "undefined" || !fileApiData.URI )  {
-              self.showPopup(self.appSettings.config.FILE_NOT_FOUND, "");
-              return false;
+          if (typeof fileApiData.URI === "undefined" || !fileApiData.URI) {
+            self.showPopup(self.appSettings.config.FILE_NOT_FOUND, "");
+            return false;
           }
 
           targetPath = self.getAttchDirectory() + '/' + file.TARGET_FILENAME;
@@ -1154,19 +1163,18 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           } else if (self.isIOS) {
             window.open(fileApiData.URI, "_system", "charset=utf-8,location=yes,enableViewportScale=yes,hidden=no");
           } else if (self.isAndroid) {
-            var filetimeout =  $timeout(timeoutFunction, appSettings.config.ATTACHMENT_TIME_OUT);
+            var filetimeout = $timeout(timeoutFunction, appSettings.config.ATTACHMENT_TIME_OUT);
             self.showLoading();
             $cordovaFileTransfer.download(fileApiData.URI, targetPath, {}, true)
               .then(
                 //success
                 function(result) {
-                $timeout.cancel(filetimeout);
-                if(!result.nativeURL)  {
-                  self.throwError("api", "cordovaFileTransfer.download", JSON.stringify(result),false);
-                }
-                 else {
-                   window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
-                 }
+                  $timeout.cancel(filetimeout);
+                  if (!result.nativeURL) {
+                    self.throwError("api", "cordovaFileTransfer.download", JSON.stringify(result), false);
+                  } else {
+                    window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
+                  }
                 },
                 //error
                 function(error) {
@@ -1189,6 +1197,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
       displayNotePopup: function(scope, btn) {
         var self = this;
+        if (typeof scope.actionNote === "undefined") {
+          self.showPopup("Missing scope.actionNote def ", "");
+        }
         var noteModal = $ionicPopup.show({
           template: '<div class="list pele-note-background pele_rtl">' +
             '<label class="item item-input"><textarea rows="8" ng-model="actionNote.text" type="text">{{actionNote.text}}</textarea></label>' +

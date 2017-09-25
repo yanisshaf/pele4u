@@ -27,11 +27,7 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
   $scope.onBtnAction = function() {
     btnClass.activ = !btnClass.activ;
   };
-  //-----------------------------------------------------------
-  //-- When        Who       Description
-  //-- ----------  --------  -----------------------------------
-  //-- 06/10/2016  R.W.
-  //-----------------------------------------------------------
+
   $scope.insertOnTouchFlag = function(arr) {
     var myArr = [];
     for (var i = 0; i < arr.length; i++) {
@@ -155,8 +151,8 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
         PelApi.showPopupVersionUpdate(data.StatusDesc, "");
       }
     }).error(
-      function(errorStr,httpStatus) {
-        PelApi.throwError("api-400", "GetUserMenu", "httpStatus : "+ httpStatus)
+      function(errorStr, httpStatus) {
+        PelApi.throwError("api-400", "GetUserMenu", "httpStatus : " + httpStatus)
         //PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
       }
     ).finally(function() {

@@ -38,7 +38,7 @@ angular.module('pele')
 
           if (data.Response.OutParams.ROW[0].DOC_NAME === null) {
             //$state.go("app.p1_appsLists");
-            //appSettings.config.IS_TOKEN_VALID = "N";
+            appSettings.config.IS_TOKEN_VALID = "N";
             PelApi.goHome();
           } else {
             $scope.docsGroups = data.Response.OutParams.ROW;
@@ -70,8 +70,8 @@ angular.module('pele')
         } else if ("ERROR_CODE" === pinStatus) {
           PelApi.throwError("app", "GetUserFormGroups", JSON.stringify(data));
         }
-      }).error(function(error,httpStatus) {
-        PelApi.throwError("api", "GetUserFormGroups", "httpStatus : "+httpStatus)
+      }).error(function(error, httpStatus) {
+        PelApi.throwError("api", "GetUserFormGroups", "httpStatus : " + httpStatus)
       }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');

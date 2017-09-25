@@ -33,24 +33,26 @@ angular.module('pele')
       var links = PelApi.getDocApproveServiceUrl("GtUserFormGroups");
 
       var retGetUserFormGroups = PelApi.GetUserFormGroups(links, $scope.appId, $scope.formType, $state.pin);
-
+      var srvData = {};
       retGetUserFormGroups.success(function(data) {
+
           var apiData = PelApi.checkApiResponse(data);
 
           var result = apiData.ROW || [];
-
+          //Cursor if empty
           if (result.length && result[0].DOC_NAME === null) {
-            PelApi.throwError("app", "GetUserNotifNew", "maof retreived : DOC_NAME is NULL : " + JSON.stringify(data))
+            PelApi.appSettings.config.IS_TOKEN_VALID = 'N'
+            PelApi.goHome();
           }
           $scope.docsGroups = $scope.parse(result);
           if ($scope.docsGroups.length) {
             $scope.title = $scope.docsGroups[0].DOC_TYPE;
           }
         })
-        .error(function(error,httpStatus) {
-          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : "+httpStatus)
+        .error(function(error, httpStatus) {
+          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus)
         })
-        .finally(function() {
+        .finally(function(skip) {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
         });
@@ -58,7 +60,7 @@ angular.module('pele')
     };
 
 
-    $scope.forwardToDoc = function(docId, docInitId) {
+    $scope.forwardToDoc = function(docId, docInitId, notificationId) {
 
       var statePath = 'app.tsk_details';
 
@@ -66,12 +68,12 @@ angular.module('pele')
         formType: $scope.formType,
         appId: $scope.appId,
         docId: docId,
-        docInitId: docInitId
+        docInitId: notificationId
       });
     }
 
     $scope.feed = [];
-    $scope.searchText ="";
+    $scope.searchText = "";
     $scope.doRefresh();
 
   });

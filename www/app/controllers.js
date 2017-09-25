@@ -1,6 +1,11 @@
 angular.module('pele.controllers', ['ngStorage'])
 
   .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory) {
+    $rootScope.stopLoading = function() {
+      PelApi.hideLoading()
+    }
+
+
     $scope.clearLogFile = function() {
       PelApi.lagger.deleteLogfile().then(function() {
         PelApi.lagger.info('Logfile deleted - start new log');
@@ -114,7 +119,16 @@ angular.module('pele.controllers', ['ngStorage'])
   //========================================================================
   //--                       AppProfileCtrl
   //========================================================================
-  .controller('AppProfileCtrl', ['$scope', '$fileLogger', '$timeout', 'PelApi', 'appSettings', function($scope, $fileLogger, $timeout, PelApi, appSettings) {
+  .controller('AppProfileCtrl', ['$scope', '$state', '$fileLogger', '$timeout', 'PelApi', 'appSettings', function($scope, $state, $fileLogger, $timeout, PelApi, appSettings) {
+    $scope.devCounter = 0;
+    $scope.showDev = function() {
+      $scope.devCounter++
+
+        $timeout(function() {
+          $scope.devCounter = 0;
+        }, 2000)
+      if ($scope.devCounter >= 3) $state.go("app.dev")
+    }
 
     $scope.APP_VERSION = appSettings.config.APP_VERSION;
     if ("PD" !== appSettings.env) {
