@@ -5,9 +5,14 @@ var app = angular.module('pele.P1_appsListCtrl', ['ngStorage']);
 //=====================================================================//
 //==                         PAGE_1                                  ==//
 //=====================================================================//
-app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading, PelApi, $cordovaNetwork, $rootScope, $ionicPopup, $ionicHistory, $sessionStorage, $localStorage, appSettings, $cordovaFile, srvShareData, $cordovaFileTransfer) {
+app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading, PelApi, $rootScope, $ionicPopup, $ionicHistory, $sessionStorage, $localStorage, appSettings, srvShareData) {
 
   $ionicHistory.clearHistory();
+
+  var ddd = PelApi.lagger.checkFile().then(function(logStat) {
+    console.log(logStat)
+  })
+
 
   //=======================================================//
   //== When        Who         Description               ==//

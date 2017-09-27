@@ -1,5 +1,16 @@
 angular.module('pele.states', [])
   .constant('appStates', [{
+    state: "app.dev",
+    url: '/dev',
+    views: {
+      'menuContent@app': {
+        templateUrl: function() {
+          return 'app/apps/dev/devmenu.html';
+        },
+        controller: 'AppCtrl',
+      }
+    }
+  }, {
     state: "app.dev.log",
     url: '/log',
     views: {
@@ -11,7 +22,7 @@ angular.module('pele.states', [])
       }
     },
     src: ["app/apps/dev/devCtrl.js"]
-  },{
+  }, {
     state: "app.dev.errors",
     url: '/errors',
     views: {
@@ -23,7 +34,7 @@ angular.module('pele.states', [])
       }
     },
     src: ["app/apps/dev/devCtrl.js"]
-  },{
+  }, {
     state: "app.dev.attach",
     url: '/attach',
     views: {

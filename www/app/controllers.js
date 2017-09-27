@@ -1,8 +1,21 @@
 angular.module('pele.controllers', ['ngStorage'])
-
   .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory) {
     $rootScope.stopLoading = function() {
       PelApi.hideLoading()
+    }
+
+
+    $scope.appDebug = PelApi.appSettings.debug;
+    $scope.setDebug = function(flag) {
+      if (flag === false) {
+        PelApi.appSettings.debug = flag;
+        PelApi.lagger.info = function() {};
+        PelApi.lagger.error = function() {};
+        PelApi.lagger.warn = function() {};
+      } else {
+        PelApi.lagger = PelApi.$fileLogger;
+      }
+      $scope.appDebug = flag;
     }
 
 
@@ -14,6 +27,16 @@ angular.module('pele.controllers', ['ngStorage'])
           $scope.checkClear = false;
         }, 1000)
       });
+    }
+
+    $scope.clearStorage = function() {
+
+      PelApi.localStorage.$reset();
+      PelApi.sessionStorage.$reset();
+      $scope.storageCheckClear = true;
+      $timeout(function() {
+        $scope.storageCheckClear = false;
+      }, 1000)
     }
 
     $scope.displayErrors = function() {

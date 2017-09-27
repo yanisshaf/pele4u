@@ -17,7 +17,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
 
   .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings',
     function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings) {
-
+      PelApi.init();
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         PelApi.lagger.error('State Resolve on ' + toState.name + ' -> Error: ', error);
 
@@ -31,7 +31,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
 
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {});
 
-      PelApi.init();
+
 
       $ionicPlatform.ready(function() {
         //----------------------------------------
@@ -64,9 +64,9 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
     }
   ])
   .config(function($stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
-
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
+    $ionicConfigProvider.navBar.alignTitle('center');
 
     $stateProvider
       .state('app', {
@@ -74,14 +74,6 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         abstract: true,
         templateUrl: 'templates/menu.html',
         controller: 'AppCtrl'
-      }).state('app.dev', {
-        url: '/dev',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/devmenu.html',
-            controller: 'AppCtrl'
-          }
-        }
       })
       //---------------------------------------------------------------------------//
       //--                           MENU                                        --//
@@ -186,7 +178,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       .state('app.error', {
         url: '/error',
         params: {
-          error:{}
+          error: {}
         },
         views: {
           'menuContent': {
@@ -203,6 +195,8 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         views: state.views,
         resolve: {
           deps: ['$ocLazyLoad', function($ocLazyLoad) {
+            if (!state.src)
+              return true;
             return $ocLazyLoad.load({
               name: state.state,
               files: state.src
@@ -218,15 +212,16 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       'showLoading': 'Y'
     });
   })
-  .factory('httpRequestInterceptor', function($q,$injector,$rootScope) {
+  .factory('httpRequestInterceptor', function($q, $injector, $rootScope) {
     return {
       request: function(config) {
         config.headers = config.headers || {};
         if (config.url.match(/^http/)) {
           var PelApi = $injector.get('PelApi');
-          PelApi.lagger.info(config.method + " API request : " + config.url)
-          PelApi.lagger.info("    -> headers : ", config.headers)
-          PelApi.lagger.info("    -> data : ", config.data)
+          PelApi.lagger.info("---------------------------------------------")
+          PelApi.lagger.info("-> " + config.method + " API request : " + config.url)
+          PelApi.lagger.info("  headers : ", config.headers)
+          PelApi.lagger.info("  data : ", config.data)
         }
         return config;
       },
@@ -234,8 +229,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         if (response.config.url.match(/^http/)) {
           var PelApi = $injector.get('PelApi');
           PelApi.hideLoading();
-          PelApi.lagger.info("API response  status : ", response.status)
-          PelApi.lagger.info("   -> response data : ", response.data)
+          PelApi.lagger.info("<-Response ( status:" + response.status + ") :", response.data)
         }
         return response;
       }

@@ -92,7 +92,6 @@ angular.module('pele')
     $scope.onClick = function(formType, docQty) {
       if (0 < docQty) {
 
-
         var params = {
           AppId: appSettings.config.appId,
           FormType: formType,
@@ -100,14 +99,9 @@ angular.module('pele')
         };
 
         var path = appSettings.MODULE_TYPES_FORWARD_PATH[formType] || "app.error";
-
         if (path === "app.error") {
-          params = {
-            category: "client",
-            description: "Failed to locate MODULE_TYPES_FORWARD_PATH for FormType : " + formType
-          }
+          PelApi.throwError("client", "MODULE_TYPES_FORWARD_PATH", "Failed to locate MODULE_TYPES_FORWARD_PATH for FormType : " + formType);
         }
-
         $state.go(path, params);
       }
     };
@@ -228,9 +222,9 @@ angular.module('pele')
         }
 
       }).error(
-        function(error,httpStatus) {
-          PelApi.throwError("api", "GetUserModuleTypes", "httpStatus : "+httpStatus)
-          }).finally(function() {
+        function(error, httpStatus) {
+          PelApi.throwError("api", "GetUserModuleTypes", "httpStatus : " + httpStatus)
+        }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
       });
@@ -238,7 +232,7 @@ angular.module('pele')
     //======= dats section ====//
     $scope.category_sources = [];
     $scope.btn_class = {};
-    $scope.btn_class.on_release = true
+    $scope.btn_class.on_release = true;
     $scope.doRefresh();
 
   })

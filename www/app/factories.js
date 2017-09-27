@@ -10,8 +10,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         this.env = appSettings.env;
         //file "located" in Borwser localStorage
         this.lagger = $fileLogger;
-        //this.lagger = { info :function(){},error:function(){}};
+        this.$fileLogger = $fileLogger;
 
+        this.sessionStorage = $sessionStorage;
+        this.localStorage = $localStorage;
+
+        //this.lagger = { info :function(){},error:function(){}};
       },
       cordovaInit: function() {
         //file in device file system
@@ -61,6 +65,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
         $fileLogger.setStorageFilename(appSettings.config.LOG_FILE_NAME)
         this.lagger.deleteLogfile().then(function() {
+          $fileLogger.setStorageFilename(appSettings.config.LOG_FILE_NAME)
           this.lagger.info('Flush log ->  start new log');
         });
         this.registerPushNotification();
@@ -560,6 +565,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         } else if ("ERROR_CODE" === pinStatus) {
           self.throwError("app", "checkApiResponse", apiStat.description)
         }
+        apiStat.error = true;
         return apiStat;
       },
       //-----------------------------------------------------------------------------//

@@ -5,21 +5,16 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('tskDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicActionSheet', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup',
-    function($scope, $stateParams, $ionicLoading, $ionicActionSheet, $ionicModal, PelApi, $ionicHistory, $ionicPopup) {
-
-      $scope.actionNote = {
-        text: ""
-      };
+  .controller('iniDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaFileTransfer',
+    function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaFileTransfer) {
+      $scope.actionNote = {};
       $scope.params = $stateParams;
-      $scope.title = "אישור משימה " + $stateParams.docInitId
+      $scope.title = "אישור ייזום " + $stateParams.docInitId
       //    $scope.tabs = appSettings.tabs;
       $scope.tabs = [{
         "text": "סבב מאשרים"
       }, {
-        "text": "תיאור משימה"
-      }, {
-        "text": "תוכן משימה"
+        "text": "תוכן הייזום"
       }];
 
       $scope.notifLinks = PelApi.getDocApproveServiceUrl("SubmitNotif");
@@ -29,17 +24,21 @@ angular.module('pele')
         PelApi.showLoading({
           noBackdrop: true
         });
+
+        PelApi.deleteAttachDirecoty();
+
         var links = PelApi.getDocApproveServiceUrl("GetUserNotifNew");
         var retGetUserNotifications = PelApi.GetUserNotifications(links, $stateParams.appId, $stateParams.docId, $stateParams.docInitId);
         retGetUserNotifications.success(function(data) {
           var apiData = PelApi.checkApiResponse(data);
-          PelApi.lagger.info("PelApi.GetUserNotifications : ");
+          if (apiData.error) return false;
           $scope.docDetails = PelApi.getJsonString(apiData.Result, "JSON[0]", true);
-          PelApi.lagger.info("$scope.docDetails : ", JSON.stringify($scope.docDetails))
+          $scope.docDetails.attachments = $scope.docDetails.ATTACHMENT_FILES || [];
           $scope.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
-        }).error(function(error,httpStatus) {
-            PelApi.throwError("api", "GetUserNotifNew", "httpStatus : "+httpStatus)
+          PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
+        }).error(function(error, httpStatus) {
+          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus)
         }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
@@ -56,6 +55,11 @@ angular.module('pele')
         $scope.Note = u.Note;
         $scope.modal.hide();
       };
+
+
+      $scope.openAttachment = function(file) {
+        PelApi.openAttachment(file, $scope.params.appId);
+      }
 
 
       $scope.toggle = function(element) {
@@ -106,7 +110,6 @@ angular.module('pele')
             action.left_icon = 'ion-chevron-left';
             action.right_icon = 'ion-checkmark-circled'
           }
-
           if (action.ACTION_CODE === "NO_ACTION") {
             action.left_icon = 'ion-chevron-left';
             action.right_icon = 'ion-minus-circled';
@@ -126,7 +129,7 @@ angular.module('pele')
 
       $scope.updateDoc = function(btn) {
         if (btn.note) {
-          $scope.displayNotePopup(btn)
+          PelApi.displayNotePopup($scope, btn)
         } else {
           $scope.submitUpdateInfo(btn, $scope.actionNote.text);
         }
@@ -137,68 +140,22 @@ angular.module('pele')
         PelApi.SubmitNotification($scope.notifLinks, $scope.params.appId, $scope.docDetails.NOTIFICATION_ID, note, btn.action)
           .success(function(data) {
             var apiData = PelApi.checkApiResponse(data);
-            PelApi.lagger.info(JSON.stringify(apiData));
+            $ionicHistory.goBack();
           }).error(
-            function(response) {
-              PelApi.lagger.error("SubmitNotif : " + JSON.stringify(response));
+            function(error, httpStatus) {
+              PelApi.throwError("api", "SubmitNotif", "httpStatus : " + httpStatus)
             }).finally(function() {
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
-            $ionicHistory.goBack();
           });
       };
 
-      $scope.displayNotePopup = function(btn) {
-        var noteModal = $ionicPopup.show({
-          template: '<div class="list pele-note-background pele_rtl">' +
-            '<label class="item item-input"><textarea rows="8" ng-model="actionNote.text" type="text">{{actionNote.text}}</textarea></label>' +
-            '</div>',
-          title: '<strong class="float-right">הערות</strong>',
-          subTitle: '',
-          scope: $scope,
-          buttons: [{
-              text: '<a class="pele-popup-positive-text-collot">המשך</a>',
-              type: 'button-positive',
-              onTap: function(e) {
-                if (!$scope.actionNote.text) {
-                  e.preventDefault();
-                  PelApi.showPopup("יש להזין הערה", "");
-                } else {
-                  return $scope.actionNote.text;
-                }
-              }
-            },
-            {
-              text: 'ביטול',
-              type: 'button-assertive',
-              onTap: function(e) {
-                return $scope.actionNote.text;
-              }
-            },
-          ]
-        });
-        noteModal.then(function(res) {
-          $scope.actionNote.text = res;
-          if (btn)
-            $scope.submitUpdateInfo(btn, res);
-        });
+      $scope.displayNotePopup = function() {
+        PelApi.displayNotePopup($scope);
       }
 
       $scope.showBtnActions = function() {
-        var buttons = PelApi.getButtons($scope.buttonsArr);
-
-        var hideSheet = $ionicActionSheet.show({
-          buttons: buttons,
-          titleText: 'רשימת פעולות עבור טופס',
-          cancelText: 'ביטול',
-          cancel: function() {
-            return true;
-          },
-          buttonClicked: function(index, button) {
-            $scope.updateDoc(buttons[index]);
-            return true;
-          },
-        });
+        PelApi.showBtnActions($scope, $scope.buttonsArr);
       }
 
       $scope.getData();

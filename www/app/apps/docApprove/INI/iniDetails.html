@@ -51,21 +51,7 @@
 
           </ion-scroll>
         </ion-slide>
-        <ion-slide>
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
-            <ul class="list">
-              <li class="item item-info no-border">
-                <div class="item item-divider item-icon-left item-icon-right">
-                  <h2 class="text-right pele_rtl">תיאור משימה</h2>
-                  <i class="icon ion-clipboard"></i>
-                </div>
-                <div class="item-section pele_rtl item-text-wrap text-right">
-                  {{docDetails.TASK_DESCRIPTION}}
-                </div>
-              </li>
-            </ul>
-          </ion-scroll>
-        </ion-slide>
+
         <!------------------------------------------------------------------------------->
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
@@ -73,93 +59,77 @@
           <ion-scroll class="pele_rtl text-right" style="height:80%" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
             <ul class="list">
-              <li class="item no-border">
-                <div class="item item-divider item-icon-right">
+              <li class="item item-info no-border">
+                <div class="item item-divider item-icon-left item-icon-right">
+                  <h2 class="text-right pele_rtl">תיאור ייזום</h2>
                   <i class="icon ion-clipboard"></i>
-                  <h2 class="text-right pele_rtl">פרטי המשימה</h2>
                 </div>
-                <div class="item-section">
+                <div class="item-section pele_rtl item-text-wrap text-right">
+                  {{docDetails.INIT_DESCRIPTION}}
+                </div>
+              </li>
+              <li class="item item-info no-border">
+                <div class="item item-divider item-icon-right item-icon-left" ng-init="info_elm=true" ng-click="info_elm=!info_elm">
+                  <i class="icon" ng-class="info_elm ? 'ion-chevron-down' :'ion-chevron-left'"></i>
+                  <i class="icon ion-clipboard"></i>
+                  <h2 class="text-right pele_rtl">פרטי ייזום</h2>
+                </div>
+                <div class="item-section" ng-show="info_elm">
                   <table class="pele_rtl text-right">
                     <tbody>
                       <tr>
-                        <td class="label">שם: </td>
-                        <td class="info"> {{docDetails.BAN_NAME}}</td>
-                      </tr>
-                      <tr>
-                        <td class="label">מספר לקוח: </td>
-                        <td class="info"> {{docDetails.BAN}}</td>
-                      </tr>
-                      <tr>
-                        <td class="label">נושא משימה: </td>
-                        <td class="info"> {{docDetails.TASK_TYPE}}</td>
-                      </tr>
-                      <tr>
-                        <td class="label">תת נושא: </td>
-                        <td class="info"> {{docDetails.SUB_TASK_TYPE}}</td>
+                        <td class="label">שם מסמך: </td>
+                        <td class="info"> {{docDetails.DOC_NAME}}</td>
                       </tr>
                       <tr>
                         <td class="label">תאריך יצירה: </td>
-                        <td class="info pele_rtl"> {{docDetails.CREATION_DATE| date:'dd-MM-yyyy HH:mm'}}</td>
+                        <td class="info"> {{docDetails.CREATION_DATE|date:'dd-MM-yyyy HH:mm'}}</td>
                       </tr>
                       <tr>
-                        <td class="label">האם משימה חוזרת: </td>
-                        <td class="info"> {{docDetails.RETURN_TASK}}</td>
+                        <td class="label">יוזם: </td>
+                        <td class="info"> {{docDetails.PREPARER_NAME}}</td>
                       </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </li>
-              <li class="item item-info no-border" ng-init="toggleInit('sys_data',true)">
-                <div class="item item-divider item-icon-left item-icon-right">
-
-                  <i class="icon" ng-class="sys_data.icon" ng-click="toggle(sys_data)"></i>
-                  <h2 class="text-right pele_rtl">נתוני מערכת</h2>
-                  <i class="icon ion-clipboard"></i>
-                </div>
-                <div class="item-section" ng-show="sys_data.display">
-                  <table class="pele_rtl text-right">
-                    <tbody>
-                      <tr class="pele_rtl" ng-repeat="item in docDetails.SYSTEM_INFORMATION">
-                        <td class="label">{{item.PROMPT}}: </td>
-                        <td class="info"> {{item.VALUE}}</td>
+                      <tr>
+                        <td class="label">הצדקת ייזום: </td>
+                        <td class="info"> {{docDetails.SUB_TASK_TYPE}}</td>
+                      </tr>
+                      <tr>
+                        <td class="label">ספק מומלץ: </td>
+                        <td class="info"> {{docDetails.VENDOR_NAME}}</td>
+                      </tr>
+                      <tr>
+                        <td class="label">נדרש חוזה תחזוקה: </td>
+                        <td class="info pele_rtl"> {{docDetails.IS_CONTRACT_REQUIRED}}</td>
+                      </tr>
+                      <tr>
+                        <td class="label">קיום הצעת מחיר: </td>
+                        <td class="info"> {{docDetails.IS_EXISTS_QUOTATION}}</td>
+                      </tr>
+                      <tr>
+                        <td class="label">סכום משוער: </td>
+                        <td class="info"> {{docDetails.AMOUNT}} {{docDetails.CURRENCY_CODE}}</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </li>
               <li class="item item-info no-border">
-                <div class="item item-divider item-icon-right item-icon-left" ng-init="toggleInit('extra_elm')">
-                  <i class="icon" ng-class="extra_elm.icon" ng-click="toggle(extra_elm)"></i>
-                  <h2 class="text-right pele_rtl">נתונים נוספים</h2>
-                  <i class="icon ion-clipboard"></i>
+                <div class="item item-divider item-icon-right item-icon-left" ng-init="attach_elm=true" ng-click="attach_elm=!attach_elm">
+                  <i class="icon" ng-class="attach_elm ? 'ion-chevron-down' :'ion-chevron-left'"></i>
+                  <h2 class="text-right pele_rtl">נספחי ייזום</h2>
+                  <i class="icon ion-paperclip"></i>
                 </div>
-                <div class="item-section" ng-show="extra_elm.display">
-                  <table class="pele_rtl text-right">
+                <div class="item-section" ng-show="attach_elm">
+                  <table class="pele_rtl attachments-table text-right">
                     <tbody>
-                      <tr class="pele_rtl" ng-repeat="item in docDetails.EXTRA_INFORMATION">
-                        <td class="label">{{item.PROMPT}}: </td>
-                        <td class="info"> {{item.VALUE}}</td>
+                      <tr class="pele_rtl" ng-repeat="file in docDetails.attachments | filter:{ DISPLAY: 'Y' }">
+                        <td class="num_index"> {{$index+1}} . </td>
+                        <td class="info pele_ltr">
+                          <span ng-click="openAttachment(file)" ng-class="'show_content_'+file.SHOW_CONTENT"> {{file.DISPLAY_NAME}}</span>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
-                </div>
-              </li>
-              <!--li class="item item-info no-border">
-                <div class="item item-divider item-icon-right item-icon-left" ng-init="toggleInit('desc_elm')">
-                  <i class="icon" ng-class="desc_elm.icon" ng-click="toggle(desc_elm)"></i>
-                  <i class="icon ion-clipboard"></i>
-                  <h2 class="text-right pele_rtl">תיאור</h2>
-                </div>
-              </li-->
-              <li class="item item-info no-border">
-                <div class="item item-divider item-icon-right">
-                  <i class="icon ion-clipboard"></i>
-                  <h2 class="text-right pele_rtl">נספחי משימה</h2>
-                </div>
-                <div class="item-section pele_rtl">
-                  <div class="pele_rtl" ng-repeat="file in docDetails.attachments">
-                    <span>{{file.name}}</span>
-                  </div>
                 </div>
               </li>
             </ul>
