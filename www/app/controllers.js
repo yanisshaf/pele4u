@@ -9,6 +9,7 @@ angular.module('pele.controllers', ['ngStorage'])
     $scope.setDebug = function(flag) {
       if (flag === false) {
         PelApi.appSettings.debug = flag;
+        PelApi.lagger = {};
         PelApi.lagger.info = function() {};
         PelApi.lagger.error = function() {};
         PelApi.lagger.warn = function() {};
@@ -21,7 +22,7 @@ angular.module('pele.controllers', ['ngStorage'])
 
     $scope.clearLogFile = function() {
       PelApi.lagger.deleteLogfile().then(function() {
-        PelApi.lagger.info('Logfile deleted - start new log');
+        PelApi.$fileLogger.info('Logfile deleted - start new log');
         $scope.checkClear = true;
         $timeout(function() {
           $scope.checkClear = false;
@@ -36,7 +37,7 @@ angular.module('pele.controllers', ['ngStorage'])
       $scope.storageCheckClear = true;
       $timeout(function() {
         $scope.storageCheckClear = false;
-      }, 1000)
+      }, 60000)
     }
 
     $scope.displayErrors = function() {

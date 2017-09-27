@@ -597,7 +597,7 @@ img.spinner-svg {height:60px}
 .item.error-top  {background :#e95350}
 .item.error-top i.icon  { font-size:130px;color:#FFF}
 .item.error-bottom { background :#FFF}
-.card.error .button { border:1px solid #CCC}
+.card.error .button { border:1px solid #CCC;margin:0}
 .show_content_Y { color:blue;text-decoration:none;}
 .attach_file {line-height:25px}
 .alert { color:red}
@@ -610,3 +610,4 @@ img.spinner-svg {height:60px}
   text-overflow: ellipsis;
   margin-left:60px
 }
+.bar.app-top-bar { background-color: #0160a0 !important}

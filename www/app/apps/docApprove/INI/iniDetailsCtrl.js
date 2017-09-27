@@ -140,6 +140,7 @@ angular.module('pele')
         PelApi.SubmitNotification($scope.notifLinks, $scope.params.appId, $scope.docDetails.NOTIFICATION_ID, note, btn.action)
           .success(function(data) {
             var apiData = PelApi.checkApiResponse(data);
+            if (apiData.error) return false;
             $ionicHistory.goBack();
           }).error(
             function(error, httpStatus) {

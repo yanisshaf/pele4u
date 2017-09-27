@@ -22,10 +22,9 @@
     </div>
     <div ng-if="1" class="apps-front-menu">
       <div class="menu-item" ng-repeat="source in category_sources">
-        <button ng-click="onClick(source.MODULE_NAME ,source.DOCUMENT_QTY )" class="button button-large button-stable button-block">
+        <button ng-click="onClick(source.MODULE_NAME ,source.DOCUMENT_QTY )" class="button button-large button-stable button-block item-icon-right">
       {{source.MODULE_DESC}} <span class="pel-badge">{{source.DOCUMENT_QTY}}</span>
-
-    </button>
+      </button>
       </div>
     </div>
     <div ng-if="0" ng-repeat="source in category_sources" class="text-center apps-menu">

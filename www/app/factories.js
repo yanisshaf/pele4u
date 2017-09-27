@@ -9,8 +9,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         this.topconfig = appSettings.apiConfig;
         this.env = appSettings.env;
         //file "located" in Borwser localStorage
-        this.lagger = $fileLogger;
         this.$fileLogger = $fileLogger;
+        this.lagger = $fileLogger;
 
         this.sessionStorage = $sessionStorage;
         this.localStorage = $localStorage;
@@ -478,6 +478,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           redirect: redirect
         };
 
+        self.$fileLogger.error(lastError);
+
         var errStr = "";
         Object.keys(lastError).forEach(function(k) {
           errStr += k + ":" + lastError[k] + "\n\r";
@@ -523,7 +525,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         // Then we check EAI OutParams (Application error)
         var P_ERROR_CODE = _.get(data, "Response.OutParams.P_ERROR_CODE", "").toString();
         var P_ERROR_DESC = _.get(data, "Response.OutParams.P_ERROR_DESC");
-
+        var AppErrorCode = _.get(data, "Response.OutParams.ErrorCode", "").toString();
+        var AppErrorDesc = _.get(data, "Response.OutParams.ErrorDesc");
 
         if (P_ERROR_CODE && P_ERROR_CODE != "0") {
           return {
@@ -531,6 +534,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             description: P_ERROR_DESC
           }
         }
+
+        if (AppErrorCode && AppErrorCode != "0") {
+          return {
+            status: "APP_ERROR_CODE",
+            description: AppErrorDesc
+          }
+        }
+
         // then check specical return data from getMenu API
         if ("getMenu" === interface) {
           stat.status = data.Status;
@@ -564,7 +575,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           self.throwError("eai", "checkApiResponse", apiStat.description)
         } else if ("ERROR_CODE" === pinStatus) {
           self.throwError("app", "checkApiResponse", apiStat.description)
+        } else if ("APP_ERROR_CODE" === pinStatus) {
+          self.throwError("app", "checkApiResponse", apiStat.description)
         }
+
+
         apiStat.error = true;
         return apiStat;
       },
