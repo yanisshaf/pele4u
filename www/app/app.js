@@ -17,7 +17,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
 
   .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings',
     function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings) {
-
+      PelApi.init();
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         PelApi.lagger.error('State Resolve on ' + toState.name + ' -> Error: ', error);
 
@@ -31,7 +31,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
 
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {});
 
-      PelApi.init();
+
 
       $ionicPlatform.ready(function() {
         //----------------------------------------
@@ -64,9 +64,9 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
     }
   ])
   .config(function($stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
-
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
+    $ionicConfigProvider.navBar.alignTitle('center');
 
     $stateProvider
       .state('app', {
@@ -186,7 +186,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       .state('app.error', {
         url: '/error',
         params: {
-          error:{}
+          error: {}
         },
         views: {
           'menuContent': {
@@ -218,7 +218,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       'showLoading': 'Y'
     });
   })
-  .factory('httpRequestInterceptor', function($q,$injector,$rootScope) {
+  .factory('httpRequestInterceptor', function($q, $injector, $rootScope) {
     return {
       request: function(config) {
         config.headers = config.headers || {};

@@ -2,7 +2,9 @@
  * Created by User on 25/08/2016.
  */
 angular.module('pele')
-  .controller('tskListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
+  .controller('iniListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
+
+
     $scope.parse = function(data) {
       var mapped = [];
       data.forEach(function(item) {
@@ -25,7 +27,6 @@ angular.module('pele')
     //----------------------- REFRESH ------------------------//
     $scope.doRefresh = function() {
 
-
       PelApi.showLoading();
       $scope.appId = $stateParams.AppId;
       $scope.formType = $stateParams.FormType;
@@ -34,27 +35,26 @@ angular.module('pele')
       var links = PelApi.getDocApproveServiceUrl("GtUserFormGroups");
 
       var retGetUserFormGroups = PelApi.GetUserFormGroups(links, $scope.appId, $scope.formType, $state.pin);
-
+      var srvData = {};
       retGetUserFormGroups.success(function(data) {
-          var apiData = PelApi.checkApiResponse(data);
-          PelApi.lagger.info(JSON.stringify(apiData));
-          var result = apiData.ROW || [];
 
-          if (result.length && result[0].DOC_NAME === null)
-            $state.go("app.error", {
-              category: "help_us",
-              description: "maof retreived : DOC_NAME is NULL"
-            });
+          var apiData = PelApi.checkApiResponse(data);
+
+          var result = apiData.ROW || [];
+          //Cursor if empty
+          if (result.length && result[0].DOC_NAME === null) {
+            PelApi.appSettings.config.IS_TOKEN_VALID = 'N'
+            PelApi.goHome();
+          }
           $scope.docsGroups = $scope.parse(result);
           if ($scope.docsGroups.length) {
             $scope.title = $scope.docsGroups[0].DOC_TYPE;
           }
         })
-        .error(function(error) {
-          PelApi.lagger.error("GetUserNotifNew : " + JSON.stringify(error));
-          PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
+        .error(function(error, httpStatus) {
+          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus)
         })
-        .finally(function() {
+        .finally(function(skip) {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
         });
@@ -62,39 +62,7 @@ angular.module('pele')
     };
 
 
-
-    //----------------------------------------------------------
-    //-- Search bar JSON rebild
-    //----------------------------------------------------------
-    $scope.searchBarCreteria = function() {
-      var searchText = $scope.searchText.text;
-      if ($scope.searchText.text !== undefined && $scope.searchText.text !== "") {
-        list = $scope.docsGroups;
-        for (var i = 0; i < list.length; i++) {
-          var sCount = 0;
-          for (var j = 0; j < list[i].DOCUMENTS.DOCUMENTS_ROW.length; j++) {
-            var owner = list[i].DOCUMENTS.DOCUMENTS_ROW[j].MESSAGE;
-            var n = owner.indexOf(searchText);
-            if (-1 !== n) {
-              sCount++;
-            }
-          }
-          $scope.docsGroups[i].FORM_QTY = sCount;
-        }
-      } else {
-        for (var i = 0; i < list.length; i++) {
-          var sCount = list[i].DOCUMENTS.DOCUMENTS_ROW.length;
-          $scope.docsGroups[i].FORM_QTY = sCount;
-        }
-      }
-    };
-
-    //--------------------------------------------------------------
-    //-- When        Who         Description
-    //-- ----------  ----------  -----------------------------------
-    //-- 01/11/2015  R.W.        function forward to page by DOC_ID
-    //--------------------------------------------------------------
-    $scope.forwardToDoc = function(docId, docInitId) {
+    $scope.forwardToDoc = function(docId, docInitId, notificationId) {
 
       var statePath = 'app.tsk_details';
 
@@ -102,12 +70,12 @@ angular.module('pele')
         formType: $scope.formType,
         appId: $scope.appId,
         docId: docId,
-        docInitId: docInitId
+        docInitId: notificationId
       });
-    } // forwardToDoc
+    }
 
     $scope.feed = [];
-    $scope.searchText = {};
+    $scope.searchText = "";
     $scope.doRefresh();
 
   });

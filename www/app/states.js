@@ -11,7 +11,7 @@ angular.module('pele.states', [])
       }
     },
     src: ["app/apps/dev/devCtrl.js"]
-  },{
+  }, {
     state: "app.dev.errors",
     url: '/errors',
     views: {
@@ -23,7 +23,7 @@ angular.module('pele.states', [])
       }
     },
     src: ["app/apps/dev/devCtrl.js"]
-  },{
+  }, {
     state: "app.dev.attach",
     url: '/attach',
     views: {
