@@ -563,7 +563,7 @@ div#main-apps-menu div.row-bottom {margin-top:15px}
 /* fix ios 10 title  proble*/
 .platform-ios .nav-bar-title .bar .title {margin-top:0 !important}
 .docs-menu-head {font-weight:bolder}
-.docs-menu-item-title {font-size: 18px;}
+.docs-menu-item-title {font-size: 16px;font-weight:bolder}
 .docs-menu .item.docs-menu-details {padding:7px 11px}
 .docs-menu .item.docs-menu-details .icon {height:50%; top:25%}
 .pel-badge {
@@ -604,3 +604,9 @@ img.spinner-svg {height:60px}
 .attachments-table {width:100%}
 .attachments-table tr  { border-bottom: 1px solid #CCC ; line-height: 30px}
 .attachments-table tr td.num_index  { width:30px;}
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left:60px
+}
