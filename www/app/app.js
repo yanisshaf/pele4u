@@ -18,19 +18,42 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
   .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings',
     function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings) {
       PelApi.init();
-      $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-        PelApi.lagger.error('State Resolve on ' + toState.name + ' -> Error: ', error);
-
-      });
 
       $rootScope.$on('$stateChangeStart',
         function(event, toState, toParams, fromState, fromParams) {
-          PelApi.lagger.info("start StateChange ->  from :  " + fromState.name + " to: ", toState.name);
-          PelApi.lagger.info(" new State params :  ", toParams);
+
+          if (PelApi.global.get('debugFlag')) {
+            PelApi.lagger.info("start StateChange ->  from :  " + fromState.name + " to: ", toState.name);
+            PelApi.lagger.info(" new State params :  ", toParams);
+          } else {
+            PelApi.global.clear('lastStateChangeStart');
+            PelApi.global.clear('lastStateChangeError');
+            PelApi.global.clear('lastApiResponse');
+            PelApi.global.clear('lastApiRequestConfig');
+            PelApi.global.set('lastStateChangeStart', {
+              toState: toState,
+              toParams: toParams,
+              fromState: fromState,
+              fromParams: fromParams
+            }, false)
+          }
         });
 
-      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {});
+      $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+        if (PelApi.global.get('debugFlag')) {
+          PelApi.lagger.error('State Resolve on ' + toState.name + ' -> Error: ', error);
+        } else {
+          PelApi.global.set('lastStateChangeError', {
+            toState: toState,
+            toParams: toParams,
+            fromState: fromState,
+            fromParams: fromParams
+          }, false)
+        }
+      });
 
+
+      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {});
 
 
       $ionicPlatform.ready(function() {
@@ -213,15 +236,29 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
     });
   })
   .factory('httpRequestInterceptor', function($q, $injector, $rootScope) {
+    var retries = 0,
+      waitBetweenErrors = 0,
+      maxRetries = 2;
+
+    function onResponseError(httpConfig) {
+      var $http = $injector.get('$http');
+      return $http(httpConfig);
+    }
+
     return {
       request: function(config) {
         config.headers = config.headers || {};
         if (config.url.match(/^http/)) {
           var PelApi = $injector.get('PelApi');
-          PelApi.lagger.info("---------------------------------------------")
-          PelApi.lagger.info("-> " + config.method + " API request : " + config.url)
-          PelApi.lagger.info("  headers : ", config.headers)
-          PelApi.lagger.info("  data : ", config.data)
+          if (PelApi.global.get('debugFlag')) {
+            PelApi.lagger.info("---------------------------------------------")
+            PelApi.lagger.info("-> " + config.method + " API request : " + config.url)
+            PelApi.lagger.info("  headers : ", config.headers)
+            PelApi.lagger.info("  data : ", config.data)
+          } else {
+            PelApi.global.set('lastApiRequestConfig', config, false)
+          }
+
         }
         return config;
       },
@@ -229,15 +266,26 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         if (response.config.url.match(/^http/)) {
           var PelApi = $injector.get('PelApi');
           PelApi.hideLoading();
-          PelApi.lagger.info("<-Response ( status:" + response.status + ") :", response.data)
+          if (PelApi.global.get('debugFlag')) {
+            PelApi.lagger.info("<-Response ( status:" + response.status + ") :", response.data)
+          } else {
+            PelApi.global.set('lastApiResponse', response, false)
+          }
         }
         return response;
+      },
+      responseError: function(rejection) {
+        // Retry
+        var PelApi = $injector.get('PelApi');
+
+        if (retries < (rejection.config.retry || 0)) {
+          PelApi.lagger.error("Reject & Retry . number :  " + retries, "on Config : ", rejection.config)
+          retries++;
+          return onResponseError(rejection.config);
+        }
+        retries = 0;
+        return $q.reject(rejection);
       }
-      /* 'responseError': function(error) {
-                console.log("response",error)
-                return $q.reject(response);
-            }
-      */
     };
   })
   .config(function($httpProvider) {

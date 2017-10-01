@@ -168,7 +168,6 @@ angular.module('pele')
 
         var stat = PelApi.GetPinCodeStatus2(data, "GetUserNotifNew");
         var pinStatus = stat.status;
-        PelApi.lagger.info("pinStatus after get pin code  : ", pinStatus);
 
         if ("Valid" === pinStatus) {
 

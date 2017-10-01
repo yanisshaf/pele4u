@@ -8,9 +8,12 @@ var app = angular.module('pele.P1_appsListCtrl', ['ngStorage']);
 app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading, PelApi, $rootScope, $ionicPopup, $ionicHistory, $sessionStorage, $localStorage, appSettings, srvShareData) {
 
   $ionicHistory.clearHistory();
-
-  var ddd = PelApi.lagger.checkFile().then(function(logStat) {
-    console.log(logStat)
+  PelApi.lagger.checkFile().then(function(logStat) {
+    if (logStat.size > (1024 * 1024)) {
+      PelApi.lagger.deleteLogfile().then(function() {
+        PelApi.lagger.error("flush Log file ...  log too big ...( > 1MB) ")
+      })
+    }
   })
 
 
@@ -157,6 +160,7 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
       }
     }).error(
       function(errorStr, httpStatus) {
+
         PelApi.throwError("api-400", "GetUserMenu", "httpStatus : " + httpStatus)
         //PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
       }

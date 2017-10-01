@@ -98,11 +98,11 @@ angular.module('pele')
           Pin: appSettings.config.Pin
         };
 
-        var path = appSettings.MODULE_TYPES_FORWARD_PATH[formType] || "app.error";
-        if (path === "app.error") {
+        var docAppConfig = appSettings.MODULE_TYPES_FORWARD_PATH[formType];
+        if (typeof docAppConfig === "undefined") {
           PelApi.throwError("client", "MODULE_TYPES_FORWARD_PATH", "Failed to locate MODULE_TYPES_FORWARD_PATH for FormType : " + formType);
         }
-        $state.go(path, params);
+        $state.go(docAppConfig.state, params);
       }
     };
 
@@ -223,6 +223,7 @@ angular.module('pele')
 
       }).error(
         function(error, httpStatus) {
+
           PelApi.throwError("api", "GetUserModuleTypes", "httpStatus : " + httpStatus)
         }).finally(function() {
         $ionicLoading.hide();

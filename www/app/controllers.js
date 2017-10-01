@@ -1,21 +1,15 @@
 angular.module('pele.controllers', ['ngStorage'])
   .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory) {
+
     $rootScope.stopLoading = function() {
       PelApi.hideLoading()
     }
 
 
+
     $scope.appDebug = PelApi.appSettings.debug;
     $scope.setDebug = function(flag) {
-      if (flag === false) {
-        PelApi.appSettings.debug = flag;
-        PelApi.lagger = {};
-        PelApi.lagger.info = function() {};
-        PelApi.lagger.error = function() {};
-        PelApi.lagger.warn = function() {};
-      } else {
-        PelApi.lagger = PelApi.$fileLogger;
-      }
+      PelApi.global.set('debugFlag', flag, true)
       $scope.appDebug = flag;
     }
 
@@ -92,8 +86,9 @@ angular.module('pele.controllers', ['ngStorage'])
   .controller('SettingsListCtrl', ['$scope', '$fileLogger', '$cordovaFile', '$timeout', '$state', 'PelApi', '$ionicPopup', '$cordovaSocialSharing', 'appSettings',
     function($scope, $fileLogger, $cordovaFile, $timeout, $state, PelApi, $ionicPopup, $cordovaSocialSharing, appSettings) {
 
-      $scope.stateParams = $state.params;
 
+      $scope.stateParams = $state.params;
+      $scope.env = PelApi.appSettings.env;
       $scope.sendMail = function() {
         if (!window.cordova) {
           $ionicPopup.alert({
@@ -104,7 +99,7 @@ angular.module('pele.controllers', ['ngStorage'])
 
         $cordovaFile.readAsDataURL(cordova.file.dataDirectory, appSettings.config.LOG_FILE_NAME)
           .then(function(data) {
-            var env = appSettings.config.env;
+            var env = $scope.env;
             var recipient = appSettings.config.LOG_FILE_MAIL_RECIPIENT[env] || "";
 
             data = data.replace(";base64", ".txt;base64");
@@ -150,8 +145,8 @@ angular.module('pele.controllers', ['ngStorage'])
 
         $timeout(function() {
           $scope.devCounter = 0;
-        }, 2000)
-      if ($scope.devCounter >= 3) $state.go("app.dev")
+        }, 10000)
+      if ($scope.devCounter >= 2) $state.go("app.dev")
     }
 
     $scope.APP_VERSION = appSettings.config.APP_VERSION;

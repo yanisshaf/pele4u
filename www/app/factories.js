@@ -1,8 +1,10 @@
 angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova', 'pele.messages'])
   .factory('PelApi', function($cordovaFileTransfer, $cordovaNetwork, $ionicActionSheet, $http, $rootScope, appSettings, $state, $ionicLoading, $filter, $ionicPopup, $timeout, $fileLogger, $sessionStorage, $localStorage, $cordovaFile, messages) {
+    var self = this;
+    self._global = {};
     return {
-
       init: function() {
+        this.global.set('debugFlag', appSettings.debug, true)
         this.network = {};
         this.messages = messages;
         this.appSettings = appSettings;
@@ -117,7 +119,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           data: {
             pincode: pincode
           },
-
           timeout: appSettings.timeout,
           headers: {
             'Content-Type': 'application/json; charset=utf-8'
@@ -230,7 +231,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return $http({
           url: links.url,
           method: "GET",
-          timeout: appSettings.menuTimeout,
+          timeout: links.timeout || appSettings.menuTimeout,
+          retry: links.retry || 0,
           headers: links.headers
         });
 
@@ -260,7 +262,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
       },
@@ -291,7 +293,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
       },
@@ -322,7 +324,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
       },
@@ -351,7 +353,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
 
@@ -390,7 +392,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
       },
@@ -421,7 +423,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
       }, // End GetFileURI
@@ -450,12 +452,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           }
         };
 
-
         return $http({
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
 
@@ -478,8 +479,24 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           redirect: redirect
         };
 
+        var debugFlag = self.global.get('debugFlag');
+        self.$fileLogger.error("-------------- START ERROR SECTION  ------------------");
+        if (!debugFlag || debugFlag === undefined) {
+          var lastStateChangeStart = self.global.get('lastStateChangeStart');
+          var lastStateChangeError = self.global.get('lastStateChangeError');
+          var lastApiResponse = self.global.get('lastApiResponse');
+          var lastApiRequestConfig = self.global.get('lastApiRequestConfig');
+          if (lastStateChangeStart)
+            self.$fileLogger.error("lastStateChangeStart:", lastStateChangeStart);
+          if (lastStateChangeError)
+            self.$fileLogger.error("lastStateChangeError:", lastStateChangeError);
+          if (lastApiResponse)
+            self.$fileLogger.error("lastApiResponse:", lastApiResponse);
+          if (lastApiRequestConfig)
+            self.$fileLogger.error("lastApiRequestConfig:", lastApiRequestConfig);
+        }
         self.$fileLogger.error(lastError);
-
+        self.$fileLogger.error("-------------- END ERROR SECTION  ------------------");
         var errStr = "";
         Object.keys(lastError).forEach(function(k) {
           errStr += k + ":" + lastError[k] + "\n\r";
@@ -512,6 +529,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           description: ""
         };
 
+
         //First check EAI ResponseHeader
         var eaiStatus = _.get(data, "Response.ResponseHeader.EAI_Status");
         var SessionStatus = _.get(data, "Response.OutParams.SessionStatus");
@@ -519,7 +537,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         if (eaiStatus && eaiStatus != "0") {
           return {
             status: "EAI_ERROR",
-            description: "EAI ResponseHeader return with error"
+            description: "EAI ResponseHeader return with error : "
           }
         }
         // Then we check EAI OutParams (Application error)
@@ -1119,6 +1137,38 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       getErrorsStack: function() {
         return _.reverse(($localStorage.appErrors || []))
       },
+      global: {
+        get: function(varname, storageInd, defvalue) {
+          storageInd = storageInd || true;
+
+          if (typeof self._global[varname] !== "undefined") {
+            return self._global[varname];
+          }
+          if (storageInd && $localStorage._global && $localStorage._global[varname] !== "undefined") {
+            self._global[varname] = $localStorage._global[varname]
+            return self._global[varname]
+          }
+          if (defvalue) {
+            return defvalue;
+          } else {
+            return undefined
+          }
+
+        },
+        set: function(varname, newval, storageInd) {
+          storageInd = storageInd || true;
+          self._global[varname] = newval;
+          if (storageInd) {
+            $localStorage[varname] = newval;
+          }
+          return true;
+        },
+        clear: function(varname) {
+          delete self._global[varname]
+          delete $localStorage[varname]
+          return true;
+        }
+      },
       pinState: {
         get: function() {
           if (typeof this.pinStateData !== "undefined") {
@@ -1133,9 +1183,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             valid: false,
             code: ""
           }
-
           this.pinStateData = $localStorage.pinStateData;
-
         },
         set: function(newState) {
           this.pinStateData = newState;
@@ -1146,7 +1194,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           $localStorage.pinStateData = undefined;
         }
       },
-
       openAttachment: function(file, appId) {
         appId = appId || "123456";
         var self = this;

@@ -21,7 +21,7 @@
       <div class="menu-item" ng-repeat="category in feeds_categories.menuItems">
 
         <button ng-click="forwardToApp(category.Path, category.AppId , category.DisplayName)" class="button button-large button-stable button-block">
-         <img class="menu-item-icon" src="{{category.Image}}" />    {{category.DisplayName}}
+         <img class="menu-item-icon" ng-src="{{category.Image}}" />    {{category.DisplayName}}
         </button>
       </div>
     </div>

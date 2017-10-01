@@ -36,7 +36,7 @@ angular.module('pele')
           $scope.docDetails.attachments = $scope.docDetails.ATTACHMENT_FILES || [];
           $scope.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
-          PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
+          //PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
         }).error(function(error, httpStatus) {
           PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus)
         }).finally(function() {

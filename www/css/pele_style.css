@@ -568,8 +568,9 @@ div#main-apps-menu div.row-bottom {margin-top:15px}
 .docs-menu .item.docs-menu-details .icon {height:50%; top:25%}
 .pel-badge {
     display: inline-block;
-    min-width: 10px;
-    padding: 3px 7px;
+    min-width: 20px;
+    min-height: 20px;
+    padding: 4px 4px;
     font-size: 12px;
     font-weight: 700;
     line-height: 1;
@@ -578,9 +579,32 @@ div#main-apps-menu div.row-bottom {margin-top:15px}
     white-space: nowrap;
     vertical-align: middle;
     background-color: #777;
-    border-radius: 10px;
+    border-radius: 50%;
     margin-right:5px;
+    color: rgb(255, 255, 255);
 }
+
+.pel-badge.pink {
+  background-color: rgb(255, 64, 129);
+}
+
+.pel-badge.blue {
+  background-color: #1E88E5
+}
+
+.pel-badge.light-blue {
+  background-color: #0288D1
+}
+
+.pel-badge.green {
+  background-color: #43A047
+}
+
+.pel-badge.cyan {
+  background-color: #0097A7
+}
+
+
 .pel-badge-positive {background-color:#387ef5 }
 .item-section {padding-top:8px;padding-right:8px;padding-bottom: 12px}
 .item-section {clear:both !important;}
