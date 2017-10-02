@@ -16,6 +16,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
         this.sessionStorage = $sessionStorage;
         this.localStorage = $localStorage;
+        //appSettings.config.network = "wifi"
 
         //this.lagger = { info :function(){},error:function(){}};
       },
@@ -27,6 +28,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         appSettings.config.network = $cordovaNetwork.getNetwork();
         appSettings.config.isOnline = $cordovaNetwork.isOnline();
         //$scope.$apply();
+
 
         // listen for Online event
         $rootScope.$on('$cordovaNetwork:online', function(event, networkState) {
@@ -1115,6 +1117,39 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           return undefined;
         }
         return jsVar;
+      },
+
+
+      extendActionHistory: function(doc) {
+        if (!doc.ACTION_HISTORY) return [];
+        doc.ACTION_HISTORY.forEach(function(action) {
+          action.display = false;
+          action.right_icon = "";
+          action.left_icon = "";
+
+          if (typeof action.NOTE != "undefined" && action.NOTE.length) {
+            action.display = true;
+            action.left_icon = 'ion-chevron-down';
+            if (action.ACTION_CODE == "REJECT") {
+              action.right_icon = 'ion-close-circled';
+            }
+          }
+
+          if (action.ACTION_CODE === "FORWARD" || action.ACTION_CODE === "APPROVE") {
+
+            action.left_icon = 'ion-chevron-left';
+            action.right_icon = 'ion-checkmark-circled'
+          }
+          if (action.ACTION_CODE === "NO_ACTION") {
+            action.left_icon = 'ion-chevron-left';
+            action.right_icon = 'ion-minus-circled';
+          }
+          if (!action.ACTION_CODE) {
+            action.display = false;
+            action.right_icon = "";
+            action.left_icon = "";
+          }
+        })
       },
 
       showBtnActions: function(scope, butttons) {

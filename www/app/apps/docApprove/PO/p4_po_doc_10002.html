@@ -31,7 +31,7 @@
         <!----------------------------- Approve List Slide ------------------------------->
         <!-------------------------------------------------------------------------------->
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
+          <ion-scroll scrollX="false" style="height:80%" delegate-handle="slide1Scroll">
             <div ng-repeat="detail in ACTION_HISTORY" type="item-text-wrap" dir="RTL">
               <!--<div class="item item-divider "> -->
               <a class="item item-divider item-icon-right pele-item-icon-left" ng-hide="pelHideShow2( detail.DISPLAY_FLAG )" ng-click="detail.SHOW_FLAG = !detail.SHOW_FLAG; detail.PUSH_COUNT = PUSH_COUNT +1; ">
@@ -68,7 +68,7 @@
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
         <ion-slide on-drag-left="disable('drag')" on-drag-right="enable('drag')">
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
+          <ion-scroll scrollX="false" style="height:80%" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
             <!--
             <label class="item">
@@ -156,7 +156,7 @@
                     לא קיים מידע רלוונטי
                   </div>
                 </div>
-                <div ng-repeat="matchPricerow in MATCH_PRICE">
+                <div ng-repeat="matchPricerow in MATCH_PRICE" ng-show="prices_elm">
                   <div class="card">
                     <div class="item item-divider text-right pele_rtl">
                       שם ספק :{{matchPricerow.VENDOR_NAME}}

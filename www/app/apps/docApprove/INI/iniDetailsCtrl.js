@@ -5,8 +5,8 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('iniDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaFileTransfer',
-    function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaFileTransfer) {
+  .controller('iniDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup',
+    function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup) {
       $scope.actionNote = {};
       $scope.params = $stateParams;
       $scope.title = "אישור ייזום " + $stateParams.docInitId
@@ -34,7 +34,7 @@ angular.module('pele')
           if (apiData.error) return false;
           $scope.docDetails = PelApi.getJsonString(apiData.Result, "JSON[0]", true);
           $scope.docDetails.attachments = $scope.docDetails.ATTACHMENT_FILES || [];
-          $scope.extendActionHistory($scope.docDetails);
+          PelApi.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
           //PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
         }).error(function(error, httpStatus) {
@@ -56,72 +56,15 @@ angular.module('pele')
         $scope.modal.hide();
       };
 
-
       $scope.openAttachment = function(file) {
         PelApi.openAttachment(file, $scope.params.appId);
       }
-
-
-      $scope.toggle = function(element) {
-        element.display = !element.display;
-        if (element.display) element.icon = 'ion-chevron-down';
-        else element.icon = 'ion-chevron-left';
-      }
-
-
-      $scope.toggleInit = function(elementStr, isDisplay) {
-        $scope[elementStr] = {
-          display: false
-        };
-        if (typeof isDisplay === true) {
-          $scope[elementStr] = {
-            display: true
-          };
-        }
-        if ($scope[elementStr].display) $scope[elementStr].icon = 'ion-chevron-down';
-        else $scope[elementStr].icon = 'ion-chevron-left';
-      }
-
 
       $scope.toggleActionItem = function(action) {
         action.display = !action.display;
         if (action.display) action.left_icon = 'ion-chevron-down';
         else action.left_icon = 'ion-chevron-left';
       }
-
-
-      $scope.extendActionHistory = function(doc) {
-        if (!doc.ACTION_HISTORY) return [];
-        doc.ACTION_HISTORY.forEach(function(action) {
-          action.display = false;
-          action.right_icon = "";
-          action.left_icon = "";
-
-          if (typeof action.NOTE != "undefined" && action.NOTE.length) {
-            action.display = true;
-            action.left_icon = 'ion-chevron-down';
-            if (action.ACTION_CODE == "REJECT") {
-              action.right_icon = 'ion-close-circled';
-            }
-          }
-
-          if (action.ACTION_CODE === "FORWARD" || action.ACTION_CODE === "APPROVE") {
-
-            action.left_icon = 'ion-chevron-left';
-            action.right_icon = 'ion-checkmark-circled'
-          }
-          if (action.ACTION_CODE === "NO_ACTION") {
-            action.left_icon = 'ion-chevron-left';
-            action.right_icon = 'ion-minus-circled';
-          }
-          if (!action.ACTION_CODE) {
-            action.display = false;
-            action.right_icon = "";
-            action.left_icon = "";
-          }
-        })
-      }
-
 
       $scope.onSlideMove = function(data) {
         //alert("You have selected " + data.index + " tab");
