@@ -9,7 +9,7 @@ angular.module('pele')
     function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaFileTransfer) {
       $scope.actionNote = {};
       $scope.params = $stateParams;
-      $scope.title = "אישור משימה " + $stateParams.docInitId
+
       //    $scope.tabs = appSettings.tabs;
       $scope.tabs = [{
         "text": "סבב מאשרים"
@@ -38,6 +38,7 @@ angular.module('pele')
           $scope.docDetails.attachments = $scope.docDetails.TASK_ATTACHMENTS_CUR || [];
           PelApi.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
+          $scope.title = "משימה " + $scope.docDetails.TASK_ID
           PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
         }).error(function(error, httpStatus) {
           PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus)

@@ -34,12 +34,17 @@
       </div>
       <div ng-if="!accordion" class="docs-menu" ng-repeat="docsGroup in docsGroups">
         <div class="item docs-menu-details item-icon-left pele_rtl" ng-repeat="item in docsGroup.DOCUMENTS.DOCUMENTS_ROW | filter:searchText as filtered" ng-click="forwardToDoc(docsGroup.DOC_ID, item.DOC_INIT_ID,item.INFO.NOTIFICATION_ID)">
-          <img class="icon" ng-src="img/DocApprove/document_redirect.png">
-          <div class="docs-menu-item-title">ייזום {{item.DOC_INIT_ID}} - {{item.INFO.AMOUNT}} {{item.INFO.CURRENCY_CODE}}</div>
-          <div class="ellipsis"> {{item.INFO.DESCRIPTION}}</div>
-          <div>תאריך יצירה: <span class="peldate">{{item.INFO.CREATION_DATE| date : 'hh:ss dd-MM-yyyy'}}</span> </div>
+          <div class="row">
+            <div class="col col-10">
+              <img class="icon" ng-src="img/DocApprove/document_redirect.png">
+            </div>
+            <div class="col">
+              <div class="docs-menu-item-title">ייזום {{item.DOC_INIT_ID}} - {{item.INFO.AMOUNT}} {{item.INFO.CURRENCY_CODE}}</div>
+              <div class="ellipsis"> {{item.INFO.DESCRIPTION}}</div>
+              <div>תאריך יצירה: <span class="peldate">{{item.INFO.CREATION_DATE| date : 'hh:ss dd-MM-yyyy'}}</span> </div>
+            </div>
+          </div>
         </div>
-      </div>
       </div>
     </ion-list>
     <ion-nav-view name="menuContent"></ion-nav-view>

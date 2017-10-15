@@ -107,11 +107,9 @@ angular.module('pele')
           PelApi.goHome();
 
         } else if ("EAI_ERROR" === pinStatus) {
-
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
           PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
-
         } else if ("ERROR_CODE" === pinStatus) {
 
           $ionicLoading.hide();
@@ -128,8 +126,8 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(error,httpStatus) {
-          PelApi.throwError("api", "GetUserPoOrdGroupGroup", "httpStatus : "+httpStatus)
+        function(error, httpStatus) {
+          PelApi.throwError("api", "GetUserPoOrdGroupGroup", "httpStatus : " + httpStatus)
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -264,8 +262,8 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(error,httpStatus) {
-            PelApi.throwError("api", "GetUserNotificationsNew", "httpStatus : "+httpStatus)
+        function(error, httpStatus) {
+          PelApi.throwError("api", "GetUserNotificationsNew", "httpStatus : " + httpStatus)
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');

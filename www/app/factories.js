@@ -229,6 +229,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //                    GetUserMenu PAGE 1                              //
       //--------------------------------------------------------------------//
       getMenu: function(links) {
+
         // LOADING
         return $http({
           url: links.url,

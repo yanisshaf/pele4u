@@ -27,7 +27,7 @@
 
     <ion-list>
       <ion-item class="item-doc-list-3 pele_rtl" ng-repeat="chat in chats | filter:searchText.text" ng-click="forwardToDoc( '20002', chat.NOTIFICATION_ID)">
-        <img ng-src="img/DocApprove/document_redirect.png">
+        <img class="doc-redirect" ng-src="img/DocApprove/document_redirect.png">
         <!--<h2 class="pele_rtl2" >דר.&nbsp;{{chat.REQ_NUM}}&nbsp;-&nbsp;{{chat.REQ_TOTAL_AMOUNT_DSP}}</h2>-->
         <h2 class="pele_rtl2"><table><tr><td></td><td>&nbsp;</td><td>{{chat.REQ_NUM}}</td><td>&nbsp;</td><td>-</td><td>&nbsp;</td><td>{{chat.REQ_TOTAL_AMOUNT_DSP}}</td></tr></table></h2>
         <h3>{{chat.REQ_DESCRIPTION}}</h3>

@@ -477,6 +477,8 @@ table.pele_rtl td.label {
   text-decoration: underline;
 }
 
+span.label  { font-weight:bold}
+span.info  { padding-left:10px}
 table.pele_rtl td.info {
   padding-right:8px
 }
@@ -565,7 +567,7 @@ div#main-apps-menu div.row-bottom {margin-top:15px}
 .docs-menu-head {font-weight:bolder}
 .docs-menu-item-title {font-size: 16px;font-weight:bolder}
 .docs-menu .item.docs-menu-details {padding:7px 11px}
-.docs-menu .item.docs-menu-details .icon {height:50%; top:25%}
+.docs-menu .item.docs-menu-details .icon {height:40%; top:20%}
 .pel-badge {
     display: inline-block;
     min-width: 20px;
@@ -632,6 +634,16 @@ img.spinner-svg {height:60px}
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-left:60px
 }
 .bar.app-top-bar { background-color: #0160a0 !important}
+
+.item-icon-right .pel_icon.icon {
+    right: 4px;
+    font-size: 1.3em;
+}
+
+.item-icon-left .pel_icon.icon {
+    left: 4px;
+    font-size: 1.3em;
+}
+img.doc-redirect {height:35px}
