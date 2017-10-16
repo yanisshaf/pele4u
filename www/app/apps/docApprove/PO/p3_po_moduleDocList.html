@@ -17,7 +17,7 @@
     <div ng-if="0" class="list list-inset list-item-search">
       <label class="item item-input item-search-new">
       <input type="text" placeholder="חיפוש" ng-model="searchText.text" class="" ng-change="searchBarCreteria()">
-        <i class="icon ion-search placeholder-icon"></i>
+        <i class="icon pel_icon ion-search placeholder-icon"></i>
       </input>
     </label>
     </div>
@@ -30,12 +30,14 @@
     <ion-list>
       <div ng-repeat="chat in chats">
         <ion-item class="item-stable" ng-click="toggleGroup(chat.ORG_NAME)" ng-class="{active: isGroupShown(chat.ORG_NAME)}">
-          <a ng-class="isGroupShown(chat.ORG_NAME) ? 'icon-expand' : 'icon-collapse'"></a>
-          <span class="item-title">{{chat.ORG_NAME}}&nbsp;({{chat.ORDER_QTY}})</span>
+          <ion-icon ng-class="isGroupShown(chat.ORG_NAME) ? 'ion-arrow-left-b' : 'ion-arrow-down-b'"></ion-icon>
+          <!--i class="pel_icon icon" ng-class="isGroupShown(chat.ORG_NAME) ? 'icon-expand' : 'icon-collapse'"></i-->
+          <span class="item-title">{{chat.ORG_NAME}}&nbsp;
+          <span class="pel-badge light-blue">{{chat.ORDER_QTY}}</span>
         </ion-item>
 
         <ion-item class="item-doc-list" ng-repeat="item in chat.ORDER_DETAILS.ORDER_DETAILS_ROW | filter:searchText.text" ng-show="isGroupShown(chat.ORG_NAME)" ng-click="forwardToDoc(item.DOC_ID, item.PO_HEADER_ID , chat.ORG_NAME)">
-          <img ng-src="img/DocApprove/document_redirect.png">
+          <img class="doc-redirect" ng-src="img/DocApprove/document_redirect.png">
           <div>
             <table class="mix-alpha-numeric-table">
               <tr>

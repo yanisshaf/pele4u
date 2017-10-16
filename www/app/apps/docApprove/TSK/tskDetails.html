@@ -28,7 +28,7 @@
           <ion-scroll scrollX="false" style="height:80%" scrollX="false" delegate-handle="slide1Scroll">
             <div class="list">
               <div ng-repeat="action in docDetails.ACTION_HISTORY" class="pele_rtl">
-                <div ng-click="toggleActionItem(action)" class="item item-divider item-icon-left item-icon-right text-right action-history-item">
+                <div ng-click="action.left_icon && toggleActionItem(action)" class="item item-divider item-icon-left item-icon-right text-right action-history-item">
                   <i class="icon pel_icon" ng-class="action.left_icon"></i> {{action.APPROVAL_SEQ}}. {{action.USER_NAME}}
                   <i class="icon pel_icon" ng-class="action.right_icon"></i>
                 </div>
@@ -52,35 +52,46 @@
           </ion-scroll>
         </ion-slide>
         <ion-slide>
+          <div class="list list-inset text-finder">
+            <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input class="pele_rtl text-right" type="text" placeholder="חיפוש בתיאור" ng-model="term">
+          </label>
+          </div>
           <ion-scroll scrollX="false" style="height:80%" scrollX="false" delegate-handle="slide1Scroll">
-            <ul class="list">
-              <li class="item item-info no-border">
-                <div class="item item-divider item-icon-left item-icon-right">
-                  <h2 class="text-right pele_rtl">תיאור משימה</h2>
-                  <i class="icon pel_icon ion-clipboard"></i>
+            <div class="card item-section pele_rtl item-text-wrap text-right" ng-repeat="description in docDetails.TASK_DESCRIPTION">
+
+              <div class="row">
+                <div class="col-100">
+                  <p><span class="label">תאריך עדכון: </span>
+                    <span class="info" ng-bind-html="description.UPDATE_DATE|date:'dd-MM-yyyy HH:mm'| highlight:term"></span>
+                    <p>
                 </div>
-                <div class="item-section pele_rtl item-text-wrap text-right">
-                  <table class="pele_rtl text-right" ng-repeat="description in docDetails.TASK_DESCRIPTION">
-                    <tbody>
-                      <tr>
-                        <td>
-                          <span class="label">תאריך עדכון: </span>
-                          <span class="info"> {{description.UPDATE_DATE|date:'dd-MM-yyyy HH:mm'}}</span>
-                          <span class="label">כותב התיאור : </span>
-                          <span class="info"> {{description.USER_NAME}} - {{description.ORG_HIERARCHY}}</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <span class="label">נושא: </span>
-                          <span class="info"> {{description.SUBJECT}}</span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+              </div>
+
+              <div class="row">
+                <div class="col-100">
+                  <p>
+                    <span class="label">כותב התיאור :</span>
+                    <span class="info" ng-bind-html="description.USER_NAME +' - '+ description.ORG_HIERARCHY| highlight:term"></span>
+                  </p>
                 </div>
-              </li>
-            </ul>
+              </div>
+              <div class="row">
+                <div class="col-100">
+                  <p>
+                    <span class="label" ng-bind-html="description.SUBJECT| highlight:term"> </span>
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-100">
+                  <span class="label">פירוט: </span>
+                  <span class="info" ng-bind-html="description.NOTES| highlight:term"></span>
+                </div>
+              </div>
+            </div>
+            </div>
           </ion-scroll>
         </ion-slide>
         <!------------------------------------------------------------------------------->

@@ -1349,4 +1349,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       var date = moment(dateString, "YYYYMMDDHHmmss");
       return date.unix() * 1000;
     }
+  }).filter('highlight', function($sce) {
+    return function(text, phrase) {
+      if (!text)
+        return null;
+      text = text.toString();
+      if (phrase) text = text.replace(new RegExp('(' + phrase + ')', 'gi'), '<span class="highlighted">$1</span>');
+      return $sce.trustAsHtml(text)
+    }
   });
