@@ -29,8 +29,8 @@
             <div class="list">
               <div ng-repeat="action in docDetails.ACTION_HISTORY" class="pele_rtl">
                 <div ng-click="action.left_icon && toggleActionItem(action)" class="item item-divider item-icon-left item-icon-right text-right action-history-item">
-                  <i class="icon pel_icon" ng-class="action.left_icon"></i> {{action.APPROVAL_SEQ}}. {{action.USER_NAME}}
-                  <i class="icon pel_icon" ng-class="action.right_icon"></i>
+                  <i class="icon pel_icon icon-sm" ng-class="action.left_icon"></i> {{action.APPROVAL_SEQ}}. {{action.USER_NAME}}
+                  <i class="icon pel_icon icon-sm" ng-class="action.right_icon"></i>
                 </div>
                 <div class="item bo-border pele_rtl text-right item-icon-left item-icon-right text-right" ng-show="action.display">
                   <div class="row">
@@ -62,7 +62,7 @@
               <li class="item item-info no-border">
                 <div class="item item-divider item-icon-left item-icon-right">
                   <h2 class="text-right pele_rtl">תיאור ייזום</h2>
-                  <i class="icon ion-clipboard"></i>
+                  <i class="icon pel_icon icon-md ion-clipboard"></i>
                 </div>
                 <div class="item-section pele_rtl item-text-wrap text-right">
                   {{docDetails.INIT_DESCRIPTION}}
@@ -70,8 +70,8 @@
               </li>
               <li class="item item-info no-border">
                 <div class="item item-divider item-icon-right item-icon-left" ng-init="info_elm=true" ng-click="info_elm=!info_elm">
-                  <i class="icon pel_icon" ng-class="info_elm ? 'ion-chevron-down' :'ion-chevron-left'"></i>
-                  <i class="icon ion-clipboard"></i>
+                  <i class="icon pel_icon icon-sm" ng-class="info_elm ? 'ion-chevron-down' :'ion-chevron-left'"></i>
+                  <i class="icon pel_icon icon-md ion-clipboard"></i>
                   <h2 class="text-right pele_rtl">פרטי ייזום</h2>
                 </div>
                 <div class="item-section" ng-show="info_elm">
@@ -115,9 +115,9 @@
               </li>
               <li class="item item-info no-border">
                 <div class="item item-divider item-icon-right item-icon-left" ng-init="attach_elm=true" ng-click="attach_elm=!attach_elm">
-                  <i class="icon pel_icon" ng-class="attach_elm ? 'ion-chevron-down' :'ion-chevron-left'"></i>
+                  <i class="icon pel_icon icon-sm" ng-class="attach_elm ? 'ion-chevron-down' :'ion-chevron-left'"></i>
                   <h2 class="text-right pele_rtl">נספחי ייזום</h2>
-                  <i class="icon ion-paperclip"></i>
+                  <i class="icon pel_icon icon-md ion-paperclip"></i>
                 </div>
                 <div class="item-section" ng-show="attach_elm">
                   <table class="pele_rtl attachments-table text-right">

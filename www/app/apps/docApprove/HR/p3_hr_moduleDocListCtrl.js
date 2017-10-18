@@ -4,12 +4,14 @@
 angular.module('pele')
   .controller('p3_hr_moduleDocListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, $cordovaNetwork, $sessionStorage, appSettings) {
 
+    $scope.appId = $stateParams.AppId;
     //---------------------------------
     //--       goHome
     //---------------------------------
     $scope.goHome = function() {
       PelApi.goHome();
     }
+
     //----------------------- REFRESH ------------------------//
     $scope.doRefresh = function() {
 
@@ -154,7 +156,7 @@ angular.module('pele')
     //--------------------------------------------------------------
     $scope.forwardToDoc = function(docId, docInitId) {
       //var appId = $stateParams.AppId;
-      var appId = appSettings.config.appId;
+      var appId = $scope.appId;
       var statePath = 'app.doc_' + docId;
 
       PelApi.showLoading();
@@ -164,8 +166,6 @@ angular.module('pele')
       var retGetUserNotifications = PelApi.GetUserNotifications(links, appId, docId, docInitId);
       retGetUserNotifications.success(function(data, status, headers, config) {
         data = $scope.fix_json(data)
-
-
         var stat = PelApi.GetPinCodeStatus2(data, "GetUserNotifNew");
         var pinStatus = stat.status;
 

@@ -10,6 +10,8 @@ angular.module('pele')
     //---------------------------------
     //--       goHome
     //---------------------------------
+    $scope.appId = $stateParams.AppId;
+
     $scope.goHome = function() {
       PelApi.goHome();
     }
@@ -26,6 +28,7 @@ angular.module('pele')
       var appId = $stateParams.AppId,
         formType = $stateParams.FormType,
         pin = $stateParams.Pin;
+
 
       PelApi.deleteAttachDirecoty();
 
@@ -101,8 +104,8 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(error,httpStatus) {
-            PelApi.throwError("api", "GetUserPoOrdGroupGroup", "httpStatus : "+httpStatus)
+        function(error, httpStatus) {
+          PelApi.throwError("api", "GetUserPoOrdGroupGroup", "httpStatus : " + httpStatus)
         }
       ).finally(function() {
         $ionicLoading.hide();
@@ -192,8 +195,8 @@ angular.module('pele')
     //--------------------------------------------------------------
     $scope.forwardToDoc = function(docId, docInitId, orgName) {
 
-      var appId = PelApi.appSettings.config.appId;
-      $scope.appId = PelApi.appSettings.config.appId;
+      var appId = $scope.appId;
+
       var statePath = 'app.doc_' + docId;
       PelApi.showLoading();
 
@@ -247,8 +250,8 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(error,httpStatus) {
-            PelApi.throwError("api", "GetUserNotificationsNew", "httpStatus : "+httpStatus)
+        function(error, httpStatus) {
+          PelApi.throwError("api", "GetUserNotificationsNew", "httpStatus : " + httpStatus)
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');

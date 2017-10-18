@@ -637,17 +637,25 @@ img.spinner-svg {height:60px}
 }
 .bar.app-top-bar { background-color: #0160a0 !important}
 
-.pel_icon.icon {
+.icon.pel_icon {
     font-size: 1.3em;
+}
+.icon.pel_icon.icon-sm {
+    font-size: 1.2em;
+}
+
+.icon.pel_icon.icon-md {
+    font-size: 1.4em;
+}
+.icon.pel_icon.icon-lg {
+    font-size: 1.6em;
 }
 .item-icon-right .pel_icon.icon {
     right: 4px;
-    font-size: 1.3em;
-}
 
+}
 .item-icon-left .pel_icon.icon {
     left: 4px;
-    font-size: 1.3em;
 }
 img.doc-redirect {height:30px}
  .highlighted { background: yellow ; font-weight: bold}

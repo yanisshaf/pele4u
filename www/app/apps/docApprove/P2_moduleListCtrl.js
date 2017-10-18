@@ -93,7 +93,7 @@ angular.module('pele')
       if (0 < docQty) {
 
         var params = {
-          AppId: appSettings.config.appId,
+          AppId: $stateParams.AppId,
           FormType: formType,
           Pin: appSettings.config.Pin
         };
@@ -164,6 +164,7 @@ angular.module('pele')
       var links = PelApi.getDocApproveServiceUrl("GetUserModuleTypes");
 
       var retUserModuleTypes = PelApi.getUserModuleTypes(links, appId, pin);
+
       retUserModuleTypes.success(function(data, status) {
 
         $scope.feeds_categories = [];

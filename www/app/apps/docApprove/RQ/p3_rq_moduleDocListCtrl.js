@@ -16,6 +16,7 @@ angular.module('pele')
     $sessionStorage,
     appSettings) {
 
+    $scope.appId = $stateParams.AppId;
     //---------------------------------
     //--       goHome
     //---------------------------------
@@ -197,8 +198,8 @@ angular.module('pele')
     //-- 01/11/2015  R.W.        function forward to page by DOC_ID
     //--------------------------------------------------------------
     $scope.forwardToDoc = function(docId, docInitId) {
-      var appId = appSettings.config.appId;
-      $scope.appId = appSettings.config.appId;
+      var appId = $scope.appId;
+
       var statePath = 'app.doc_' + docId;
       PelApi.showLoading();
 
