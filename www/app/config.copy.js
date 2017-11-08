@@ -296,6 +296,9 @@ angular.module('pele.config', [])
       },
       "PO": {
         state: "app.ini_list"
+      },
+      "FIN":{
+        state: "app.inv_list"
       }
     },
     ACTION_HISTORY: {
