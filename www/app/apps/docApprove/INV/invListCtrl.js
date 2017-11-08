@@ -2,7 +2,7 @@
  * Created by User on 25/08/2016.
  */
 angular.module('pele')
-  .controller('tskListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
+  .controller('invListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
     $scope.parse = function(data) {
       var mapped = [];
       data.forEach(function(item) {
@@ -54,9 +54,7 @@ angular.module('pele')
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
         });
-
     };
-
 
     $scope.forwardToDoc = function(docId, docInitId, notificationId) {
 

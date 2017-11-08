@@ -5,18 +5,17 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('tskDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaFileTransfer',
+  .controller('invDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaFileTransfer',
     function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaFileTransfer) {
       $scope.actionNote = {};
-      $scope.params = $stateParams;
-      $scope.title = "אישור משימה " + $stateParams.docInitId
+
+      $scope.appId = $stateParams.AppId;
+
       //    $scope.tabs = appSettings.tabs;
       $scope.tabs = [{
         "text": "סבב מאשרים"
       }, {
-        "text": "תיאור משימה"
-      }, {
-        "text": "תוכן משימה"
+        "text": "תוכן החשבונית"
       }];
 
       $scope.notifLinks = PelApi.getDocApproveServiceUrl("SubmitNotif");
@@ -38,9 +37,12 @@ angular.module('pele')
           $scope.docDetails.attachments = $scope.docDetails.TASK_ATTACHMENTS_CUR || [];
           PelApi.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
+          $scope.title = "חשבונית " + $scope.docDetails.INVOICE_NUM;
           PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
-        }).error(function(error, httpStatus) {
-          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus)
+        }).error(function(error, httpStatus, headers, config) {
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus + tr)
         }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
@@ -59,7 +61,7 @@ angular.module('pele')
       };
 
       $scope.openAttachment = function(file) {
-        PelApi.openAttachment(file, $scope.params.appId);
+        PelApi.openAttachment(file, $scope.appId);
       }
 
       $scope.toggleActionItem = function(action) {
@@ -82,14 +84,16 @@ angular.module('pele')
 
       $scope.submitUpdateInfo = function(btn, note) {
         PelApi.showLoading();
-        PelApi.SubmitNotification($scope.notifLinks, $scope.params.appId, $scope.docDetails.NOTIFICATION_ID, note, btn.action)
+        PelApi.SubmitNotification($scope.notifLinks, $scope.appId, $scope.docDetails.NOTIFICATION_ID, note, btn.action)
           .success(function(data) {
             var apiData = PelApi.checkApiResponse(data);
             if (apiData.error) return false;
             $ionicHistory.goBack();
           }).error(
-            function(error, httpStatus) {
-              PelApi.throwError("api", "SubmitNotif", "httpStatus : " + httpStatus)
+            function(error, httpStatus, headers, config) {
+              var time = config.responseTimestamp - config.requestTimestamp;
+              var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+              PelApi.throwError("api", "SubmitNotif", "httpStatus : " + httpStatus + tr)
             }).finally(function() {
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
