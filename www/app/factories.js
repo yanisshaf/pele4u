@@ -113,12 +113,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         //--   Registration for Push Notification
         //-----------------------------------------
         var self = this;
-        if (window.plugins && window.plugins.notification && cordova.plugins.notification.badge) {
+        if (cordova.plugins && cordova.plugins.notification && cordova.plugins.notification.badge) {
           cordova.plugins.notification.badge.configure({
             autoClear: true
           });
 
           cordova.plugins.notification.badge.clear();
+          self.lagger.info("Clean badge  counter");
         }
         var oneSignalConf = appSettings.apiConfig.OneSignal[appSettings.apiConfig.env] || "notfound";
         if (oneSignalConf === "notfound") {

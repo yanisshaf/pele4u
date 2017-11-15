@@ -1,5 +1,5 @@
 angular.module('pele.controllers', ['ngStorage'])
-  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory) {
+  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory, $ionicPopup) {
 
     $rootScope.stopLoading = function() {
       PelApi.hideLoading()
@@ -9,6 +9,47 @@ angular.module('pele.controllers', ['ngStorage'])
       return PelApi.getLocalStorageUsage();
     }
 
+    $scope.getBadgeCount = function() {
+      var badgePlugin = _.get(window, "cordova.plugins.notification.badge");
+      if (!badgePlugin) {
+        $ionicPopup.alert({
+          title: PelApi.messages.no_cordova
+        });
+        return false;
+      }
+      badgePlugin.get(function(cnt) {
+        $scope.badgeCount = cnt;
+      })
+    }
+    $scope.setBadge = function(count) {
+      var badgePlugin = _.get(window, "cordova.plugins.notification.badge");
+      if (!badgePlugin) {
+        $ionicPopup.alert({
+          title: PelApi.messages.no_cordova
+        });
+        return false;
+      }
+
+      if (count === 0) {
+        badgePlugin.clear();
+        $ionicPopup.alert({
+          title: "check if badge counter is clear"
+        });
+        badgePlugin.get(function(cnt) {
+          $scope.badgeCount = cnt;
+        })
+
+        return true;
+      }
+
+      badgePlugin.set(count)
+      badgePlugin.get(function(cnt) {
+        $scope.badgeCount = cnt;
+      })
+      $ionicPopup.alert({
+        title: "check if badge counter is = " + count
+      });
+    }
 
     $scope.appDebug = PelApi.global.get('debugFlag', true)
     $scope.setDebug = function(flag) {
