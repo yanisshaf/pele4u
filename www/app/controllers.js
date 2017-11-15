@@ -56,8 +56,7 @@ angular.module('pele.controllers', ['ngStorage'])
         $scope.badgeCount = cnt;
       })
       $ionicPopup.alert({
-        title: "check if badge counter is = "
-        count
+        title: "check if badge counter is = " + count
       });
     }
 
