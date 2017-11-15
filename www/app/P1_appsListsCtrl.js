@@ -5,9 +5,16 @@ var app = angular.module('pele.P1_appsListCtrl', ['ngStorage']);
 //=====================================================================//
 //==                         PAGE_1                                  ==//
 //=====================================================================//
-app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading, PelApi, $cordovaNetwork, $rootScope, $ionicPopup, $ionicHistory, $sessionStorage, $localStorage, appSettings, $cordovaFile, srvShareData, $cordovaFileTransfer) {
+app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading, PelApi, $rootScope, $ionicPopup, $ionicHistory, $sessionStorage, $localStorage, appSettings, srvShareData) {
 
   $ionicHistory.clearHistory();
+  PelApi.lagger.checkFile().then(function(logStat) {
+    if (logStat.size > (1024 * 1024)) {
+      PelApi.lagger.deleteLogfile().then(function() {
+        PelApi.lagger.error("flush Log file ...  log too big ...( > 1MB) ")
+      })
+    }
+  })
 
   //=======================================================//
   //== When        Who         Description               ==//
@@ -79,7 +86,10 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
         }
       }
 
-      $scope.setMSISDN(appSettings.config.MSISDN_VALUE);
+      $sessionStorage.PELE4U_MSISDN = appSettings.config.MSISDN_VALUE;
+      $localStorage.PELE4U_MSISDN = appSettings.config.MSISDN_VALUE;
+
+      //$scope.setMSISDN(appSettings.config.MSISDN_VALUE);
 
       var pinCodeStatus = PelApi.GetPinCodeStatus(data, "getMenu");
       if ("Valid" === pinCodeStatus) {
@@ -93,11 +103,19 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
         appSettings.config.GetUserMenu = JSON.parse(strData);
         $scope.feeds_categories = appSettings.config.GetUserMenu;
         $scope.feeds_categories.menuItems = $scope.insertOnTouchFlag($scope.feeds_categories.menuItems);
+        $sessionStorage.mainMenu = {
+          token: appSettings.config.token,
+          user: appSettings.config.GetUserMenu.user,
+          userName: appSettings.config.GetUserMenu.userName,
+          menuItems: appSettings.config.GetUserMenu,
+          timeStamp: new Date().getTime()
+        };
+
 
         //---------------------------------------------
         //-- Send User Tag for push notifications
         //---------------------------------------------
-        if (window.plugins !== undefined) {
+        if (window.plugins && window.plugins.OneSignal) {
           window.plugins.OneSignal.sendTags({
             "User": data.userName,
             "Env": appSettings.env
@@ -111,13 +129,8 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
         $sessionStorage.userName = appSettings.config.GetUserMenu.userName;
 
         appSettings.config.Pin = appSettings.config.GetUserMenu.PinCode;
+
         if (appSettings.config.PIN_CODE_AUTHENTICATION_REQUIRED_CODE === appSettings.config.Pin) {
-          //Golan
-          PelApi.pinState.set({
-            valid: false,
-            code: appSettings.config.Pin,
-            apiCode: pinCodeStatus
-          })
           $state.go('app.login');
         } else {
           appSettings.config.Pin = appSettings.config.GetUserMenu.PinCode;
@@ -151,8 +164,11 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
         PelApi.showPopupVersionUpdate(data.StatusDesc, "");
       }
     }).error(
-      function(errorStr, httpStatus) {
-        PelApi.throwError("api-400", "GetUserMenu", "httpStatus : " + httpStatus)
+      function(errorStr, httpStatus, headers, config) {
+        var time = config.responseTimestamp - config.requestTimestamp;
+        var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+
+        PelApi.throwError("api-400", "GetUserMenu", "httpStatus : " + httpStatus + tr)
         //PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
       }
     ).finally(function() {
@@ -205,9 +221,11 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
     var continueFlag = "Y";
 
     if ("wifi" === appSettings.config.network) {
-      appSettings.config.MSISDN_VALUE = $scope.getMSISDN();
+      appSettings.config.MSISDN_VALUE = $localStorage.PELE4U_MSISDN;
 
-      if (appSettings.config.MSISDN_VALUE === null) {
+      //appSettings.config.MSISDN_VALUE = $scope.getMSISDN();
+
+      if (!appSettings.config.MSISDN_VALUE || appSettings.config.MSISDN_VALUE === undefined) {
         PelApi.showPopup(appSettings.config.TITLE_WIFI_FIRST_CONNECTION_1, appSettings.config.TITLE_WIFI_FIRST_CONNECTION_2);
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');

@@ -1,5 +1,5 @@
 /*********************/
-const env = "DV";
+const env = "PD";
 /********************/
 
 const EnvCodes = {
@@ -8,6 +8,13 @@ const EnvCodes = {
   QA: "QA",
   LP: "LP"
 };
+
+const SSOEnv = {
+  PD: "PD",
+  DV: "DV",
+  QA: "QA",
+  LP: "LP"
+}
 
 const spinConfig = {
   template: '<img ng-click="stopLoading()" class="spinner" src="./img/spinners/puff.svg">',
@@ -30,77 +37,83 @@ const apiConfig = {
   menuTimeout: 15000,
   translateFlag: "N",
   flashTime: 2500,
+
   OneSignal: {
     DV: {
-      appId: '*',
+      appId: '430ad45c-c555-41f5-87c4-46f9d4be0cc1',
       visualLevel: 0,
       logLevel: 0
     },
     QA: {
-      appId: "*",
+      appId: "922ef47f-6abc-4df5-80ea-801a8b081fa1",
       visualLevel: 0,
       logLevel: 0
     },
     PD: {
-      appId: "*",
+      appId: "1d0135a7-da67-4953-b241-2385bfcedcd9",
+      visualLevel: 0,
+      logLevel: 0
+    },
+    LP: {
+      appId: "1d0135a7-da67-4953-b241-2385bfcedcd9",
       visualLevel: 0,
       logLevel: 0
     },
   },
   services: {
     GetUserMenu: {
-      timeout: 6000,
+      timeout: 10000,
       retry: 2,
-      "endpoint": "/" + env + "/MobileServices/SSOService.svc/json/GetUserMenu",
+      "endpoint": "/" + SSOEnv[env] + "/MobileServices/SSOService.svc/json/GetUserMenu",
       "RequestHeader": ""
     },
     GetUserNotifNew: {
-      timeout: 6000, // $http timeout
+      timeout: 10000, // $http timeout
       retry: 2,
-      "endpoint": "/" + env + "/REST/GetUserNotifNew",
+      "endpoint": "/" + SSOEnv[env] + "/REST/GetUserNotifNew",
       "RequestHeader": {
         "ServiceName": "GetUserNotificationsNew",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "5"
+        "Timeout": "10"
       }
     },
     GetUserModuleTypes: {
-      timeout: 6000,
+      timeout: 10000,
       retry: 2,
-      "endpoint": "/" + env + "/REST/GetUserModuleTypes",
+      "endpoint": "/" + SSOEnv[env] + "/REST/GetUserModuleTypes",
       "RequestHeader": {
         "ServiceName": "GetUserModuleTypes",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "5"
+        "Timeout": "10"
       }
     },
     GtUserFormGroups: {
-      timeout: 6000,
+      timeout: 10000,
       retry: 2,
-      "endpoint": "/" + env + "/REST/GtUserFormGroups",
+      "endpoint": "/" + SSOEnv[env] + "/REST/GtUserFormGroups",
       "RequestHeader": {
         "ServiceName": "GetUserFormGroups",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "5"
+        "Timeout": "10"
       }
     },
     GetUserNotif: {
-      timeout: 6000,
+      timeout: 10000,
       retry: 2,
-      "endpoint": "/" + env + "/REST/GetUserNotif",
+      "endpoint": "/" + SSOEnv[env] + "/REST/GetUserNotif",
       "RequestHeader": {
         "ServiceName": "GetUserNotifications",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "5"
+        "Timeout": "10"
       }
     },
     SubmitNotif: {
       timeout: 20000,
-      "endpoint": "/" + env + "/REST/SubmitNotif",
+      "endpoint": "/" + SSOEnv[env] + "/REST/SubmitNotif",
       "RequestHeader": {
         "ServiceName": "SubmitNotifications",
         "AppID": "MobileApp",
@@ -109,42 +122,42 @@ const apiConfig = {
       }
     },
     GetUserPoOrdGroup: {
-      timeout: 6000,
+      timeout: 10000,
       retry: 2,
-      "endpoint": "/" + env + "/REST/GetUserPoOrdGroup",
+      "endpoint": "/" + SSOEnv[env] + "/REST/GetUserPoOrdGroup",
       "RequestHeader": {
         "ServiceName": "GetUserPoOrdGroup",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "5"
+        "Timeout": "10"
       }
     },
     GetUserRqGroups: {
-      timeout: 6000,
+      timeout: 10000,
       retry: 2,
-      "endpoint": "/" + env + "/REST/GetUserRqGroups",
+      "endpoint": "/" + SSOEnv[env] + "/REST/GetUserRqGroups",
       "RequestHeader": {
         "ServiceName": "GetUserRqGroups",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "5"
+        "Timeout": "10"
       }
     },
     GetFileURI: {
-      timeout: 6000,
+      timeout: 10000,
       retry: 2,
-      "endpoint": "/" + env + "/REST/GetFileURI",
+      "endpoint": "/" + SSOEnv[env] + "/REST/GetFileURI",
       "RequestHeader": {
         "ServiceName": "ShareFile-GetFileURI",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "5"
+        "Timeout": "10"
       }
     },
     IsSessionValidJson: {
-      timeout: 6000,
-      retry: 2,
-      "endpoint": "/" + env + "/MobileServices/SSOService.svc/json/IsSessionValidJson",
+      timeout: 10000,
+      retry: 0,
+      "endpoint": "/" + SSOEnv[env] + "/MobileServices/SSOService.svc/json/IsSessionValidJson",
       "RequestHeader": ""
     }
   }
@@ -157,7 +170,8 @@ angular.module('pele.config', [])
   .value('appSettings', {
     debug: false,
     config: {
-      APP_VERSION: "116.9",
+      mainMenuKeepAlive: 0, // 0 - means disabled
+      APP_VERSION: "117.6",
       SCAN_PRINT_SCANNING_ERROR: "שגיאה בסריקה",
       PIN_CODE_AUTHENTICATION_REQUIRED_CODE: "10000",
       IS_TOKEN_VALID: "N",
@@ -236,7 +250,6 @@ angular.module('pele.config', [])
       pinCodeErrorInd: "N",
       pinCodeReq: "Y",
       token: "",
-      //appId: "2313E2E95ADDFDB3E050AE0A5B0768D2",
       user: "",
       userName: "",
       PIN: "0",
@@ -297,7 +310,7 @@ angular.module('pele.config', [])
       "PO": {
         state: "app.ini_list"
       },
-      "FIN":{
+      "FIN": {
         state: "app.inv_list"
       }
     },

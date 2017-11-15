@@ -1,13 +1,12 @@
-<ion-view cache-view="false">
+<ion-view class="feeds-categories-view" cache-view="false" hide-back-button="true">
   <ion-nav-buttons side="right">
     <button menu-toggle="left" class="button button-icon icon ion-navicon">
     </button>
   </ion-nav-buttons>
   <ion-nav-title>
-    <ion-header-bar align-title="center" class="bar-positive">
+    <div class="bar bar-header bar-positive">
       <h1 class="title">תפריט יישומים</h1>
-      </ion-header>
-
+    </div>
   </ion-nav-title>
 
   <ion-content class="pele-background">
@@ -22,7 +21,7 @@
       <div class="menu-item" ng-repeat="category in feeds_categories.menuItems">
 
         <button ng-click="forwardToApp(category.Path, category.AppId , category.DisplayName)" class="button button-large button-stable button-block">
-         <img class="menu-item-icon" src="{{category.Image}}" />    {{category.DisplayName}}
+         <img class="menu-item-icon" ng-src="{{category.Image}}" />    {{category.DisplayName}}
         </button>
       </div>
     </div>

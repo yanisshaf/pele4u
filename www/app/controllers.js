@@ -1,13 +1,29 @@
 angular.module('pele.controllers', ['ngStorage'])
   .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory) {
+
     $rootScope.stopLoading = function() {
       PelApi.hideLoading()
     }
 
+    $scope.getLocalStorageUsage = function() {
+      return PelApi.getLocalStorageUsage();
+    }
+
+
+    $scope.appDebug = PelApi.global.get('debugFlag', true)
+    $scope.setDebug = function(flag) {
+
+      PelApi.global.set('debugFlag', flag, true)
+      $scope.appDebug = flag;
+    }
+
+
+    $scope.storage_PELE4U_MSISDN = window.localStorage.getItem('PELE4U_MSISDN');
+    $scope.config_PELE4U_MSISDN = PelApi.appSettings.config.MSISDN_VALUE;
 
     $scope.clearLogFile = function() {
       PelApi.lagger.deleteLogfile().then(function() {
-        PelApi.lagger.info('Logfile deleted - start new log');
+        PelApi.$fileLogger.info('Logfile deleted - start new log');
         $scope.checkClear = true;
         $timeout(function() {
           $scope.checkClear = false;
@@ -22,7 +38,7 @@ angular.module('pele.controllers', ['ngStorage'])
       $scope.storageCheckClear = true;
       $timeout(function() {
         $scope.storageCheckClear = false;
-      }, 1000)
+      }, 60000)
     }
 
     $scope.displayErrors = function() {
@@ -77,8 +93,9 @@ angular.module('pele.controllers', ['ngStorage'])
   .controller('SettingsListCtrl', ['$scope', '$fileLogger', '$cordovaFile', '$timeout', '$state', 'PelApi', '$ionicPopup', '$cordovaSocialSharing', 'appSettings',
     function($scope, $fileLogger, $cordovaFile, $timeout, $state, PelApi, $ionicPopup, $cordovaSocialSharing, appSettings) {
 
-      $scope.stateParams = $state.params;
 
+      $scope.stateParams = $state.params;
+      $scope.env = PelApi.appSettings.env;
       $scope.sendMail = function() {
         if (!window.cordova) {
           $ionicPopup.alert({
@@ -89,7 +106,7 @@ angular.module('pele.controllers', ['ngStorage'])
 
         $cordovaFile.readAsDataURL(cordova.file.dataDirectory, appSettings.config.LOG_FILE_NAME)
           .then(function(data) {
-            var env = appSettings.config.env;
+            var env = $scope.env;
             var recipient = appSettings.config.LOG_FILE_MAIL_RECIPIENT[env] || "";
 
             data = data.replace(";base64", ".txt;base64");
@@ -135,8 +152,8 @@ angular.module('pele.controllers', ['ngStorage'])
 
         $timeout(function() {
           $scope.devCounter = 0;
-        }, 2000)
-      if ($scope.devCounter >= 3) $state.go("app.dev")
+        }, 10000)
+      if ($scope.devCounter >= 2) $state.go("app.dev")
     }
 
     $scope.APP_VERSION = appSettings.config.APP_VERSION;

@@ -2,9 +2,7 @@
  * Created by User on 25/08/2016.
  */
 angular.module('pele')
-  .controller('iniListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
-
-    $scope.appId = $stateParams.AppId;
+  .controller('invListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
     $scope.parse = function(data) {
       var mapped = [];
       data.forEach(function(item) {
@@ -17,7 +15,7 @@ angular.module('pele')
             task = {}
             PelApi.lagger.error("Failed to parse  JSON  string on docsGroup ")
           }
-          g.INFO = _.get(task, "ROW.ROW", {});
+          g.TASK = _.get(task, "ROW.ROW", {});
         })
         mapped.push(item)
       });
@@ -28,7 +26,7 @@ angular.module('pele')
     $scope.doRefresh = function() {
 
       PelApi.showLoading();
-
+      $scope.appId = $stateParams.AppId;
       $scope.formType = $stateParams.FormType;
       $state.pin = $stateParams.Pin;
 
@@ -37,14 +35,11 @@ angular.module('pele')
       var retGetUserFormGroups = PelApi.GetUserFormGroups(links, $scope.appId, $scope.formType, $state.pin);
       var srvData = {};
       retGetUserFormGroups.success(function(data) {
-
           var apiData = PelApi.checkApiResponse(data);
-          if (apiData.error) return false;
-
           var result = apiData.ROW || [];
           //Cursor if empty
           if (result.length && result[0].DOC_NAME === null) {
-            //PelApi.appSettings.config.IS_TOKEN_VALID = 'N'
+            PelApi.appSettings.config.IS_TOKEN_VALID = 'N'
             PelApi.goHome();
           }
           $scope.docsGroups = $scope.parse(result);
@@ -52,22 +47,18 @@ angular.module('pele')
             $scope.title = $scope.docsGroups[0].DOC_TYPE;
           }
         })
-        .error(function(error, httpStatus, headers, config) {
-          var time = config.responseTimestamp - config.requestTimestamp;
-          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
-          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus + tr)
+        .error(function(error, httpStatus) {
+          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus)
         })
         .finally(function(skip) {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
         });
-
     };
-
 
     $scope.forwardToDoc = function(docId, docInitId, notificationId) {
 
-      var statePath = 'app.ini_details';
+      var statePath = 'app.inv_details';
 
       $state.go(statePath, {
         formType: $scope.formType,

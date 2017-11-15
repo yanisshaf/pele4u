@@ -477,6 +477,8 @@ table.pele_rtl td.label {
   text-decoration: underline;
 }
 
+span.label  { font-weight:bold}
+span.info  { padding-left:10px}
 table.pele_rtl td.info {
   padding-right:8px
 }
@@ -563,13 +565,15 @@ div#main-apps-menu div.row-bottom {margin-top:15px}
 /* fix ios 10 title  proble*/
 .platform-ios .nav-bar-title .bar .title {margin-top:0 !important}
 .docs-menu-head {font-weight:bolder}
-.docs-menu-item-title {font-size: 18px;}
+.docs-menu-item-title {font-size: 16px;font-weight:bolder}
 .docs-menu .item.docs-menu-details {padding:7px 11px}
-.docs-menu .item.docs-menu-details .icon {height:50%; top:25%}
+.docs-menu .item.docs-menu-details .icon {height:40%; top:20%}
+
 .pel-badge {
     display: inline-block;
-    min-width: 10px;
-    padding: 3px 7px;
+    min-width: 20px;
+    min-height: 20px;
+    padding: 4px 4px;
     font-size: 12px;
     font-weight: 700;
     line-height: 1;
@@ -578,11 +582,52 @@ div#main-apps-menu div.row-bottom {margin-top:15px}
     white-space: nowrap;
     vertical-align: middle;
     background-color: #777;
-    border-radius: 10px;
+    border-radius: 50%;
     margin-right:5px;
+    color: rgb(255, 255, 255);
 }
+.string-badge {
+    display: inline-block;
+    min-width: 20px;
+    min-height: 20px;
+    padding: 4px 4px;
+    font-size:11px;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #777;
+    border-radius: 10%;
+    margin-right:5px;
+    color: rgb(255, 255, 255);
+}
+.icon.navy {color:#003366}
+.icon.red {color:#CA002A}
+
+.pel-badge.pink {
+  background-color: rgb(255, 64, 129);
+}
+
+.pel-badge.blue {
+  background-color: #1E88E5
+}
+
+.pel-badge.light-blue {
+  background-color: #0288D1
+}
+
+.pel-badge.green {
+  background-color: #43A047
+}
+
+.pel-badge.cyan {
+  background-color: #0097A7
+}
+
+
 .pel-badge-positive {background-color:#387ef5 }
-.item-section {padding-top:8px;padding-right:8px;padding-bottom: 8px}
+.item-section {padding-top:8px;padding-right:8px;padding-bottom: 12px}
 .item-section {clear:both !important;}
 .no-border { border:0  !important}
 .item.action-history-item {line-height:30px}
@@ -597,10 +642,70 @@ img.spinner-svg {height:60px}
 .item.error-top  {background :#e95350}
 .item.error-top i.icon  { font-size:130px;color:#FFF}
 .item.error-bottom { background :#FFF}
-.card.error .button { border:1px solid #CCC;margin:2px}
+.card.error .button { border:1px solid #CCC;margin:0}
 .show_content_Y { color:blue;text-decoration:none;}
 .attach_file {line-height:25px}
 .alert { color:red}
 .attachments-table {width:100%}
 .attachments-table tr  { border-bottom: 1px solid #CCC ; line-height: 30px}
 .attachments-table tr td.num_index  { width:30px;}
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ellipsis_90 {max-width:90%}
+
+.bar.app-top-bar { background-color: #0160a0 !important}
+
+.icon.pel_icon {
+    font-size: 1.3em;
+}
+.icon.pel_icon.icon-sm {
+    font-size: 1.2em;
+}
+
+.icon.pel_icon.icon-md {
+    font-size: 1.4em;
+}
+.icon.pel_icon.icon-lg {
+    font-size: 1.6em;
+}
+.item-icon-right .pel_icon.icon {
+    right: 4px;
+
+}
+.item-icon-left .pel_icon.icon {
+    left: 4px;
+}
+img.doc-redirect {height:30px}
+ .highlighted { background: yellow ; font-weight: bold}
+.list.list-inset.text-finder {margin-top:0 ; margin-bottom: 0}
+
+div.show-search {height:50px;min-height: 50px;display: block}
+div.hide-search {height:0px;min-height: 0px;display:none}
+
+
+.fab {
+   width: 40px;
+   height: 40px;
+   background-color: #60dff5;
+   border-radius: 50%;
+   box-shadow: 0 6px 10px 0 #666;
+   transition: all 0.1s ease-in-out;
+   font-size: 20px;
+   color: white;
+   text-align: center;
+   line-height: 40px;
+   position: fixed;
+   left: 10px;
+   top: 5px;
+   z-index: 199999;
+}
+
+.fab .icon { color:white}
+.fab:hover {
+   box-shadow: 0 6px 14px 0 #666;
+   transform: scale(1.05);
+}
+div.short_text { font-size:12px}

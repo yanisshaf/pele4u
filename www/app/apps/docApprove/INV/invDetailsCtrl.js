@@ -5,18 +5,19 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('iniDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup',
-    function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup) {
+  .controller('invDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaFileTransfer',
+    function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaFileTransfer) {
       $scope.actionNote = {};
-      $scope.params = $stateParams;
+
+      $scope.appId = $stateParams.AppId;
+
       //    $scope.tabs = appSettings.tabs;
       $scope.tabs = [{
         "text": "סבב מאשרים"
       }, {
-        "text": "תוכן הייזום"
+        "text": "תוכן החשבונית"
       }];
 
-      $scope.appId = $stateParams.AppId;
       $scope.notifLinks = PelApi.getDocApproveServiceUrl("SubmitNotif");
 
       $scope.getData = function() {
@@ -28,16 +29,19 @@ angular.module('pele')
         PelApi.deleteAttachDirecoty();
 
         var links = PelApi.getDocApproveServiceUrl("GetUserNotifNew");
-        var retGetUserNotifications = PelApi.GetUserNotifications(links, $scope.appId, $stateParams.docId, $stateParams.docInitId);
+        var retGetUserNotifications = PelApi.GetUserNotifications(links, $stateParams.appId, $stateParams.docId, $stateParams.docInitId);
         retGetUserNotifications.success(function(data) {
           var apiData = PelApi.checkApiResponse(data);
+
           if (apiData.error) return false;
           $scope.docDetails = PelApi.getJsonString(apiData.Result, "JSON[0]", true);
-          $scope.title = "אישור ייזום " + $scope.docDetails.DOC_INIT_NUMBER;
-          $scope.docDetails.attachments = $scope.docDetails.ATTACHMENT_FILES || [];
+          //var orderAttachment = _.get($scope.docDetails, "INVOICE_ROWS[0].ORDER_FILE", []);
+
+          $scope.docDetails.attachments = $scope.docDetails.TASK_ATTACHMENTS_CUR || [];
           PelApi.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
-          //PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
+          $scope.title = "חשבונית " + $scope.docDetails.INVOICE_NUM;
+          PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
         }).error(function(error, httpStatus, headers, config) {
           var time = config.responseTimestamp - config.requestTimestamp;
           var tr = ' (TS  : ' + (time / 1000) + ' seconds)';

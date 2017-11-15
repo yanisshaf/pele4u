@@ -169,11 +169,28 @@ angular.module('tabSlideBox', [])
           $scope.events = new SimplePubSub();
 
           $scope.disable = function(event) {
-            $ionicSlideBoxDelegate.enableSlide(false);
+            if (event === "drag") $ionicSlideBoxDelegate.enableSlide(false);
+
+            if (event === "left-right" || event === "right-left") {
+              $ionicScrollDelegate.getScrollView().options.scrollingX = true;
+              $ionicScrollDelegate.getScrollView().options.scrollingY = false;
+            }
+            if (event === "up-down" || event === "down-up") {
+              $ionicScrollDelegate.getScrollView().options.scrollingX = false;
+              $ionicScrollDelegate.getScrollView().options.scrollingY = true;
+            }
           }
 
           $scope.enable = function(event) {
-            $ionicSlideBoxDelegate.enableSlide(true);
+            if (event === "drag") $ionicSlideBoxDelegate.enableSlide(true);
+            if (event === "left-right" || event === "right-left") {
+              $ionicScrollDelegate.getScrollView().options.scrollingX = true;
+              $ionicScrollDelegate.getScrollView().options.scrollingY = false;
+            }
+            if (event === "up-down" || event === "down-up") {
+              $ionicScrollDelegate.getScrollView().options.scrollingX = false;
+              $ionicScrollDelegate.getScrollView().options.scrollingY = true;
+            }
           }
 
           $scope.slideHasChanged = function(index) {

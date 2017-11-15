@@ -1,33 +1,72 @@
 angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova', 'pele.messages'])
   .factory('PelApi', function($cordovaFileTransfer, $cordovaNetwork, $ionicActionSheet, $http, $rootScope, appSettings, $state, $ionicLoading, $filter, $ionicPopup, $timeout, $fileLogger, $sessionStorage, $localStorage, $cordovaFile, messages) {
+    var self = this;
+    var _global = {};
+    var network = {};
     return {
 
+      getLocalStorageUsage: function() {
+        var _lsTotal = 0,
+          maxLen = 0,
+          _xLen, _x, largestX;
+        var localStorageKeys = {};
+        for (var i = 0; i < localStorage.length; i++) {
+          localStorageKeys[localStorage.key(i)] = 1;
+        }
+
+        for (_x in localStorageKeys) {
+          _xLen = ((localStorage.getItem(_x).length + _x.length) * 2);
+          if (_xLen > maxLen) {
+            largestX = _x;
+            maxLen = _xLen;
+          }
+          _lsTotal += _xLen;
+
+        };
+        var kb = (_lsTotal / 1024).toFixed(2);
+        var mb = (kb / 1024).toFixed(2);
+        return {
+          kb: kb,
+          mb: mb,
+          largetKey: largestX,
+          maxSize: (maxLen / (1024 * 1024)).toFixed(2)
+        }
+      },
       init: function() {
-        this.network = {};
+        this.global.set('debugFlag', appSettings.debug, true)
+
         this.messages = messages;
         this.appSettings = appSettings;
         this.topconfig = appSettings.apiConfig;
         this.env = appSettings.env;
         //file "located" in Borwser localStorage
+        this.$fileLogger = $fileLogger;
         this.lagger = $fileLogger;
+
         this.sessionStorage = $sessionStorage;
         this.localStorage = $localStorage;
-        //this.lagger = { info :function(){},error:function(){}};
+
       },
       cordovaInit: function() {
         //file in device file system
         var self = this;
-        this.isAndroid = ionic.Platform.isAndroid();
-        this.isIOS = ionic.Platform.isIOS();
+        self.isAndroid = ionic.Platform.isAndroid();
+        self.isIOS = ionic.Platform.isIOS();
         appSettings.config.network = $cordovaNetwork.getNetwork();
         appSettings.config.isOnline = $cordovaNetwork.isOnline();
+        network = {
+          isOnline: $cordovaNetwork.isOnline(),
+          network: $cordovaNetwork.getNetwork()
+        };
+
         //$scope.$apply();
+
 
         // listen for Online event
         $rootScope.$on('$cordovaNetwork:online', function(event, networkState) {
           appSettings.config.isOnline = true;
           appSettings.config.network = $cordovaNetwork.getNetwork();
-          self.network = {
+          network = {
             isOnline: true,
             network: $cordovaNetwork.getNetwork()
           };
@@ -45,7 +84,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         $rootScope.$on('$cordovaNetwork:offline', function(event, networkState) {
           appSettings.config.isOnline = false;
           appSettings.config.network = $cordovaNetwork.getNetwork();
-          self.network = {
+          network = {
             isOnline: false,
             network: $cordovaNetwork.getNetwork()
           };
@@ -58,14 +97,15 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           $rootScope.$apply();
         })
 
-        this.lagger = $fileLogger;
+        self.lagger = $fileLogger;
 
-        $fileLogger.setStorageFilename(appSettings.config.LOG_FILE_NAME)
-        this.lagger.deleteLogfile().then(function() {
+        $fileLogger.setStorageFilename(appSettings.config.LOG_FILE_NAME);
+        self.lagger.info('start new log');
+        self.lagger.deleteLogfile().then(function() {
           $fileLogger.setStorageFilename(appSettings.config.LOG_FILE_NAME)
-          this.lagger.info('Flush log ->  start new log');
+          self.lagger.info('Flush log ->  start new log');
         });
-        this.registerPushNotification();
+        self.registerPushNotification();
       },
 
       registerPushNotification: function() {
@@ -73,38 +113,38 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         //--   Registration for Push Notification
         //-----------------------------------------
         var self = this;
-        if (window.plugins !== undefined) {
+        if (window.plugins && window.plugins.notification && cordova.plugins.notification.badge) {
           cordova.plugins.notification.badge.configure({
             autoClear: true
           });
 
           cordova.plugins.notification.badge.clear();
-
-          var oneSignalConf = appSettings.apiConfig.OneSignal[appSettings.apiConfig.env] || "notfound";
-          if (oneSignalConf === "notfound") {
-            self.throwError("client", "registerPushNotification", "Onesignal conf not found !", false);
-          }
-
-          self.lagger.info('Open Notification Event');
-          window.plugins.OneSignal.setLogLevel({
-            logLevel: oneSignalConf.logLevel || 0,
-            visualLevel: oneSignalConf.visualLevel || 0
-          });
-          var notificationOpenedCallback = function(jsonData) {
-            self.lagger.info('notificationOpenedCallback: ', jsonData);
-          };
-          window.plugins.OneSignal
-            //.startInit(conf.appId, conf.googleProjectNumber)
-            .startInit(oneSignalConf.appId)
-            .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
-            .handleNotificationOpened(notificationOpenedCallback)
-            .endInit();
-
-          window.plugins.OneSignal.getIds(function(ids) {
-            appSettings.config.PLAYER_ID = ids.userId;
-            self.lagger.info('window.plugins.OneSignal.getIds :' + ids.userId);
-          });
         }
+        var oneSignalConf = appSettings.apiConfig.OneSignal[appSettings.apiConfig.env] || "notfound";
+        if (oneSignalConf === "notfound") {
+          self.throwError("client", "registerPushNotification", "Onesignal conf not found !", false);
+        }
+
+        self.lagger.info('Open Notification Event');
+        window.plugins.OneSignal.setLogLevel({
+          logLevel: oneSignalConf.logLevel || 0,
+          visualLevel: oneSignalConf.visualLevel || 0
+        });
+        var notificationOpenedCallback = function(jsonData) {
+          self.lagger.info('notificationOpenedCallback: ', jsonData);
+        };
+        window.plugins.OneSignal
+          //.startInit(conf.appId, conf.googleProjectNumber)
+          .startInit(oneSignalConf.appId)
+          .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
+          .handleNotificationOpened(notificationOpenedCallback)
+          .endInit();
+
+        window.plugins.OneSignal.getIds(function(ids) {
+          appSettings.config.PLAYER_ID = ids.userId;
+          self.lagger.info('window.plugins.OneSignal.getIds :' + ids.userId);
+        });
+
       },
 
       sendPincode: function(pincode) {
@@ -114,7 +154,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           data: {
             pincode: pincode
           },
-
           timeout: appSettings.timeout,
           headers: {
             'Content-Type': 'application/json; charset=utf-8'
@@ -169,11 +208,18 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         //{"Content-Type": "application/json; charset=utf-8"};
         var envUrl = links + "&UserName=" + appSettings.config.userName + "&ID=" + appSettings.config.user;
 
-        if ("wifi" === appSettings.config.network) {
+        if ("wifi" === network.network) {
+          var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
+          if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
+          if (!msisdn) {
+            self.lagger.error("Service:ScanPrint cant find msisdn ! not in config or localStorage or sessionStorage")
+          }
+
+
           headers = {
             "Content-Type": "application/json; charset=utf-8",
             "VERSION": version,
-            "msisdn": appSettings.config.MSISDN_VALUE
+            "msisdn": msisdn
           }
         } else {
           headers = {
@@ -197,12 +243,18 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var headers = "";
         var version = appSettings.config.APP_VERSION
         var parameters = "/" + appSettings.config.token + "/" + appId + "/" + pin;
-        if ("wifi" === appSettings.config.network) {
+        if ("wifi" === network.network) {
+          var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
+          if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
+          if (!msisdn) {
+            self.lagger.error("Service:ScanPrint cant find msisdn ! not in config or localStorage or sessionStorage")
+          }
+
           envUrl = links.url + parameters;
           headers = {
             "Content-Type": "application/json; charset=utf-8",
             "VERSION": version,
-            "msisdn": appSettings.config.MSISDN_VALUE
+            "msisdn": msisdn
           }
         } else {
           envUrl = links.URL + parameters;
@@ -223,11 +275,18 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //                    GetUserMenu PAGE 1                              //
       //--------------------------------------------------------------------//
       getMenu: function(links) {
+        var self = this;
         // LOADING
+
+        var retry = links.retry || 0;
+        if (network.network === "wifi") {
+          retry = 0;
+        }
         return $http({
           url: links.url,
           method: "GET",
-          timeout: appSettings.menuTimeout,
+          timeout: links.timeout || appSettings.menuTimeout,
+          retry: retry,
           headers: links.headers
         });
 
@@ -257,7 +316,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
+          retry: links.retry || 0,
           headers: links.headers
         });
       },
@@ -288,7 +348,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          retry: links.retry || 0,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
       },
@@ -318,8 +379,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return $http({
           url: links.url,
           method: "POST",
+          retry: links.retry || 0,
           data: data,
-          timeout: appSettings.timeout,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
       },
@@ -348,7 +410,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          retry: links.retry || 0,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
 
@@ -387,7 +450,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
       },
@@ -418,7 +481,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          retry: links.retry || 0,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
       }, // End GetFileURI
@@ -447,12 +511,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           }
         };
 
-
         return $http({
           url: links.url,
           method: "POST",
           data: data,
-          timeout: appSettings.timeout,
+          retry: links.retry || 0,
+          timeout: links.timeout || appSettings.defaultHttpTimeout,
           headers: links.headers
         });
 
@@ -468,13 +532,31 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var lastError = {
           state: $state.current.name,
           created: new Date(),
-          network: self.network,
+          network: network.network,
           category: category,
           from: from,
           description: errorString,
           redirect: redirect
         };
 
+        var debugFlag = self.global.get('debugFlag');
+        self.$fileLogger.error("-------------- START ERROR SECTION  ------------------");
+        if (!debugFlag || debugFlag === undefined) {
+          var lastStateChangeStart = self.global.get('lastStateChangeStart');
+          var lastStateChangeError = self.global.get('lastStateChangeError');
+          var lastApiResponse = self.global.get('lastApiResponse');
+          var lastApiRequestConfig = self.global.get('lastApiRequestConfig');
+          if (lastStateChangeStart)
+            self.$fileLogger.error("lastStateChangeStart:", lastStateChangeStart);
+          if (lastStateChangeError)
+            self.$fileLogger.error("lastStateChangeError:", lastStateChangeError);
+          if (lastApiResponse)
+            self.$fileLogger.error("lastApiResponse:", lastApiResponse);
+          if (lastApiRequestConfig)
+            self.$fileLogger.error("lastApiRequestConfig:", lastApiRequestConfig);
+        }
+        self.$fileLogger.error(lastError);
+        self.$fileLogger.error("-------------- END ERROR SECTION  ------------------");
         var errStr = "";
         Object.keys(lastError).forEach(function(k) {
           errStr += k + ":" + lastError[k] + "\n\r";
@@ -507,6 +589,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           description: ""
         };
 
+
         //First check EAI ResponseHeader
         var eaiStatus = _.get(data, "Response.ResponseHeader.EAI_Status");
         var SessionStatus = _.get(data, "Response.OutParams.SessionStatus");
@@ -514,13 +597,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         if (eaiStatus && eaiStatus != "0") {
           return {
             status: "EAI_ERROR",
-            description: "EAI ResponseHeader return with error"
+            description: "EAI ResponseHeader return with error : "
           }
         }
         // Then we check EAI OutParams (Application error)
         var P_ERROR_CODE = _.get(data, "Response.OutParams.P_ERROR_CODE", "").toString();
         var P_ERROR_DESC = _.get(data, "Response.OutParams.P_ERROR_DESC");
-
+        var AppErrorCode = _.get(data, "Response.OutParams.ErrorCode", "").toString();
+        var AppErrorDesc = _.get(data, "Response.OutParams.ErrorDesc");
 
         if (P_ERROR_CODE && P_ERROR_CODE != "0") {
           return {
@@ -528,6 +612,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             description: P_ERROR_DESC
           }
         }
+
+        if (AppErrorCode && AppErrorCode != "0") {
+          return {
+            status: "APP_ERROR_CODE",
+            description: AppErrorDesc
+          }
+        }
+
         // then check specical return data from getMenu API
         if ("getMenu" === interface) {
           stat.status = data.Status;
@@ -561,7 +653,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           self.throwError("eai", "checkApiResponse", apiStat.description)
         } else if ("ERROR_CODE" === pinStatus) {
           self.throwError("app", "checkApiResponse", apiStat.description)
+        } else if ("APP_ERROR_CODE" === pinStatus) {
+          self.throwError("app", "checkApiResponse", apiStat.description)
         }
+
+        apiStat.error = true;
         return apiStat;
       },
       //-----------------------------------------------------------------------------//
@@ -727,9 +823,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //--                    GetServiceUrl                     --//
       //----------------------------------------------------------//
       getDocApproveServiceUrl: function(serviceName) {
+        var self = this;
         var serviceConf = appSettings.apiConfig.services[serviceName];
         if (!serviceConf || serviceConf == undefined) {
-          this.lagger.error("No service conf found : " + serviceName);
+
+          self.lagger.error("No service conf found : " + serviceName);
           return serviceConf;
         }
 
@@ -738,8 +836,16 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           "VERSION": appSettings.config.APP_VERSION
         };
 
-        if ("wifi" === appSettings.config.network) {
-          headers.msisdn = appSettings.config.MSISDN_VALUE;
+
+        if ("wifi" === network.network) {
+          var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
+          if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
+          if (!msisdn) {
+            self.lagger.error("Service:" + serviceName + " cant find msisdn ! not in config or localStorage or sessionStorage")
+
+          }
+
+          headers.msisdn = msisdn;
           serviceConf.url = appSettings.apiConfig.wifi_uri + serviceConf.endpoint;
         } else {
           serviceConf.url = appSettings.apiConfig.uri + serviceConf.endpoint;
@@ -845,7 +951,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //====================================================//
       showLoading: function(options) {
         // you can configure default ionicLoadingConfig in  config.js   file
-        $ionicLoading.show();
+        $ionicLoading.show(options);
       },
       hideLoading: function() {
         $ionicLoading.hide();
@@ -1074,12 +1180,50 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           if (redirect)
             self.throwError("api", "jsonParse", "Failed to parse  JSON  string :" + str, redirect)
           else
-            PelApi.lagger.error("Failed to parse  JSON  string   : " + str)
+            self.lagger.error("Failed to parse  JSON  string   : " + str)
           return undefined;
         }
         return jsVar;
       },
 
+      extendActionHistory: function(doc) {
+        if (!doc.ACTION_HISTORY) return [];
+        doc.ACTION_HISTORY.forEach(function(action) {
+          action.display = false;
+          action.right_icon = "";
+          action.left_icon = "";
+
+          if (typeof action.NOTE != "undefined" && action.NOTE.length) {
+            action.display = true;
+            action.left_icon = 'ion-chevron-down';
+            if (action.ACTION_CODE == "REJECT") {
+              action.right_icon = 'ion-close-circled red';
+            }
+          }
+          if (action.ACTION_CODE === "FORWARD" || action.ACTION_CODE === "APPROVE") {
+            action.left_icon = 'ion-chevron-left';
+            action.right_icon = 'ion-checkmark-circled'
+          }
+          if (action.ACTION_CODE === "NO_ACTION") {
+            action.left_icon = 'ion-chevron-left';
+            action.right_icon = 'ion-minus-circled';
+          }
+          if (action.ACTION_CODE === "WAITING") {
+            action.short_text = 'ממתין';
+            action.right_icon = 'ion-clock navy';
+          }
+          if (!action.ACTION_CODE && action.NOTE) {
+            action.display = false;
+            action.left_icon = 'ion-chevron-left';
+            action.short_text = action.NOTE;
+          }
+          if (!action.ACTION_CODE && !action.NOTE) {
+            action.display = false;
+            action.right_icon = "";
+            action.left_icon = "";
+          }
+        })
+      },
       showBtnActions: function(scope, butttons) {
         var self = this;
         var buttons = self.getButtons(butttons);
@@ -1100,6 +1244,41 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       getErrorsStack: function() {
         return _.reverse(($localStorage.appErrors || []))
       },
+      global: {
+        getall: function() {
+          return _global;
+        },
+        get: function(varname, storageInd, defvalue) {
+          storageInd = storageInd || true;
+
+          if (typeof _global[varname] !== "undefined") {
+            return _global[varname];
+          }
+          if (storageInd && $localStorage._global && $localStorage._global[varname] !== "undefined") {
+            _global[varname] = $localStorage._global[varname]
+            return _global[varname]
+          }
+          if (defvalue) {
+            return defvalue;
+          } else {
+            return undefined
+          }
+
+        },
+        set: function(varname, newval, storageInd) {
+          storageInd = storageInd || true;
+          _global[varname] = newval;
+          if (storageInd) {
+            $localStorage[varname] = newval;
+          }
+          return true;
+        },
+        clear: function(varname) {
+          delete _global[varname]
+          delete $localStorage[varname]
+          return true;
+        }
+      },
       pinState: {
         get: function() {
           if (typeof this.pinStateData !== "undefined") {
@@ -1114,9 +1293,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             valid: false,
             code: ""
           }
-
           this.pinStateData = $localStorage.pinStateData;
-
         },
         set: function(newState) {
           this.pinStateData = newState;
@@ -1127,16 +1304,29 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           $localStorage.pinStateData = undefined;
         }
       },
-
       openAttachment: function(file, appId) {
+
+        var spinOptions = {
+          delay: 0,
+          template: '<div class="text-center">המתינו לפתיחת הקובץ' +
+            '<br \><img ng-click="stopLoading()" class="spinner" src="./img/spinners/puff.svg">' +
+            '</div>',
+        };
+
         appId = appId || "123456";
+        openDoc = function(url, target, propsStr) {
+          var myPopup = window.open(url, target, propsStr);
+          myPopup.addEventListener('loadend', function() {
+            self.hideLoading();
+          }, false);
+        }
         var self = this;
-        self.appSettings.config.ATTACHMENT_TIME_OUT = 1000;
+
 
         var timeoutFunction = function() {
           $ionicLoading.hide();
           $rootScope.$broadcast('scroll.refreshComplete');
-          PelApi.showPopup(self.appSettings.config.FILE_TIMEOUT, "");
+          self.showPopup(self.appSettings.config.FILE_TIMEOUT, "");
         };
 
         if (file.SHOW_CONTENT !== 'Y') {
@@ -1144,52 +1334,54 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           return true;
         }
         var links = self.getDocApproveServiceUrl("GetFileURI");
-        self.showLoading();
+        self.showLoading(spinOptions);
+
         var pinCode = self.pinState.get().code;
         var full_path = self.appSettings.shareFileDirectory + file.TARGET_PATH + "/" + file.TARGET_FILENAME;
 
         var getFilePromise = self.GetFileURI(links, appId, self.pinState.get().code, full_path);
         getFilePromise.success(function(data) {
+          self.showLoading(spinOptions);
           var fileApiData = self.checkApiResponse(data);
 
           if (typeof fileApiData.URI === "undefined" || !fileApiData.URI) {
+            self.hideLoading();
             self.showPopup(self.appSettings.config.FILE_NOT_FOUND, "");
             return false;
           }
 
           targetPath = self.getAttchDirectory() + '/' + file.TARGET_FILENAME;
-
+          var docWindow;
           if (!window.cordova) {
             self.showPopup("הקובץ ירד לספריית ההורדות במחשב זה", "");
-            window.open(fileApiData.URI, "_system", "location=yes,enableViewportScale=yes,hidden=no");
+            openDoc(fileApiData.URI, "_system", "location=yes,enableViewportScale=yes,hidden=no");
           } else if (self.isIOS) {
-            window.open(fileApiData.URI, "_system", "charset=utf-8,location=yes,enableViewportScale=yes,hidden=no");
+            openDoc(fileApiData.URI, "_system", "charset=utf-8,location=yes,enableViewportScale=yes,hidden=no");
           } else if (self.isAndroid) {
             var filetimeout = $timeout(timeoutFunction, appSettings.config.ATTACHMENT_TIME_OUT);
-            self.showLoading();
+
             $cordovaFileTransfer.download(fileApiData.URI, targetPath, {}, true)
               .then(
                 //success
                 function(result) {
                   $timeout.cancel(filetimeout);
                   if (!result.nativeURL) {
+                    self.hideLoading();
                     self.throwError("api", "cordovaFileTransfer.download", JSON.stringify(result), false);
                   } else {
-                    window.open(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
+                    openDoc(result.nativeURL, "_system", "location=yes,enableViewportScale=yes,hidden=no");
                   }
                 },
-                //error
                 function(error) {
+                  self.hideLoading()
                   self.showPopup(self.appSettings.config.FILE_NOT_FOUND, "");
                 },
-                // in progress
                 function(progress) {
-                  //  $timeout(function() {
-                  //    $scope.downloadProgress = (progress.loaded / progress.total) * 100;
-                  //  });
+                  //  self.showLoading(spinOptions);
                 })
           }
         }).error(function(error) {
+          self.hideLoading();
           self.showPopup(self.appSettings.config.FILE_NOT_FOUND, "");
         }).finally(function() {
           self.hideLoading();
@@ -1246,5 +1438,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     return function(dateString, opt1, opt2) {
       var date = moment(dateString, "YYYYMMDDHHmmss");
       return date.unix() * 1000;
+    }
+  }).filter('highlight', function($sce) {
+    return function(text, phrase) {
+      if (!text)
+        return null;
+      text = text.toString();
+      if (phrase) text = text.replace(new RegExp('(' + phrase + ')', 'gi'), '<span class="highlighted">$1</span>');
+      return $sce.trustAsHtml(text)
     }
   });

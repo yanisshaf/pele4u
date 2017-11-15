@@ -16,6 +16,8 @@ angular.module('pele')
     $sessionStorage,
     appSettings) {
 
+    $scope.appId = $stateParams.AppId;
+
     //---------------------------------
     //--       goHome
     //---------------------------------
@@ -32,7 +34,7 @@ angular.module('pele')
 
       $scope.shownGroup = appSettings.config.PO_ORG_NAME;
 
-      var appId = $stateParams.AppId,
+      var appId = $scope.appId,
         formType = $stateParams.FormType,
         pin = $stateParams.Pin;
 
@@ -72,7 +74,7 @@ angular.module('pele')
             } else {
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
-              var appId = $stateParams.AppId,
+              var appId = $scope.appId,
                 formType = $stateParams.FormType,
                 pin = $stateParams.Pin;
 
@@ -107,11 +109,9 @@ angular.module('pele')
           PelApi.goHome();
 
         } else if ("EAI_ERROR" === pinStatus) {
-
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
           PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
-
         } else if ("ERROR_CODE" === pinStatus) {
 
           $ionicLoading.hide();
@@ -128,8 +128,10 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(error,httpStatus) {
-          PelApi.throwError("api", "GetUserPoOrdGroupGroup", "httpStatus : "+httpStatus)
+        function(error, httpStatus, headers, config) {
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+          PelApi.throwError("api", "GetUserPoOrdGroupGroup", "httpStatus : " + httpStatus + tr)
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -199,8 +201,8 @@ angular.module('pele')
     //-- 01/11/2015  R.W.        function forward to page by DOC_ID
     //--------------------------------------------------------------
     $scope.forwardToDoc = function(docId, docInitId) {
-      var appId = appSettings.config.appId;
-      $scope.appId = appSettings.config.appId;
+      var appId = $scope.appId;
+
       var statePath = 'app.doc_' + docId;
       PelApi.showLoading();
 
@@ -264,8 +266,10 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
         }
       }).error(
-        function(error,httpStatus) {
-            PelApi.throwError("api", "GetUserNotificationsNew", "httpStatus : "+httpStatus)
+        function(error, httpStatus, headers, config) {
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+          PelApi.throwError("api", "GetUserNotificationsNew", "httpStatus : " + httpStatus + tr)
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
