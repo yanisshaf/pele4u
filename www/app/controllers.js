@@ -1,5 +1,5 @@
 angular.module('pele.controllers', ['ngStorage'])
-  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory) {
+  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory, $ionicPopup) {
 
     $rootScope.stopLoading = function() {
       PelApi.hideLoading()
