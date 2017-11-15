@@ -30,6 +30,7 @@ angular.module('pele.controllers', ['ngStorage'])
         $scope.badgeCount = cnt;
       })
     }
+
     $scope.setBadge = function(count) {
       var badgePlugin = _.get(window, "cordova.plugins.notification.badge");
       if (!badgePlugin) {
@@ -44,17 +45,18 @@ angular.module('pele.controllers', ['ngStorage'])
         $ionicPopup.alert({
           title: "check if badge counter is clear"
         });
-        badgePlugin.get(function(cnt) {
-          $scope.badgeCount = cnt;
-        })
-
+        setTimeout(function() {
+          $scope.getBadgeCount()
+        }, 2000)
         return true;
       }
 
       badgePlugin.set(count)
-      badgePlugin.get(function(cnt) {
-        $scope.badgeCount = cnt;
-      })
+
+      setTimeout(function() {
+        $scope.getBadgeCount()
+      }, 2000)
+
       $ionicPopup.alert({
         title: "check if badge counter is = " + count
       });
