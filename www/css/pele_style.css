@@ -709,3 +709,9 @@ div.hide-search {height:0px;min-height: 0px;display:none}
    transform: scale(1.05);
 }
 div.short_text { font-size:12px}
+
+table.init_lines_table {margin-bottom: 6px}
+table.init_lines_table thead {background: #f4f4f4;border:1px solid #999999}
+table.init_lines_table .label {padding-right:5px;}
+table.init_lines_table thead .label {font-weight: bold}
+table.init_lines_table {border:1px solid #CCC}

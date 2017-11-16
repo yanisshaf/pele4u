@@ -1,5 +1,5 @@
 angular.module('pele.controllers', ['ngStorage'])
-  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory, $ionicPopup) {
+  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory) {
 
     $rootScope.stopLoading = function() {
       PelApi.hideLoading()
@@ -7,14 +7,6 @@ angular.module('pele.controllers', ['ngStorage'])
 
     $scope.getLocalStorageUsage = function() {
       return PelApi.getLocalStorageUsage();
-    }
-
-
-    $scope.appDebug = PelApi.global.get('debugFlag', true)
-    $scope.setDebug = function(flag) {
-
-      PelApi.global.set('debugFlag', flag, true)
-      $scope.appDebug = flag;
     }
 
 
@@ -61,6 +53,16 @@ angular.module('pele.controllers', ['ngStorage'])
         title: "check if badge counter is = " + count
       });
     }
+
+
+    $scope.appDebug = PelApi.global.get('debugFlag', true)
+
+    $scope.setDebug = function(flag) {
+
+      PelApi.global.set('debugFlag', flag, true)
+      $scope.appDebug = flag;
+    }
+
 
     $scope.storage_PELE4U_MSISDN = window.localStorage.getItem('PELE4U_MSISDN');
     $scope.config_PELE4U_MSISDN = PelApi.appSettings.config.MSISDN_VALUE;

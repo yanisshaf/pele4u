@@ -33,6 +33,7 @@ angular.module('pele')
           var apiData = PelApi.checkApiResponse(data);
           if (apiData.error) return false;
           $scope.docDetails = PelApi.getJsonString(apiData.Result, "JSON[0]", true);
+          console.log(JSON.stringify($scope.docDetails.INIT_LINES));
           $scope.title = "אישור ייזום " + $scope.docDetails.DOC_INIT_NUMBER;
           $scope.docDetails.attachments = $scope.docDetails.ATTACHMENT_FILES || [];
           PelApi.extendActionHistory($scope.docDetails);

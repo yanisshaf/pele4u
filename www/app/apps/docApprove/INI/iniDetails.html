@@ -30,6 +30,8 @@
               <div ng-repeat="action in docDetails.ACTION_HISTORY" class="pele_rtl">
                 <div ng-click="action.left_icon && toggleActionItem(action)" class="item item-divider item-icon-left item-icon-right text-right action-history-item">
                   <i class="icon pel_icon icon-sm" ng-class="action.left_icon"></i> {{action.APPROVAL_SEQ}}. {{action.USER_NAME}}
+                  <small class="string-badge" ng-show="action.short_text">{{action.short_text}}</small>
+
                   <i class="icon pel_icon icon-sm" ng-class="action.right_icon"></i>
                 </div>
                 <div class="item bo-border pele_rtl text-right item-icon-left item-icon-right text-right" ng-show="action.display">
@@ -111,6 +113,44 @@
                       </tr>
                     </tbody>
                   </table>
+                </div>
+              </li>
+              <li class="item item-info no-border">
+                <div class="item item-divider item-icon-right item-icon-left" ng-init="lines_elm=false" ng-click="lines_elm=!lines_elm">
+                  <i class="icon pel_icon icon-sm" ng-class="attach_elm ? 'ion-chevron-down' :'ion-chevron-left'"></i>
+                  <h2 class="text-right pele_rtl">שורות ייזום</h2>
+                  <i class="icon pel_icon icon-md ion-navicon"></i>
+                </div>
+                <div class="item-section" ng-show="lines_elm">
+                  <div ng-show="!docDetails.INIT_LINES.length" class="item-text-wrap">לא נמצאו שורות ייזום</div>
+
+                  <table class="init_lines_table pele_rtl text-right" ng-repeat="line in docDetails.INIT_LINES">
+                    <thead>
+                      <th class="label"> שורה {{line.LINE_NUM}}: </th>
+                      <th class="item-text-wrap">
+                        {{line.ITEM}}
+                      </th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="label">מחיר ליחידה: </td>
+                        <td class="info"> {{line.PRICE}} </td>
+                      </tr>
+                      <tr>
+                        <td class="label">כמות: </td>
+                        <td class="info"> {{line.QTY}} </td>
+                      </tr>
+                      <tr>
+                        <td class="label">סה"כ לשורה: </td>
+                        <td class="info"> {{line.SUM_QTY}} </td>
+                      </tr>
+                      <tr>
+                        <td class="label">שם ספק: </td>
+                        <td class="info"> {{line.VENDOR}} </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
                 </div>
               </li>
               <li class="item item-info no-border">
