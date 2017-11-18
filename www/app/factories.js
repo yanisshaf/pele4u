@@ -133,18 +133,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
         
         var handleNotificationReceived = function(data) { 
-          var alertPopup = $ionicPopup.alert({
-              title: 'notification received',
-              template: JSON.stringify(data.payload)
-            });
-            
+       
           self.lagger.info('handleNotificationReceived: ', data);
         }
         var notificationOpenedCallback = function(data) {
-            var alertPopup = $ionicPopup.alert({
-              title: 'notification received',
-              template: JSON.stringify(data.payload)
-            });
+        
             
           self.lagger.info('notificationOpenedCallback: ', data);
         };
