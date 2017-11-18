@@ -133,10 +133,20 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
         
         var handleNotificationReceived = function(data) { 
-           self.lagger.info('handleNotificationReceived: ', data);
+          var alertPopup = $ionicPopup.alert({
+              title: 'notification received',
+              template: JSON.stringify(data.payload)
+            });
+            
+          self.lagger.info('handleNotificationReceived: ', data);
         }
-        var notificationOpenedCallback = function(jsonData) {
-          self.lagger.info('notificationOpenedCallback: ', jsonData);
+        var notificationOpenedCallback = function(data) {
+            var alertPopup = $ionicPopup.alert({
+              title: 'notification received',
+              template: JSON.stringify(data.payload)
+            });
+            
+          self.lagger.info('notificationOpenedCallback: ', data);
         };
         
         window.plugins.OneSignal
