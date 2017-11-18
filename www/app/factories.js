@@ -131,14 +131,20 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           logLevel: oneSignalConf.logLevel || 0,
           visualLevel: oneSignalConf.visualLevel || 0
         });
+        
+        var handleNotificationReceived = function(data) { 
+           self.lagger.info('handleNotificationReceived: ', data);
+        }
         var notificationOpenedCallback = function(jsonData) {
           self.lagger.info('notificationOpenedCallback: ', jsonData);
         };
+        
         window.plugins.OneSignal
           //.startInit(conf.appId, conf.googleProjectNumber)
           .startInit(oneSignalConf.appId)
           .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
           .handleNotificationOpened(notificationOpenedCallback)
+          .handleNotificationReceived(handleNotificationReceived)
           .endInit();
 
         window.plugins.OneSignal.getIds(function(ids) {
