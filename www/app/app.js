@@ -103,6 +103,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       //---------------------------------------------------------------------------//
       .state('app.p1_appsLists', {
         url: '/p1_appsLists',
+        cache: false,
         views: {
           'menuContent': {
             templateUrl: 'templates/p1_appsLists.html',
