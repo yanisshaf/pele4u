@@ -544,12 +544,16 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       throwError: function(category, from, errorString, redirectInd) {
         var self = this;
         var redirect = redirectInd || true;
+        
         if(!$cordovaNetwork.isOnline()) {
-           $ionicPopup.alert({
+          var tryAgain =   $ionicPopup.alert({
               title: 'בעיית חיבור נתונים',
-              template: appSettings.config.OFFLINE_MESSAGE
+              template: "<Div class='text-center'>" + appSettings.config.OFFLINE_MESSAGE + "</div>" 
             });
             redirect = false ;
+            tryAgain.then(function(res) {
+                 PelApi.goHome();
+            });
         }
         
         if (category.match(/api|eai|app/i)) {
