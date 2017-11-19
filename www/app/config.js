@@ -62,13 +62,13 @@ const apiConfig = {
   },
   services: {
     GetUserMenu: {
-      timeout: 10000,
+      timeout: 15000,
       retry: 2,
       "endpoint": "/" + SSOEnv[env] + "/MobileServices/SSOService.svc/json/GetUserMenu",
       "RequestHeader": ""
     },
     GetUserNotifNew: {
-      timeout: 10000, // $http timeout
+      timeout: 15000, // $http timeout
       retry: 2,
       "endpoint": "/" + SSOEnv[env] + "/REST/GetUserNotifNew",
       "RequestHeader": {
@@ -79,7 +79,7 @@ const apiConfig = {
       }
     },
     GetUserModuleTypes: {
-      timeout: 10000,
+      timeout: 15000,
       retry: 2,
       "endpoint": "/" + SSOEnv[env] + "/REST/GetUserModuleTypes",
       "RequestHeader": {
@@ -90,7 +90,7 @@ const apiConfig = {
       }
     },
     GtUserFormGroups: {
-      timeout: 10000,
+      timeout: 15000,
       retry: 2,
       "endpoint": "/" + SSOEnv[env] + "/REST/GtUserFormGroups",
       "RequestHeader": {
@@ -101,7 +101,7 @@ const apiConfig = {
       }
     },
     GetUserNotif: {
-      timeout: 10000,
+      timeout: 15000,
       retry: 2,
       "endpoint": "/" + SSOEnv[env] + "/REST/GetUserNotif",
       "RequestHeader": {
@@ -122,7 +122,7 @@ const apiConfig = {
       }
     },
     GetUserPoOrdGroup: {
-      timeout: 10000,
+      timeout: 15000,
       retry: 2,
       "endpoint": "/" + SSOEnv[env] + "/REST/GetUserPoOrdGroup",
       "RequestHeader": {
@@ -133,7 +133,7 @@ const apiConfig = {
       }
     },
     GetUserRqGroups: {
-      timeout: 10000,
+      timeout: 15000,
       retry: 2,
       "endpoint": "/" + SSOEnv[env] + "/REST/GetUserRqGroups",
       "RequestHeader": {
@@ -144,7 +144,7 @@ const apiConfig = {
       }
     },
     GetFileURI: {
-      timeout: 10000,
+      timeout: 15000,
       retry: 2,
       "endpoint": "/" + SSOEnv[env] + "/REST/GetFileURI",
       "RequestHeader": {
@@ -155,8 +155,8 @@ const apiConfig = {
       }
     },
     IsSessionValidJson: {
-      timeout: 10000,
-      retry: 0,
+      timeout: 20000,
+      retry: 2,
       "endpoint": "/" + SSOEnv[env] + "/MobileServices/SSOService.svc/json/IsSessionValidJson",
       "RequestHeader": ""
     }
