@@ -215,6 +215,7 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
               title: 'בעיית חיבור נתונים',
               template: "<Div class='text-center'>" + appSettings.config.OFFLINE_MESSAGE + "</div>" 
             });
+            return false ;
     }
         
     PelApi.showLoading();
