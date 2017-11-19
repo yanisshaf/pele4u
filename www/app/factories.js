@@ -551,9 +551,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
               template: "<Div class='text-center'>" + appSettings.config.OFFLINE_MESSAGE + "</div>" 
             });
             redirect = false ;
-            tryAgain.then(function(res) {
-                 PelApi.goHome();
-            });
         }
         
         if (category.match(/api|eai|app/i)) {
