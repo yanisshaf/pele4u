@@ -32,6 +32,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           maxSize: (maxLen / (1024 * 1024)).toFixed(2)
         }
       },
+      ensureOnline:function(){ 
+        if($cordovaNetwork.isOnline()) {
+          return true ;
+        }
+        PelApi.goHome();
+      },
       init: function() {
         this.global.set('debugFlag', appSettings.debug, true)
 
