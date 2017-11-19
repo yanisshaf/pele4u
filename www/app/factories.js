@@ -1271,7 +1271,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
 
       getErrorsStack: function() {
-        return _.orderBy(($localStorage.appErrors || []),['timestampe'],[false]);
+        return _.orderBy(($localStorage.appErrors || []),['timestampe'],[true]);
       },
       global: {
         getall: function() {

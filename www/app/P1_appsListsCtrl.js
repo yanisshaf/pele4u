@@ -308,5 +308,8 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
   var btnClass = {};
   btnClass.activ = false;
   $scope.class = "pele-menu-item-on-touch item-icon-right";
-  $scope.doRefresh();
+  $scope.$on('$ionicView.enter', function() {
+    $scope.doRefresh();
+  });
+  
 })
