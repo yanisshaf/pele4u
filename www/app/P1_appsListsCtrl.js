@@ -8,6 +8,7 @@ var app = angular.module('pele.P1_appsListCtrl', ['ngStorage']);
 app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading, PelApi, $rootScope, $ionicPopup, $ionicHistory, $sessionStorage, $localStorage, appSettings, srvShareData) {
 
   $ionicHistory.clearHistory();
+  
   PelApi.lagger.checkFile().then(function(logStat) {
     if (logStat.size > (1024 * 1024)) {
       PelApi.lagger.deleteLogfile().then(function() {
@@ -209,12 +210,19 @@ app.controller('P1_appsListCtrl', function($scope, $http, $state, $ionicLoading,
     $scope.btn_class = {};
     $scope.btn_class.on_release = true;
 
+    if(!PelApi.cordovaNetwork.isOnline()) {
+          var tryAgain =   $ionicPopup.alert({
+              title: 'בעיית חיבור נתונים',
+              template: "<Div class='text-center'>" + appSettings.config.OFFLINE_MESSAGE + "</div>" 
+            });
+    }
+        
     PelApi.showLoading();
     var errorMsg = "";
 
     $scope.isOnline = appSettings.config.isOnline;
     $scope.network = appSettings.config.network;
-
+    
     //-------------------------------//
     //PelApi.setPELE4_SETTINGS_DIRECTORY();
     //-------------------------------//

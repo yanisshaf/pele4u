@@ -61,6 +61,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var self = this;
         self.isAndroid = ionic.Platform.isAndroid();
         self.isIOS = ionic.Platform.isIOS();
+        self.cordovaNetwork = $cordovaNetwork ;
         appSettings.config.network = $cordovaNetwork.getNetwork();
         appSettings.config.isOnline = $cordovaNetwork.isOnline();
         network = {
