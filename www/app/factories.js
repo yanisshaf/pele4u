@@ -544,6 +544,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       throwError: function(category, from, errorString, redirectInd) {
         var self = this;
         var redirect = redirectInd || true;
+        if(!$cordovaNetwork.isOnline()) {
+           $ionicPopup.alert({
+              title: 'בעיית חיבור נתונים',
+              template: appSettings.config.OFFLINE_MESSAGE
+            });
+            redirect = false ;
+        }
+        
         if (category.match(/api|eai|app/i)) {
           errorString = "API request " + from + " endedd with failure : " + errorString;
         }

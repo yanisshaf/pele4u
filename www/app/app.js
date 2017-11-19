@@ -251,7 +251,6 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         config.headers = config.headers || {};
         if (config.url.match(/^http/)) {
           var PelApi = $injector.get('PelApi');
-          PelApi.ensureOnline();
           if (PelApi.global.get('debugFlag')) {
             PelApi.lagger.info("---------------------------------------------")
             PelApi.lagger.info("-> " + config.method + " API request : " + config.url)
