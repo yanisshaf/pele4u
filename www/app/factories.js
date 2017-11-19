@@ -227,7 +227,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         //{"Content-Type": "application/json; charset=utf-8"};
         var envUrl = links + "&UserName=" + appSettings.config.userName + "&ID=" + appSettings.config.user;
 
-        if ("wifi" === network.network) {
+        if ("wifi" === $cordovaNetwork.getNetwork()) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -262,7 +262,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var headers = "";
         var version = appSettings.config.APP_VERSION
         var parameters = "/" + appSettings.config.token + "/" + appId + "/" + pin;
-        if ("wifi" === network.network) {
+        if ("wifi" === $cordovaNetwork.getNetwork()) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -298,7 +298,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         // LOADING
 
         var retry = links.retry || 0;
-        if (network.network === "wifi") {
+        if ($cordovaNetwork.getNetwork() === "wifi") {
           retry = 0;
         }
         return $http({
@@ -563,7 +563,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var lastError = {
           state: $state.current.name,
           created: new Date(),
-          network: network.network,
+          network: $cordovaNetwork.getNetwork(),
           category: category,
           from: from,
           description: errorString,
@@ -868,7 +868,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         };
 
 
-        if ("wifi" === network.network) {
+        if ("wifi" === $cordovaNetwork.getNetwork()) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
