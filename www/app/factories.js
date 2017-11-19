@@ -558,6 +558,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         }
 
         var lastError = {
+          timestamp :moment().unix(),
           state: $state.current.name,
           created: new Date(),
           network: $cordovaNetwork.getNetwork(),
@@ -1270,7 +1271,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
 
       getErrorsStack: function() {
-        return _.reverse(($localStorage.appErrors || []))
+        return _.orderBy(($localStorage.appErrors || []),['timestampe'],[false]);
       },
       global: {
         getall: function() {
