@@ -1,5 +1,5 @@
 /*********************/
-const env = "DV";
+const env = "QA";
 /********************/
 
 const EnvCodes = {
@@ -23,7 +23,6 @@ const spinConfig = {
   minWidth: 50,
   delay: 1000
 };
-
 
 const apiConfig = {
   env: env,
@@ -171,7 +170,7 @@ angular.module('pele.config', [])
     debug: false,
     config: {
       mainMenuKeepAlive: 0, // 0 - means disabled
-      APP_VERSION: "117.6",
+      APP_VERSION: "117.7",
       SCAN_PRINT_SCANNING_ERROR: "שגיאה בסריקה",
       PIN_CODE_AUTHENTICATION_REQUIRED_CODE: "10000",
       IS_TOKEN_VALID: "N",
