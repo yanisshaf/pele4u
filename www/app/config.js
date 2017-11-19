@@ -74,7 +74,7 @@ const apiConfig = {
         "ServiceName": "GetUserNotificationsNew",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "10"
+        "Timeout": "15"
       }
     },
     GetUserModuleTypes: {
@@ -85,7 +85,7 @@ const apiConfig = {
         "ServiceName": "GetUserModuleTypes",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "10"
+        "Timeout": "15"
       }
     },
     GtUserFormGroups: {
@@ -96,7 +96,7 @@ const apiConfig = {
         "ServiceName": "GetUserFormGroups",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "10"
+        "Timeout": "15"
       }
     },
     GetUserNotif: {
@@ -107,7 +107,7 @@ const apiConfig = {
         "ServiceName": "GetUserNotifications",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "10"
+        "Timeout": "15"
       }
     },
     SubmitNotif: {
@@ -128,7 +128,7 @@ const apiConfig = {
         "ServiceName": "GetUserPoOrdGroup",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "10"
+        "Timeout": "15"
       }
     },
     GetUserRqGroups: {
@@ -139,7 +139,7 @@ const apiConfig = {
         "ServiceName": "GetUserRqGroups",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "10"
+        "Timeout": "15"
       }
     },
     GetFileURI: {
@@ -150,7 +150,7 @@ const apiConfig = {
         "ServiceName": "ShareFile-GetFileURI",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "10"
+        "Timeout": "15"
       }
     },
     IsSessionValidJson: {
