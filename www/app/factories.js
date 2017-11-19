@@ -33,10 +33,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         }
       },
       ensureOnline:function(){ 
-        if($cordovaNetwork.isOnline()) {
-          return true ;
+        if(!$cordovaNetwork.isOnline()) {
+           $ionicPopup.alert({
+              title: 'בעיית חיבור נתונים',
+              template: appSettings.config.OFFLINE_MESSAGE
+            });
         }
-        PelApi.goHome();
+        return true ;
       },
       init: function() {
         this.global.set('debugFlag', appSettings.debug, true)
