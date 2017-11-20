@@ -21,7 +21,7 @@
     </div>
     <div ng-if="1" class="apps-front-menu">
       <div class="menu-item" ng-class="{reduce:category_sources.length >= 5,reduce2 : category_sources.length >=7}" ng-repeat="source in category_sources">
-        <button ng-click="onClick(source.MODULE_NAME ,source.DOCUMENT_QTY )" class="button button-large button-stable button-block item-icon-right">
+        <button ng-click="onClick(source.MODULE_NAME ,source.DOCUMENT_QTY )" class="button button-large button-stable button-block item-icon-left text-right">
       {{source.MODULE_DESC}} <span class="pel-badge blue">{{source.DOCUMENT_QTY}}</span>
 
       </button>

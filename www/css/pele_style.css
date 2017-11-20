@@ -509,15 +509,23 @@ h2.pele_rtl{
 
 .apps-front-menu {padding: 0 10%}
 .apps-front-menu .menu-item {margin-top:3px}
-.apps-front-menu button { height:70px;position: relative;background-color: #E3F2FD;border-radius: 6px;font-weight:bolder;min-height:70px;}
+.apps-front-menu button { height:70px;position: relative;background-color: #E3F2FD;border-radius: 6px;min-height:70px;}
+.apps-front-menu button {text-align:right}
 .apps-front-menu .menu-item.reduce button {min-height:60px;height:60px}
 .apps-front-menu .menu-item.reduce2 button {min-height:50px;height:50px}
 .apps-front-menu button.activated {border-radius: 6px;background:#BBDEFB}
 .apps-front-menu .badge.badge-positive {margin-right:10px}
 .apps-front-menu .menu-item button img {  position: absolute; height:50px;min-height:50px;
             top: 10px;
-            right:10px
+            left:10px
             }
+.apps-front-menu .menu-item button .pel-badge {  position: absolute;
+top: 50%;
+transform: translateY(-50%);
+margin: 0 auto;
+left:15px;
+}
+                        }
 .apps-front-menu .menu-item.reduce  button img { height:40px;min-height:40px;}
 .apps-front-menu .menu-item.reduce2  button img { height:30px;min-height:30px;}
 
