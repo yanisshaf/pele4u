@@ -177,7 +177,7 @@ angular.module('pele.config', [])
       TITLE_WIFI_FIRST_CONNECTION_1: "בעת כניסה ראשונה",
       TITLE_WIFI_FIRST_CONNECTION_2: "יש לעבור לגלישה ברשת סלולרית",
       TITLE_SYSTEM_MESSAGES: "באפשרותך לבצע כניסה ללא קוד הזדהות על ידי מעבר לגלישה ברשת סלולרית",
-      OFFLINE_MESSAGE:"אנא המתינו להתחברות או בדקו נתונים מחוברים ונסו שוב",
+      OFFLINE_MESSAGE: "לא זוהה חיבור לרשת, יש לבצע רענון לאפליקציה",
       TITLE_OTP_REQUEST: "שלח",
       TITLE_OTP_INPUT: "קוד הזדהות",
       TITLE_SEND_OTP: "כניסה",
