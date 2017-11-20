@@ -5,6 +5,7 @@ angular.module('pele')
   .controller('iniListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
 
     $scope.appId = $stateParams.AppId;
+
     $scope.parse = function(data) {
       var mapped = [];
       data.forEach(function(item) {
