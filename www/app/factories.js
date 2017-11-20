@@ -3,6 +3,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var self = this;
     var _global = {};
     var network = {};
+    var deviceReady = false;
     return {
 
       getLocalStorageUsage: function() {
@@ -32,14 +33,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           maxSize: (maxLen / (1024 * 1024)).toFixed(2)
         }
       },
-      ensureOnline:function(){ 
-        if(!$cordovaNetwork.isOnline()) {
-           $ionicPopup.alert({
-              title: 'בעיית חיבור נתונים',
-              template: appSettings.config.OFFLINE_MESSAGE
-            });
+      ensureOnline: function() {
+        if (deviceReady && !$cordovaNetwork.isOnline()) {
+          $ionicPopup.alert({
+            title: 'בעיית חיבור נתונים',
+            template: appSettings.config.OFFLINE_MESSAGE
+          });
         }
-        return true ;
+        return true;
       },
       init: function() {
         this.global.set('debugFlag', appSettings.debug, true)
@@ -59,9 +60,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       cordovaInit: function() {
         //file in device file system
         var self = this;
+        deviceReady = true;
         self.isAndroid = ionic.Platform.isAndroid();
         self.isIOS = ionic.Platform.isIOS();
-        self.cordovaNetwork = $cordovaNetwork ;
+        self.cordovaNetwork = $cordovaNetwork;
         appSettings.config.network = $cordovaNetwork.getNetwork();
         appSettings.config.isOnline = $cordovaNetwork.isOnline();
         network = {
@@ -141,17 +143,17 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           logLevel: oneSignalConf.logLevel || 0,
           visualLevel: oneSignalConf.visualLevel || 0
         });
-        
-        var handleNotificationReceived = function(data) { 
-       
+
+        var handleNotificationReceived = function(data) {
+
           self.lagger.info('handleNotificationReceived: ', data);
         }
         var notificationOpenedCallback = function(data) {
-        
-            
+
+
           self.lagger.info('notificationOpenedCallback: ', data);
         };
-        
+
         window.plugins.OneSignal
           //.startInit(conf.appId, conf.googleProjectNumber)
           .startInit(oneSignalConf.appId)
@@ -228,7 +230,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         //{"Content-Type": "application/json; charset=utf-8"};
         var envUrl = links + "&UserName=" + appSettings.config.userName + "&ID=" + appSettings.config.user;
 
-        if ("wifi" === $cordovaNetwork.getNetwork()) {
+        if (deviceReady && "wifi" === $cordovaNetwork.getNetwork()) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -263,7 +265,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var headers = "";
         var version = appSettings.config.APP_VERSION
         var parameters = "/" + appSettings.config.token + "/" + appId + "/" + pin;
-        if ("wifi" === $cordovaNetwork.getNetwork()) {
+        if (deviceReady && "wifi" === $cordovaNetwork.getNetwork()) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -299,7 +301,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         // LOADING
 
         var retry = links.retry || 0;
-        if ($cordovaNetwork.getNetwork() === "wifi") {
+        if (deviceReady && $cordovaNetwork.getNetwork() === "wifi") {
           retry = 0;
         }
         return $http({
@@ -545,24 +547,30 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       throwError: function(category, from, errorString, redirectInd) {
         var self = this;
         var redirect = redirectInd || true;
-        
-        if(!$cordovaNetwork.isOnline()) {
-          var tryAgain =   $ionicPopup.alert({
-              title: 'בעיית חיבור נתונים',
-              template: "<Div class='text-center'>" + appSettings.config.OFFLINE_MESSAGE + "</div>" 
-            });
-            redirect = false ;
+        var network = "none";
+        if (deviceReady) {
+          netwrok = $cordovaNetwork.getNetwork();
         }
-        
+
+
+
+        if (deviceReady && !$cordovaNetwork.isOnline()) {
+          var tryAgain = $ionicPopup.alert({
+            title: 'בעיית חיבור נתונים',
+            template: "<Div class='text-center'>" + appSettings.config.OFFLINE_MESSAGE + "</div>"
+          });
+          redirect = false;
+        }
+
         if (category.match(/api|eai|app/i)) {
           errorString = "API request " + from + " endedd with failure : " + errorString;
         }
 
         var lastError = {
-          timestamp :moment().unix(),
+          timestamp: moment().unix(),
           state: $state.current.name,
           created: new Date(),
-          network: $cordovaNetwork.getNetwork(),
+          network: network,
           category: category,
           from: from,
           description: errorString,
@@ -867,7 +875,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         };
 
 
-        if ("wifi" === $cordovaNetwork.getNetwork()) {
+        if (deviceReady && "wifi" === $cordovaNetwork.getNetwork()) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -1272,7 +1280,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
 
       getErrorsStack: function() {
-        return _.orderBy(($localStorage.appErrors || []),['timestamp'],['desc']);
+        console.log(($localStorage.appErrors || []), ['timestamp'], ['desc']);
+        return _.orderBy(($localStorage.appErrors || []), ['timestamp'], ['desc']);
       },
       global: {
         getall: function() {

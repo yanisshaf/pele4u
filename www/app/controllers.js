@@ -1,5 +1,5 @@
 angular.module('pele.controllers', ['ngStorage'])
-  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory) {
+  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory, $ionicPopup) {
 
     $rootScope.stopLoading = function() {
       PelApi.hideLoading()
@@ -12,15 +12,16 @@ angular.module('pele.controllers', ['ngStorage'])
 
     $scope.getBadgeCount = function() {
       var badgePlugin = _.get(window, "cordova.plugins.notification.badge");
-      if (!badgePlugin) {
+      if (!badgePlugin && PelApi.deviceReady) {
         $ionicPopup.alert({
           title: PelApi.messages.no_cordova
         });
         return false;
       }
-      badgePlugin.get(function(cnt) {
-        $scope.badgeCount = cnt;
-      })
+      if (PelApi.deviceReady)
+        badgePlugin.get(function(cnt) {
+          $scope.badgeCount = cnt;
+        })
     }
 
     $scope.setBadge = function(count) {
