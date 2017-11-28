@@ -30,7 +30,7 @@
               <div ng-repeat="action in docDetails.ACTION_HISTORY" class="pele_rtl">
                 <div ng-click="action.left_icon && toggleActionItem(action)" class="item item-divider item-icon-left item-icon-right text-right action-history-item">
                   <i class="icon pel_icon icon-sm" ng-class="action.left_icon"></i> {{action.APPROVAL_SEQ}}. {{action.USER_NAME}}
-                  <small class="string-badge" ng-show="action.short_text">{{action.short_text}}</small>
+                  <small class="string-badge ellipsis_90 ellipsis" ng-show="action.short_text">{{action.short_text}}</small>
 
                   <i class="icon pel_icon icon-sm" ng-class="action.right_icon"></i>
                 </div>
@@ -116,14 +116,15 @@
                 </div>
               </li>
               <li class="item item-info no-border">
-                <div class="item item-divider item-icon-right item-icon-left" ng-init="lines_elm=false" ng-click="lines_elm=!lines_elm">
+                <div class="item item-divider item-icon-right item-icon-left" ng-init="lines_elm=true" ng-click="lines_elm=!lines_elm">
                   <i class="icon pel_icon icon-sm" ng-class="lines_elm ? 'ion-chevron-down' :'ion-chevron-left'"></i>
                   <h2 class="text-right pele_rtl">שורות ייזום</h2>
                   <i class="icon pel_icon icon-md ion-navicon"></i>
                 </div>
-                <div class="item-section" ng-show="lines_elm">
+                <div class="item-section" ng-show="docDetails && !docDetails.INIT_LINES.length">
                   <div ng-show="!docDetails.INIT_LINES.length" class="item-text-wrap">לא נמצאו שורות ייזום</div>
-
+                </div>
+                <div class="item-section" ng-show="lines_elm">
                   <table class="init_lines_table pele_rtl text-right" ng-repeat="line in docDetails.INIT_LINES">
                     <thead>
                       <th class="label"> שורה {{line.LINE_NUM}}: </th>
@@ -167,10 +168,13 @@
                   <h2 class="text-right pele_rtl">נספחי ייזום</h2>
                   <i class="icon pel_icon icon-md ion-paperclip"></i>
                 </div>
-                <div class="item-section" ng-show="attach_elm">
+                <div class="item-section" ng-show="displayable && !displayable.length">
+                  לא קיימים מסמכים מצורפים
+                </div>
+                <div class="item-section" ng-show="attach_elm && displayable.length">
                   <table class="pele_rtl attachments-table text-right">
                     <tbody>
-                      <tr class="pele_rtl" ng-repeat="file in docDetails.attachments | filter:{ DISPLAY: 'Y' }">
+                      <tr class="pele_rtl" ng-repeat="file in docDetails.attachments | filter:{ DISPLAY: 'Y' } as displayable">
                         <td class="num_index"> {{$index+1}} . </td>
                         <td class="info pele_ltr">
                           <span ng-click="openAttachment(file)" ng-class="'show_content_'+file.SHOW_CONTENT"> {{file.DISPLAY_NAME}}</span>

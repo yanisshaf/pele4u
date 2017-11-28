@@ -609,7 +609,7 @@ div#main-apps-menu div.row-bottom {margin-top:15px}
     white-space: nowrap;
     vertical-align: middle;
     background-color: #777;
-    border-radius: 10%;
+    border-radius: 8px;
     margin-right:5px;
     color: rgb(255, 255, 255);
 }
@@ -665,7 +665,8 @@ img.spinner-svg {height:60px}
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.ellipsis_90 {max-width:90%}
+.ellipsis_90 {max-width:90%;}
+
 
 .bar.app-top-bar { background-color: #0160a0 !important}
 

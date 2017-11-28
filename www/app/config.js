@@ -111,13 +111,13 @@ const apiConfig = {
       }
     },
     SubmitNotif: {
-      timeout: 20000,
+      timeout: 25000,
       "endpoint": "/" + SSOEnv[env] + "/REST/SubmitNotif",
       "RequestHeader": {
         "ServiceName": "SubmitNotifications",
         "AppID": "MobileApp",
         "EnvCode": "MobileApp_" + EnvCodes[env],
-        "Timeout": "15"
+        "Timeout": "25"
       }
     },
     GetUserPoOrdGroup: {

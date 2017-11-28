@@ -1253,8 +1253,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           if (!action.ACTION_CODE && action.NOTE) {
             action.display = false;
             action.left_icon = 'ion-chevron-left';
-            action.short_text = action.NOTE;
+
+            if (action.NOTE.length <= 15)
+              action.short_text = action.NOTE;
           }
+
           if (!action.ACTION_CODE && !action.NOTE) {
             action.display = false;
             action.right_icon = "";

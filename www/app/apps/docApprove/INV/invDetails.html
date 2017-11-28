@@ -210,10 +210,13 @@
                   <h2 class="text-right pele_rtl">נספחי חשבונית</h2>
                   <i class="icon pel_icon icon-md ion-paperclip"></i>
                 </div>
-                <div class="item-section" ng-show="attach_elm">
+                <div class="item-section" ng-show="displayable && !displayable.length">
+                  לא קיימים מסמכים מצורפים
+                </div>
+                <div class="item-section" ng-show="attach_elm && displayable.length">
                   <table class="pele_rtl attachments-table text-right">
                     <tbody>
-                      <tr class="pele_rtl" ng-repeat="file in docDetails.ATTACHMENT_FILES | filter:{ DISPLAY: 'Y' }">
+                      <tr class="pele_rtl" ng-repeat="file in docDetails.ATTACHMENT_FILES | filter:{ DISPLAY: 'Y' } as displayable">
                         <!-- <td class="num_index"> {{$index+1}} . </td> -->
                         <td class="info pele_ltr">
                           <span ng-click="openAttachment(file)" ng-class="'show_content_'+file.SHOW_CONTENT"> {{file.DISPLAY_NAME}}</span>

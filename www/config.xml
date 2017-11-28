@@ -1,12 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.int-pele.pele4u_qa" version="117.7" versionCode="117.7" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name> PELE4U  QA</name>
+<widget id="com.int-pele.pele4u_qa" version="117.6" versionCode="117.6" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name> PELE4U  QA </name>
     <description>
     Work form anywhere
   </description>
     <author email="oren@pelephone.co.il" href="http://www.pelephone.co.il">
     Pelephone IT
   </author>
+  <!--platform name="ios" /-->
+  <platform name="android" />
+
 
   <preference name="phonegap-version" value="cli-7.0.1" /><!-- for Push Notif O.H / R.W. 08/02/2016 -->
   <preference name="android-build-tool" value="gradle" /> <!-- for Push Notif O.H / R.W.  08/02/2016 -->
@@ -58,7 +61,7 @@
         <param name="URL_SCHEME" value="pele4u" />
     </plugin>
     <plugin name="cordova-plugin-whitelist" />
-    <plugin name="phonegap-plugin-barcodescanner" source="npm">
+    <plugin name="phonegap-plugin-barcodescanner" spec="^6.0.8">
         <variable name="CAMERA_USAGE_DESCRIPTION" value="Allow the app to use your camera" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Allow the app to access your photos" />
     </plugin>
