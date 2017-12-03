@@ -36,7 +36,8 @@
 
         <ion-item class="docs-menu-details item-icon-left pele_rtl" ng-repeat="item in docsGroup.DOCUMENTS.DOCUMENTS_ROW | filter:searchText as filtered" ng-show="docsGroup.active" ng-click="forwardToDoc(docsGroup.DOC_ID, item.DOC_INIT_ID,item.TASK.NOTIFICATION_ID)">
           <img class="icon doc-redirect" ng-src="img/DocApprove/document_redirect.png">
-          <div class=""><strong> חש' {{item.TASK.INVOICE_NUM}}{{item.TASK.AMOUNT}}{{item.TASK.MINUS_SIGN}} {{item.TASK.CURRENCY_CODE}} </strong></div>
+          <div class=""><strong>  <span ng-show="item.TASK.ADD_TITLE" class="string-badge">{{item.TASK.ADD_TITLE}} </span> חש' {{item.TASK.INVOICE_NUM}} ע"ס {{item.TASK.AMOUNT}}{{item.TASK.MINUS_SIGN}} {{item.TASK.CURRENCY_CODE}} </strong>
+          </div>
           <div>{{item.TASK.VENDOR_NAME}}</div>
           <div> ת. חשבונית:
             <span class="peldate">{{item.TASK.INV_CREATION_DATE|peldate | date : 'hh:ss dd-MM-yyyy'}}</span></div>

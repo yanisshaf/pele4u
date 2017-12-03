@@ -42,10 +42,12 @@ angular.module('pele')
             PelApi.appSettings.config.IS_TOKEN_VALID = 'N'
             PelApi.goHome();
           }
+
           $scope.docsGroups = $scope.parse(result);
           if ($scope.docsGroups.length) {
             $scope.title = $scope.docsGroups[0].DOC_TYPE;
           }
+
         })
         .error(function(error, httpStatus) {
           PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus)
