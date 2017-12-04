@@ -732,3 +732,4 @@ table.init_lines_table .info {padding-right:5px;width: 99%;padding}
 
 table.init_lines_table thead .label {font-weight: bold}
 table.init_lines_table {border:1px solid #CCC}
+.numeric {direction:ltr !important}

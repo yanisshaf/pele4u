@@ -148,7 +148,7 @@
                   <h2 class="text-right pele_rtl">הפצה</h2>
                 </div>
                 <div class="item-section" ng-show="sys_data" ng-repeat="item in docDetails.INVOICE_ROWS">
-                  <div class="err h4" ng-show="item.ERR_MESSAGE">
+                  <div class="err item-text-wrap" ng-show="item.ERR_MESSAGE">
                     {{item.ERR_MESSAGE}}
                   </div>
                   <table ng-show="!item.ERR_MESSAGE" class="pele_rtl text-right">
@@ -171,7 +171,7 @@
                       </tr>
                       <tr>
                         <td class="label">חשבון הוצאה: </td>
-                        <td class="info"> {{item.ACCOUNT_NUMBER}}</td>
+                        <td class="info numeric"> {{item.ACCOUNT_NUMBER}}</td>
                       </tr>
                       <tr>
                         <td class="label">תקציב הזמנה: </td>
