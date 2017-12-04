@@ -3,18 +3,10 @@
  */
 angular.module('pele')
   .controller('tskListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
-    $scope.GroupState = {};
-    $scope.saveGroupsState = function() {
-      _.get($scope, 'docsGroups', []).forEach((g) => {
-        $scope.GroupState[g.DOC_NAME] = g.active
-      })
+    $scope.activeGroup = {};
+    $scope.toggleActive = function(g) {
+      $scope.activeGroup[g.DOC_NAME] = !$scope.activeGroup[g.DOC_NAME];
     }
-    $scope.restoreGroupsState = function() {
-      _.get($scope, 'docsGroups', []).forEach((g) => {
-        g.active = $scope.GroupState[g.DOC_NAME];
-      })
-    }
-
 
     $scope.appId = $stateParams.AppId;
     $scope.parse = function(data) {
@@ -40,13 +32,9 @@ angular.module('pele')
     $scope.doRefresh = function() {
 
       PelApi.showLoading();
-      $scope.saveGroupsState();
-
       $scope.formType = $stateParams.FormType;
       $state.pin = $stateParams.Pin;
-
       var links = PelApi.getDocApproveServiceUrl("GtUserFormGroups");
-
       var retGetUserFormGroups = PelApi.GetUserFormGroups(links, $scope.appId, $scope.formType, $state.pin);
       var srvData = {};
       retGetUserFormGroups.success(function(data) {
@@ -60,7 +48,7 @@ angular.module('pele')
             PelApi.goHome();
           }
           $scope.docsGroups = $scope.parse(result);
-          $scope.restoreGroupsState();
+
           if ($scope.docsGroups.length) {
             $scope.title = $scope.docsGroups[0].DOC_TYPE;
           }
