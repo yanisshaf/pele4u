@@ -1,5 +1,5 @@
 /*********************/
-const env = "QA";
+const env = "LP";
 /********************/
 
 const EnvCodes = {
