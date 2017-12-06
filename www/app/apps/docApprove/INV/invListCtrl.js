@@ -3,10 +3,13 @@
  */
 angular.module('pele')
   .controller('invListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
-    $scope.activeGroup = {};
+    $scope.activeGroup = "";
+
     $scope.toggleActive = function(g) {
-      $scope.activeGroup[g.DOC_NAME] = !$scope.activeGroup[g.DOC_NAME];
+      $scope.activeGroup ===  g.DOC_NAME ?  $scope.activeGroup  ="" :  $scope.activeGroup =  g.DOC_NAME ;
     }
+
+
 
     $scope.parse = function(data) {
       var mapped = [];

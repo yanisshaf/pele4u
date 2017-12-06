@@ -27,14 +27,14 @@
         <ion-item class="item-stable" ng-click="toggleActive(docsGroup)" ng-class="{active: docsGroup.active}">
           <div class="row">
             <div class="col ellipsis">
-              <ion-icon ng-class="docsGroup.active ? 'ion-arrow-left-b' : 'ion-arrow-down-b'"></ion-icon>
+              <ion-icon ng-class="activeGroup== docsGroup.DOC_NAME ? 'ion-arrow-left-b' : 'ion-arrow-down-b'"></ion-icon>
               {{docsGroup.DOC_NAME}}
             </div>
             <div class="col col-10"><span class="pel-badge light-blue">{{filtered.length}}</span> </div>
           </div>
         </ion-item>
 
-        <ion-item class="docs-menu-details item-icon-left pele_rtl" ng-repeat="item in docsGroup.DOCUMENTS.DOCUMENTS_ROW | filter:searchText as filtered" ng-show="activeGroup[docsGroup.DOC_NAME]" ng-click="forwardToDoc(docsGroup.DOC_ID, item.DOC_INIT_ID,item.TASK.NOTIFICATION_ID)">
+        <ion-item class="docs-menu-details item-icon-left pele_rtl" ng-repeat="item in docsGroup.DOCUMENTS.DOCUMENTS_ROW | filter:searchText as filtered" ng-show="activeGroup == docsGroup.DOC_NAME" ng-click="forwardToDoc(docsGroup.DOC_ID, item.DOC_INIT_ID,item.TASK.NOTIFICATION_ID)">
           <img class="icon doc-redirect" ng-src="img/DocApprove/document_redirect.png">
           <div class=""><strong>  <span ng-show="item.TASK.ADD_TITLE" class="string-badge">{{item.TASK.ADD_TITLE}} </span> חש' {{item.TASK.INVOICE_NUM}} ע"ס {{item.TASK.AMOUNT}}{{item.TASK.MINUS_SIGN}} {{item.TASK.CURRENCY_CODE}} </strong>
           </div>
