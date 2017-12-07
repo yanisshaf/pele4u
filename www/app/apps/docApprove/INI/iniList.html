@@ -27,7 +27,7 @@
         </ion-item>
         <div class="item docs-menu-details item-icon-left pele_rtl" ng-repeat="item in docsGroup.DOCUMENTS.DOCUMENTS_ROW | filter:searchText as filtered" ng-show="docsGroup.active" ng-click="forwardToDoc(docsGroup.DOC_ID, item.DOC_INIT_ID,item.INFO.NOTIFICATION_ID)">
           <img class="icon" ng-src="img/DocApprove/document_redirect.png">
-          <div class="docs-menu-item-title"> <span ng-show="item.TASK.ADD_TITLE" class="string-badge">{{item.TASK.ADD_TITLE}} </span> ייזום {{item.DOC_INIT_ID}} - {{item.INFO.AMOUNT}} {{item.INFO.CURRENCY_CODE}}</div>
+          <div class="docs-menu-item-title"> <span ng-show="item.INFO.ADD_TITLE" class="string-badge">{{item.INFO.ADD_TITLE}} </span> ייזום {{item.DOC_INIT_ID}} - {{item.INFO.AMOUNT}} {{item.INFO.CURRENCY_CODE}}</div>
           <div class="ellipsis"> {{item.INFO.DESCRIPTION}}</div>
           <div>תאריך יצירה: <span class="peldate">{{item.INFO.CREATION_DATE| date : 'hh:ss dd-MM-yyyy'}}</span> </div>
         </div>
@@ -36,7 +36,8 @@
         <div class="item docs-menu-details item-icon-left pele_rtl" ng-repeat="item in docsGroup.DOCUMENTS.DOCUMENTS_ROW | filter:searchText as filtered" ng-click="forwardToDoc(docsGroup.DOC_ID, item.DOC_INIT_ID,item.INFO.NOTIFICATION_ID)">
           <div class="row">
             <div class="col-90">
-              <div class="docs-menu-item-title">ייזום {{item.DOC_INIT_ID}} - {{item.INFO.AMOUNT}} {{item.INFO.CURRENCY_CODE}}</div>
+              <div class="docs-menu-item-title"><span ng-show="item.INFO.ADD_TITLE" class="string-badge">{{item.INFO.ADD_TITLE}} </span> 
+                ייזום {{item.DOC_INIT_ID}} - {{item.INFO.AMOUNT}} {{item.INFO.CURRENCY_CODE}}</div>
               <div class="ellipsis"> {{item.INFO.DESCRIPTION}}</div>
               <div>תאריך יצירה: <span class="peldate">{{item.INFO.CREATION_DATE| date : 'hh:ss dd-MM-yyyy'}}</span> </div>
             </div>
