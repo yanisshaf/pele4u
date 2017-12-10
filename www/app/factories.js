@@ -898,7 +898,33 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //===========================================================//
       //==               Update Version                          ==//
       //===========================================================//
-      showPopupVersionUpdate: function(title, subTitle) {
+      showPopupVersionUpdate :function(title,subTitle){
+        var storeUrl = appSettings.GOOGLE_PLAY_APP_LINK ;
+
+       if(ionic.Platform.isIOS()) {
+          storeUrl = PelApi.appSettings.APPLE_STORE_APP_LINK;
+       }
+       swal({
+           text: title,
+           buttons: {
+             "cancel": {
+               text: "ביטול",
+               value: "cancel",
+               visible: true
+             },
+             approve: {
+               text: "עדכון גרסה",
+               value: "ok",
+             }
+           }
+         })
+         .then((value) => {
+           if (value === 'ok')
+               window.open(storeUrl, '_system', 'location=yes');
+         });
+      },
+      showPopupVersionUpdate_old: function(title, subTitle) {
+
         $rootScope.data = {}
 
         // An elaborate, custom popup
@@ -1324,6 +1350,15 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           return true;
         }
       },
+      getLocalJson: function(jsonfile) {
+        return $http.get(jsonfile, {
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": 0
+          }
+        });
+      },
       pinState: {
         get: function() {
           if (typeof this.pinStateData !== "undefined") {
@@ -1491,5 +1526,112 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       text = text.toString();
       if (phrase) text = text.replace(new RegExp('(' + phrase + ')', 'gi'), '<span class="highlighted">$1</span>');
       return $sce.trustAsHtml(text)
+    }
+  }).factory('Contact', function($q) {
+    var self = this;
+    var _global = {};
+    var network = {};
+    var deviceReady = false;
+    return {
+      save: function(info, idPrefix) {
+        var deferred = $q.defer();
+
+        if (!idPrefix)
+          deferred.reject("Missing idPrefix !!!")
+
+        if (!(info.workPhone || info.mobilePhone))
+          deferred.reject("Contact has no phone numbers !!!")
+
+        var contact;
+        if (info.fullName) {
+          contact = navigator.contacts.create({
+            "displayName": info.fullName
+          });
+        } else if (info.firstName && info.lastName) {
+          contact = navigator.contacts.create({
+            "displayName": info.firstName + " " + info.lastName
+          });
+        }
+
+        if (info.emailAddress)
+          contact.emails = [new ContactField('work', info.emailAddress, true)]
+
+        var phoneNumbers = [];
+        contact.rawId = idPrefix + info.personId
+
+        if (info.workPhone)
+          phoneNumbers.push(new ContactField('work', info.workPhone, false))
+        if (info.mobilePhone)
+          phoneNumbers.push(new ContactField('mobile', info.mobilePhone, true))
+        contact.phoneNumbers = phoneNumbers;
+
+        if (info.company || info.section || info.jobName)
+          contact.organizations = [new ContactOrganization(true, 'work', info.company, info.section, info.jobName)]
+        contact.photos = [];
+        if (info.pic)
+          contact.photos[0] = new ContactField('base64', info.pic, true)
+
+        contact.save((c) => {
+          deferred.resolve(c)
+        }, (err) => {
+          deferred.reject(err)
+        });
+        return deferred.promise;
+      },
+      get: (id, idPrefix) => {
+        if (!idPrefix)
+          deferred.reject("Missing idPrefix !!!")
+
+        if (!id)
+          deferred.reject("Missing id  !!!")
+
+        var deferred = $q.defer();
+        var contact = {
+          id: idPrefix + id
+        };
+
+        navigator.contacts.pickContact(
+          (contact) => {
+            deferred.resolve(contact)
+          }, (err) => {
+            deferred.reject(err)
+          });
+        return deferred.promise;
+      },
+
+      remove: (id, idPrefix) => {
+        var deferred = $q.defer();
+        self.get()
+        if (!idPrefix)
+          deferred.reject("Missing idPrefix !!!")
+
+        con.remove(() => {}, () => {});
+
+        return deferred.promise;
+      },
+      find: function(idPrefix, filter, fields, hasPhoneNumber) {
+        var deferred = $q.defer();
+        if (!idPrefix)
+          deferred.reject("Missing idPrefix !!!")
+
+        var options = new ContactFindOptions();
+        var searchFields = [];
+        options.filter = filter;
+        options.multiple = true;
+        options.desiredFields = [];
+        fields.forEach((f) => {
+          options.desiredFields.push(navigator.contacts.fieldType[f])
+          searchFields.push(navigator.contacts.fieldType[f])
+        })
+        options.hasPhoneNumber = hasPhoneNumber || true;
+        navigator.contacts.find(searchFields,
+          (res) => {
+            return deferred.resolve(res);
+          }, (err) => {
+            return deferred.reject(err);
+          },
+          options);
+        return deferred.promise;
+      }
     }
   });

@@ -242,6 +242,30 @@ angular.module('pele.states', [])
     },
     src: ["app/apps/docApprove/INI/p4_ini_doc_30002Ctrl.js"]
   }, {
+    state: "app.phonebook",
+    url: '/phonebook',
+    views: {
+      'menuContent': {
+        templateUrl: function() {
+          return 'app/apps/phonebook/list.html';
+        },
+        controller: 'phonebookListCtrl',
+      }
+    },
+    src: ["app/apps/phonebook/listCtrl.js"]
+  }, {
+    state: "app.phonebook.details",
+    url: '/:personId',
+    views: {
+      'menuContent@app': {
+        templateUrl: function() {
+          return 'app/apps/phonebook/details.html';
+        },
+        controller: 'phonebookDetailsCtrl',
+      }
+    },
+    src: ["app/apps/phonebook/detailsCtrl.js"]
+  },  {
     state: 'app.p2_scan_print',
     url: '/scan_print',
     views: {
