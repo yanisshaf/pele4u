@@ -83,6 +83,8 @@ angular.module('pele')
         })
     }
 
+    $scope.getSectors();
+
     $scope.search = function() {
       //  $scope.modals.search.show();
       $scope.title = "אלפון - תוצאות חיפוש"

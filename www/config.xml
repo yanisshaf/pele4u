@@ -8,7 +8,7 @@
     Pelephone IT
   </author>
 
-  <platform name="ios" />
+  <!--platform name="ios" /-->
   <platform name="android" />
 
 
