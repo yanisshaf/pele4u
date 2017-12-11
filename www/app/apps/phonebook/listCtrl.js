@@ -71,6 +71,18 @@ angular.module('pele')
       },
     ]
 
+    $scope.sectors = [];
+    $scope.getSectors = function() {
+      PelApi.getLocalJson("mocks/sectors.json")
+        .success((data, status, headers, config) => {
+          console.log(data)
+          $scope.sectors = data;
+        })
+        .error((errorStr, httpStatus, headers, config) => {
+
+        })
+    }
+
     $scope.search = function() {
       //  $scope.modals.search.show();
       $scope.title = "אלפון - תוצאות חיפוש"

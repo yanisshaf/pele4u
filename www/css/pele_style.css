@@ -797,6 +797,22 @@ top:11px;
 
 .no-contact-pic {height:100px;width:100px}
 .phonebook-form .col-input {margin:10px 30px}
-
-
 .phonebook-footer.bar-footer {height:50px}
+
+.main-menu-content {background:#fff}
+.main-menu-content  .item .menu-text {color:#11418e}
+.main-menu-content  .item-complex  .menu-text {color:#11418e}
+.main-menu-content  .item {
+  background-color: transparent;
+  color:navy !important;
+}
+
+/*Changes the border for the last item*/
+.main-menu-content  .item:last-child {
+  border-bottom: 1px solid #666;
+}
+
+.main-menu-content  .item-complex .item-content, .dark .item-radio .item-content {
+  background-color: transparent;
+}
+.main-menu-content .item .item-content .icon:before { background:#939292}

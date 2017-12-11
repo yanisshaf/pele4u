@@ -9,16 +9,16 @@
     </div>
   </ion-nav-title>
   <ion-content scroll="false" padding="true" id="phonebook_details">
-    <tab-slide-box tab="2">
+    <tab-slide-box tab="1">
       <div class="tsb-icons">
         <div class="tsb-ic-wrp">
           <ion-scroll has-bouncing="false" scrollX="false" direction="x" scrollY="false" class="tsb-hscroll">
-            <a href="#" ng-click="swalContact(contact)" class="">
-                <img  class="fab" src="img/new_icons/purple_add_contact.png "></a>
-            <a class="triangle-isosceles" on-finish-render="test()">
+            <!--a href="#" ng-click="swalContact(contact)" class="">
+                <img  class="fab" src="img/new_icons/purple_add_contact.png "></a-->
+            <a class="triangle-isosceles">
             עץ ארגוני
             </a>
-            <a class="triangle-isosceles" on-finish-render="test()">
+            <a class="triangle-isosceles">
             פרטי העובד
             </a>
           </ion-scroll>
@@ -33,10 +33,10 @@
           <ion-scroll scrollX="false" scrollX="false" delegate-handle="slide1Scroll">
 
             <h4 class="pele_rtl text-right">{{managerInfo.orgName}}</h4>
-            <h5 class="pele_rtl text-right"> הוסף לאנשי קשר :
+            <!--h5 class="pele_rtl text-right"> הוסף לאנשי קשר :
               <span class="pel-badge blue"><i ng-click="actions('members_tree',contact,contact.orgTree)" class="icon white medium ion-person-stalker"></i></span>
               <span class="pel-badge blue"><i ng-click="actions('manager_tree',managerInfo,contact.orgTree)" class="icon white medium ion-ios-people"></i></span>
-           </h5>
+           </h5-->
             <div class="item-section">
               <ul class="list pele_rtl text-right treeview level1">
                 <li class="direct_admin tree-item">
@@ -156,6 +156,7 @@
           </ion-scroll>
         </ion-slide>
       </ion-slide-box>
+      </tab-slide-box>
   </ion-content>
   <!-- Footer Actions -->
   <!-- ion-footer-bar  class="phonebook-footer">
