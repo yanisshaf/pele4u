@@ -330,7 +330,7 @@ ion-item.item-doc-list-3{margin-top:1px; margin-bottom: 1px; background-color: #
 .item-doc-list-3 img{height: 50px; float: left;  width:auto; border: none;}
 ion-item.item-doc-list-3A{margin-top:1px; margin-bottom: 1px; background-color: #CECECE; max-height: 82px; vertical-align: top; border: none; }
 .item-doc-list-3A img{height: 54px; float: left;  width:auto; border: none;}
-div.item-content{padding:5px 10px 5px 10px !important; border: none !important; background-color: #CECECE !important;  vertical-align: middle !important;}
+sdiv.item-content{padding:5px 10px 5px 10px !important; border: none !important; background-color: #CECECE !important;  vertical-align: middle !important;}
 .item-doc h2{    padding: 0px 5px 0px 5px ;}
 .item-doc h3{    padding: 0px 10px 0px 10px ;}
 
@@ -816,3 +816,6 @@ top:11px;
   background-color: transparent;
 }
 .main-menu-content .item .item-content .icon:before { background:#939292}
+
+.item-checkbox.text-right {padding-right:60px}
+.leads-notes {height:200px;min-height: 200px}

@@ -265,7 +265,7 @@ angular.module('pele.states', [])
       }
     },
     src: ["app/apps/phonebook/detailsCtrl.js"]
-  },  {
+  }, {
     state: 'app.p2_scan_print',
     url: '/scan_print',
     views: {
@@ -277,4 +277,28 @@ angular.module('pele.states', [])
       }
     },
     src: ["app/apps/scanPrint/p2_scan_printCtrl.js"]
+  }, {
+    state: 'app.lead',
+    url: '/lead',
+    views: {
+      'menuContent': {
+        templateUrl: function() {
+          return 'app/apps/lead/lead.html';
+        },
+        controller: 'leadCtrl'
+      }
+    },
+    src: ["app/apps/lead/leadCtrl.js"]
+  }, {
+    state: 'app.lead.report',
+    url: '/report',
+    views: {
+      'menuContent@app': {
+        templateUrl: function() {
+          return 'app/apps/lead/report.html';
+        },
+        controller: 'reportCtrl'
+      }
+    },
+    src: ["app/apps/lead/reportCtrl.js"]
   }]);
