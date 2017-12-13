@@ -4,8 +4,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var _global = {};
     var network = {};
     var deviceReady = false;
-    return {
 
+
+    return {
+      http: $http,
       getLocalStorageUsage: function() {
         var _lsTotal = 0,
           maxLen = 0,
@@ -898,30 +900,30 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //===========================================================//
       //==               Update Version                          ==//
       //===========================================================//
-      showPopupVersionUpdate :function(title,subTitle){
-        var storeUrl = appSettings.GOOGLE_PLAY_APP_LINK ;
+      showPopupVersionUpdate: function(title, subTitle) {
+        var storeUrl = appSettings.GOOGLE_PLAY_APP_LINK;
 
-       if(ionic.Platform.isIOS()) {
+        if (ionic.Platform.isIOS()) {
           storeUrl = PelApi.appSettings.APPLE_STORE_APP_LINK;
-       }
-       swal({
-           text: title,
-           buttons: {
-             "cancel": {
-               text: "ביטול",
-               value: "cancel",
-               visible: true
-             },
-             approve: {
-               text: "עדכון גרסה",
-               value: "ok",
-             }
-           }
-         })
-         .then((value) => {
-           if (value === 'ok')
-               window.open(storeUrl, '_system', 'location=yes');
-         });
+        }
+        swal({
+            text: title,
+            buttons: {
+              "cancel": {
+                text: "ביטול",
+                value: "cancel",
+                visible: true
+              },
+              approve: {
+                text: "עדכון גרסה",
+                value: "ok",
+              }
+            }
+          })
+          .then((value) => {
+            if (value === 'ok')
+              window.open(storeUrl, '_system', 'location=yes');
+          });
       },
       showPopupVersionUpdate_old: function(title, subTitle) {
 

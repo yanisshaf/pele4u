@@ -72,8 +72,8 @@ angular.module('pele')
     ]
 
     $scope.sectors = [];
-    $scope.getSectors = function() {
-      PelApi.getLocalJson("mocks/sectors.json")
+    $scope.getReport = function() {
+      PelApi.getLocalJson("http://api.jsonbin.io/b/5a30d6fe26f8d31713912a73")
         .success((data, status, headers, config) => {
           console.log(data)
           $scope.sectors = data;
@@ -83,7 +83,7 @@ angular.module('pele')
         })
     }
 
-    $scope.getSectors();
+    $scope.getReport();
 
     $scope.search = function() {
       //  $scope.modals.search.show();
