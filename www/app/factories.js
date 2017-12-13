@@ -35,6 +35,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           maxSize: (maxLen / (1024 * 1024)).toFixed(2)
         }
       },
+      toQueryString: function(obj) {
+        return Object.keys(obj).map(k => {
+            return encodeURIComponent(k) + "=" + encodeURIComponent(obj[k])
+          })
+          .join("&");
+      },
       ensureOnline: function() {
         if (deviceReady && !$cordovaNetwork.isOnline()) {
           $ionicPopup.alert({
@@ -46,6 +52,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
       init: function() {
         this.global.set('debugFlag', appSettings.debug, true)
+        this.cordovaNetwork = {
+          getNetwork: () => {
+            return "3g";
+          }
+        };
 
         this.messages = messages;
         this.appSettings = appSettings;

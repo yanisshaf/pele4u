@@ -169,7 +169,6 @@ angular.module('pele.config', [])
   .value('appSettings', {
     debug: false,
     config: {
-      mainMenuKeepAlive: 0, // 0 - means disabled
       APP_VERSION: "117.8",
       SCAN_PRINT_SCANNING_ERROR: "שגיאה בסריקה",
       PIN_CODE_AUTHENTICATION_REQUIRED_CODE: "10000",

@@ -77,7 +77,7 @@ app.controller('P1_appsListCtrl',
       }
 
       reMenu.success(function(data, status, headers, config) {
-
+        PelApi.sessionStorage.ApiServiceAuthParams = {}
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
         if (headers('msisdn_res') !== undefined && headers('msisdn_res') !== null && headers('msisdn_res') != null) {
@@ -105,13 +105,6 @@ app.controller('P1_appsListCtrl',
           appSettings.config.GetUserMenu = JSON.parse(strData);
           $scope.feeds_categories = appSettings.config.GetUserMenu;
           $scope.feeds_categories.menuItems = $scope.insertOnTouchFlag($scope.feeds_categories.menuItems);
-          $sessionStorage.mainMenu = {
-            token: appSettings.config.token,
-            user: appSettings.config.GetUserMenu.user,
-            userName: appSettings.config.GetUserMenu.userName,
-            menuItems: appSettings.config.GetUserMenu,
-            timeStamp: new Date().getTime()
-          };
 
 
           //---------------------------------------------
@@ -137,6 +130,15 @@ app.controller('P1_appsListCtrl',
           } else {
             appSettings.config.Pin = appSettings.config.GetUserMenu.PinCode;
             appSettings.config.IS_TOKEN_VALID = "Y";
+
+            $sessionStorage.AuthInfo = {
+              pinCode: appSettings.config.Pin,
+              token: appSettings.config.token,
+              user: appSettings.config.GetUserMenu.user,
+              userName: appSettings.config.GetUserMenu.userName,
+              timeStamp: new Date().getTime()
+            };
+
             //Golan
             PelApi.pinState.set({
               valid: true,
@@ -308,6 +310,11 @@ app.controller('P1_appsListCtrl',
       i.AppId = appId;
       i.Title = titleDisp;
       i.Pin = appSettings.config.Pin;
+
+      PelApi.sessionStorage.ApiServiceAuthParams = {
+        PIN: $sessionStorage.AuthInfo.pinCode,
+        TOKEN: $sessionStorage.AuthInfo.token
+      };
 
       $scope.appSwitch(i);
 
