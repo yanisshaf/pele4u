@@ -1532,6 +1532,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       var date = moment(dateString, "YYYYMMDDHHmmss");
       return date.unix() * 1000;
     }
+  }).filter('replace', function() {
+    return function(str, text1, text2) {
+      str = str || "";
+
+      var regexp = new RegExp(text1, 'ig');
+      return str.replace(regexp, text2);
+    }
   }).filter('highlight', function($sce) {
     return function(text, phrase) {
       if (!text)
@@ -1632,6 +1639,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         options.filter = filter;
         options.multiple = true;
         options.desiredFields = [];
+
         fields.forEach((f) => {
           options.desiredFields.push(navigator.contacts.fieldType[f])
           searchFields.push(navigator.contacts.fieldType[f])

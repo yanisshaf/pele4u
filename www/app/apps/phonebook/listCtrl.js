@@ -2,40 +2,43 @@
  * Created by User on 25/08/2016.
  */
 angular.module('pele')
-  .controller('phonebookListCtrl', function($scope, ApiService, $stateParams, $ionicLoading, $state, PelApi, Contact, $ionicPopup, $ionicModal) {
+  .controller('phonebookListCtrl', function($scope, ApiService, StorageService, $stateParams, $ionicLoading, $state, PelApi, Contact, $ionicPopup, $ionicModal) {
+
+    var AppId = $stateParams.AppId;
+    $scope.formData = {
+      term: "",
+      sectorId: ""
+    };
+    $scope.modals = {
+      operunits: {},
+
+    }
+
     $scope.title = "אלפון"
     $scope.goHome = function() {
       PelApi.goHome();
     }
     $scope.page = 'form'
+
     $scope.setForm = function() {
       $scope.page = "form"
       $scope.searchResult = []
+      $scope.modals.operunits.hide();
+
     }
     $scope.goBack = function() {
-      $scope.modals.search.hide();
+
       $state.go("app.phonebook", {}, {
         reload: true
       })
     }
 
-    $scope.modals = {
-      operunits: {},
-      search: {}
-    }
 
     $ionicModal.fromTemplateUrl('operunits.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function(modal) {
       $scope.modals.operunits = modal;
-    });
-
-    $ionicModal.fromTemplateUrl('search.html', {
-      scope: $scope,
-      animation: 'slide-in-up'
-    }).then(function(modal) {
-      $scope.modals.search = modal;
     });
 
     $scope.options = {
@@ -46,9 +49,8 @@ angular.module('pele')
       direction: 'vertical'
     }
 
-    $scope.data = {}
-    $scope.aaaa = "11111"
-    $scope.displayElement = 'search';
+
+
     $scope.useful = [{
         displayName: "מוקד התפעול",
         phoneNumber: "050-707-8990"
@@ -73,24 +75,28 @@ angular.module('pele')
 
     $scope.sectors = [];
     $scope.getSectors = function() {
-      ApiService.post("mocks/sectors.json")
+      $scope.sectors = StorageService.get("phonebook_sectors");
+      if (!$scope.sectors)
+        ApiService.post("PhonebookGetSector", AppId)
         .success((data, status, headers, config) => {
-          console.log(data)
-          $scope.sectors = data;
-        })
-        .error((errorStr, httpStatus, headers, config) => {
 
+          $scope.sectors = data;
+          $scope.sectors = StorageService.set("phonebook_sectors", data, 60 * 60 * 3)
         })
+        .error((errorStr, httpStatus, headers, config) => {})
     }
 
     $scope.getSectors();
 
     $scope.search = function() {
-      //  $scope.modals.search.show();
+      PelApi.showLoading();
       $scope.title = "אלפון - תוצאות חיפוש"
-      PelApi.getLocalJson("mocks/phonebook_list.json")
+      ApiService.post("PhonebookSearch", AppId, {
+          p1: $scope.formData.term,
+          p2: $scope.formData.sectorId
+        })
         .success((data, status, headers, config) => {
-          console.log(JSON.stringify(data))
+
           $scope.searchResult = data;
           $scope.page = 'result';
         })

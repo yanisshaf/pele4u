@@ -1,5 +1,5 @@
 /*********************/
-const env = "DV";
+const env = "QA";
 /********************/
 
 const EnvCodes = {
@@ -168,7 +168,11 @@ angular.module('pele.config', [])
   .constant('$ionicLoadingConfig', spinConfig)
   .value('appSettings', {
     debug: false,
+    EnvCodes: EnvCodes,
+    SSOEnv: SSOEnv,
+    api_timeout: 20,
     config: {
+      contactIdPrefix: "pelephone",
       APP_VERSION: "117.8",
       SCAN_PRINT_SCANNING_ERROR: "שגיאה בסריקה",
       PIN_CODE_AUTHENTICATION_REQUIRED_CODE: "10000",

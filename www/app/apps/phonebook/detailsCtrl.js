@@ -5,29 +5,85 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('phonebookDetailsCtrl', ['Contact', '$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing',
-    function(Contact, $scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing) {
+  .controller('phonebookDetailsCtrl', ['Contact', 'ApiService', '$state', '$scope', '$stateParams', '$ionicLoading', 'PelApi', '$ionicHistory', '$cordovaSocialSharing',
+    function(Contact, ApiService, $state, $scope, $stateParams, $ionicLoading, PelApi, $ionicHistory, $cordovaSocialSharing) {
+      var appId = $stateParams.AppId;
+      var personId = $stateParams.personId;
+      $scope.today = moment().format('DD/MM');;
+
+      $scope.view = "normal";
+      $scope.searchForm = {};
+      console.log($stateParams)
+
+      $scope.goSearchForm = function() {
+        $state.go("app.phonebook", {
+          AppId: appId
+        }, {
+          reload: true
+        })
+      }
+
+      $scope.searchContacts = function() {
+        if ($scope.searchForm.term.length < 2) {
+          $scope.contatcsList = [];
+          return false;
+        }
+
+        Contact.find('p', $scope.searchForm.term, ['displayName'], true).then(res => {
+          $scope.contatcsList = res;
+        });
+
+      }
+
 
       $scope.swalContact = function(c) {
+
         swal({
-            text: "האם לשמור את איש הקשר במכשירכם ?",
-            buttons: {
-              "cancel": {
-                text: "ביטול",
-                value: "cancel",
-                visible: true
-              },
-              approve: {
-                text: "אישור",
-                value: "ok",
-              }
+          //title: '<i>HTML</i> <u>example</u>',
+          //type: 'info',
+          html: 'האם לשמור איש קשר זה במכשירכם ?',
+          showCloseButton: true,
+          showCancelButton: true,
+          focusConfirm: false,
+          confirmButtonText: ' חדש',
+          confirmButtonAriaLabel: 'Thumbs up, great!',
+          cancelButtonText: 'קיים',
+          cancelButtonAriaLabel: 'Thumbs down',
+        }).then((btn) => {
+          console.log(btn)
+          if (btn.value) {
+            $scope.addContact(c)
+          } else if (btn.dismiss === 'cancel') {
+            $scope.$apply(() => {
+              $scope.view = "newContact";
+            })
+          }
+        })
+        /*swal({
+          text: "האם לשמור את איש הקשר במכשירכם ?",
+          buttons: {
+            "cancel": {
+              text: "ביטול",
+              value: "cancel",
+              visible: true
+            },
+            approve: {
+              text: "איש קשר חדש",
+              value: "new",
+            },
+            exists: {
+              text: "איש קשר קיים",
+              value: "exists",
             }
-          })
-          .then((value) => {
-            if (value === 'ok')
-              $scope.addContact(c)
-          });
+          }
+        })
+        .then((value) => {
+          if (value === 'ok')
+            $scope.addContact(c)
+        });
+        */
       }
+
 
       $scope.actions = function(group, contact, orgTree) {
         console.log(contact)
@@ -149,16 +205,15 @@ angular.module('pele')
 
       }
 
-
       $scope.getContact = function() {
-        PelApi.getLocalJson("mocks/phonebook_details.json")
+        ApiService.post("PhonebookDetails", appId, {
+            p1: personId
+          })
           .success((data, status, headers, config) => {
-            console.log(JSON.stringify(data))
+
             $scope.contact = data;
-            $scope.title = "פרטי עובד : " + data.lastName + " " + data.firstName;
-            $scope.contact.tree = $scope.getTreeData(data);
-
-
+            $scope.page = 'result';
+            $scope.contact.tree = $scope.getTreeData($scope.contact)
           })
           .error((errorStr, httpStatus, headers, config) => {})
       }
