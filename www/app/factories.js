@@ -1547,7 +1547,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       if (phrase) text = text.replace(new RegExp('(' + phrase + ')', 'gi'), '<span class="highlighted">$1</span>');
       return $sce.trustAsHtml(text)
     }
-  }).factory('Contact', function($q) {
+  }).factory('Contact', function($q, $cordovaContacts) {
     var self = this;
     var _global = {};
     var network = {};
