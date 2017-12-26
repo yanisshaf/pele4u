@@ -7,11 +7,16 @@
     <author email="oren@pelephone.co.il" href="http://www.pelephone.co.il">
     Pelephone IT
   </author>
-    <platform name="android" />
-    <preference name="phonegap-version" value="cli-7.0.1" />
-    <preference name="android-build-tool" value="gradle" />
-    <preference name="android-minSdkVersion" value="15" />
-    <preference name="android-targetSdkVersion" value="23" />
+
+  <!--platform name="ios" /-->
+  <platform name="android" />
+
+
+  <preference name="phonegap-version" value="cli-7.0.1" /><!-- for Push Notif O.H / R.W. 08/02/2016 -->
+  <preference name="android-build-tool" value="gradle" /> <!-- for Push Notif O.H / R.W.  08/02/2016 -->
+  <preference name="android-minSdkVersion" value="15" />
+      <!--   <preference name="android-maxSdkVersion" value="15" /> -->
+  <preference name="android-targetSdkVersion" value="23" />
     <preference name="permissions" value="none" />
     <preference name="orientation" value="portrait" />
     <preference name="target-device" value="handset" />
@@ -29,6 +34,7 @@
     <preference name="SplashScreen" value="splash" />
     <preference name="SplashScreenDelay" value="4000" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
+
     <plugin name="cordova-plugin-battery-status" spec="~1.2.2" />
     <plugin name="cordova-plugin-camera" spec="~2.3.1">
         <variable name="CAMERA_USAGE_DESCRIPTION" value="Allow the app to use your camera" />
@@ -106,9 +112,8 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+
     <plugin name="cordova-plugin-badge" spec="~0.8.5" />
     <plugin name="cordova-plugin-x-socialsharing" source="npm" />
-    <plugin name="onesignal-cordova-plugin" source="npm" spec="^2.2.2" />
-    <content src="index.html" />
-    <plugin name="cordova-plugin-contacts" spec="^3.0.1" />
+    <plugin name="onesignal-cordova-plugin" spec="^2.2.2" source="npm" />
 </widget>
