@@ -19,7 +19,7 @@
       </ion-item>
       <div>
         <ion-list class="pele_rtl">
-          <ion-item class="item-text-wrap  item-avatar" ng-repeat="contact in contatcsList">{{contact.displayName}}:{{contact.rawId}}
+          <ion-item class="item-text-wrap  item-avatar" ng-repeat="contact in contatcsList">{{contact.displayName}}:{{contact.Id}}:{{contact.rawId}}
             <img class="avatar" ng-if="contact.photos[0]" src="data:image/JPEG;base64,{{contact.photos[0].value}} ">
           </ion-item>
         </ion-list>

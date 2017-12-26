@@ -1578,7 +1578,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           contact.emails = [new ContactField('work', info.emailAddress, true)]
 
         var phoneNumbers = [];
-        contact.rawId = idPrefix + info.personId
+        contact.rawId = info.personId + "_pele4u"
+        contact.id = info.personId + "_pele4u";
 
         if (info.workPhone)
           phoneNumbers.push(new ContactField('work', info.workPhone, false))
@@ -1586,8 +1587,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           phoneNumbers.push(new ContactField('mobile', info.mobilePhone, true))
         contact.phoneNumbers = phoneNumbers;
 
-        if (info.company || info.section || info.jobName)
-          contact.organizations = [new ContactOrganization(true, 'work', info.company, info.section, info.jobName)]
+        if (info.company || info.section)
+          contact.organizations = [new ContactOrganization(true, 'work', info.company, info.section)]
         contact.photos = [];
         if (info.pic)
           contact.photos[0] = new ContactField('base64', info.pic, true)
