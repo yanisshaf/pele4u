@@ -1552,6 +1552,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var _global = {};
     var network = {};
     var deviceReady = false;
+
     return {
       save: function(info, idPrefix) {
         var deferred = $q.defer();
@@ -1630,6 +1631,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return deferred.promise;
       },
       find: function(idPrefix, filter, fields, hasPhoneNumber) {
+        console.log("navigator.contacts:", navigator.contacts)
         var deferred = $q.defer();
         if (!idPrefix)
           deferred.reject("Missing idPrefix !!!")
