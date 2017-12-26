@@ -1547,7 +1547,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       if (phrase) text = text.replace(new RegExp('(' + phrase + ')', 'gi'), '<span class="highlighted">$1</span>');
       return $sce.trustAsHtml(text)
     }
-  }).factory('Contact', function($q, $cordovaContacts) {
+  }).factory('Contact', function($q) {
     var self = this;
     var _global = {};
     var network = {};
@@ -1578,8 +1578,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           contact.emails = [new ContactField('work', info.emailAddress, true)]
 
         var phoneNumbers = [];
-        contact.rawId = "a" + info.personId;
-        contact.id = info.personId;
+        contact.rawId = idPrefix + info.personId
 
         if (info.workPhone)
           phoneNumbers.push(new ContactField('work', info.workPhone, false))
