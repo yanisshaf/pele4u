@@ -1579,7 +1579,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
         var phoneNumbers = [];
         contact.rawId = info.personId + "_pele4u"
-        contact.id = info.personId + "_pele4u";
+        contact.id = info.personId;
 
         if (info.workPhone)
           phoneNumbers.push(new ContactField('work', info.workPhone, false))
