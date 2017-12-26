@@ -12,14 +12,14 @@
     </div>
   </ion-nav-title>
   <ion-content scroll="false" padding="true" id="phonebook_details">
-    <ion-scroll style="height:80%" ng-show="view=='newContact'" scrollx="false" delegate-handle="slide1Scroll">
+    <ion-scroll style="height:80%" ng-show="view=='newContact'" delegate-handle="slide1Scroll">
       <ion-item class="item item-input">
         <input class="pele_rtl text-right" type="text" placeholder="חיפוש לפי שם פרטי/משפחה/שלוחה" ng-change="searchContacts()" ng-model="searchForm.term">
         <i class="icon ion-funnel placeholder-icon"></i>
       </ion-item>
       <div>
         <ion-list class="pele_rtl">
-          <ion-item class="item-text-wrap  item-avatar" ng-repeat="contact in contatcsList">{{contact.displayName}}
+          <ion-item class="item-text-wrap  item-avatar" ng-repeat="contact in contatcsList">{{contact.displayName}}:{{contact.rawId}}
             <img class="avatar" ng-if="contact.photos[0]" src="data:image/JPEG;base64,{{contact.photos[0].value}} ">
           </ion-item>
         </ion-list>
@@ -28,7 +28,7 @@
     <tab-slide-box tab="1" ng-show="view!='newContact'">
       <div class="tsb-icons">
         <div class="tsb-ic-wrp">
-          <ion-scroll has-bouncing="false" scrollx="false" direction="x" scrolly="false" class="tsb-hscroll">
+          <ion-scroll has-bouncing="false" direction="x" scrolly="false" class="tsb-hscroll">
             <!--a href="#" ng-click="swalContact(contact)" class=""> <img class="fab" src="img/new_icons/purple_add_contact.png "></a-->
             <a class="triangle-isosceles">
               עץ ארגוני
@@ -41,11 +41,8 @@
       </div>
       <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
 
-        <!-------------------------------------------------------------------------------->
-        <!----------------------------- Approve List Slide ------------------------------->
-        <!-------------------------------------------------------------------------------->
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
-          <ion-scroll scrollx="false" delegate-handle="slide1Scroll">
+          <ion-scroll delegate-handle="slide1Scroll">
 
             <h4 class="pele_rtl text-right">{{managerInfo.orgName}}</h4>
             <!--h5 class="pele_rtl text-right"> הוסף לאנשי קשר : <span class="pel-badge blue"><i ng-click="actions('members_tree',contact,contact.orgTree)" class="icon white medium ion-person-stalker"></i></span> <span class="pel-badge blue"><i
@@ -87,7 +84,7 @@
         <!------------------------------------------------------------------------------->
         <ion-slide on-drag-right="enable('drag')" on-drag-left="disable('drag')">
 
-          <ion-scroll class="pele_rtl text-right" scrollx="false" delegate-handle="slide1Scroll">
+          <ion-scroll class="pele_rtl text-right" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
 
             <ul class="list">

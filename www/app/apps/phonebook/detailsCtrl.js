@@ -10,7 +10,7 @@ angular.module('pele')
       var appId = $stateParams.AppId;
       var personId = $stateParams.personId;
       $scope.today = moment().format('DD/MM');;
-
+      $scope.title = "אלפון";
       $scope.view = "normal";
       $scope.searchForm = {};
       console.log($stateParams)
@@ -210,8 +210,9 @@ angular.module('pele')
             p1: personId
           })
           .success((data, status, headers, config) => {
-
             $scope.contact = data;
+            $scope.title = "פרטי עובד: " + $scope.contact.firstName + " " + $scope.contact.lastName;
+
             $scope.page = 'result';
             $scope.contact.tree = $scope.getTreeData($scope.contact)
           })
