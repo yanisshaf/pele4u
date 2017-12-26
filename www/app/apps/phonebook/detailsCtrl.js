@@ -29,7 +29,7 @@ angular.module('pele')
           return false;
         }
 
-        Contact.find('p', $scope.searchForm.term, ['displayName', 'photos'], true).then(res => {
+        Contact.find('p', $scope.searchForm.term, ['displayName'], ['displayName', 'photos'], true).then(res => {
           $scope.contatcsList = res;
         });
 

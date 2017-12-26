@@ -1630,24 +1630,20 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
         return deferred.promise;
       },
-      find: function(idPrefix, filter, fields, hasPhoneNumber) {
+      find: function(idPrefix, filter, searchFields, desiredFields, hasPhoneNumber) {
         console.log("navigator.contacts:", navigator.contacts)
         var deferred = $q.defer();
         if (!idPrefix)
           deferred.reject("Missing idPrefix !!!")
 
         var options = new ContactFindOptions();
-        var searchFields = [];
+
         options.filter = filter;
         options.multiple = true;
-        options.desiredFields = [];
-
-        fields.forEach((f) => {
-          options.desiredFields.push(navigator.contacts.fieldType[f])
-          searchFields.push(navigator.contacts.fieldType[f])
-        })
+        options.desiredFields = desiredFields;
         options.hasPhoneNumber = hasPhoneNumber || true;
         navigator.contacts.find(searchFields,
+          console.log(res)
           (res) => {
             return deferred.resolve(res);
           }, (err) => {
