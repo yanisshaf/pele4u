@@ -6,3 +6,4 @@ hooks/
 node_modules/
 res/
 platforms/
+plugins/
