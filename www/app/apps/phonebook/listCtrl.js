@@ -22,7 +22,7 @@ angular.module('pele')
 
     $scope.setForm = function() {
       $scope.page = "form"
-      $scope.searchResult = []
+      $scope.searchResult = {}
       $scope.modals.operunits.hide();
 
     }
@@ -80,10 +80,13 @@ angular.module('pele')
         ApiService.post("PhonebookGetSector", AppId)
         .success((data, status, headers, config) => {
 
-          $scope.sectors = data;
+          $scope.sectors = data.sectors;
+          $scope.operunits = data.operunits;
           $scope.sectors = StorageService.set("phonebook_sectors", data, 60 * 60 * 3)
         })
-        .error((errorStr, httpStatus, headers, config) => {})
+        .error((errorStr, httpStatus, headers, config) => {
+          swal(errorStr + ":" + httpStatus)
+        })
     }
 
     $scope.getSectors();
@@ -96,11 +99,15 @@ angular.module('pele')
           p2: $scope.formData.sectorId
         })
         .success((data, status, headers, config) => {
-
           $scope.searchResult = data;
           $scope.page = 'result';
+          if (data.list && !data.list.length) {
+            $scope.page = 'form';
+          }
         })
-        .error((errorStr, httpStatus, headers, config) => {})
+        .error((errorStr, httpStatus, headers, config) => {
+          swal(errorStr + ":" + httpStatus)
+        })
     }
 
 

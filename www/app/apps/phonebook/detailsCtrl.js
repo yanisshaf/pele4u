@@ -29,7 +29,7 @@ angular.module('pele')
           return false;
         }
 
-        Contact.find('p', $scope.searchForm.term, ['displayName', 'name'], ['displayName', 'photos', 'lastName', 'firstName'], true).then(res => {
+        Contact.find($scope.searchForm.term, ['displayName', 'name'], ['displayName', 'photos', 'lastName', 'firstName'], true).then(res => {
           $scope.contatcsList = res;
         });
 
@@ -50,7 +50,7 @@ angular.module('pele')
           cancelButtonText: 'קיים',
           cancelButtonAriaLabel: 'Thumbs down',
         }).then((btn) => {
-          console.log(btn)
+
           if (btn.value) {
             $scope.addContact(c)
           } else if (btn.dismiss === 'cancel') {
@@ -150,12 +150,24 @@ angular.module('pele')
         });
       }
 
-      $scope.addContact = function(c) {
-        Contact.save(c, PelApi.appSettings.config.contactIdPrefix).then((res) => {
-          console.log("Saved :", res)
+      $scope.addContact = function(c, id) {
+        if (id !== undefined) {
+          c.id = id;
+        }
+        Contact.save(c).then((res) => {
+          swal({
+            type: 'success',
+            title: 'איש הקשר נשמר במכשירכם',
+            showConfirmButton: false,
+            timer: 1500
+          })
         }).
         catch((err) => {
-          console.log("contact err:", err)
+          swal({
+            text: "! התרחשה שגיאה" + JSON.stringify(err),
+            icon: "error",
+            timer: 2000
+          });
         })
       }
 
@@ -204,7 +216,9 @@ angular.module('pele')
         return tree;
 
       }
-
+      $scope.setTargetContact = function(cid) {
+        $scope.targetContactId = cid;
+      }
       $scope.getContact = function() {
         ApiService.post("PhonebookDetails", appId, {
             p1: personId
@@ -216,7 +230,13 @@ angular.module('pele')
             $scope.page = 'result';
             $scope.contact.tree = $scope.getTreeData($scope.contact)
           })
-          .error((errorStr, httpStatus, headers, config) => {})
+          .error((errorStr, httpStatus, headers, config) => {
+            swal({
+              text: "! התרחשה שגיאה" + errorStr,
+              icon: "error",
+              timer: 2000
+            });
+          })
       }
       $scope.getContact();
 

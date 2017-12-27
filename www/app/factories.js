@@ -1554,15 +1554,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var deviceReady = false;
 
     return {
-      save: function(info, idPrefix) {
+      save: function(info) {
         var deferred = $q.defer();
         var contact;
-        if (!idPrefix)
-          deferred.reject("Missing idPrefix !!!")
 
         if (!(info.workPhone || info.mobilePhone))
           deferred.reject("Contact has no phone numbers !!!")
-
 
         if (info.fullName) {
           contact = navigator.contacts.create({
@@ -1578,7 +1575,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           contact.emails = [new ContactField('work', info.emailAddress, true)]
 
         var phoneNumbers = [];
-        contact.rawId = idPrefix + info.personId
+        contact.rawId = info.personId
 
         if (info.workPhone)
           phoneNumbers.push(new ContactField('work', info.workPhone, false))
@@ -1600,16 +1597,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
         return deferred.promise;
       },
-      get: (id, idPrefix) => {
-        if (!idPrefix)
-          deferred.reject("Missing idPrefix !!!")
+      get: (id) => {
 
         if (!id)
           deferred.reject("Missing id  !!!")
 
         var deferred = $q.defer();
         var contact = {
-          id: idPrefix + id
+          id: id
         };
 
         navigator.contacts.pickContact(
@@ -1621,21 +1616,18 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return deferred.promise;
       },
 
-      remove: (id, idPrefix) => {
+      remove: (id) => {
         var deferred = $q.defer();
         self.get()
-        if (!idPrefix)
-          deferred.reject("Missing idPrefix !!!")
 
         con.remove(() => {}, () => {});
 
         return deferred.promise;
       },
-      find: function(idPrefix, filter, searchFields, desiredFields, hasPhoneNumber) {
+      find: function(filter, searchFields, desiredFields, hasPhoneNumber) {
         console.log("navigator.contacts:", navigator.contacts)
         var deferred = $q.defer();
-        if (!idPrefix)
-          deferred.reject("Missing idPrefix !!!")
+
 
         var options = new ContactFindOptions();
 

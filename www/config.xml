@@ -7,7 +7,7 @@
     <author email="oren@pelephone.co.il" href="http://www.pelephone.co.il">
     Pelephone IT
   </author>
-    <platform name="ios" />
+    <!--platform name="ios" /-->
     <platform name="android" />
     <preference name="phonegap-version" value="cli-7.0.1" />
     <preference name="android-build-tool" value="gradle" />

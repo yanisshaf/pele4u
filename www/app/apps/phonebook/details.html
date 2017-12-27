@@ -12,15 +12,17 @@
     </div>
   </ion-nav-title>
   <ion-content scroll="false" padding="true" id="phonebook_details">
-    <ion-scroll style="height:80%" ng-show="view=='newContact'" delegate-handle="slide1Scroll">
+    <ion-scroll ng-show="view=='newContact'" delegate-handle="slide1Scroll">
+      <ion-item class="item text-right no-border">חפשו וסמנו אישר קשר לעדכון</ion-item>
       <ion-item class="item item-input">
-        <input class="pele_rtl text-right" type="text" placeholder="חיפוש לפי שם פרטי/משפחה/שלוחה" ng-change="searchContacts()" ng-model="searchForm.term">
+        <input class="pele_rtl text-right" type="text" placeholder="חפשו לפי שם/מספר .." ng-change="searchContacts()" ng-model="searchForm.term">
         <i class="icon ion-funnel placeholder-icon"></i>
       </ion-item>
       <div>
         <ion-list class="pele_rtl">
-          <ion-item class="item-text-wrap  item-avatar" ng-repeat="contact in contatcsList">{{contact.displayName}} :{{contact.photos}}
-            <img class="avatar" ng-if="contact.photos[0]" src="data:image/JPEG;base64,{{contact.photos[0].value}} ">
+          <ion-item class="item-text-wrap item-avatar  item-icon-right" ng-repeat="devContact in contatcsList" ng-click="setTargetContact(devContact.id)">{{contact.displayName}} {{targetContactId}} == {{contact.id}}
+            <a class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" ng-click="addContact(contact,devContact.id)">לחצו לאישור </a>
+            <img class="avatar" ng-if="devContact.photos[0]" src="data:image/JPEG;base64,{{devContact.photos[0].value}} ">
           </ion-item>
         </ion-list>
       </div>
@@ -40,9 +42,8 @@
         </div>
       </div>
       <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
-
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
-          <ion-scroll delegate-handle="slide1Scroll">
+          <ion-scroll direction="y" style="height:130%">
 
             <h4 class="pele_rtl text-right">{{managerInfo.orgName}}</h4>
             <!--h5 class="pele_rtl text-right"> הוסף לאנשי קשר : <span class="pel-badge blue"><i ng-click="actions('members_tree',contact,contact.orgTree)" class="icon white medium ion-person-stalker"></i></span> <span class="pel-badge blue"><i
