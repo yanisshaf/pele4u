@@ -1556,14 +1556,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     return {
       save: function(info, idPrefix) {
         var deferred = $q.defer();
-
+        var contact;
         if (!idPrefix)
           deferred.reject("Missing idPrefix !!!")
 
         if (!(info.workPhone || info.mobilePhone))
           deferred.reject("Contact has no phone numbers !!!")
 
-        var contact;
+
         if (info.fullName) {
           contact = navigator.contacts.create({
             "displayName": info.fullName
@@ -1589,6 +1589,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         if (info.company || info.section)
           contact.organizations = [new ContactOrganization(true, 'work', info.company, info.section)]
         contact.photos = [];
+
         if (info.pic)
           contact.photos[0] = new ContactField('base64', info.pic, true)
 

@@ -52,18 +52,18 @@
    },
    "birthday":null,
    "note":null,
-   "photos":{
+   "photos":[{
       "id":null,
       "type":null,
       "value":null,
       "pref":false
-   },
-   "categories":{
+   }],
+   "categories":[{
       "id":null,
       "type":null,
       "value":null,
       "pref":false
-   },
+   }],
    "urls":{
       "id":null,
       "type":null,
