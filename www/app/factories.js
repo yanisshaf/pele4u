@@ -1569,6 +1569,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           contact = navigator.contacts.create({
             "displayName": info.firstName + " " + info.lastName
           });
+          contact.nickname = info.firstName + " " + info.lastName; // specify both to support all devices
+          var name = new ContactName();
+          name.givenName = info.firstName;
+          name.familyName = info.lastName;
+          contact.name = name;
         }
 
         if (info.emailAddress)

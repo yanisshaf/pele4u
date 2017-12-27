@@ -47,12 +47,12 @@ angular.module('pele')
           focusConfirm: false,
           confirmButtonText: ' חדש',
           confirmButtonAriaLabel: 'Thumbs up, great!',
-          cancelButtonText: 'קיים',
+          cancelButtonText: 'עדכון קיים',
           cancelButtonAriaLabel: 'Thumbs down',
         }).then((btn) => {
 
           if (btn.value) {
-            $scope.addContact(c)
+            $scope.addContact(c, c.personId)
           } else if (btn.dismiss === 'cancel') {
             $scope.$apply(() => {
               $scope.view = "newContact";
@@ -150,9 +150,12 @@ angular.module('pele')
         });
       }
 
-      $scope.addContact = function(c, cid) {
-        if (cid !== undefined) {
-          c.id = cid;
+      $scope.addContact = function(c, rawId, id) {
+        if (rawId !== undefined) {
+          c.rawId = rawId;
+        }
+        if (id !== undefined) {
+          c.id = id;
         }
         Contact.save(c).then((res) => {
           swal({
