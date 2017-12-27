@@ -1644,7 +1644,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         options.desiredFields = desiredFields;
         options.hasPhoneNumber = hasPhoneNumber || true;
         navigator.contacts.find(searchFields,
-          console.log(res)
           (res) => {
             return deferred.resolve(res);
           }, (err) => {
