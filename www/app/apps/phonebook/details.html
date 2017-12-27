@@ -21,7 +21,7 @@
       <div>
         <ion-list class="pele_rtl">
           <ion-item class="item-text-wrap item-avatar  item-icon-right" ng-repeat="devContact in contatcsList" ng-click="setTargetContact(devContact.id)">{{contact.displayName}} {{targetContactId}} == {{contact.id}}
-            <a class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" ng-click="addContact(contact,devContact.rawId)">לחצו לאישור </a>
+            <a class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" ng-click="addContact(contact,devContact.id)">לחצו לאישור </a>
             <img class="avatar" ng-if="devContact.photos[0]" src="data:image/JPEG;base64,{{devContact.photos[0].value}} ">
           </ion-item>
         </ion-list>

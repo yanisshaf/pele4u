@@ -150,9 +150,9 @@ angular.module('pele')
         });
       }
 
-      $scope.addContact = function(c, rawId) {
-        if (id !== undefined) {
-          c.rawId = rawId;
+      $scope.addContact = function(c, cid) {
+        if (cid !== undefined) {
+          c.id = cid;
         }
         Contact.save(c).then((res) => {
           swal({
