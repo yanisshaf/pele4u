@@ -156,7 +156,19 @@ angular.module('pele')
         }
         if (id !== undefined) {
           c.id = id;
+          Contact.get(id).then((contact) => {
+
+
+          }).catch((err) => {
+            swal({
+              text: "! התרחשה שגיאה" + JSON.stringify(err),
+              icon: "error",
+              timer: 2000
+            });
+
+          })
         }
+
         Contact.save(c).then((res) => {
           swal({
             type: 'success',

@@ -1608,7 +1608,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return deferred.promise;
       },
       get: (id) => {
-
         if (!id)
           deferred.reject("Missing id  !!!")
 
