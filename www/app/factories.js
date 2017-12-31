@@ -1645,6 +1645,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       if (c.workPhone) {
         findOneByPhone(c.workPhone).then(res => {
           if (res) {
+            var formattedDeviceContact = updateContactInfo(res, c)
             saveOnDevice(formattedDeviceContact).then(res => {
               deferred.resolve(res)
             }).catch(err => {
