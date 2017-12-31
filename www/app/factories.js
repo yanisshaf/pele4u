@@ -1553,6 +1553,122 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var network = {};
     var deviceReady = false;
 
+    function findOneByPhone(num) {
+      var deferred = $q.defer();
+      var options = new ContactFindOptions();
+      options.multiple = false;
+      options.desiredFields = '*';
+      options.hasPhoneNumber = true;
+      var searchFields = ['phoneNumber'];
+      options.filter = num;
+      navigator.contacts.find(searchFields,
+        (res) => {
+          if (res.length)
+            deferred.resolve(res[0]);
+          return deferred.resolve(null);
+        }, (err) => {
+          deferred.reject(err);
+        },
+        options);
+      return deferred.promise;
+    }
+
+    function updateContactInfo(targetContact, info) {
+      if (info.rawId)
+        targetContact.rawId = info.rawId;
+
+      if (info.firstName && info.lastName) {
+        targetContact.nickname = info.firstName + " " + info.lastName; // specify both to support all devices
+        var name = new ContactName();
+        name.givenName = info.firstName;
+        name.familyName = info.lastName;
+        targetContact.name = name;
+      }
+
+      if (info.emailAddress)
+        targetContact.emails = [new ContactField('work', info.emailAddress, true)]
+
+      var phoneNumbers = [];
+      targetContact.rawId = info.personId
+
+      if (info.workPhone)
+        phoneNumbers.push(new ContactField('work', info.workPhone, false))
+      if (info.mobilePhone)
+        phoneNumbers.push(new ContactField('mobile', info.mobilePhone, true))
+      targetContact.phoneNumbers = phoneNumbers;
+
+      if (info.company || info.section)
+        targetContact.organizations = [new ContactOrganization(true, 'work', info.company, info.section)]
+
+      targetContact.photos = targetContact.photos || [];
+      if (info.pic) {
+        targetContact.photos[0] = new ContactField('base64', info.pic, true);
+      }
+
+      return targetContact;
+    }
+
+    function saveOnDevice(contact) {
+      var deferred = $q.defer();
+      contact.save((c) => {
+        return deferred.resolve(c)
+      }, (err) => {
+        return deferred.reject(err)
+      });
+      return deferred.promise;
+    }
+
+    var luckySaveFunction = function(c) {
+      var deferred = $q.defer();
+      if (!(c.mobilePhone || c.workPhone)) {
+        deferred.reject("Missing phone numbers")
+        return deferred.promise;
+      }
+
+      if (c.mobilePhone) {
+        findOneByPhone(c.mobilePhone).then(res => {
+          if (res) {
+            var formattedDeviceContact = updateContactInfo(res, c)
+            deferred.resolve(saveOnDevice(formattedDeviceContact))
+          }
+        }).catch(err => {
+          deferred.reject(err)
+        })
+      }
+
+      if (c.workPhone) {
+        findOneByPhone(c.workPhone).then(res => {
+          if (res) {
+            var formattedDeviceContact = updateContactInfo(res, c)
+            deferred.resolve(saveOnDevice(formattedDeviceContact))
+          }
+        }).catch(err => {
+          deferred.reject(err)
+        })
+      }
+      return deferred.promise;
+    }
+
+    return {
+      pickAndSave: function(info) {
+        var deferred = $q.defer();
+        navigator.contacts.pickContact(
+          (contact) => {
+            targetContact = updateContactInfo(contact, info);
+            deferred.resolve(saveOnDevice(formattedDeviceContact))
+          }, (err) => {
+            deferred.reject(err)
+          });
+        return deferred.promise;
+      },
+      luckySave: luckySaveFunction
+    }
+  }).factory('Contact2', function($q, $cordovaContacts) {
+    var self = this;
+    var _global = {};
+    var network = {};
+    var deviceReady = false;
+
     function updateContactInfo(targetContact, info) {
       if (info.rawId)
         targetContact.rawId = info.rawId;
