@@ -1654,7 +1654,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var deferred = $q.defer();
         navigator.contacts.pickContact(
           (contact) => {
-            targetContact = updateContactInfo(contact, info);
+            var formattedDeviceContact = updateContactInfo(contact, info);
             deferred.resolve(saveOnDevice(formattedDeviceContact))
           }, (err) => {
             deferred.reject(err)
