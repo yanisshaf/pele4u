@@ -58,7 +58,7 @@ angular.module('pele')
             }).catch(err => {
               swal({
                 text: "! התרחשה שגיאה" + JSON.stringify(err),
-                icon: "error",
+                type: "error",
                 timer: 1500
               });
             })
@@ -132,7 +132,7 @@ angular.module('pele')
 
         swal({
           title: "אנשי הקשר שבחרת נשמרו במכשירך",
-          icon: "success",
+          type: "success",
         });
       }
 
@@ -147,7 +147,7 @@ angular.module('pele')
         }).catch(err => {
           swal({
             text: "! התרחשה שגיאה" + JSON.stringify(err),
-            icon: "error",
+            type: "error",
             timer: 1500
           });
         })
@@ -222,7 +222,7 @@ angular.module('pele')
           .error((errorStr, httpStatus, headers, config) => {
             swal({
               text: "! התרחשה שגיאה" + errorStr,
-              icon: "error",
+              type: "error",
               timer: 2000
             });
           })

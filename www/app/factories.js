@@ -1611,9 +1611,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     function saveOnDevice(contact) {
       var deferred = $q.defer();
       contact.save((c) => {
-        return deferred.resolve(c)
+        deferred.resolve(c)
       }, (err) => {
-        return deferred.reject(err)
+        console.log(err)
+        deferred.reject(err)
       });
       return deferred.promise;
     }
@@ -1629,7 +1630,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         findOneByPhone(c.mobilePhone).then(res => {
           if (res) {
             var formattedDeviceContact = updateContactInfo(res, c)
-            deferred.resolve(saveOnDevice(formattedDeviceContact))
+
+            saveOnDevice(formattedDeviceContact).then(res => {
+              deferred.resolve(res)
+            }).catch(err => {
+              deferred.reject(err)
+            })
           }
         }).catch(err => {
           deferred.reject(err)
@@ -1639,8 +1645,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       if (c.workPhone) {
         findOneByPhone(c.workPhone).then(res => {
           if (res) {
-            var formattedDeviceContact = updateContactInfo(res, c)
-            deferred.resolve(saveOnDevice(formattedDeviceContact))
+            saveOnDevice(formattedDeviceContact).then(res => {
+              deferred.resolve(res)
+            }).catch(err => {
+              deferred.reject(err)
+            })
           }
         }).catch(err => {
           deferred.reject(err)
@@ -1655,7 +1664,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         navigator.contacts.pickContact(
           (contact) => {
             var formattedDeviceContact = updateContactInfo(contact, info);
-            deferred.resolve(saveOnDevice(formattedDeviceContact))
+            saveOnDevice(formattedDeviceContact).then(res => {
+              deferred.resolve(res)
+            }).catch(err => {
+              deferred.reject(err)
+            })
           }, (err) => {
             deferred.reject(err)
           });
