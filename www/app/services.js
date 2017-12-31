@@ -2,7 +2,7 @@
  * Created by User on 27/01/2016.
  */
 var app = angular.module('pele.services', []);
-app.service('StorageService', ['$http', 'PelApi', '$sessionStorage', function($http, PelApi, $sessionStorage) {
+app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($http, PelApi, $localStorage) {
     // ttl - time ( seconds to live)
 
     var yearTtl = 60 * 60 * 24 * 365;
@@ -23,15 +23,16 @@ app.service('StorageService', ['$http', 'PelApi', '$sessionStorage', function($h
       // default ttl is one year
       if (typeof ttl === 'undefined')
         ttl = yearTtl;
-      if (typeof $sessionStorage[varname] === 'undefined' || $sessionStorage[varname] === null || isExpired($sessionStorage[varname])) {
-        $sessionStorage[varname].data = data;
-        $sessionStorage[varname].ttl = ttl;
-        $sessionStorage[varname].timestamp = currentStamp();
+      if (typeof $localStorage[varname] === 'undefined' || $localStorage[varname] === null || isExpired($localStorage[varname])) {
+        $localStorage[varname] = {};
+        $localStorage[varname].data = data;
+        $localStorage[varname].ttl = ttl;
+        $localStorage[varname].timestamp = currentStamp();
       }
-      return $sessionStorage[varname];
+      return $localStorage[varname];
     }
     this.get = function(varname) {
-      return $sessionStorage[varname];
+      return $localStorage[varname];
     }
   }]).service('ApiService', ['$http', 'PelApi', '$sessionStorage', function($http, PelApi, $sessionStorage) {
     var env = PelApi.appSettings.env;

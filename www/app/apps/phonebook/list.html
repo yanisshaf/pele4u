@@ -42,8 +42,11 @@
         <button ng-click="search(term)" class="round button icon-left ion-search button-positive">חיפוש</button>
       </div>
     </div>
-    <div class="col" ng-show="page=='form' && searchResult.list.length==0">
-      <div class="text-center">
+    <div class="col">
+      <div class="text-center" ng-show="hint">
+        <h3 class="white">{{hint}}</h3>
+      </div>
+      <div class="text-center" ng-show="page=='form' && searchResult.isFound==false">
         <h3 class="white">לא נמצאו עובדים התואמים לחיפוש</h3>
       </div>
     </div>
@@ -58,50 +61,27 @@
   </ion-content>
   <ion-content class="pele_rtl" scroll="true" ng-show="page=='result' && searchResult.list.length>0">
     <div class="list phonebook">
-      <div class="item item-avatar item-avatar-right item-icon-left " ng-repeat="contact in searchResult.list">
+      <div class="item item-avatar item-avatar-right item-icon-left " ng-repeat="contact in searchResult.list track by $index">
         <img class="avatar" ng-if="contact.pic" ui-sref="app.phonebook.details({personId:contact.personId}) " src="data:image/JPEG;base64,{{contact.pic}} ">
         <div ui-sref="app.phonebook.details({personId:contact.personId})">
-          <h2>
+          <h2>[{{$index}}]
             {{contact.lastName}}
             {{contact.firstName}}</h2>
           <p>{{contact.sector}}
           </p>
         </div>
-        <div class="icon ">
-          <a href="# " ng-href="tel:{{contact.mobilePhone}} "><img class="pel_icon " src="img/new_icons/blue_mobile.png "></a>
+        <div class="icon">
+          <a href="# " ng-href="tel:{{contact.mobilePhone}} "><img class="pel_icon " src="img/new_icons/green_mobile.png "></a>
           <a href="# " ng-href="tel:{{contact.workPhone}} "><img class="pel_icon " src="img/new_icons/gray_phone.png "></a>
         </div>
       </div>
+    </div>
+    <div class="text-center" ng-show="searchResult.cursor.quantity == searchResult.cursor.pageSize">
+      <button ng-click="search(searchResult.cursor.offset)" class="button button-positive"> הציגו עוד ... </button>
+    </div>
   </ion-content>
 
-  <script id=" search.html " type="text/ng-template ">
-    <ion-modal-view>
-      <ion-header-bar class="bar app-top-bar bar-header icon-left ">
-        <button class="button-clear " ng-click="goBack() ">
-            <i class="ion-arrow-left-a "></i>
-          </button>
-        <h1 class="title ">{{title}}</h1>
-      </ion-header-bar>
-      <ion-content>
-        <div class="list phonebook ">
-          <a class="item item-avatar item-avatar-right item-icon-left " href="# " ng-repeat="contact in searchResult">
-              <img class="avatar " ng-if="contact.pic " ng-click="modals.search.hide() " ui-sref="app.phonebook.details({personId:contact.personId}) " src="data:image/JPEG;base64,{{contact.pic}} ">
-              <div ui-sref="app.phonebook.details({personId:contact.personId}) " ng-click="modals.search.hide() ">
-                <h2>
-                  {{contact.lastName}}
-                  {{contact.firstName}}</h2>
-                <p>{{contact.sector}}
-                </p>
-              </div>
-              <div class="icon ">
-                <i href="tel:{{contact.mobilePhone}} "><img class="pel_icon " src="img/phone.png " \="\"></i>
-                <i ng-click="createContact(contact) "><img class="pel_icon " src="img/add_contact.png " \="\"></i>
-              </div>
-            </a>
-        </div>
-      </ion-content>
-    </ion-modal-view>
-  </script>
+
   <script id="operunits.html " type="text/ng-template ">
     <ion-modal-view>
       <ion-header-bar class="bar app-top-bar bar-header icon-left icon-right">
@@ -118,8 +98,8 @@
                 </div>
                 <div class="col col-35 ">{{u.phoneNumber}}</div>
                 <div class="col col-30 text-left ">
-                  <a href="tel:{{u.phoneNumber}} "><img class="pel_icon " src="img/new_icons/blue_phone.png"></a>
-                  <a ng-click="createContact(u) "><img class="pel_icon " src="img/new_icons/green_add_contact.png"></a>
+                  <a href="tel:{{u.phoneNumber}} "><img class="pel_icon " src="img/new_icons/gray_phone.png"></a>
+                  <a ng-click="createContact(u) "><img class="pel_icon " src="img/new_icons/purple_add_contact.png"></a>
                 </div>
               </div>
             </ion-item>

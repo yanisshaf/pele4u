@@ -186,6 +186,42 @@ angular.module('pele')
         })
       }
 
+      $scope.updateContact = function(c, id) {
+        if (rawId !== undefined) {
+          c.rawId = rawId;
+        }
+        if (id !== undefined) {
+          c.id = id;
+          Contact.get(id).then((contact) => {
+
+
+          }).catch((err) => {
+            swal({
+              text: "! התרחשה שגיאה" + JSON.stringify(err),
+              icon: "error",
+              timer: 2000
+            });
+
+          })
+        }
+
+        Contact.save(c).then((res) => {
+          swal({
+            type: 'success',
+            title: 'איש הקשר נשמר במכשירכם',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }).
+        catch((err) => {
+          swal({
+            text: "! התרחשה שגיאה" + JSON.stringify(err),
+            icon: "error",
+            timer: 2000
+          });
+        })
+      }
+
       $scope.shareViaEmail = function(email) {
         $cordovaSocialSharing.shareViaEmail(null, null, [email]);
       }

@@ -1553,58 +1553,82 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var network = {};
     var deviceReady = false;
 
+    function updateContactInfo(targetContact, info) {
+
+
+      if (info.rawId)
+        targetContact.rawId = info.rawId;
+
+      if (info.firstName && info.lastName) {
+        targetContact.nickname = info.firstName + " " + info.lastName; // specify both to support all devices
+        var name = new ContactName();
+        name.givenName = info.firstName;
+        name.familyName = info.lastName;
+        targetContact.name = name;
+      }
+
+      if (info.emailAddress)
+        targetContact.emails = [new ContactField('work', info.emailAddress, true)]
+
+      var phoneNumbers = [];
+      targetContact.rawId = info.personId
+
+      if (info.workPhone)
+        phoneNumbers.push(new ContactField('work', info.workPhone, false))
+      if (info.mobilePhone)
+        phoneNumbers.push(new ContactField('mobile', info.mobilePhone, true))
+      targetContact.phoneNumbers = phoneNumbers;
+
+      if (info.company || info.section)
+        targetContact.organizations = [new ContactOrganization(true, 'work', info.company, info.section)]
+
+      targetContact.photos = targetContact.photos || [];
+      if (info.pic) {
+        targetContact.photos[0] = new ContactField('base64', info.pic, true);
+      }
+
+      return targetContact;
+    }
+
+    function saveOnDevice(contact) {
+      var deferred = $q.defer();
+      contact.save((c) => {
+        deferred.resolve(c)
+      }, (err) => {
+        deferred.reject(err)
+      });
+      return deferred.promise;
+    }
+
     return {
       save: function(info) {
         var deferred = $q.defer();
         var contact;
+        var targetContact;
 
         if (!(info.workPhone || info.mobilePhone))
           deferred.reject("Contact has no phone numbers !!!")
-
-        if (info.fullName) {
-          contact = navigator.contacts.create({
-            "displayName": info.fullName
-          });
-        } else if (info.firstName && info.lastName) {
-          contact = navigator.contacts.create({
-            "displayName": info.firstName + " " + info.lastName
-          });
-          if (info.id)
-            contact.id = info.id;
-          if (info.rawId)
-            contact.rawId = info.rawId;
-
-          contact.nickname = info.firstName + " " + info.lastName; // specify both to support all devices
-          var name = new ContactName();
-          name.givenName = info.firstName;
-          name.familyName = info.lastName;
-          contact.name = name;
+        if (info.id) {
+          navigator.contacts.pickContact(
+            (contact) => {
+              targetContact = updateContactInfo(contact, info);
+              saveOnDevice(targetContact)
+            }, (err) => {
+              deferred.reject(err)
+            });
+        } else {
+          if (info.fullName) {
+            contact = navigator.contacts.create({
+              "displayName": info.fullName
+            });
+          } else if (info.firstName && info.lastName) {
+            contact = navigator.contacts.create({
+              "displayName": info.firstName + " " + info.lastName
+            });
+          }
+          targetContact = updateContactInfo(contact, info);
+          saveOnDevice(targetContact)
         }
-
-        if (info.emailAddress)
-          contact.emails = [new ContactField('work', info.emailAddress, true)]
-
-        var phoneNumbers = [];
-        contact.rawId = info.personId
-
-        if (info.workPhone)
-          phoneNumbers.push(new ContactField('work', info.workPhone, false))
-        if (info.mobilePhone)
-          phoneNumbers.push(new ContactField('mobile', info.mobilePhone, true))
-        contact.phoneNumbers = phoneNumbers;
-
-        if (info.company || info.section)
-          contact.organizations = [new ContactOrganization(true, 'work', info.company, info.section)]
-        contact.photos = [];
-
-        if (info.pic)
-          contact.photos[0] = new ContactField('base64', info.pic, true)
-
-        contact.save((c) => {
-          deferred.resolve(c)
-        }, (err) => {
-          deferred.reject(err)
-        });
         return deferred.promise;
       },
       get: (id) => {
