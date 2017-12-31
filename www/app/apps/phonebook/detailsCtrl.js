@@ -37,10 +37,7 @@ angular.module('pele')
 
 
       $scope.swalContact = function(c) {
-
         swal({
-          //title: '<i>HTML</i> <u>example</u>',
-          //type: 'info',
           html: 'האם לשמור איש קשר זה במכשירכם ?',
           showCloseButton: true,
           showCancelButton: true,
@@ -50,38 +47,18 @@ angular.module('pele')
           cancelButtonText: 'עדכון קיים',
           cancelButtonAriaLabel: 'Thumbs down',
         }).then((btn) => {
-
           if (btn.value) {
+            Contact.find($scope.searchForm.term, ['displayName', 'name'], ['givenName', 'nickname', 'id', 'rawId', 'displayName', 'photos', 'lastName', 'firstName'], true).then(res => {
+              $scope.contatcsList = res;
+            });
+
             $scope.addContact(c, c.personId)
           } else if (btn.dismiss === 'cancel') {
             $scope.$apply(() => {
-              $scope.view = "newContact";
+              $scope.pickAndSave(c)
             })
           }
         })
-        /*swal({
-          text: "האם לשמור את איש הקשר במכשירכם ?",
-          buttons: {
-            "cancel": {
-              text: "ביטול",
-              value: "cancel",
-              visible: true
-            },
-            approve: {
-              text: "איש קשר חדש",
-              value: "new",
-            },
-            exists: {
-              text: "איש קשר קיים",
-              value: "exists",
-            }
-          }
-        })
-        .then((value) => {
-          if (value === 'ok')
-            $scope.addContact(c)
-        });
-        */
       }
 
 
@@ -150,76 +127,27 @@ angular.module('pele')
         });
       }
 
-      $scope.addContact = function(c, rawId, id) {
-        if (rawId !== undefined) {
-          c.rawId = rawId;
-        }
-        if (id !== undefined) {
-          c.id = id;
-          Contact.get(id).then((contact) => {
-
-
-          }).catch((err) => {
-            swal({
-              text: "! התרחשה שגיאה" + JSON.stringify(err),
-              icon: "error",
-              timer: 2000
-            });
-
-          })
-        }
-
-        Contact.save(c).then((res) => {
+      $scope.pickAndSave = function(c) {
+        Contact.pickAndSave(c).then(result => {
           swal({
             type: 'success',
             title: 'איש הקשר נשמר במכשירכם',
             showConfirmButton: false,
             timer: 1500
           })
-        }).
-        catch((err) => {
+        }).catch(err => {
           swal({
             text: "! התרחשה שגיאה" + JSON.stringify(err),
             icon: "error",
-            timer: 2000
+            timer: 1500
           });
         })
       }
 
-      $scope.updateContact = function(c, id) {
+      $scope.addContact = function(c, rawId) {
         if (rawId !== undefined) {
           c.rawId = rawId;
         }
-        if (id !== undefined) {
-          c.id = id;
-          Contact.get(id).then((contact) => {
-
-
-          }).catch((err) => {
-            swal({
-              text: "! התרחשה שגיאה" + JSON.stringify(err),
-              icon: "error",
-              timer: 2000
-            });
-
-          })
-        }
-
-        Contact.save(c).then((res) => {
-          swal({
-            type: 'success',
-            title: 'איש הקשר נשמר במכשירכם',
-            showConfirmButton: false,
-            timer: 1500
-          })
-        }).
-        catch((err) => {
-          swal({
-            text: "! התרחשה שגיאה" + JSON.stringify(err),
-            icon: "error",
-            timer: 2000
-          });
-        })
       }
 
       $scope.shareViaEmail = function(email) {
@@ -275,6 +203,7 @@ angular.module('pele')
             p1: personId
           })
           .success((data, status, headers, config) => {
+            console.log(JSON.stringify(data))
             $scope.contact = data;
             $scope.title = "פרטי עובד: " + $scope.contact.firstName + " " + $scope.contact.lastName;
 

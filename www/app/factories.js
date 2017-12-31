@@ -1554,8 +1554,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var deviceReady = false;
 
     function updateContactInfo(targetContact, info) {
-
-
       if (info.rawId)
         targetContact.rawId = info.rawId;
 
@@ -1590,17 +1588,77 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       return targetContact;
     }
 
+    function findOneAndSave() {
+
+    }
+
     function saveOnDevice(contact) {
       var deferred = $q.defer();
       contact.save((c) => {
-        deferred.resolve(c)
+        return deferred.resolve(c)
       }, (err) => {
-        deferred.reject(err)
+        return deferred.reject(err)
       });
       return deferred.promise;
     }
 
+    function luckyFind(c) {
+      var deferred = $q.defer();
+
+      var options = new ContactFindOptions();
+      options.multiple = false;
+      options.desiredFields = '*';
+      options.hasPhoneNumber = true;
+
+      var searchFields = ['phoneNumber'];
+
+      if (!(c.mobilePhone || c.workPhone)) {
+        deferred.reject("Missing phone numbers")
+        return deferred.promise;
+      } else {
+        if (c.mobilePhone) {
+          options.filter = c.mobilePhone;
+          navigator.contacts.find(searchFields,
+            (res) => {
+              if (res.length)
+                return deferred.resolve(res[0]);
+              if (!res.length && c.workPhone) {
+                options.filter = c.workPhone;
+                navigator.contacts.find(searchFields,
+                  (res) => {
+                    if (res.length)
+                      return deferred.resolve(res[0]);
+                    return deferred.resolve(null);
+                  }, (err) => {
+                    return deferred.reject(err);
+                  },
+                  options);
+              } else {
+                if (res.length)
+                  return deferred.resolve(res[0]);
+                return deferred.resolve(null);
+              }
+            }, (err) => {
+              return deferred.reject(err);
+            },
+            options);
+
+        }
+      }
+      return deferred.promise;
+    }
     return {
+      pickAndSave: function(info) {
+        var deferred = $q.defer();
+        navigator.contacts.pickContact(
+          (contact) => {
+            targetContact = updateContactInfo(contact, info);
+            saveOnDevice(targetContact)
+          }, (err) => {
+            deferred.reject(err)
+          });
+        return deferred.promise;
+      },
       save: function(info) {
         var deferred = $q.defer();
         var contact;
@@ -1657,11 +1715,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
         return deferred.promise;
       },
+      luckySave: function(info) {
+
+      },
       find: function(filter, searchFields, desiredFields, hasPhoneNumber) {
         console.log("navigator.contacts:", navigator.contacts)
         var deferred = $q.defer();
-
-
         var options = new ContactFindOptions();
 
         options.filter = filter;

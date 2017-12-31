@@ -90,9 +90,10 @@ angular.module('pele')
       } else {
         ApiService.post("PhonebookGetSector", AppId)
           .success((data, status, headers, config) => {
+            console.log(JSON.stringify(data))
             $scope.sectors = data.sectors;
             $scope.operunits = data.operunits;
-            $scope.sectors = StorageService.set("phonebook_sectors", data, 60 * 60 * 3)
+            StorageService.set("phonebook_sectors", data, 60 * 60 * 3)
           })
           .error((errorStr, httpStatus, headers, config) => {
             swal(errorStr + ":" + httpStatus)
@@ -108,6 +109,7 @@ angular.module('pele')
         $scope.hint = "";
         if ($scope.formData.term.length < 2) {
           $scope.hint = "יש להזין לפחות שתי אותיות"
+          $scope.searchResult = $scope.searchResult || {};
           $scope.searchResult.isFound = null
         }
       })
@@ -120,6 +122,7 @@ angular.module('pele')
         $scope.hint = "";
         if ($scope.formData.term.length < 2) {
           $scope.hint = "יש להזין לפחות שתי אותיות"
+          $scope.searchResult = $scope.searchResult || {};
           $scope.searchResult.isFound = null
         }
       })
@@ -151,7 +154,7 @@ angular.module('pele')
         })
         .success((data, status, headers, config) => {
           $scope.searchResult.cursor = data.cursor;
-          console.log(data.list);
+          console.log(JSON.stringify(data));
           $scope.searchResult.list = _.concat($scope.searchResult.list, data.list);
 
           $scope.searchResult.isFound = !(!data.list.length);
