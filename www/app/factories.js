@@ -1548,8 +1548,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       return $sce.trustAsHtml(text)
     }
   }).factory('Contact', function($q, $cordovaContacts) {
-    var getContactData = function(info, deviceContact) {
-      var targetContact = deviceContact || {};
+    var setContactData = function(deviceContact, info) {
+      var targetContact = deviceContact;
 
       if (info.rawId)
         targetContact.rawId = info.rawId;
@@ -1591,6 +1591,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     }
 
     return {
+      newContact: function() {
+        return navigator.contacts.create();
+      },
+      contacts: navigator.contacts,
       cordovaContacts: $cordovaContacts,
       getContactData: getContactData
     }

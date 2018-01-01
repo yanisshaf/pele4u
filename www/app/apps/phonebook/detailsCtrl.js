@@ -24,8 +24,10 @@ angular.module('pele')
       }
 
 
-      $scope.saveContact = function(c) {
-        Contact.cordovaContacts.save(c).then(function(result) {
+      $scope.saveContact = function(c, info) {
+        var deviceContact = c;
+        deviceContact = Contact.setContactData(deviceContact, info);
+        deviceContact.save(function(result) {
           swal({
             type: 'success',
             title: 'איש הקשר נשמר במכשירכם',
@@ -38,8 +40,9 @@ angular.module('pele')
             type: "error",
             timer: 1500
           });
-        });
+        })
       }
+
 
       $scope.swalContact = function(c) {
         swal({
@@ -53,12 +56,17 @@ angular.module('pele')
           cancelButtonAriaLabel: 'Thumbs down',
         }).then(btn => {
           if (btn.value) {
-            var targetContact = Contact.getContactData(c);
-            $scope.saveContact(targetContact)
+            var targetContact = Contact.getContactData(Contact.newContact(), c);
+            $scope.saveContact(targetContact, c)
           } else if (btn.dismiss === 'cancel') {
-            Contact.cordovaContacts.pickContact().then(function(contactPicked) {
-              var targetContact = Contact.getContactData(c, contactPicked);
-              $scope.saveContact(targetContact)
+            Contact.contact.pickContact(function(contactPicked) {
+              $scope.saveContact(contactPicked, c)
+            }, function(err) {
+              swal({
+                text: "! התרחשה שגיאה" + JSON.stringify(err),
+                type: "error",
+                timer: 1500
+              });
             })
           }
         })
