@@ -74,6 +74,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
       cordovaInit: function() {
         //file in device file system
+
         var self = this;
         deviceReady = true;
         self.isAndroid = ionic.Platform.isAndroid();
@@ -1547,13 +1548,23 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       if (phrase) text = text.replace(new RegExp('(' + phrase + ')', 'gi'), '<span class="highlighted">$1</span>');
       return $sce.trustAsHtml(text)
     }
-  }).factory('Contact', function($q, $cordovaContacts) {
+  }).factory('Contact', function($q, $cordovaContacts, $rootScope, $ionicPlatform) {
+
+    $ionicPlatform.on('resume', function(resumeEvent) {
+      if (resumeEvent.pendingResult) {
+        if (resumeEvent.pendingResult.pluginStatus === "OK") {
+          alert(pendingResult.pluginServiceName)
+          var contact = navigator.contacts.create(resumeEvent.pendingResult.result);
+          alert(JSON.stringify(resumeEvent.pendingResult.result))
+          $rootScope.$broadcast('CONTACT-PICKUP-DONE', resumeEvent.pendingResult.result);
+        } else {
+          console.log(resumeEvent.pendingResult.result);
+        }
+      }
+    });
+
     var setContactData = function(deviceContact, info) {
       var targetContact = deviceContact;
-
-      if (info.rawId)
-        targetContact.rawId = info.rawId;
-
 
       if (info.displayName)
         targetContact.displayName = info.displayName;

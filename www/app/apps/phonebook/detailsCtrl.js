@@ -28,7 +28,7 @@ angular.module('pele')
         var deviceContact = c;
         deviceContact = Contact.setContactData(deviceContact, info);
         deviceContact.save(function(result) {
-          swal("success:" + JSON.stringify(result))
+
           swal({
             type: 'success',
             title: 'איש הקשר נשמר במכשירכם',
@@ -36,7 +36,7 @@ angular.module('pele')
             timer: 1500
           })
         }, function(err) {
-          swal("error:" + JSON.stringify(err))
+
           swal({
             text: "! התרחשה שגיאה" + JSON.stringify(err),
             type: "error",
@@ -44,7 +44,6 @@ angular.module('pele')
           });
         })
       }
-
 
       $scope.swalContact = function(c) {
         swal({
@@ -61,23 +60,17 @@ angular.module('pele')
             var targetContact = Contact.setContactData(Contact.newContact(), c);
             $scope.saveContact(targetContact, c)
           } else if (btn.dismiss === 'cancel') {
+            $scope.$on('CONTACT-PICKUP-DONE', function(event, contact) {
+              $scope.saveContact(contact, c)
+            });
+
             Contact.contacts.pickContact(function(contactPicked) {
-              var deviceContact = Contact.newContact();
-              deviceContact.id = contactPicked.id;
-              $scope.saveContact(deviceContact, c)
-            }, function(err) {
-              // do nothing on cancelation
-              if (err !== "6")
-                swal({
-                  text: "! התרחשה שגיאה" + JSON.stringify(err),
-                  type: "error",
-                  timer: 1500
-                });
+              if (ionic.Platform.isIOS())
+                $rootScope.$broadcast('CONTACT-PICKUP-DONE', contactPicked);
             })
           }
         })
       }
-
 
       $scope.shareViaEmail = function(email) {
         $cordovaSocialSharing.shareViaEmail(null, null, [email]);
