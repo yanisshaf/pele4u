@@ -17,6 +17,9 @@
           <input class="pele_rtl text-right" type="text" placeholder="חיפוש לפי שם פרטי/משפחה/שלוחה" ng-model="formData.term">
           <i class="icon ion-funnel placeholder-icon"></i>
         </ion-item>
+        <div class="text-center" ng-show="hint">
+          <strong class="white">{{hint}}</strong>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -43,9 +46,7 @@
       </div>
     </div>
     <div class="col">
-      <div class="text-center" ng-show="hint">
-        <h3 class="white">{{hint}}</h3>
-      </div>
+
       <div class="text-center" ng-show="page=='form' && searchResult.isFound==false">
         <h3 class="white">לא נמצאו עובדים התואמים לחיפוש</h3>
       </div>
@@ -64,7 +65,7 @@
       <div class="item item-avatar item-avatar-right item-icon-left " ng-repeat="contact in searchResult.list track by $index">
         <img class="avatar" ng-if="contact.pic" ui-sref="app.phonebook.details({personId:contact.personId}) " src="data:image/JPEG;base64,{{contact.pic}} ">
         <div ui-sref="app.phonebook.details({personId:contact.personId})">
-          <h2>[{{$index}}]
+          <h2>
             {{contact.lastName}}
             {{contact.firstName}}</h2>
           <p>{{contact.sector}}

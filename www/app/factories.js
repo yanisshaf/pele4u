@@ -1548,33 +1548,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       return $sce.trustAsHtml(text)
     }
   }).factory('Contact', function($q, $cordovaContacts) {
-    var self = this;
-    var _global = {};
-    var network = {};
-    var deviceReady = false;
-
-
-    function findOneByPhone(num) {
-      var deferred = $q.defer();
-      var options = new ContactFindOptions();
-      options.multiple = false;
-      options.desiredFields = '*';
-      options.hasPhoneNumber = true;
-      var searchFields = ['phoneNumbers'];
-      options.filter = num;
-      navigator.contacts.find(searchFields,
-        (res) => {
-          if (res.length)
-            return deferred.resolve(res[0]);
-          return deferred.resolve(null);
-        }, (err) => {
-          return deferred.reject(err);
-        },
-        options);
-      return deferred.promise;
-    }
-
-    function updateContactInfo(targetContact, info) {
+    var getContactData = function(info) {
       if (info.rawId)
         targetContact.rawId = info.rawId;
 
@@ -1614,72 +1588,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       return targetContact;
     }
 
-    function saveOnDevice(contact) {
-      var deferred = $q.defer();
-      contact.save((c) => {
-        deferred.resolve(c)
-      }, (err) => {
-        deferred.reject(err)
-      });
-      return deferred.promise;
-    }
-
-    var luckySaveFunction = function(c) {
-      var deferred = $q.defer();
-      if (!(c.mobilePhone || c.workPhone)) {
-        deferred.reject("Missing phone numbers")
-        return deferred.promise;
-      }
-      if (c.mobilePhone) {
-        return findOneByPhone(c.mobilePhone).then(function(res) {
-          if (res) {
-            var formattedDeviceContact = updateContactInfo(res, c)
-            formattedDeviceContact.save(res => {
-              deferred.resolve(res);
-            }, err => {
-              deferred.reject(err);
-            })
-          } else {
-            var formattedDeviceContact = updateContactInfo(navigator.contacts.create(), c);
-            formattedDeviceContact.save(res => {
-              deferred.resolve(res);
-            }, err => {
-              deferred.reject(err);
-            })
-          }
-        }).catch(function(err) {
-          deferred.reject(err);
-        })
-      } else {
-        var formattedDeviceContact = updateContactInfo(navigator.contacts.create(), c);
-        formattedDeviceContact.save(res => {
-          deferred.resolve(res);
-        }, err => {
-          deferred.reject(err);
-        })
-      }
-
-      return deferred.promise;
-    }
-
     return {
-      pickAndSave: function(info) {
-        var deferred = $q.defer();
-        navigator.contacts.pickContact(
-          function(contact) {
-            console.log("Contact:", contact)
-            var formattedDeviceContact = updateContactInfo(contact, info);
-            formattedDeviceContact.save(res => {
-              deferred.resolve(res);
-            }, err => {
-              deferred.reject(err);
-            })
-          },
-          function(err) {
-            deferred.reject(err)
-          });
-        return deferred.promise;
-      },
-      luckySave: luckySaveFunction
+      getContactData: getContactData
     }
   });

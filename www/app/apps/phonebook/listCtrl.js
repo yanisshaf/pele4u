@@ -108,7 +108,7 @@ angular.module('pele')
       safeApply($scope, function() {
         $scope.hint = "";
         if ($scope.formData.term.length < 2) {
-          $scope.hint = "יש להזין לפחות שתי אותיות"
+          //  $scope.hint = "יש להזין לפחות שתי אותיות"
           $scope.searchResult = $scope.searchResult || {};
           $scope.searchResult.isFound = null
         }
@@ -121,7 +121,7 @@ angular.module('pele')
       safeApply($scope, function() {
         $scope.hint = "";
         if ($scope.formData.term.length < 2) {
-          $scope.hint = "יש להזין לפחות שתי אותיות"
+          //  $scope.hint = "יש להזין לפחות שתי אותיות"
           $scope.searchResult = $scope.searchResult || {};
           $scope.searchResult.isFound = null
         }
@@ -134,6 +134,7 @@ angular.module('pele')
       var quantity = cursor.quantity || 0;
       var offset = cursor.offset || null;
       if ($scope.formData.term.length < 2) {
+        $scope.hint = "יש להזין לפחות שתי אותיות"
         return false;
       }
 
