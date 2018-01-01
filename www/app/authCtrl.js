@@ -3,7 +3,7 @@
  */
 var app = angular.module('pele.authCtrl', ['ngStorage']);
 
-app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootScope, PelApi, $localStorage, $ionicLoading, appSettings) {
+app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootScope, PelApi, $sessionStorage, $ionicLoading, appSettings) {
   //------------------------------------------------------------//
   //--                    Get AppId                           --//
   //------------------------------------------------------------//
@@ -62,10 +62,12 @@ app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootSc
               $scope.$broadcast('scroll.refreshComplete');
               appSettings.config.Pin = pin;
               appSettings.config.IS_TOKEN_VALID = "Y";
-              PelApi.sessionStorage.ApiServiceAuthParams = {
-                PIN: appSettings.config.Pin,
-                TOKEN: appSettings.config.token
+
+              $sessionStorage.AuthInfo = {
+                pinCode: appSettings.config.Pin,
+                token: appSettings.config.token
               };
+
 
               PelApi.pinState.set({
                 valid: true,
