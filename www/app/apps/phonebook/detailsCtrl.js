@@ -61,6 +61,7 @@ angular.module('pele')
             $scope.saveContact(targetContact, c)
           } else if (btn.dismiss === 'cancel') {
             $scope.$on('CONTACT-PICKUP-DONE', function(event, contact) {
+              alert(JSON.stringify(contact))
               $scope.saveContact(contact, c)
             });
 
@@ -123,7 +124,7 @@ angular.module('pele')
             p1: personId
           })
           .success((data, status, headers, config) => {
-            console.log(JSON.stringify(data))
+
             $scope.contact = data;
             $scope.title = "פרטי עובד: " + $scope.contact.firstName + " " + $scope.contact.lastName;
 

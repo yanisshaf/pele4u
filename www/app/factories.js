@@ -1551,6 +1551,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
   }).factory('Contact', function($q, $cordovaContacts, $rootScope, $ionicPlatform) {
 
     $ionicPlatform.on('resume', function(resumeEvent) {
+      console.log("resumeEvent:", resumeEvent)
       if (resumeEvent.pendingResult) {
         if (resumeEvent.pendingResult.pluginStatus === "OK") {
           alert(pendingResult.pluginServiceName)
@@ -1558,7 +1559,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           alert(JSON.stringify(resumeEvent.pendingResult.result))
           $rootScope.$broadcast('CONTACT-PICKUP-DONE', resumeEvent.pendingResult.result);
         } else {
-          console.log(resumeEvent.pendingResult.result);
+          console.log("resumeEvent.pendingResult.result:", resumeEvent.pendingResult.result);
         }
       }
     });
