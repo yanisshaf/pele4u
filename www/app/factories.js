@@ -1630,7 +1630,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         deferred.reject("Missing phone numbers")
         return deferred.promise;
       }
-
       if (c.mobilePhone) {
         return findOneByPhone(c.mobilePhone).then(function(res) {
           if (res) {
@@ -1638,20 +1637,28 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             formattedDeviceContact.save(res => {
               deferred.resolve(res);
             }, err => {
-              deferred.resolve(err);
+              deferred.reject(err);
             })
           } else {
             var formattedDeviceContact = updateContactInfo(navigator.contacts.create(), c);
             formattedDeviceContact.save(res => {
               deferred.resolve(res);
             }, err => {
-              deferred.resolve(err);
+              deferred.reject(err);
             })
           }
         }).catch(function(err) {
           deferred.reject(err);
         })
+      } else {
+        var formattedDeviceContact = updateContactInfo(navigator.contacts.create(), c);
+        formattedDeviceContact.save(res => {
+          deferred.resolve(res);
+        }, err => {
+          deferred.reject(err);
+        })
       }
+
       return deferred.promise;
     }
 
@@ -1665,7 +1672,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             formattedDeviceContact.save(res => {
               deferred.resolve(res);
             }, err => {
-              deferred.resolve(err);
+              deferred.reject(err);
             })
           },
           function(err) {
