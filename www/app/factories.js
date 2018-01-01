@@ -1635,10 +1635,18 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return findOneByPhone(c.mobilePhone).then(function(res) {
           if (res) {
             var formattedDeviceContact = updateContactInfo(res, c)
-            deferred.resolve(saveOnDevice(formattedDeviceContact))
+            formattedDeviceContact.save(res => {
+              deferred.resolve(res);
+            }, err => {
+              deferred.resolve(err);
+            })
           } else {
             var formattedDeviceContact = updateContactInfo(navigator.contacts.create(), c);
-            deferred.resolve(saveOnDevice(formattedDeviceContact));
+            formattedDeviceContact.save(res => {
+              deferred.resolve(res);
+            }, err => {
+              deferred.resolve(err);
+            })
           }
         }).catch(function(err) {
           deferred.reject(err);
@@ -1654,7 +1662,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           function(contact) {
             console.log("Contact:", contact)
             var formattedDeviceContact = updateContactInfo(contact, info);
-            deferred.resolve(saveOnDevice(formattedDeviceContact))
+            formattedDeviceContact.save(res => {
+              deferred.resolve(res);
+            }, err => {
+              deferred.resolve(err);
+            })
           },
           function(err) {
             deferred.reject(err)
