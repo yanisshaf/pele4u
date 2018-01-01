@@ -62,8 +62,9 @@ angular.module('pele')
             $scope.saveContact(targetContact, c)
           } else if (btn.dismiss === 'cancel') {
             Contact.contacts.pickContact(function(contactPicked) {
-              swal(JSON.stringify(contactPicked))
-              $scope.saveContact(contactPicked, c)
+              var deviceContact = Contact.newContact();
+              deviceContact.id = contactPicked.id;
+              $scope.saveContact(deviceContact, c)
             }, function(err) {
               // do nothing on cancelation
               if (err !== "6")
