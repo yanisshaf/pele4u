@@ -1559,7 +1559,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       options.multiple = false;
       options.desiredFields = '*';
       options.hasPhoneNumber = true;
-      var searchFields = ['phoneNumber'];
+      var searchFields = ['phoneNumbers'];
       options.filter = num;
       navigator.contacts.find(searchFields,
         (res) => {
