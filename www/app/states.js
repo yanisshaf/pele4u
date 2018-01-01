@@ -252,7 +252,7 @@ angular.module('pele.states', [])
         controller: 'phonebookListCtrl',
       }
     },
-    src: ["app/apps/phonebook/listCtrl.js"]
+    src: ["lib/async.min.js", "app/apps/phonebook/listCtrl.js"]
   }, {
     state: "app.phonebook.details",
     url: '/:personId',
@@ -264,7 +264,7 @@ angular.module('pele.states', [])
         controller: 'phonebookDetailsCtrl',
       }
     },
-    src: ["app/apps/phonebook/detailsCtrl.js"]
+    src: ["lib/async.min.js", "app/apps/phonebook/detailsCtrl.js"]
   }, {
     state: 'app.p2_scan_print',
     url: '/scan_print',
