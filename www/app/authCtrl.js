@@ -62,6 +62,11 @@ app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootSc
               $scope.$broadcast('scroll.refreshComplete');
               appSettings.config.Pin = pin;
               appSettings.config.IS_TOKEN_VALID = "Y";
+              PelApi.sessionStorage.ApiServiceAuthParams = {
+                PIN: appSettings.config.Pin,
+                TOKEN: appSettings.config.token
+              };
+
               PelApi.pinState.set({
                 valid: true,
                 code: appSettings.config.Pin,
