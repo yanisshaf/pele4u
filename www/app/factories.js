@@ -1564,10 +1564,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       navigator.contacts.find(searchFields,
         (res) => {
           if (res.length)
-            deferred.resolve(res[0]);
+            return deferred.resolve(res[0]);
           return deferred.resolve(null);
         }, (err) => {
-          deferred.reject(err);
+          return deferred.reject(err);
         },
         options);
       return deferred.promise;
