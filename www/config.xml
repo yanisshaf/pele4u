@@ -110,7 +110,5 @@
     <plugin name="cordova-plugin-badge" spec="~0.8.5" />
     <plugin name="cordova-plugin-x-socialsharing" source="npm" />
     <plugin name="onesignal-cordova-plugin" source="npm" spec="~2.2.2" />
-    <plugin name="cordova-plugin-contacts" spec="^3.0.1">
-        <variable name="CONTACTS_USAGE_DESCRIPTION" value="האפליקציה תאפשר שמירת אנשי קשר של עובדי פלאפון במכשירך" />
-    </plugin>
+  <gap:plugin name="org.apache.cordova.contacts" />
 </widget>
