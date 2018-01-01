@@ -59,7 +59,7 @@ angular.module('pele')
             var targetContact = Contact.setContactData(Contact.newContact(), c);
             $scope.saveContact(targetContact, c)
           } else if (btn.dismiss === 'cancel') {
-            Contact.contact.pickContact(function(contactPicked) {
+            Contact.contacts.pickContact(function(contactPicked) {
               $scope.saveContact(contactPicked, c)
             }, function(err) {
               swal({
