@@ -1663,14 +1663,17 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       pickAndSave: function(info) {
         var deferred = $q.defer();
         navigator.contacts.pickContact(
-          (contact) => {
+          function(contact) {
+            console.log(contact)
             var formattedDeviceContact = updateContactInfo(contact, info);
             saveOnDevice(formattedDeviceContact).then(res => {
               deferred.resolve(res)
             }).catch(err => {
               deferred.reject(err)
             })
-          }, (err) => {
+          },
+          function(err) {
+            console.log(err)
             deferred.reject(err)
           });
         return deferred.promise;
