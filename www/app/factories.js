@@ -1627,36 +1627,17 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       }
 
       if (c.mobilePhone) {
-        findOneByPhone(c.mobilePhone).then(res => {
+        return findOneByPhone(c.mobilePhone).then(res => {
           if (res) {
             var formattedDeviceContact = updateContactInfo(res, c)
-
-            saveOnDevice(formattedDeviceContact).then(res => {
-              deferred.resolve(res)
+            return saveOnDevice(formattedDeviceContact).then(res => {
+              return res;
             }).catch(err => {
-              deferred.reject(err)
+              return err;
             })
           }
-        }).catch(err => {
-          deferred.reject(err)
         })
       }
-
-      if (c.workPhone) {
-        findOneByPhone(c.workPhone).then(res => {
-          if (res) {
-            var formattedDeviceContact = updateContactInfo(res, c)
-            saveOnDevice(formattedDeviceContact).then(res => {
-              deferred.resolve(res)
-            }).catch(err => {
-              deferred.reject(err)
-            })
-          }
-        }).catch(err => {
-          deferred.reject(err)
-        })
-      }
-      return deferred.promise;
     }
 
     return {
