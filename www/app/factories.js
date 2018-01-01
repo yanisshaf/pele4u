@@ -1589,6 +1589,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     }
 
     return {
+      cordovaContacts: $cordovaContacts,
       getContactData: getContactData
     }
   });

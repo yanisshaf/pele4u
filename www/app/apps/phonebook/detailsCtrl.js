@@ -25,7 +25,7 @@ angular.module('pele')
 
 
       $scope.saveContact = function(c) {
-        $cordovaContacts.save(targetContact).then(function(result) {
+        Contact.cordovaContacts.save(c).then(function(result) {
           swal({
             type: 'success',
             title: 'איש הקשר נשמר במכשירכם',
@@ -56,7 +56,7 @@ angular.module('pele')
             var targetContact = Contact.getContactData(c);
             $scope.saveContact(targetContact)
           } else if (btn.dismiss === 'cancel') {
-            $cordovaContacts.pickContact().then(function(contactPicked) {
+            Contact.cordovaContacts.pickContact().then(function(contactPicked) {
               var targetContact = Contact.getContactData(c);
               targetContact.id = contactPicked.id;
               $scope.saveContact(targetContact)
@@ -111,9 +111,7 @@ angular.module('pele')
         return tree;
 
       }
-      $scope.setTargetContact = function(cid) {
-        $scope.targetContactId = cid;
-      }
+
       $scope.getContact = function() {
         ApiService.post("PhonebookDetails", appId, {
             p1: personId
