@@ -1548,7 +1548,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       if (phrase) text = text.replace(new RegExp('(' + phrase + ')', 'gi'), '<span class="highlighted">$1</span>');
       return $sce.trustAsHtml(text)
     }
-  }).factory('Contact', function($q, $cordovaContacts) {
+  }).factory('Contact', function($q) {
 
 
     var setContactData = function(deviceContact, info) {
@@ -1594,7 +1594,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return navigator.contacts.create();
       },
       contacts: navigator.contacts,
-      cordovaContacts: $cordovaContacts,
       setContactData: setContactData
     }
   });
