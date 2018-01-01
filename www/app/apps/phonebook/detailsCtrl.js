@@ -57,8 +57,7 @@ angular.module('pele')
             $scope.saveContact(targetContact)
           } else if (btn.dismiss === 'cancel') {
             Contact.cordovaContacts.pickContact().then(function(contactPicked) {
-              var targetContact = Contact.getContactData(c);
-              targetContact.id = contactPicked.id;
+              var targetContact = Contact.getContactData(c, contactPicked);
               $scope.saveContact(targetContact)
             })
           }
