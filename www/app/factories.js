@@ -1549,6 +1549,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     }
   }).factory('Contact', function($q, $cordovaContacts) {
     var getContactData = function(info) {
+      var targetContact = {};
       if (info.rawId)
         targetContact.rawId = info.rawId;
 
