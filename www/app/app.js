@@ -55,6 +55,19 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
 
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {});
 
+      $ionicPlatform.on('resume', function(resumeEvent) {
+        console.log("resumeEvent:", resumeEvent)
+        if (resumeEvent.pendingResult) {
+          if (resumeEvent.pendingResult.pluginStatus === "OK") {
+            alert(pendingResult.pluginServiceName)
+            var contact = navigator.contacts.create(resumeEvent.pendingResult.result);
+            alert(JSON.stringify(resumeEvent.pendingResult.result))
+            $rootScope.$broadcast('CONTACT-PICKUP-DONE', resumeEvent.pendingResult.result);
+          } else {
+            console.log("resumeEvent.pendingResult.result:", resumeEvent.pendingResult.result);
+          }
+        }
+      });
 
       $ionicPlatform.ready(function() {
         //----------------------------------------

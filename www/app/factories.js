@@ -1548,21 +1548,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       if (phrase) text = text.replace(new RegExp('(' + phrase + ')', 'gi'), '<span class="highlighted">$1</span>');
       return $sce.trustAsHtml(text)
     }
-  }).factory('Contact', function($q, $cordovaContacts, $rootScope, $ionicPlatform) {
+  }).factory('Contact', function($q, $cordovaContacts) {
 
-    $ionicPlatform.on('resume', function(resumeEvent) {
-      console.log("resumeEvent:", resumeEvent)
-      if (resumeEvent.pendingResult) {
-        if (resumeEvent.pendingResult.pluginStatus === "OK") {
-          alert(pendingResult.pluginServiceName)
-          var contact = navigator.contacts.create(resumeEvent.pendingResult.result);
-          alert(JSON.stringify(resumeEvent.pendingResult.result))
-          $rootScope.$broadcast('CONTACT-PICKUP-DONE', resumeEvent.pendingResult.result);
-        } else {
-          console.log("resumeEvent.pendingResult.result:", resumeEvent.pendingResult.result);
-        }
-      }
-    });
 
     var setContactData = function(deviceContact, info) {
       var targetContact = deviceContact;
