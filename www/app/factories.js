@@ -1661,22 +1661,15 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
     return {
       pickAndSave: function(info) {
-        var deferred = $q.defer();
-        navigator.contacts.pickContact(
+        return navigator.contacts.pickContact(
           function(contact) {
-            console.log(contact)
+            console.log("Contact:", contact)
             var formattedDeviceContact = updateContactInfo(contact, info);
-            saveOnDevice(formattedDeviceContact).then(res => {
-              deferred.resolve(res)
-            }).catch(err => {
-              deferred.reject(err)
-            })
+            return saveOnDevice(formattedDeviceContact).then(res => {})
           },
           function(err) {
-            console.log(err)
-            deferred.reject(err)
+            return err;
           });
-        return deferred.promise;
       },
       luckySave: luckySaveFunction
     }
