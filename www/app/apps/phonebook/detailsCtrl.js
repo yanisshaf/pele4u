@@ -28,6 +28,7 @@ angular.module('pele')
         var deviceContact = c;
         deviceContact = Contact.setContactData(deviceContact, info);
         deviceContact.save(function(result) {
+          swal("success:" + JSON.stringify(result))
           swal({
             type: 'success',
             title: 'איש הקשר נשמר במכשירכם',
@@ -35,6 +36,7 @@ angular.module('pele')
             timer: 1500
           })
         }, function(err) {
+          swal("error:" + JSON.stringify(err))
           swal({
             text: "! התרחשה שגיאה" + JSON.stringify(err),
             type: "error",
@@ -60,13 +62,16 @@ angular.module('pele')
             $scope.saveContact(targetContact, c)
           } else if (btn.dismiss === 'cancel') {
             Contact.contacts.pickContact(function(contactPicked) {
+              swal(JSON.stringify(contactPicked))
               $scope.saveContact(contactPicked, c)
             }, function(err) {
-              swal({
-                text: "! התרחשה שגיאה" + JSON.stringify(err),
-                type: "error",
-                timer: 1500
-              });
+              // do nothing on cancelation
+              if (err !== "6")
+                swal({
+                  text: "! התרחשה שגיאה" + JSON.stringify(err),
+                  type: "error",
+                  timer: 1500
+                });
             })
           }
         })
