@@ -1596,6 +1596,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
       contacts: navigator.contacts,
       cordovaContacts: $cordovaContacts,
-      getContactData: getContactData
+      setContactData: setContactData
     }
   });
