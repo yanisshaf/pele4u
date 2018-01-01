@@ -59,7 +59,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       $ionicPlatform.ready(function() {
         document.addEventListener("pause", function() {
           console.log("on pause")
-        }, false);
+        }, true);
 
         document.addEventListener("resume", function(resumeEvent) {
           console.log("resumeEvent:", resumeEvent)
@@ -73,7 +73,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
               console.log("resumeEvent.pendingResult.result:", resumeEvent.pendingResult.result);
             }
           }
-        }, false);
+        }, true);
 
         //----------------------------------------
         //--    Get Version from config.xml
