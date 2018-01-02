@@ -86,11 +86,11 @@ angular.module('pele')
       if (cacheData) {
         $scope.sectors = cacheData.sectors;
         $scope.operunits = cacheData.operunits;
-        console.log(cacheData)
+
       } else {
         ApiService.post("PhonebookGetSector", AppId)
           .success((data, status, headers, config) => {
-            console.log(JSON.stringify(data))
+
             $scope.sectors = data.sectors;
             $scope.operunits = data.operunits;
             StorageService.set("phonebook_sectors", data, 60 * 60 * 3)
@@ -155,12 +155,8 @@ angular.module('pele')
         })
         .success((data, status, headers, config) => {
           $scope.searchResult.cursor = data.cursor;
-          console.log(JSON.stringify(data));
           $scope.searchResult.list = _.concat($scope.searchResult.list, data.list);
-
           $scope.searchResult.isFound = !(!data.list.length);
-
-          console.log($scope.searchResult);
           $scope.page = 'result';
           if (data.list && !data.list.length) {
             $scope.page = 'form';

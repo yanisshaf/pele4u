@@ -15,15 +15,15 @@
     <ion-scroll ng-show="view=='newContact'" delegate-handle="slide1Scroll">
       <ion-item class="item text-right no-border">חפשו וסמנו אישר קשר לעדכון</ion-item>
       <ion-item class="item item-input">
-        <input class="pele_rtl text-right" type="text" placeholder="חפשו לפי שם/מספר .." ng-change="searchContacts()" ng-model="searchForm.term">
+        <input class="pele_rtl text-right" type="text" placeholder="חפשו לפי שם/מספר .." ng-change="searchOnDeviceContacts()" ng-model="searchForm.term">
         <i class="icon ion-funnel placeholder-icon"></i>
       </ion-item>
       <div>
         <ion-list class="pele_rtl">
-          <ion-item class="item-text-wrap item-avatar  item-icon-right" ng-repeat="devContact in contatcsList" ng-click="setTargetContact(devContact.id)">{{devContact||json}}
-            <a class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" ng-click="addContact(contact,null,devContact.id)">לחצו לאישור </a>
-            <img class="avatar" ng-if="devContact.photos[0]" src="data:image/JPEG;base64,{{devContact.photos[0].value}} ">
-            <img class="avatar" ng-if="devContact.photos[0].type=='url'" ng-src="{{devContact.photos[0].value}}" src="data:image/JPEG;base64,{{devContact.photos[0].value}} ">
+          <ion-item class="item item-avatar item-avatar-right item-icon-left" ng-repeat="devContact in contatcsList" ng-click="setTargetContact(devContact.id)">{{devContact.displayName}}
+            <a class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" ng-click="saveContact(devContact,contact)">לחצו לאישור </a>
+            <!--img class="avatar" ng-if="devContact.photos[0]" src="data:image/JPEG;base64,{{devContact.photos[0].value}} ">
+            <img class="avatar" ng-if="devContact.photos[0].type=='url'" ng-src="{{devContact.photos[0].value}}" src="data:image/JPEG;base64,{{devContact.photos[0].value}} "-->
           </ion-item>
         </ion-list>
       </div>

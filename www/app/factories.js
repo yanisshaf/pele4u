@@ -1553,7 +1553,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
     var setContactData = function(deviceContact, info) {
       var targetContact = deviceContact;
-
+      targetContact.rawId = info.personId;
+      var idx = 100;
       if (info.displayName)
         targetContact.displayName = info.displayName;
 
@@ -1566,33 +1567,72 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         targetContact.name = name;
       }
 
-      if (info.emailAddress)
-        targetContact.emails = [new ContactField('work', info.emailAddress, true)]
-
+      if (info.emailAddress) {
+        var emailField = new ContactField('work', info.emailAddress, true);
+        emailField.id = idx++;
+        targetContact.emails = [emailField]
+      }
       var phoneNumbers = [];
-      targetContact.rawId = info.personId
-
-      if (info.workPhone)
-        phoneNumbers.push(new ContactField('work', info.workPhone, false))
-      if (info.mobilePhone)
-        phoneNumbers.push(new ContactField('mobile', info.mobilePhone, true))
+      if (info.workPhone) {
+        var phoneField = new ContactField('work', info.workPhone, false)
+        phoneField.id = idx++;
+        phoneNumbers.push(phoneField)
+      }
+      if (info.mobilePhone) {
+        var phoneField = new ContactField('work', info.mobilePhone, true)
+        phoneField.id = idx++;
+        phoneNumbers.push(phoneField)
+      }
       targetContact.phoneNumbers = phoneNumbers;
 
-      if (info.company || info.section)
-        targetContact.organizations = [new ContactOrganization(true, 'work', info.company, info.section)]
+      if (info.company || info.section) {
+        info.company = info.company || "פלאפון תקשורת"
+        var orgField = new ContactOrganization(true, 'work', info.company, info.section, null)
+        orgField.id = idx++;
+        targetContact.organizations = [orgField]
+      }
 
       targetContact.photos = targetContact.photos || [];
       if (info.pic) {
-        targetContact.photos[0] = new ContactField('base64', info.pic, true);
+        var photoField = new ContactField('base64', info.pic, true);
+        photoField.id = idx++;
+        targetContact.photos[0] = photoField;
       }
-
       return targetContact;
+    }
+
+    var find = function(term) {
+      var deferred = $q.defer();
+      var options = new ContactFindOptions();
+      options.filter = term;
+
+      options.multiple = true;
+      var fields = [
+        navigator.contacts.fieldType.displayName,
+        navigator.contacts.fieldType.phoneNumbers,
+        navigator.contacts.fieldType.name,
+      ];
+      options.desiredFields = [
+        navigator.contacts.fieldType.id,
+        navigator.contacts.fieldType.phoneNumbers,
+        navigator.contacts.fieldType.emails,
+        navigator.contacts.fieldType.organizations,
+      ];
+      options.hasPhoneNumber = true;
+      navigator.contacts.find(fields, function(result) {
+        deferred.resolve(result);
+      }, function(err) {
+        deferred.reject(err);
+      }, options);
+
+      return deferred.promise;
     }
 
     return {
       newContact: function() {
         return navigator.contacts.create();
       },
+      find: find,
       contacts: navigator.contacts,
       setContactData: setContactData
     }

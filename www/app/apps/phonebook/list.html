@@ -62,8 +62,8 @@
   </ion-content>
   <ion-content class="pele_rtl" scroll="true" ng-show="page=='result' && searchResult.list.length>0">
     <div class="list phonebook">
-      <div class="item item-avatar item-avatar-right item-icon-left " ng-repeat="contact in searchResult.list track by $index">
-        <img class="avatar" ng-if="contact.pic" ui-sref="app.phonebook.details({personId:contact.personId}) " src="data:image/JPEG;base64,{{contact.pic}} ">
+      <div class="item item-avatar item-avatar-right item-icon-left" ng-repeat="contact in searchResult.list track by $index">
+        <img class="avatar" ng-if="contact.pic" ui-sref="app.phonebook.details({personId:contact.personId})" ng-src="data:image/JPEG;base64,{{contact.pic}}">
         <div ui-sref="app.phonebook.details({personId:contact.personId})">
           <h2>
             {{contact.lastName}}

@@ -13,7 +13,17 @@ angular.module('pele')
       $scope.title = "אלפון";
       $scope.view = "normal";
       $scope.searchForm = {};
-      console.log($stateParams)
+      $scope.targetContactId = "";
+
+      function safeApply(scope, fn) {
+        (scope.$$phase || scope.$root.$$phase) ? fn(): scope.$apply(fn);
+      }
+
+      $scope.setTargetContact = function(id) {
+        safeApply($scope, function() {
+          $scope.targetContactId = id;
+        })
+      }
 
       $scope.goSearchForm = function() {
         $state.go("app.phonebook", {
@@ -35,8 +45,10 @@ angular.module('pele')
             showConfirmButton: false,
             timer: 1500
           })
+          safeApply($scope, function() {
+            $scope.view = 'Contact'
+          })
         }, function(err) {
-
           swal({
             text: "! התרחשה שגיאה" + JSON.stringify(err),
             type: "error",
@@ -60,17 +72,28 @@ angular.module('pele')
             var targetContact = Contact.setContactData(Contact.newContact(), c);
             $scope.saveContact(targetContact, c)
           } else if (btn.dismiss === 'cancel') {
-            $scope.$on('CONTACT-PICKUP-DONE', function(event, contact) {
-              alert(JSON.stringify(contact))
-              $scope.saveContact(contact, c)
-            });
 
-            Contact.contacts.pickContact(function(contactPicked) {
-              if (ionic.Platform.isIOS())
-                $rootScope.$broadcast('CONTACT-PICKUP-DONE', contactPicked);
-            })
+            if (ionic.Platform.isIOS()) {
+              Contact.contacts.pickContact(function(contactPicked) {
+                $scope.saveContact(contactPicked, c)
+              })
+            } else {
+              safeApply($scope, function() {
+                $scope.view = 'newContact'
+              })
+            }
           }
         })
+      }
+
+      $scope.searchOnDeviceContacts = function() {
+        if (!$scope.searchForm.term) {
+          $scope.contatcsList = []
+          return true;
+        }
+        Contact.find($scope.searchForm.term).then((res) => {
+          $scope.contatcsList = res
+        }).catch(err => {})
       }
 
       $scope.shareViaEmail = function(email) {
