@@ -1610,13 +1610,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       var fields = [
         navigator.contacts.fieldType.displayName,
         navigator.contacts.fieldType.phoneNumbers,
-        navigator.contacts.fieldType.name,
+        navigator.contacts.fieldType.name
       ];
       options.desiredFields = [
         navigator.contacts.fieldType.id,
-        navigator.contacts.fieldType.phoneNumbers,
-        navigator.contacts.fieldType.emails,
-        navigator.contacts.fieldType.organizations,
+        navigator.contacts.fieldType.name,
+        navigator.contacts.fieldType.displayName,
+        navigator.contacts.fieldType.organizations
       ];
       options.hasPhoneNumber = true;
       navigator.contacts.find(fields, function(result) {
