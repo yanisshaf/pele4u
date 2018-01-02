@@ -55,9 +55,9 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
 
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {});
 
-
       $ionicPlatform.ready(function() {
-        document.addEventListener("pause", function() {
+
+        /* document.addEventListener("pause", function() {
           console.log("on pause")
         }, true);
 
@@ -74,7 +74,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
             }
           }
         }, true);
-
+        */
         //----------------------------------------
         //--    Get Version from config.xml
         //----------------------------------------

@@ -11,8 +11,8 @@
       </div>
     </div>
   </ion-nav-title>
-  <ion-content scroll="false" padding="true" id="phonebook_details">
-    <ion-scroll ng-show="view=='newContact'" delegate-handle="slide1Scroll">
+  <ion-content padding="true" id="phonebook_details">
+    <ion-scroll direction="y" ng-show="view=='newContact'" delegate-handle="slide1Scroll">
       <ion-item class="item text-right no-border">חפשו וסמנו אישר קשר לעדכון</ion-item>
       <ion-item class="item item-input">
         <input class="pele_rtl text-right" type="text" placeholder="חפשו לפי שם/מספר .." ng-change="searchOnDeviceContacts()" ng-model="searchForm.term">
@@ -21,7 +21,7 @@
       <div>
         <ion-list class="pele_rtl">
           <ion-item class="item item-avatar item-avatar-right item-icon-left" ng-repeat="devContact in contatcsList" ng-click="setTargetContact(devContact.id)">{{devContact.displayName}}
-            <a class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" ng-click="saveContact(devContact,contact)">לחצו לאישור </a>
+            <a class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" on-tap="saveContact(devContact,contact)">לחצו לאישור </a>
             <!--img class="avatar" ng-if="devContact.photos[0]" src="data:image/JPEG;base64,{{devContact.photos[0].value}} ">
             <img class="avatar" ng-if="devContact.photos[0].type=='url'" ng-src="{{devContact.photos[0].value}}" src="data:image/JPEG;base64,{{devContact.photos[0].value}} "-->
           </ion-item>
@@ -44,12 +44,11 @@
       </div>
       <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
-          <ion-scroll direction="y" style="height:130%">
-
+          <ion-scroll direction="y">
             <h4 class="pele_rtl text-right">{{managerInfo.orgName}}</h4>
             <!--h5 class="pele_rtl text-right"> הוסף לאנשי קשר : <span class="pel-badge blue"><i ng-click="actions('members_tree',contact,contact.orgTree)" class="icon white medium ion-person-stalker"></i></span> <span class="pel-badge blue"><i
             ng-click="actions('manager_tree',managerInfo,contact.orgTree)" class="icon white medium ion-ios-people"></i></span> </h5-->
-            <div class="item-section">
+            <div class="">
               <ul class="list pele_rtl text-right treeview level1">
                 <li class="direct_admin tree-item">
                   <a ui-sref="app.phonebook.details({personId:contact.directManagerNumber})">

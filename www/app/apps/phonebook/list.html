@@ -60,29 +60,29 @@
       </div>
     </div>
   </ion-content>
-  <ion-content class="pele_rtl" scroll="true" ng-show="page=='result' && searchResult.list.length>0">
-    <div class="list phonebook">
-      <div class="item item-avatar item-avatar-right item-icon-left" ng-repeat="contact in searchResult.list track by $index">
-        <img class="avatar" ng-if="contact.pic" ui-sref="app.phonebook.details({personId:contact.personId})" ng-src="data:image/JPEG;base64,{{contact.pic}}">
-        <div ui-sref="app.phonebook.details({personId:contact.personId})">
-          <h2>
+  <ion-content class="pele_rtl" ng-show="page=='result' && searchResult.list.length>0">
+    <ion-scroll direction="y">
+      <div class="list phonebook">
+        <div class="item item-avatar item-avatar-right item-icon-left" ng-repeat="contact in searchResult.list track by $index">
+          <img class="avatar" ng-if="contact.pic" ui-sref="app.phonebook.details({personId:contact.personId})" ng-src="data:image/JPEG;base64,{{contact.pic}}">
+          <div ui-sref="app.phonebook.details({personId:contact.personId})">
+            <h2>
             {{contact.lastName}}
             {{contact.firstName}}</h2>
-          <p>{{contact.sector}}
-          </p>
-        </div>
-        <div class="icon">
-          <a href="# " ng-href="tel:{{contact.mobilePhone}} "><img class="pel_icon " src="img/new_icons/green_mobile.png "></a>
-          <a href="# " ng-href="tel:{{contact.workPhone}} "><img class="pel_icon " src="img/new_icons/gray_phone.png "></a>
+            <p>{{contact.sector}}
+            </p>
+          </div>
+          <div class="icon">
+            <a href="# " ng-href="tel:{{contact.mobilePhone}} "><img class="pel_icon " src="img/new_icons/green_mobile.png "></a>
+            <a href="# " ng-href="tel:{{contact.workPhone}} "><img class="pel_icon " src="img/new_icons/gray_phone.png "></a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="text-center" ng-show="searchResult.cursor.quantity == searchResult.cursor.pageSize">
-      <button ng-click="search(searchResult.cursor.offset)" class="button button-positive"> הציגו עוד ... </button>
-    </div>
+      <div class="text-center" ng-show="searchResult.cursor.quantity == searchResult.cursor.pageSize">
+        <button ng-click="search(searchResult.cursor.offset)" class="button button-positive"> הציגו עוד ... </button>
+      </div>
+    </ion-scroll>
   </ion-content>
-
-
   <script id="operunits.html " type="text/ng-template ">
     <ion-modal-view>
       <ion-header-bar class="bar app-top-bar bar-header icon-left icon-right">
