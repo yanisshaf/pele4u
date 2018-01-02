@@ -1554,6 +1554,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var setContactData = function(deviceContact, info) {
       var targetContact = deviceContact;
       targetContact.rawId = info.personId;
+
       var idx = 100;
       if (info.displayName)
         targetContact.displayName = info.displayName;
@@ -1569,18 +1570,18 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
       if (info.emailAddress) {
         var emailField = new ContactField('work', info.emailAddress, true);
-        emailField.id = idx++;
+        //emailField.id = idx++;
         targetContact.emails = [emailField]
       }
       var phoneNumbers = [];
       if (info.workPhone) {
         var phoneField = new ContactField('work', info.workPhone, false)
-        phoneField.id = idx++;
+        //phoneField.id = idx++;
         phoneNumbers.push(phoneField)
       }
       if (info.mobilePhone) {
         var phoneField = new ContactField('work', info.mobilePhone, true)
-        phoneField.id = idx++;
+        //phoneField.id = idx++;
         phoneNumbers.push(phoneField)
       }
       targetContact.phoneNumbers = phoneNumbers;
@@ -1588,14 +1589,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       if (info.company || info.section) {
         info.company = info.company || "פלאפון תקשורת"
         var orgField = new ContactOrganization(true, 'work', info.company, info.section, null)
-        orgField.id = idx++;
+        //orgField.id = idx++;
         targetContact.organizations = [orgField]
       }
 
       targetContact.photos = targetContact.photos || [];
       if (info.pic) {
         var photoField = new ContactField('base64', info.pic, true);
-        photoField.id = idx++;
+        //photoField.id = idx++;
         targetContact.photos[0] = photoField;
       }
       return targetContact;

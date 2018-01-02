@@ -91,7 +91,7 @@ angular.module('pele')
           return true;
         }
         Contact.find($scope.searchForm.term).then((res) => {
-          safeApply($scope, () => {
+          safeApply($scope, function() {
             $scope.contatcsList = res
           })
         }).catch(err => {})
