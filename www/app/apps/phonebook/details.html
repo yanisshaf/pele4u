@@ -192,7 +192,7 @@
       </ion-item>
       <div>
         <ion-list class="pele_rtl">
-          <ion-item class="item item-avatar item-avatar-right item-icon-left" ng-repeat="devContact in contatcsList" ng-click="setTargetContact(devContact.id)">{{devContact.displayName}}
+          <ion-item class="item item-avatar item-avatar-right item-icon-left" ng-repeat="devContact in contatcsList" ng-click="setTargetContact(devContact.id)">{{devContact.displayName}} :: {{devContact.id}}
             <a class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" on-tap="saveContact(devContact,contact)">לחצו לאישור </a>
             <!--img class="avatar" ng-if="devContact.photos[0]" src="data:image/JPEG;base64,{{devContact.photos[0].value}} ">
             <img class="avatar" ng-if="devContact.photos[0].type=='url'" ng-src="{{devContact.photos[0].value}}" src="data:image/JPEG;base64,{{devContact.photos[0].value}} "-->

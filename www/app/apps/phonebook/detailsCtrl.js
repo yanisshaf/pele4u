@@ -38,7 +38,6 @@ angular.module('pele')
         var deviceContact = c;
         deviceContact = Contact.setContactData(deviceContact, info);
         deviceContact.save(function(result) {
-
           swal({
             type: 'success',
             title: 'איש הקשר נשמר במכשירכם',
@@ -92,7 +91,9 @@ angular.module('pele')
           return true;
         }
         Contact.find($scope.searchForm.term).then((res) => {
-          $scope.contatcsList = res
+          safeApply($scope, () => {
+            $scope.contatcsList = res
+          })
         }).catch(err => {})
       }
 
