@@ -36,7 +36,12 @@ angular.module('pele')
 
       $scope.saveContact = function(c, info) {
         var deviceContact = c;
+        if (c.id) {
+          deviceContact = Contact.newContact();
+          deviceContact.id = c.id
+        }
         deviceContact = Contact.setContactData(deviceContact, info);
+
         deviceContact.save(function(result) {
           swal({
             type: 'success',
