@@ -11,23 +11,8 @@
       </div>
     </div>
   </ion-nav-title>
-  <ion-content padding="true" id="phonebook_details">
-    <ion-scroll direction="y" ng-show="view=='newContact'" delegate-handle="slide1Scroll">
-      <ion-item class="item text-right no-border">חפשו וסמנו אישר קשר לעדכון</ion-item>
-      <ion-item class="item item-input">
-        <input class="pele_rtl text-right" type="text" placeholder="חפשו לפי שם/מספר .." ng-change="searchOnDeviceContacts()" ng-model="searchForm.term">
-        <i class="icon ion-funnel placeholder-icon"></i>
-      </ion-item>
-      <div>
-        <ion-list class="pele_rtl">
-          <ion-item class="item item-avatar item-avatar-right item-icon-left" ng-repeat="devContact in contatcsList" ng-click="setTargetContact(devContact.id)">{{devContact.displayName}}
-            <a class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" on-tap="saveContact(devContact,contact)">לחצו לאישור </a>
-            <!--img class="avatar" ng-if="devContact.photos[0]" src="data:image/JPEG;base64,{{devContact.photos[0].value}} ">
-            <img class="avatar" ng-if="devContact.photos[0].type=='url'" ng-src="{{devContact.photos[0].value}}" src="data:image/JPEG;base64,{{devContact.photos[0].value}} "-->
-          </ion-item>
-        </ion-list>
-      </div>
-    </ion-scroll>
+  <ion-content scroll="false" padding="true" id="phonebook_details">
+
     <tab-slide-box tab="1" ng-show="view!='newContact'">
       <div class="tsb-icons">
         <div class="tsb-ic-wrp">
@@ -42,54 +27,54 @@
           </ion-scroll>
         </div>
       </div>
+
       <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
-          <ion-scroll direction="y">
-            <h4 class="pele_rtl text-right">{{managerInfo.orgName}}</h4>
-            <!--h5 class="pele_rtl text-right"> הוסף לאנשי קשר : <span class="pel-badge blue"><i ng-click="actions('members_tree',contact,contact.orgTree)" class="icon white medium ion-person-stalker"></i></span> <span class="pel-badge blue"><i
+          <ion-content>
+            <div style="height:135%">
+              <strong class="pele_rtl text-right badge-string">{{managerInfo.orgName}}</strong>
+              <!--h5 class="pele_rtl text-right"> הוסף לאנשי קשר : <span class="pel-badge blue"><i ng-click="actions('members_tree',contact,contact.orgTree)" class="icon white medium ion-person-stalker"></i></span> <span class="pel-badge blue"><i
             ng-click="actions('manager_tree',managerInfo,contact.orgTree)" class="icon white medium ion-ios-people"></i></span> </h5-->
-            <div class="">
-              <ul class="list pele_rtl text-right treeview level1">
-                <li class="direct_admin tree-item">
-                  <a ui-sref="app.phonebook.details({personId:contact.directManagerNumber})">
-                    {{contact.directManagerName}}
+              <div class="pele_rtl">
+                <ul class="list pele_rtl text-right treeview level1">
+                  <li class="direct_admin tree-item">
+                    <a ui-sref="app.phonebook.details({personId:contact.directManagerNumber})">
+                  <strong>  {{contact.directManagerName}}</strong>
                   </a>
-                  <ul class="list level2">
-                    <li class="{{member.relation}} tree-item" ng-show="v.personId" ng-repeat="(k,v) in contact.tree">
-                      <div class="links" ng-class="{'last':$last}"></div>
-                      <a ui-sref="app.phonebook.details({personId:k})">
+                    <ul class="list level2">
+                      <li class="{{member.relation}} tree-item" ng-show="v.personId" ng-repeat="(k,v) in contact.tree">
+                        <div class="links" ng-class="{'last':$last}"></div>
+                        <a ui-sref="app.phonebook.details({personId:k})">
                         <i ng-if="contact.personId==k" class="ion-android-person blue"></i>
                         <span ng-class="{active:contact.personId==k}">
                           {{v.lastName}},
                           {{v.firstName}}
                         </span>
                       </a>
-                      <ul ng-if="v.members.length" class="list level3">
-                        <li class="{{member.relation}} tree-item" ng-repeat="member in v.members">
-                          <div class="links" ng-class="{'last':$last}"></div>
-                          <a ui-sref="app.phonebook.details({personId:member.personId})">
+                        <ul ng-if="v.members.length" class="list level3">
+                          <li class="{{member.relation}} tree-item" ng-repeat="member in v.members">
+                            <div class="links" ng-class="{'last':$last}"></div>
+                            <a ui-sref="app.phonebook.details({personId:member.personId})">
                             {{member.lastName}},
                             {{member.firstName}}
                           </a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </ion-scroll>
+          </ion-content>
         </ion-slide>
         <!------------------------------------------------------------------------------->
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
-        <ion-slide on-drag-right="enable('drag')" on-drag-left="disable('drag')">
-
-          <ion-scroll class="pele_rtl text-right" delegate-handle="slide1Scroll">
-            <!-- Refresh to get the new posts -->
-
-            <ul class="list">
-              <li class="item">
+        <ion-slide son-drag-right="enable('drag')" on-drag-left="disable('drag')">
+          <ion-content scroll="true" has-header="true">
+            <ul class="list pele_rtl text-right" style="height: 125%;">
+              <li class="item no-border">
                 <div class="blue text-center">
                   <strong>{{contact.firstName}}
                     {{contact.lastName}}</strong>
@@ -97,7 +82,7 @@
                 <div class="text-center">
                   <img class="contact-avatar" ng-if="contact.pic" ng-src="data:image/JPEG;base64,{{contact.pic}}" /-->
                   <img class="no-contact-pic" ng-if="!contact.pic" ng-src="img/new_icons/blue_avatar.png" />
-                  <img ng-show="contact.birthday==today" class="contact-avatar" style="border:0;border-radius:0" ng-src="img/new_icons/happybirthday.gif">
+                  <img ng-show="contact.birthday==today || today==today" class="contact-avatar" style="border:0;border-radius:0" ng-src="img/new_icons/happybirthday.gif">
                 </div>
 
               </li>
@@ -150,28 +135,28 @@
                         <td class="info">
                           {{contact.birthday}}</td>
                       </tr>
-                      <tr>
+                      <tr ng-show="contact.has_sector">
                         <td class="label">חטיבה:
                         </td>
                         <td class="info">
                           {{contact.sector}}</td>
                       </tr>
-                      <tr>
+                      <tr ng-show="contact.has_section">
                         <td class="label">אגף:
                         </td>
-                        <td class="info" ng-show="contact">
+                        <td class="info">
                           {{contact.section|replace:"no sector":""}}</td>
                       </tr>
-                      <tr>
+                      <tr ng-show="contact.has_department">
                         <td class="label">מחלקה:
                         </td>
-                        <td class="info" ng-show="contact">
+                        <td class="info">
                           {{contact.department|replace:"no sector":""}}</td>
                       </tr>
-                      <tr>
+                      <tr ng-show="contact.has_team">
                         <td class="label">צוות
                         </td>
-                        <td class="info" ng-show="contact">
+                        <td class="info">
                           {{contact.team|replace:"no sector":""}}</td>
                       </tr>
                     </tbody>
@@ -193,16 +178,27 @@
                 ng-click="shareViaWhatsAppToReceiver(contact.mobilePhone)">iver : :<img class="pel_icon medium " src="img/whatsapp.png "></a> <br \> <a href="#" ng-click="shareViaWhatsApp()"> no receiver : <img class="pel_icon medium" src="img/sms.png"></a> </div-->
               </li>
             </ul>
-
-          </ion-scroll>
+          </ion-content>
         </ion-slide>
-      </ion-slide-box>
-    </tab-slide-box>
-  </ion-content>
-  <!-- Footer Actions -->
-  <!-- ion-footer-bar class="phonebook-footer"> <div class="row "> <div class="col col-50 text-center "> <button class="button button-clear button-positive" ui-sref="app.p1_appsLists"> <i class="ion-home "></i> תפריט ראשי </button> </div> <div
-  class="col col-50 text-center "> <button class="button button-clear button-positive" ui-sref="app.phonebook"> <i class=" ion-search "></i> חיפוש חדש </button> </div> </div> </ion-footer-bar-->
-</ion-view>
 
-<!--script id="xhappybirthday.html" type="text/ng-template"> <div ng-include="'app/apps/phonebook/happybirthday.html'"></div> </div-->
-</script>
+      </ion-slide-box>
+
+    </tab-slide-box>
+    <div ng-show="view=='newContact'" delegate-handle="slide1Scroll">
+      <ion-item class="item text-right no-border">חפשו וסמנו אישר קשר לעדכון</ion-item>
+      <ion-item class="item item-input">
+        <input class="pele_rtl text-right" type="text" placeholder="חפשו לפי שם/מספר .." ng-change="searchOnDeviceContacts()" ng-model="searchForm.term">
+        <i class="icon ion-funnel placeholder-icon"></i>
+      </ion-item>
+      <div>
+        <ion-list class="pele_rtl">
+          <ion-item class="item item-avatar item-avatar-right item-icon-left" ng-repeat="devContact in contatcsList" ng-click="setTargetContact(devContact.id)">{{devContact.displayName}}
+            <a class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" on-tap="saveContact(devContact,contact)">לחצו לאישור </a>
+            <!--img class="avatar" ng-if="devContact.photos[0]" src="data:image/JPEG;base64,{{devContact.photos[0].value}} ">
+            <img class="avatar" ng-if="devContact.photos[0].type=='url'" ng-src="{{devContact.photos[0].value}}" src="data:image/JPEG;base64,{{devContact.photos[0].value}} "-->
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

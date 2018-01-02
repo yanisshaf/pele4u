@@ -10,7 +10,7 @@
       <div class="title">{{title}}</div>
     </div>
   </ion-nav-title>
-  <ion-content class="phonebook-form pele-background" scroll="true" ng-show="page=='form' || !page">
+  <ion-content class="phonebook-form pele-background" ng-show="page=='form' || !page">
     <div class="row">
       <div class="col col-input">
         <ion-item class="item item-input">
@@ -61,27 +61,26 @@
     </div>
   </ion-content>
   <ion-content class="pele_rtl" ng-show="page=='result' && searchResult.list.length>0">
-    <ion-scroll direction="y">
-      <div class="list phonebook">
-        <div class="item item-avatar item-avatar-right item-icon-left" ng-repeat="contact in searchResult.list track by $index">
-          <img class="avatar" ng-if="contact.pic" ui-sref="app.phonebook.details({personId:contact.personId})" ng-src="data:image/JPEG;base64,{{contact.pic}}">
-          <div ui-sref="app.phonebook.details({personId:contact.personId})">
-            <h2>
+    <div class="list phonebook">
+      <div class="item item-avatar item-avatar-right item-icon-left" ng-repeat="contact in searchResult.list track by $index">
+        <img class="avatar" ng-if="contact.pic" ui-sref="app.phonebook.details({personId:contact.personId})" ng-src="data:image/JPEG;base64,{{contact.pic}}">
+        <div ui-sref="app.phonebook.details({personId:contact.personId})">
+          <h2>
             {{contact.lastName}}
             {{contact.firstName}}</h2>
-            <p>{{contact.sector}}
-            </p>
-          </div>
-          <div class="icon">
-            <a href="# " ng-href="tel:{{contact.mobilePhone}} "><img class="pel_icon " src="img/new_icons/green_mobile.png "></a>
-            <a href="# " ng-href="tel:{{contact.workPhone}} "><img class="pel_icon " src="img/new_icons/gray_phone.png "></a>
-          </div>
+          <p> {{contact.sector|replace:"no sector":""}}</td>
+          </p>
+        </div>
+        <div class="icon">
+          <a href="# " ng-href="tel:{{contact.mobilePhone}} "><img class="pel_icon " src="img/new_icons/green_mobile.png "></a>
+          <a href="# " ng-href="tel:{{contact.workPhone}} "><img class="pel_icon " src="img/new_icons/gray_phone.png "></a>
         </div>
       </div>
-      <div class="text-center" ng-show="searchResult.cursor.quantity == searchResult.cursor.pageSize">
-        <button ng-click="search(searchResult.cursor.offset)" class="button button-positive"> הציגו עוד ... </button>
-      </div>
-    </ion-scroll>
+    </div>
+    <div class="text-center" ng-show="searchResult.cursor.quantity == searchResult.cursor.pageSize">
+      <button ng-click="search(searchResult.cursor.offset)" class="button button-positive"> הציגו עוד ... </button>
+    </div>
+
   </ion-content>
   <script id="operunits.html " type="text/ng-template ">
     <ion-modal-view>
@@ -89,7 +88,7 @@
         <button class="button button-icon icon ion-ios-search" ng-click="setForm()"></button>
         <h1 class="title ">יחידות תפעוליות</h1>
       </ion-header-bar>
-      <ion-content>
+      <ion-content scroll="true">
         <div class="card pele_rtl ">
           <div class="list phonebook ">
             <ion-item ng-repeat="u in useful">
@@ -110,5 +109,4 @@
       </ion-content>
     </ion-modal-view>
   </script>
-
 </ion-view>

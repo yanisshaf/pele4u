@@ -124,6 +124,7 @@ angular.module('pele')
 
       $scope.getTreeData = function(person) {
         var tree = {};
+
         person.orgTree.forEach(function(c) {
 
           if (c.personId == person.directManagerNumber) {
@@ -143,12 +144,23 @@ angular.module('pele')
       }
 
       $scope.getContact = function() {
+        PelApi.showLoading();
         ApiService.post("PhonebookDetails", appId, {
             p1: personId
           })
           .success((data, status, headers, config) => {
 
             $scope.contact = data;
+
+            if (!$scope.contact.section.match(/no\s+sector/))
+              $scope.contact.has_section = true;
+            if (!$scope.contact.department.match(/no\s+sector/))
+              $scope.contact.has_department = true;
+            if (!$scope.contact.team.match(/no\s+sector/))
+              $scope.contact.has_team = true;
+            if (!$scope.contact.sector.match(/no\s+sector/))
+              $scope.contact.has_sector = true;
+
             $scope.title = "פרטי עובד: " + $scope.contact.firstName + " " + $scope.contact.lastName;
 
             $scope.page = 'result';
