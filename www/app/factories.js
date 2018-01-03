@@ -913,28 +913,31 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //==               Update Version                          ==//
       //===========================================================//
       showPopupVersionUpdate: function(title, subTitle) {
-        var storeUrl = appSettings.GOOGLE_PLAY_DEEP_LINK;
-        if (ionic.Platform.isIOS()) {
-          storeUrl = PelApi.appSettings.APPLE_STORE_DEEP_LINK;
+        var storeUrl;
+
+        if (!ionic.Platform.is('cordova')) {
+          storeUrl = appSettings.GOOGLE_PLAY_APP_LINK;
+        } else if (ionic.Platform.isAndroid()) {
+          storeUrl = appSettings.GOOGLE_PLAY_DEEP_LINK;
+        } else if (ionic.Platform.isIOS()) {
+          storeUrl = appSettings.APPLE_STORE_DEEP_LINK;
+          alert(storeUrl)
         }
+
         swal({
-            text: title,
-            buttons: {
-              "cancel": {
-                text: "ביטול",
-                value: "cancel",
-                visible: true
-              },
-              approve: {
-                text: "עדכון גרסה",
-                value: "ok",
-              }
-            }
-          })
-          .then(function(value) {
-            if (value === 'ok')
-              window.open(storeUrl, '_system');
-          });
+          html: title,
+          showCloseButton: true,
+          showCancelButton: true,
+          focusConfirm: false,
+          confirmButtonText: 'שדרג',
+          confirmButtonAriaLabel: 'Thumbs up, great!',
+          cancelButtonText: 'ביטול',
+          cancelButtonAriaLabel: 'Thumbs down',
+        }).then(function(btn) {
+          if (btn.value) {
+            window.open(storeUrl, '_system');
+          }
+        })
       },
       showPopupVersionUpdate_old: function(title, subTitle) {
 

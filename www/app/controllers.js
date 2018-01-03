@@ -12,9 +12,11 @@ angular.module('pele.controllers', ['ngStorage'])
     $scope.setLowerVersion = function() {
       var origAppVersion = PelApi.appSettings.config.APP_VERSION;
       PelApi.appSettings.config.APP_VERSION = "0";
+      $scope.appVersion = PelApi.appSettings.config.APP_VERSION;
       setTimeout(function() {
         PelApi.appSettings.config.APP_VERSION = origAppVersion;
-      }, 1000 * 60 * 3)
+        $scope.appVersion = PelApi.appSettings.config.APP_VERSION;
+      }, 1000 * 60 * 10)
     }
 
 
