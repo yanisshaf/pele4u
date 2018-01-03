@@ -921,7 +921,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           storeUrl = appSettings.GOOGLE_PLAY_DEEP_LINK;
         } else if (ionic.Platform.isIOS()) {
           storeUrl = appSettings.APPLE_STORE_DEEP_LINK;
-          alert(storeUrl)
         }
 
         swal({
