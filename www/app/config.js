@@ -273,7 +273,7 @@ angular.module('pele.config', [])
     translateFlag: "N",
     flashTime: 2500,
     GOOGLE_PLAY_APP_LINK: "https://play.google.com/store/apps/details?id=com.int_pele.pele4u",
-    GOOGLE_MARKET_DEEP_LINK: "market://details?id=com.int_pele.pele4u",
+    GOOGLE_PLAY_DEEP_LINK: "market://details?id=com.int_pele.pele4u",
     APPLE_STORE_APP_LINK: "https://appsto.re/il/yYQKab.i",
     APPLE_STORE_DEEP_LINK: "itms-apps://appsto.re/il/yYQKab.i",
     PIN_STATUS: {
