@@ -90,13 +90,15 @@ angular.module('pele')
       } else {
         ApiService.post("PhonebookGetSector", AppId)
           .success((data, status, headers, config) => {
-
-            $scope.sectors = data.sectors;
-            $scope.operunits = data.operunits;
-            StorageService.set("phonebook_sectors", data, 60 * 60 * 3)
+            var result = ApiService.checkResponse(data, status)
+            $scope.sectors = result.sectors;
+            $scope.operunits = result.operunits;
+            StorageService.set("phonebook_sectors", result, 60 * 60 * 3)
           })
           .error((errorStr, httpStatus, headers, config) => {
-            swal(errorStr + ":" + httpStatus)
+            ApiService.checkResponse({
+              error: errorStr
+            }, httpStatus);
           })
       }
     }
@@ -128,6 +130,52 @@ angular.module('pele')
       })
     });
 
+
+    $scope.swalContact = function(c) {
+      c.company = "פלאפון תקשורת"
+
+      swal({
+        target: "#swal-target",
+        html: '<div>' + 'האם לשמור איש קשר זה במכשירכם ? ' + '</div>' +
+          '<div class="alert">' + "שים לב, איש הקשר ישמר בנייד כאיש קשר חדש" + '</div>',
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: 'שמירה',
+        confirmButtonAriaLabel: 'Thumbs up, great!',
+        cancelButtonText: 'ביטול',
+        cancelButtonAriaLabel: 'Thumbs down',
+      }).then(btn => {
+
+        if (btn.value) {
+          $scope.addContact(c)
+        }
+      })
+    }
+
+    $scope.addContact = function(c) {
+      var deviceContact = Contact.newContact();
+      deviceContact = Contact.setContactData(deviceContact, c);
+      deviceContact.save(function(result) {
+        swal({
+          type: 'success',
+          title: 'איש הקשר נשמר במכשירכם',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }, function(err) {
+        swal({
+          text: "שגיאה בניסיון לשמור איש קשר",
+          type: "error",
+          timer: 1500
+        });
+        PelApi.throwError("app", "saveContact on phonebookDetails", JSON.stringify(err));
+
+      })
+
+    }
+
+
     $scope.search = function() {
 
       var cursor = _.get($scope.searchResult, "cursor", {});
@@ -154,59 +202,21 @@ angular.module('pele')
           p3: offset
         })
         .success((data, status, headers, config) => {
-          $scope.searchResult.cursor = data.cursor;
-          $scope.searchResult.list = _.concat($scope.searchResult.list, data.list);
-          $scope.searchResult.isFound = !(!data.list.length);
+          var result = ApiService.checkResponse(data, status)
+          $scope.searchResult.cursor = result;
+          $scope.searchResult.list = _.concat($scope.searchResult.list, result.list);
+          $scope.searchResult.isFound = !(!result.list.length);
           $scope.page = 'result';
-          if (data.list && !data.list.length) {
+          if (data.list && !result.list.length) {
             $scope.page = 'form';
           }
         })
         .error((errorStr, httpStatus, headers, config) => {
-          swal(errorStr + ":" + httpStatus)
+          ApiService.checkResponse({
+            error: errorStr
+          }, httpStatus);
+
         })
     }
-
-
-
-    $scope.addContact = function(c) {
-      Contact.save(c, PelApi.appSettings.config.contactIdPrefix).then((res) => {
-        swal({
-          text: "! איש הקשר   עודכן במכשירך",
-          icon: "success",
-          button: "סגור!",
-        });
-      }).
-      catch((err) => {
-        swal({
-          text: "! התרחשה שגיאה" + JSON.stringify(err),
-          icon: "error",
-          timer: 2000
-        });
-      })
-    }
-
-    $scope.swalContact = function(c) {
-      swal({
-          text: "האם לשמור את איש הקשר במכשירכם ?",
-          buttons: {
-            "cancel": {
-              text: "ביטול",
-              value: "cancel",
-              visible: true
-            },
-            approve: {
-              text: "אישור",
-              value: "ok",
-            }
-          }
-        })
-        .then((value) => {
-          if (value === 'ok')
-            $scope.addContact(c)
-        });
-    }
-
-
 
   });

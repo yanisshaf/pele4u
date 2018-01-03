@@ -913,10 +913,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //==               Update Version                          ==//
       //===========================================================//
       showPopupVersionUpdate: function(title, subTitle) {
-        var storeUrl = appSettings.GOOGLE_PLAY_APP_LINK;
-
+        var storeUrl = appSettings.GOOGLE_PLAY_DEEP_LINK;
         if (ionic.Platform.isIOS()) {
-          storeUrl = PelApi.appSettings.APPLE_STORE_APP_LINK;
+          storeUrl = PelApi.appSettings.APPLE_STORE_DEEP_LINK;
         }
         swal({
             text: title,
@@ -934,7 +933,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           })
           .then((value) => {
             if (value === 'ok')
-              window.open(storeUrl, '_system', 'location=yes');
+              window.open(storeUrl, '_system');
           });
       },
       showPopupVersionUpdate_old: function(title, subTitle) {
@@ -955,7 +954,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
               if (isAndroid) {
                 window.open(appSettings.config.GOOGLE_PLAY_APP_LINK, '_system', 'location=yes');
               } else if (isIOS) {
-                window.open(appSettings.config.APPLE_STORE_APP_LING, '_system', 'location=yes');
+                window.open(appSettings.config.APPLE_STORE_APP_LINK, '_system', 'location=yes');
               }
               return true;
             }
@@ -1584,6 +1583,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         //phoneField.id = idx++;
         phoneNumbers.push(phoneField)
       }
+      if (info.phoneNumber) {
+        var phoneField = new ContactField('work', info.phoneNumber, false)
+        phoneNumbers.push(phoneField)
+      }
+
       targetContact.phoneNumbers = phoneNumbers;
 
       if (info.company || info.section) {

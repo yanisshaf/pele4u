@@ -1,5 +1,5 @@
 /*********************/
-const env = "DV";
+const env = "QA";
 /********************/
 
 const EnvCodes = {
@@ -273,7 +273,9 @@ angular.module('pele.config', [])
     translateFlag: "N",
     flashTime: 2500,
     GOOGLE_PLAY_APP_LINK: "https://play.google.com/store/apps/details?id=com.int_pele.pele4u",
-    APPLE_STORE_APP_LING: "https://appsto.re/il/yYQKab.i",
+    GOOGLE_MARKET_DEEP_LINK: "market://details?id=com.int_pele.pele4u",
+    APPLE_STORE_APP_LINK: "https://appsto.re/il/yYQKab.i",
+    APPLE_STORE_DEEP_LINK: "itms-apps://appsto.re/il/yYQKab.i",
     PIN_STATUS: {
       "EOL": "", //- End of life
       "PAD": "גישה נחסמה, נה לפנות ל 55 ...", // - Pin access denied after 3 time

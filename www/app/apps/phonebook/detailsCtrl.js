@@ -53,8 +53,9 @@ angular.module('pele')
             $scope.view = 'Contact'
           })
         }, function(err) {
+          PelApi.throwError("app", "saveContact on phonebookDetails", JSON.stringify(err));
           swal({
-            text: "! התרחשה שגיאה" + JSON.stringify(err),
+            text: "שגיאה בניסיון לשמור איש קשר",
             type: "error",
             timer: 1500
           });
@@ -63,29 +64,19 @@ angular.module('pele')
 
       $scope.swalContact = function(c) {
         swal({
-          html: 'האם לשמור איש קשר זה במכשירכם ?',
+          html: '<div>' + 'האם לשמור איש קשר זה במכשירכם ? ' + '</div>' +
+            '<div class="alert">' + "שים לב, איש הקשר ישמר בנייד כאיש קשר חדש" + '</div>',
           showCloseButton: true,
           showCancelButton: true,
           focusConfirm: false,
-          confirmButtonText: ' חדש',
+          confirmButtonText: 'שמירה',
           confirmButtonAriaLabel: 'Thumbs up, great!',
-          cancelButtonText: 'עדכון קיים',
+          cancelButtonText: 'ביטול',
           cancelButtonAriaLabel: 'Thumbs down',
         }).then(btn => {
           if (btn.value) {
             var targetContact = Contact.setContactData(Contact.newContact(), c);
             $scope.saveContact(targetContact, c)
-          } else if (btn.dismiss === 'cancel') {
-
-            if (ionic.Platform.isIOS()) {
-              Contact.contacts.pickContact(function(contactPicked) {
-                $scope.saveContact(contactPicked, c)
-              })
-            } else {
-              safeApply($scope, function() {
-                $scope.view = 'newContact'
-              })
-            }
           }
         })
       }
@@ -130,7 +121,7 @@ angular.module('pele')
 
       $scope.getTreeData = function(person) {
         var tree = {};
-
+        $scope.treeHeight = (person.orgTree.length * 31 + 100) + 'px';
         person.orgTree.forEach(function(c) {
 
           if (c.personId == person.directManagerNumber) {

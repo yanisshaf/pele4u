@@ -31,7 +31,7 @@
       <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
           <ion-content>
-            <div style="height:135%">
+            <div style="height:{{treeHeight}}">
               <strong class="pele_rtl text-right badge-string">{{managerInfo.orgName}}</strong>
               <!--h5 class="pele_rtl text-right"> הוסף לאנשי קשר : <span class="pel-badge blue"><i ng-click="actions('members_tree',contact,contact.orgTree)" class="icon white medium ion-person-stalker"></i></span> <span class="pel-badge blue"><i
             ng-click="actions('manager_tree',managerInfo,contact.orgTree)" class="icon white medium ion-ios-people"></i></span> </h5-->
@@ -184,7 +184,7 @@
       </ion-slide-box>
 
     </tab-slide-box>
-    <div ng-show="view=='newContact'" delegate-handle="slide1Scroll">
+    <div ng-if="0" ng-show="view=='newContact'" delegate-handle="slide1Scroll">
       <ion-item class="item text-right no-border">חפשו וסמנו אישר קשר לעדכון</ion-item>
       <ion-item class="item item-input">
         <input class="pele_rtl text-right" type="text" placeholder="חפשו לפי שם/מספר .." ng-change="searchOnDeviceContacts()" ng-model="searchForm.term">

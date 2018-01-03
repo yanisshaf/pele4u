@@ -36,6 +36,14 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     }
   }]).service('ApiService', ['$http', 'PelApi', '$sessionStorage', function($http, PelApi, $sessionStorage) {
     var env = PelApi.appSettings.env;
+    var isValidJson = (str) => {
+      try {
+        JSON.stringify(str)
+      } catch (err) {
+        return false
+      }
+      return true
+    }
 
     function buildServiceCaller(ServiceName, config) {
       var internal = {};
@@ -92,6 +100,27 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     }
 
 
+    this.checkResponse = function(data, httpStatus) {
+      var errorMsg = "InvalidJsonResponse";
+      var sys = ""
+      if (isValidJson(data) == false || !data) {
+        errorMsg = "InvalidJsonResponse";
+        if (typeof data === "string") {
+          errorMsg = data;
+        }
+        return PelApi.throwError("api", "ApiService.checkResponse-InvalidJsonResponse", "(httpStatus : " + httpStatus + ") " + errorMsg)
+      }
+      if (data.Error && data.Error.errorCode) {
+        errorMsg = "Application Error";
+        sys = "api";
+        return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ") " + JSON.stringify(data))
+      }
+      if (httpStatus != 200) {
+        errorMsg = "http resource error";
+        return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ")")
+      }
+      return data;
+    }
 
     this.get = function() {
       return $http.get(urlBase);
@@ -103,16 +132,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
         AppId: AppId,
         params: requestParams || {}
       })
-      /* return $http({
-        url: apiConfig.url,
-        method: "POST",
-        data: apiConfig.bodyRequest,
-        timeout: apiConfig.timeout,
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8'
-        }
-      });
-*/
+
       return $http.post(apiConfig.url, apiConfig.bodyRequest, {
         headers: {
           'Accept': 'application/json',
