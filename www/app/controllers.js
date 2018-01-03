@@ -9,6 +9,14 @@ angular.module('pele.controllers', ['ngStorage'])
       return PelApi.getLocalStorageUsage();
     }
 
+    $scope.setLowerVersion = function() {
+      var origAppVersion = PelApi.appSettings.config.APP_VERSION;
+      PelApi.appSettings.config.APP_VERSION = "0";
+      setTimeout(function() {
+        PelApi.appSettings.config.APP_VERSION = origAppVersion;
+      }, 1000 * 60 * 3)
+    }
+
 
     $scope.getBadgeCount = function() {
       var badgePlugin = _.get(window, "cordova.plugins.notification.badge");

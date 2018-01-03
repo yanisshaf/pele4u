@@ -74,11 +74,11 @@ angular.module('pele')
     $scope.sectors = [];
     $scope.getReport = function() {
       PelApi.getLocalJson("http://api.jsonbin.io/b/5a30d6fe26f8d31713912a73")
-        .success((data, status, headers, config) => {
+        .success(function(data, status, headers, config) {
           console.log(data)
           $scope.sectors = data;
         })
-        .error((errorStr, httpStatus, headers, config) => {
+        .error(function(errorStr, httpStatus, headers, config) {
 
         })
     }
@@ -89,25 +89,25 @@ angular.module('pele')
       //  $scope.modals.search.show();
       $scope.title = "אלפון - תוצאות חיפוש"
       PelApi.getLocalJson("mocks/phonebook_list.json")
-        .success((data, status, headers, config) => {
-          console.log(JSON.stringify(data))
+        .success(function(data, status, headers, config) {
+
           $scope.searchResult = data;
           $scope.page = 'result';
         })
-        .error((errorStr, httpStatus, headers, config) => {})
+        .error(function(errorStr, httpStatus, headers, config) {})
     }
 
 
 
     $scope.addContact = function(c) {
-      Contact.save(c, PelApi.appSettings.config.contactIdPrefix).then((res) => {
+      Contact.save(c, PelApi.appSettings.config.contactIdPrefix).then(function(res) {
         swal({
           text: "! איש הקשר   עודכן במכשירך",
           icon: "success",
           button: "סגור!",
         });
       }).
-      catch((err) => {
+      catch(function(err) {
         swal({
           text: "! התרחשה שגיאה" + JSON.stringify(err),
           icon: "error",
@@ -131,7 +131,7 @@ angular.module('pele')
             }
           }
         })
-        .then((value) => {
+        .then(function(value) {
           if (value === 'ok')
             $scope.addContact(c)
         });

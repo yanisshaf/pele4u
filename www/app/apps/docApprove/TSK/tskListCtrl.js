@@ -5,14 +5,18 @@ angular.module('pele')
   .controller('tskListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
     $scope.activeGroup = "";
     $scope.toggleActive = function(g) {
-      $scope.activeGroup ===  g.DOC_NAME ?  $scope.activeGroup  ="" :  $scope.activeGroup =  g.DOC_NAME ;
+      $scope.activeGroup === g.DOC_NAME ? $scope.activeGroup = "" : $scope.activeGroup = g.DOC_NAME;
     }
 
     $scope.appId = $stateParams.AppId;
     $scope.parse = function(data) {
       var mapped = [];
+      if (data.length == 1) {
+        $scope.activeGroup = data[0].DOC_NAME;
+      }
       data.forEach(function(item) {
         var docsGroups = _.get(item, "DOCUMENTS.DOCUMENTS_ROW", [])
+
         docsGroups.forEach(function(g) {
           var task;
           try {
@@ -47,6 +51,7 @@ angular.module('pele')
             //PelApi.appSettings.config.IS_TOKEN_VALID = 'N'
             PelApi.goHome();
           }
+
           $scope.docsGroups = $scope.parse(result);
 
           if ($scope.docsGroups.length) {

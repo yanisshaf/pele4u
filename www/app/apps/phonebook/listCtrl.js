@@ -89,13 +89,13 @@ angular.module('pele')
 
       } else {
         ApiService.post("PhonebookGetSector", AppId)
-          .success((data, status, headers, config) => {
+          .success(function(data, status, headers, config) {
             var result = ApiService.checkResponse(data, status)
             $scope.sectors = result.sectors;
             $scope.operunits = result.operunits;
             StorageService.set("phonebook_sectors", result, 60 * 60 * 3)
           })
-          .error((errorStr, httpStatus, headers, config) => {
+          .error(function(errorStr, httpStatus, headers, config) {
             ApiService.checkResponse({
               error: errorStr
             }, httpStatus);
@@ -145,7 +145,7 @@ angular.module('pele')
         confirmButtonAriaLabel: 'Thumbs up, great!',
         cancelButtonText: 'ביטול',
         cancelButtonAriaLabel: 'Thumbs down',
-      }).then(btn => {
+      }).then(function(btn) {
 
         if (btn.value) {
           $scope.addContact(c)
@@ -170,7 +170,6 @@ angular.module('pele')
           timer: 1500
         });
         PelApi.throwError("app", "saveContact on phonebookDetails", JSON.stringify(err));
-
       })
 
     }
@@ -201,7 +200,7 @@ angular.module('pele')
           p2: $scope.formData.sectorId,
           p3: offset
         })
-        .success((data, status, headers, config) => {
+        .success(function(data, status, headers, config) {
           var result = ApiService.checkResponse(data, status)
           $scope.searchResult.cursor = result;
           $scope.searchResult.list = _.concat($scope.searchResult.list, result.list);
@@ -211,7 +210,7 @@ angular.module('pele')
             $scope.page = 'form';
           }
         })
-        .error((errorStr, httpStatus, headers, config) => {
+        .error(function(errorStr, httpStatus, headers, config) {
           ApiService.checkResponse({
             error: errorStr
           }, httpStatus);

@@ -36,7 +36,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         }
       },
       toQueryString: function(obj) {
-        return Object.keys(obj).map(k => {
+        return Object.keys(obj).map(function(k) {
             return encodeURIComponent(k) + "=" + encodeURIComponent(obj[k])
           })
           .join("&");
@@ -53,7 +53,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       init: function() {
         this.global.set('debugFlag', appSettings.debug, true)
         this.cordovaNetwork = {
-          getNetwork: () => {
+          getNetwork: function() {
             return "3g";
           }
         };
@@ -931,7 +931,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
               }
             }
           })
-          .then((value) => {
+          .then(function(value) {
             if (value === 'ok')
               window.open(storeUrl, '_system');
           });

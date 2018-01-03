@@ -6,13 +6,16 @@ angular.module('pele')
     $scope.activeGroup = "";
 
     $scope.toggleActive = function(g) {
-      $scope.activeGroup ===  g.DOC_NAME ?  $scope.activeGroup  ="" :  $scope.activeGroup =  g.DOC_NAME ;
+      $scope.activeGroup === g.DOC_NAME ? $scope.activeGroup = "" : $scope.activeGroup = g.DOC_NAME;
     }
 
 
 
     $scope.parse = function(data) {
       var mapped = [];
+      if (data.length == 1) {
+        $scope.activeGroup = data[0].DOC_NAME;
+      }
       data.forEach(function(item) {
         var docsGroups = _.get(item, "DOCUMENTS.DOCUMENTS_ROW", [])
         docsGroups.forEach(function(g) {

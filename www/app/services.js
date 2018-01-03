@@ -36,7 +36,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     }
   }]).service('ApiService', ['$http', 'PelApi', '$sessionStorage', function($http, PelApi, $sessionStorage) {
     var env = PelApi.appSettings.env;
-    var isValidJson = (str) => {
+    var isValidJson = function(str) {
       try {
         JSON.stringify(str)
       } catch (err) {

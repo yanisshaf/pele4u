@@ -26,10 +26,10 @@ angular.module('pele')
       $scope.getReport = function() {
         PelApi.showLoading();
         PelApi.http.get("http://private-29b7ea-leads16.apiary-mock.com/questions")
-          .success((data, status, headers, config) => {
+          .success(function(data, status, headers, config) {
             $scope.leads = data;
           })
-          .error((errorStr, httpStatus, headers, config) => {
+          .error(function(errorStr, httpStatus, headers, config) {
 
           })
       }

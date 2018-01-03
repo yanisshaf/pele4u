@@ -41,7 +41,6 @@ angular.module('pele')
           PelApi.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
           $scope.title = "משימה " + $scope.docDetails.TASK_NUMBER;
-          PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
         }).error(function(error, httpStatus, headers, config) {
           var time = config.responseTimestamp - config.requestTimestamp;
           var tr = ' (TS  : ' + (time / 1000) + ' seconds)';

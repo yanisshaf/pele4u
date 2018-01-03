@@ -73,7 +73,7 @@ angular.module('pele')
           confirmButtonAriaLabel: 'Thumbs up, great!',
           cancelButtonText: 'ביטול',
           cancelButtonAriaLabel: 'Thumbs down',
-        }).then(btn => {
+        }).then(function(btn) {
           if (btn.value) {
             var targetContact = Contact.setContactData(Contact.newContact(), c);
             $scope.saveContact(targetContact, c)
@@ -86,11 +86,11 @@ angular.module('pele')
           $scope.contatcsList = []
           return true;
         }
-        Contact.find($scope.searchForm.term).then((res) => {
+        Contact.find($scope.searchForm.term).then(function(res) {
           safeApply($scope, function() {
             $scope.contatcsList = res
           })
-        }).catch(err => {})
+        }).catch(function(err) {})
       }
 
       $scope.shareViaEmail = function(email) {
@@ -145,7 +145,7 @@ angular.module('pele')
         ApiService.post("PhonebookDetails", appId, {
             p1: personId
           })
-          .success((data, status, headers, config) => {
+          .success(function(data, status, headers, config) {
 
             $scope.contact = data;
 
@@ -163,7 +163,7 @@ angular.module('pele')
             $scope.page = 'result';
             $scope.contact.tree = $scope.getTreeData($scope.contact)
           })
-          .error((errorStr, httpStatus, headers, config) => {
+          .error(function(errorStr, httpStatus, headers, config) {
             swal({
               text: "! התרחשה שגיאה" + errorStr,
               type: "error",
