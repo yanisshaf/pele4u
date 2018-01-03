@@ -8,15 +8,17 @@ angular.module('pele.controllers', ['ngStorage'])
     $scope.getLocalStorageUsage = function() {
       return PelApi.getLocalStorageUsage();
     }
+    $scope.appVersion = PelApi.appSettings.config.APP_VERSION;
 
     $scope.setLowerVersion = function() {
+
       var origAppVersion = PelApi.appSettings.config.APP_VERSION;
       PelApi.appSettings.config.APP_VERSION = "0";
       $scope.appVersion = PelApi.appSettings.config.APP_VERSION;
       setTimeout(function() {
         PelApi.appSettings.config.APP_VERSION = origAppVersion;
         $scope.appVersion = PelApi.appSettings.config.APP_VERSION;
-      }, 1000 * 60 * 10)
+      }, 1000 * 60 * 1)
     }
 
 
