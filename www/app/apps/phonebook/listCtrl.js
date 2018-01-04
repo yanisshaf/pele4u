@@ -180,7 +180,8 @@ angular.module('pele')
       var cursor = _.get($scope.searchResult, "cursor", {});
       var quantity = cursor.quantity || 0;
       var offset = cursor.offset || null;
-      if ($scope.formData.term.length < 2) {
+      var checkTerm = $scope.formData.term.replace(/\s/g, '')
+      if (checkTerm.length < 2) {
         $scope.hint = "יש להזין לפחות שתי אותיות"
         return false;
       }
@@ -195,16 +196,22 @@ angular.module('pele')
       $scope.searchResult.isFound = null;
       PelApi.showLoading();
       $scope.title = "אלפון - תוצאות חיפוש"
+      var termParams = $scope.formData.term.replace(/^\s+/, '').split(/\s+/);
+      console.log(termParams)
+      var p1 = termParams[0];
+      var p6 = termParams[1];
+
       ApiService.post("PhonebookSearch", AppId, {
-          p1: $scope.formData.term,
+          p1: p1,
           p2: $scope.formData.sectorId,
-          p3: offset
+          p3: offset,
+          p6: p6
         })
         .success(function(data, status, headers, config) {
           var result = ApiService.checkResponse(data, status)
-          $scope.searchResult.cursor = result;
+          $scope.searchResult.cursor = result.cursor;
           $scope.searchResult.list = _.concat($scope.searchResult.list, result.list);
-          $scope.searchResult.isFound = !(!result.list.length);
+          $scope.searchResult.isFound = result.list.length ? true : false;
           $scope.page = 'result';
           if (data.list && !result.list.length) {
             $scope.page = 'form';

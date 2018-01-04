@@ -121,21 +121,32 @@ angular.module('pele')
 
       $scope.getTreeData = function(person) {
         var tree = {};
+        tree[person.personId] = person;
+        tree[person.personId].members = [];
         $scope.treeHeight = (person.orgTree.length * 31 + 100) + 'px';
         person.orgTree.forEach(function(c) {
-
           if (c.personId == person.directManagerNumber) {
             $scope.managerInfo = c;
             return false;
           }
-          tree[c.directManagerNumber] = tree[c.directManagerNumber] || {};
-          tree[c.directManagerNumber].members = tree[c.directManagerNumber].members || [];
 
-          if (person.personId == c.directManagerNumber)
+
+          if (c.relation === "colleague") {
+            if (tree[c.personId] === undefined)
+              tree[c.personId] = c;
+          } else if (c.relation === "managed") {
             tree[person.personId].members.push(c)
-          else
-            tree[c.personId] = c;
+          }
+          //  tree[person.personId] = tree[person.personId] || []
+          //  tree[c.directManagerNumber] = tree[c.directManagerNumber] || {};
+          //    tree[c.directManagerNumber].members = tree[c.directManagerNumber].members || [];
+
+          //if (person.personId == c.directManagerNumber)
+          //    tree[person.personId].members.push(c)
+          //else
+          //    tree[c.personId] = c;
         })
+        console.log(tree)
         return tree;
 
       }
@@ -146,8 +157,8 @@ angular.module('pele')
             p1: personId
           })
           .success(function(data, status, headers, config) {
-
-            $scope.contact = data;
+            $scope.contact = ApiService.checkResponse(data, status)
+            console.log($scope.contact)
 
             if (!$scope.contact.section.match(/no\s+sector/))
               $scope.contact.has_section = true;

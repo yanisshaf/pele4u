@@ -77,7 +77,8 @@
         </div>
       </div>
     </div>
-    <div class="text-center" ng-show="searchResult.cursor.quantity == searchResult.cursor.pageSize">
+    <div class="text-center" ng-show="searchResult.cursor.quantity && searchResult.cursor.quantity == searchResult.cursor.pageSize">
+
       <button ng-click="search(searchResult.cursor.offset)" class="button button-positive"> הציגו עוד ... </button>
     </div>
 

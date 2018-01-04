@@ -32,17 +32,17 @@
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
           <ion-content>
             <div style="height:{{treeHeight}}">
-              <strong class="pele_rtl text-right badge-string">{{managerInfo.orgName}}</strong>
+              <strong class="pele_rtl text-right string-badge">{{managerInfo.orgName || 'פלאפון תקשורת'}}</strong>
               <!--h5 class="pele_rtl text-right"> הוסף לאנשי קשר : <span class="pel-badge blue"><i ng-click="actions('members_tree',contact,contact.orgTree)" class="icon white medium ion-person-stalker"></i></span> <span class="pel-badge blue"><i
             ng-click="actions('manager_tree',managerInfo,contact.orgTree)" class="icon white medium ion-ios-people"></i></span> </h5-->
               <div class="pele_rtl">
                 <ul class="list pele_rtl text-right treeview level1">
-                  <li class="direct_admin tree-item">
+                  <li class="direct_admin tree-item" ng-class="{'noadmin':!contact.directManagerName}">
                     <a ui-sref="app.phonebook.details({personId:contact.directManagerNumber})">
                   <strong>  {{contact.directManagerName}}</strong>
                   </a>
                     <ul class="list level2">
-                      <li class="{{member.relation}} tree-item" ng-show="v.personId" ng-repeat="(k,v) in contact.tree">
+                      <li ng-class="{'noadmin':!contact.directManagerName}" class="{{member.relation}} tree-item" ng-show="v.personId" ng-repeat="(k,v) in contact.tree">
                         <div class="links" ng-class="{'last':$last}"></div>
                         <a ui-sref="app.phonebook.details({personId:k})">
                         <i ng-if="contact.personId==k" class="ion-android-person blue"></i>

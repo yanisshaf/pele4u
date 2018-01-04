@@ -741,7 +741,7 @@ ul.treeview li ul li ul.level3 {margin-right:37px}
 ul.treeview li.direct_admin > a  {text-decoration: none;padding-right:5px;font-size:1.2em;line-height:25px; margin-right:11px  }
 ul.treeview a  {text-decoration: none;padding-right:5px;font-size:1.2em;line-height:25px; margin-right:27px  }
 ul.treeview ul li { border-right:2px solid #000}
-
+ul.treeview li.noadmin { border-right:0px solid #000}
 ul.treeview div.links {
   border-top: 2px solid #000;
   height: 1px;
@@ -750,6 +750,7 @@ ul.treeview div.links {
   position:relative;
   top:14px;
 }
+
 
 ul.treeview li .active {color:#0d47a1 ; font-weight:bold}
 
