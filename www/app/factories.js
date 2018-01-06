@@ -456,6 +456,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
 
       },
+     isValidNote: function(note) {
+        var chkNote = note;
+        if (!chkNote) return false;
+        if (chkNote.replace(/[^\wא-ת]+/g, "").length < 2)
+          return false;
+        return true;
+      },
       //--------------------------------------------------------------------------//
       //--                       SubmitNotification  PAGE4                      --//
       //--------------------------------------------------------------------------//
@@ -1500,9 +1507,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
               text: '<a class="pele-popup-positive-text-collot">המשך</a>',
               type: 'button-positive',
               onTap: function(e) {
-                if (!scope.actionNote.text) {
+              if (!self.isValidNote(scope.actionNote.text)) {
                   e.preventDefault();
-                  self.showPopup("יש להזין הערה", "");
+                  self.showPopup("יש להזין הערה", "יש להזין לפחות 2 אותיות");
                 } else {
                   return scope.actionNote.text;
                 }
