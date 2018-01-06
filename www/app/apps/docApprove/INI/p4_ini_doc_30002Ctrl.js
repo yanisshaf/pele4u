@@ -648,9 +648,9 @@ angular.module('pele')
                   text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
                   type: 'button-positive',
                   onTap: function(e) {
-                    if (!$scope.data.note) {
-                      //don't allow the user to close unless he enters wifi password
+                    if (!PelApi.isValidNote($scope.data.note)) {
                       e.preventDefault();
+                      PelApi.showPopup("יש להזין הערה", "יש להזין לפחות 2 אותיות");
                     } else {
                       $scope.data.cancel = false;
                       return $scope.data;
@@ -763,10 +763,9 @@ angular.module('pele')
                 text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
                 type: 'button-positive',
                 onTap: function(e) {
-                  if (!$scope.data.note) {
-                    //don't allow the user to close unless he enters wifi password
+                  if (!PelApi.isValidNote($scope.data.note)) {
                     e.preventDefault();
-                    PelApi.showPopup("יש להזין הערה", "");
+                    PelApi.showPopup("יש להזין הערה", "יש להזין לפחות 2 אותיות");
                   } else {
                     return $scope.data.note;
                   }
@@ -809,10 +808,9 @@ angular.module('pele')
                 text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
                 type: 'button-positive',
                 onTap: function(e) {
-                  if (!$scope.data.note) {
-                    //don't allow the user to close unless he enters wifi password
+                  if (!PelApi.isValidNote($scope.data.note)) {
                     e.preventDefault();
-                    PelApi.showPopup("יש להזין הערה", "");
+                    PelApi.showPopup("יש להזין הערה", "יש להזין לפחות 2 אותיות");
                   } else {
 
                     return $scope.data.note;
@@ -893,10 +891,9 @@ angular.module('pele')
               text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
               type: 'button-positive',
               onTap: function(e) {
-                if (!$scope.data.note) {
-                  //don't allow the user to close unless he enters wifi password
+                if (!PelApi.isValidNote($scope.data.note)) {
                   e.preventDefault();
-                  PelApi.showPopup("יש להזין הערה", "");
+                  PelApi.showPopup("יש להזין הערה", "יש להזין לפחות 2 אותיות");
                 } else {
 
                   return $scope.data.note;

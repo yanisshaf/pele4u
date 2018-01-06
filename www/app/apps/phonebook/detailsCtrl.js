@@ -19,11 +19,7 @@ angular.module('pele')
         (scope.$$phase || scope.$root.$$phase) ? fn(): scope.$apply(fn);
       }
 
-      $scope.setTargetContact = function(id) {
-        safeApply($scope, function() {
-          $scope.targetContactId = id;
-        })
-      }
+
 
       $scope.goSearchForm = function() {
         $state.go("app.phonebook", {
@@ -81,17 +77,7 @@ angular.module('pele')
         })
       }
 
-      $scope.searchOnDeviceContacts = function() {
-        if (!$scope.searchForm.term) {
-          $scope.contatcsList = []
-          return true;
-        }
-        Contact.find($scope.searchForm.term).then(function(res) {
-          safeApply($scope, function() {
-            $scope.contatcsList = res
-          })
-        }).catch(function(err) {})
-      }
+
 
       $scope.shareViaEmail = function(email) {
         $cordovaSocialSharing.shareViaEmail(null, null, [email]);
@@ -137,16 +123,9 @@ angular.module('pele')
           } else if (c.relation === "managed") {
             tree[person.personId].members.push(c)
           }
-          //  tree[person.personId] = tree[person.personId] || []
-          //  tree[c.directManagerNumber] = tree[c.directManagerNumber] || {};
-          //    tree[c.directManagerNumber].members = tree[c.directManagerNumber].members || [];
 
-          //if (person.personId == c.directManagerNumber)
-          //    tree[person.personId].members.push(c)
-          //else
-          //    tree[c.personId] = c;
         })
-        console.log(tree)
+
         return tree;
 
       }
@@ -157,22 +136,22 @@ angular.module('pele')
             p1: personId
           })
           .success(function(data, status, headers, config) {
-            $scope.contact = ApiService.checkResponse(data, status)
-            console.log($scope.contact)
+            var result = ApiService.checkResponse(data, status)
 
-            if (!$scope.contact.section.match(/no\s+sector/))
-              $scope.contact.has_section = true;
-            if (!$scope.contact.department.match(/no\s+sector/))
-              $scope.contact.has_department = true;
-            if (!$scope.contact.team.match(/no\s+sector/))
-              $scope.contact.has_team = true;
-            if (!$scope.contact.sector.match(/no\s+sector/))
-              $scope.contact.has_sector = true;
+            if (!result.section.match(/no\s+sector/))
+              result.has_section = true;
+            if (!result.department.match(/no\s+sector/))
+              result.has_department = true;
+            if (!result.team.match(/no\s+sector/))
+              result.has_team = true;
+            if (!result.sector.match(/no\s+sector/))
+              result.has_sector = true;
 
-            $scope.title = "פרטי עובד: " + $scope.contact.firstName + " " + $scope.contact.lastName;
+            $scope.title = "פרטי עובד: " + result.firstName + " " + result.lastName;
 
             $scope.page = 'result';
-            $scope.contact.tree = $scope.getTreeData($scope.contact)
+            result.tree = $scope.getTreeData(result)
+            $scope.contact = result;
           })
           .error(function(errorStr, httpStatus, headers, config) {
             swal({

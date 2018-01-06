@@ -197,7 +197,6 @@ angular.module('pele')
       PelApi.showLoading();
       $scope.title = "אלפון - תוצאות חיפוש"
       var termParams = $scope.formData.term.replace(/^\s+/, '').split(/\s+/);
-      console.log(termParams)
       var p1 = termParams[0];
       var p6 = termParams[1];
 

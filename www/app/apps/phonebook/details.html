@@ -12,22 +12,21 @@
     </div>
   </ion-nav-title>
   <ion-content scroll="false" padding="true" id="phonebook_details">
+    <tab-slide-box tab="2">
 
-    <tab-slide-box tab="1" ng-show="view!='newContact'">
       <div class="tsb-icons">
         <div class="tsb-ic-wrp">
           <ion-scroll has-bouncing="false" class="tsb-hscroll">
             <!--a href="#" ng-click="swalContact(contact)" class=""> <img class="fab" src="img/new_icons/purple_add_contact.png "></a-->
-            <a class="triangle-isosceles">
+            <a class="triangle-isosceles" on-finish-render="test()">
               עץ ארגוני
             </a>
-            <a class="triangle-isosceles">
+            <a class="triangle-isosceles" on-finish-render="test()">
               פרטי העובד
             </a>
           </ion-scroll>
         </div>
       </div>
-
       <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
           <ion-content>
@@ -71,7 +70,7 @@
         <!------------------------------------------------------------------------------->
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
-        <ion-slide son-drag-right="enable('drag')" on-drag-left="disable('drag')">
+        <ion-slide on-drag-right="enable('drag')" on-drag-left="disable('drag')">
           <ion-content scroll="true" has-header="true">
             <ul class="list pele_rtl text-right" style="height: 125%;">
               <li class="item no-border">
@@ -184,21 +183,5 @@
       </ion-slide-box>
 
     </tab-slide-box>
-    <div ng-if="0" ng-show="view=='newContact'" delegate-handle="slide1Scroll">
-      <ion-item class="item text-right no-border">חפשו וסמנו אישר קשר לעדכון</ion-item>
-      <ion-item class="item item-input">
-        <input class="pele_rtl text-right" type="text" placeholder="חפשו לפי שם/מספר .." ng-change="searchOnDeviceContacts()" ng-model="searchForm.term">
-        <i class="icon ion-funnel placeholder-icon"></i>
-      </ion-item>
-      <div>
-        <ion-list class="pele_rtl">
-          <ion-item class="item item-avatar item-avatar-right item-icon-left" ng-repeat="devContact in contatcsList" ng-click="setTargetContact(devContact.id)">{{devContact.displayName}} :: {{devContact.id}}
-            <button class="button button-small button-light" style="margin-right:30px" ng-show="targetContactId==devContact.id" on-tap="saveContact(devContact,contact)">עדכון</button>
-            <!--img class="avatar" ng-if="devContact.photos[0]" src="data:image/JPEG;base64,{{devContact.photos[0].value}} ">
-            <img class="avatar" ng-if="devContact.photos[0].type=='url'" ng-src="{{devContact.photos[0].value}}" src="data:image/JPEG;base64,{{devContact.photos[0].value}} "-->
-          </ion-item>
-        </ion-list>
-      </div>
-    </div>
   </ion-content>
 </ion-view>
