@@ -13,12 +13,13 @@
       <div class="tsb-icons">
         <div class="tsb-ic-wrp">
           <ion-scroll has-bouncing="false" scrollX="false" direction="x" scrollY="false" class="tsb-hscroll">
-            <a class="triangle-isosceles {{tab.icon}}" ng-repeat="tab in tabs">
+            <a class="triangle-isosceles {{tab.icon}}" ng-repeat="tab in tabs" on-finish-render="test()">
               {{tab.text}}
             </a>
           </ion-scroll>
         </div>
       </div>
+
       <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
 
         <!-------------------------------------------------------------------------------->

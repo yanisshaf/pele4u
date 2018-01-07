@@ -243,7 +243,7 @@ angular.module('pele.states', [])
     src: ["app/apps/docApprove/INI/p4_ini_doc_30002Ctrl.js"]
   }, {
     state: "app.phonebook",
-    url: '/phonebook/:AppId',
+    url: '/phonebook/:AppId/:reload',
     views: {
       'menuContent': {
         templateUrl: function() {

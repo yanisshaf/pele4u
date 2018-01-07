@@ -3,7 +3,7 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-nav-buttons side="left">
-    <button class="button button-icon icon ion-ios-search" ng-click="goSearchForm()"></button>
+    <a class="button button-icon icon ion-ios-search" ng-click="goSearchForm()"></a>
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
@@ -41,7 +41,7 @@
                   <strong>  {{contact.directManagerName}}</strong>
                   </a>
                     <ul class="list level2">
-                      <li ng-class="{'noadmin':!contact.directManagerName}" class="{{member.relation}} tree-item" ng-show="v.personId" ng-repeat="(k,v) in contact.tree">
+                      <li ng-class="{'noadmin':!contact.directManagerName}" class="{{member.relation}} tree-item" ng-show="v.personId" ng-repeat="(k,v) in tree">
                         <div class="links" ng-class="{'last':$last}"></div>
                         <a ui-sref="app.phonebook.details({personId:k})">
                         <i ng-if="contact.personId==k" class="ion-android-person blue"></i>

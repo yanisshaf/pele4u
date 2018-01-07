@@ -95,52 +95,7 @@
                   </table>
                 </div>
               </li>
-              <!--
-              <li class="item item-info no-border">
-                <div class="item item-divider item-icon-right item-icon-left" ng-init="sys_data=false" ng-click="sys_data=!sys_data">
-                  <i class="icon pel_icon icon-sm" ng-class="sys_data ? 'ion-chevron-down' :'ion-chevron-left'"></i>
-                  <i class="icon pel_icon icon-md ion-clipboard"></i>
-                  <h2 class="text-right pele_rtl">הפצה</h2>
-                </div>
-                <div class="item-section" ng-show="sys_data" ng-repeat="item in docDetails.INVOICE_ROWS">
-                  <table class="pele_rtl text-right">
-                    <tbody>
-                      <tr>
-                        <td class="label"><strong>הפצה של שורה: </strong></td>
-                        <td class="info"> {{item.ITEM}}</td>
-                      </tr>
-                      <tr>
-                        <td class="label">סוג: </td>
-                        <td class="info"> {{item.ITEM}}</td>
-                      </tr>
-                      <tr>
-                        <td class="label">סכום: </td>
-                        <td class="info"> {{item.LINE_AMOUNT}}{{item.MINUS_SIGN}}</td>
-                      </tr>
-                      <tr>
-                        <td class="label">תיאור: </td>
-                        <td class="info">{{item.LINE_DESC}}</td>
-                      </tr>
 
-                      <tr>
-                        <td class="label">חשבון הוצאה: </td>
-                        <td class="info"> {{item.ACCOUNT_NUMBER}}</td>
-                      </tr>
-                      <tr>
-                        <td class="label">תקציב הזמנה: </td>
-                        <td class="info"> {{item.BUDGET}}</td>
-                      </tr>
-                      <tr>
-                        <td class="label">ת.תקציב: </td>
-                        <td class="info"> {{item.BUDGET_NAME}}</td>
-                      </tr>
-
-
-                    </tbody>
-                  </table>
-                </div>
-              </li>
--->
               <li class="item item-info no-border">
                 <div class="item item-divider item-icon-right item-icon-left" ng-init="sys_data=false" ng-click="sys_data=!sys_data">
                   <i class="icon pel_icon icon-sm" ng-class="sys_data ? 'ion-chevron-down' :'ion-chevron-left'"></i>
@@ -229,9 +184,7 @@
                   </table>
                 </div>
               </li>
-
             </ul>
-
           </ion-scroll>
         </ion-slide>
       </ion-slide-box>
@@ -239,7 +192,6 @@
   </ion-content>
   <!-- Footer Actions -->
   <ion-footer-bar align-title="right">
-
     <div class="row">
       <div class="col">
         <button class="button button-block button-large button-positive  icon-right ion-paper-airplane" ng-click="showBtnActions()">פעולות</button>

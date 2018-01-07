@@ -5,8 +5,8 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('phonebookDetailsCtrl', ['Contact', 'ApiService', '$state', '$rootScope', '$scope', '$stateParams', '$ionicLoading', 'PelApi', '$ionicHistory', '$cordovaSocialSharing',
-    function(Contact, ApiService, $state, $rootScope, $scope, $stateParams, $ionicLoading, PelApi, $ionicHistory, $cordovaSocialSharing) {
+  .controller('phonebookDetailsCtrl', ['Contact', 'ApiService', '$state', '$rootScope', '$scope', '$stateParams', '$ionicLoading', 'PelApi', '$cordovaSocialSharing', '$ionicNavBarDelegate',
+    function(Contact, ApiService, $state, $rootScope, $scope, $stateParams, $ionicLoading, PelApi, $cordovaSocialSharing, $ionicNavBarDelegate) {
       var appId = $stateParams.AppId;
       var personId = $stateParams.personId;
       $scope.today = moment().format('DD/MM');;
@@ -14,21 +14,20 @@ angular.module('pele')
       $scope.view = "normal";
       $scope.searchForm = {};
       $scope.targetContactId = "";
+      $ionicNavBarDelegate.showBackButton(true);
 
       function safeApply(scope, fn) {
         (scope.$$phase || scope.$root.$$phase) ? fn(): scope.$apply(fn);
       }
 
-
-
       $scope.goSearchForm = function() {
         $state.go("app.phonebook", {
-          AppId: appId
+          AppId: appId,
+          reload: new Date().getTime()
         }, {
           reload: true
         })
       }
-
 
       $scope.saveContact = function(c, info) {
         var deviceContact = c;
@@ -107,6 +106,7 @@ angular.module('pele')
 
       $scope.getTreeData = function(person) {
         var tree = {};
+
         tree[person.personId] = person;
         tree[person.personId].members = [];
         $scope.treeHeight = (person.orgTree.length * 31 + 100) + 'px';
@@ -125,9 +125,7 @@ angular.module('pele')
           }
 
         })
-
         return tree;
-
       }
 
       $scope.getContact = function() {
@@ -147,11 +145,12 @@ angular.module('pele')
             if (!result.sector.match(/no\s+sector/))
               result.has_sector = true;
 
-            $scope.title = "פרטי עובד: " + result.firstName + " " + result.lastName;
+            $scope.title = result.firstName + " " + result.lastName;
 
             $scope.page = 'result';
-            result.tree = $scope.getTreeData(result)
             $scope.contact = result;
+            $scope.tree = $scope.getTreeData(result)
+
           })
           .error(function(errorStr, httpStatus, headers, config) {
             swal({

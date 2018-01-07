@@ -2,7 +2,7 @@
  * Created by User on 25/08/2016.
  */
 angular.module('pele')
-  .controller('phonebookListCtrl', function($scope, ApiService, StorageService, $stateParams, $ionicLoading, $state, PelApi, Contact, $ionicPopup, $ionicModal) {
+  .controller('phonebookListCtrl', function($scope, ApiService, StorageService, $stateParams, $ionicLoading, $state, PelApi, Contact, $ionicModal, $ionicNavBarDelegate) {
 
     var AppId = $stateParams.AppId;
 
@@ -212,8 +212,10 @@ angular.module('pele')
           $scope.searchResult.list = _.concat($scope.searchResult.list, result.list);
           $scope.searchResult.isFound = result.list.length ? true : false;
           $scope.page = 'result';
+          $ionicNavBarDelegate.showBackButton(false);
           if (data.list && !result.list.length) {
             $scope.page = 'form';
+            $ionicNavBarDelegate.showBackButton(true);
           }
         })
         .error(function(errorStr, httpStatus, headers, config) {
