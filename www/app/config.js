@@ -173,7 +173,7 @@ angular.module('pele.config', [])
     api_timeout: 20,
     config: {
       contactIdPrefix: "pelephone",
-      APP_VERSION: "117.8",
+      APP_VERSION: "118.0",
       SCAN_PRINT_SCANNING_ERROR: "שגיאה בסריקה",
       PIN_CODE_AUTHENTICATION_REQUIRED_CODE: "10000",
       IS_TOKEN_VALID: "N",

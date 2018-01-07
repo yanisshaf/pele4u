@@ -64,6 +64,7 @@
     <div class="list phonebook">
       <div class="item item-avatar item-avatar-right item-icon-left" ng-repeat="contact in searchResult.list track by $index">
         <img class="avatar" ng-if="contact.pic" ui-sref="app.phonebook.details({personId:contact.personId})" ng-src="data:image/JPEG;base64,{{contact.pic}}">
+        <img class="avatar" ng-if="!contact.pic" ui-sref="app.phonebook.details({personId:contact.personId})" ng-src="img/new_icons/blue_avatar.png">
         <div ui-sref="app.phonebook.details({personId:contact.personId})">
           <h2>
             {{contact.lastName}}
