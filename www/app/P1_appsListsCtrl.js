@@ -286,6 +286,8 @@ app.controller('P1_appsListCtrl',
           "AppId": i.AppId,
           "Title": i.Title,
           "Pin": i.Pin
+        }, {
+          reload: true
         });
         //$state.go("app.p2_test");
 

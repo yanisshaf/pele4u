@@ -34,7 +34,17 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     this.get = function(varname) {
       return $localStorage[varname];
     }
-  }]).service('ApiService', ['$http', 'PelApi', '$sessionStorage', function($http, PelApi, $sessionStorage) {
+  }]).service('ApiService', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', function($http, $ionicHistory, PelApi, $sessionStorage) {
+    var Errors = {
+      2: {
+        description: "token invalid",
+        redirectToMenu: true
+      },
+      3: {
+        description: "error in sso / pin code",
+        redirectToMenu: true
+      }
+    }
     var env = PelApi.appSettings.env;
     var isValidJson = function(str) {
       try {
@@ -113,7 +123,12 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
       if (data.Error && data.Error.errorCode) {
         errorMsg = "Application Error";
         sys = "api";
-        return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ") " + JSON.stringify(data))
+        var err = Errors[data.Error.errorCode] || {};
+        if (err.redirectToMenu) {
+          $ionicHistory.clearHistory();
+          return PelApi.goHome();
+        }
+        return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ") " + JSON.stringify(data), false)
       }
       if (httpStatus != 200) {
         errorMsg = "http resource error";

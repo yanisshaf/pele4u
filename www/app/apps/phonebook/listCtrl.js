@@ -57,29 +57,6 @@ angular.module('pele')
     }
 
 
-
-    $scope.useful = [{
-        displayName: "מוקד התפעול",
-        phoneNumber: "050-707-8990"
-      },
-      {
-        displayName: "חדר דואר",
-        phoneNumber: "050-707-8863"
-      },
-      {
-        displayName: "מרכזיה",
-        phoneNumber: "050-707-8888"
-      },
-      {
-        displayName: "לובי",
-        phoneNumber: "050-707-8181"
-      },
-      {
-        displayName: "מוקד ביטחון",
-        phoneNumber: "050-707-8501"
-      },
-    ]
-
     $scope.sectors = [];
     $scope.getSectors = function() {
       var cacheData = _.get(StorageService.get("phonebook_sectors"), "data", null);
