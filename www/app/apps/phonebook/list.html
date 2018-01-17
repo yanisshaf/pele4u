@@ -102,7 +102,7 @@
                 <div class="col col-35 ">{{u.phoneNumber}}</div>
                 <div class="col col-30 text-left ">
                   <a href="tel:{{u.phoneNumber}} "><img class="pel_icon " src="img/new_icons/gray_phone.png"></a>
-                  <a ng-click="swalContact(u) "><img class="pel_icon " src="img/new_icons/purple_add_contact.png"></a>
+                  <a ng-click="swalContact($event,u) "><img class="pel_icon " src="img/new_icons/purple_add_contact.png"></a>
                 </div>
               </div>
             </ion-item>

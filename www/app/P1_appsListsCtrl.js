@@ -285,9 +285,10 @@ app.controller('P1_appsListCtrl',
         $state.go(path, {
           "AppId": i.AppId,
           "Title": i.Title,
-          "Pin": i.Pin
+          "Pin": i.Pin,
+          reload: new Date().getTime()
         }, {
-          reload: true
+          reload: path
         });
         //$state.go("app.p2_test");
 

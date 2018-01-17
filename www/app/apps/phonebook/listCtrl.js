@@ -108,7 +108,8 @@ angular.module('pele')
     });
 
 
-    $scope.swalContact = function(c) {
+    $scope.swalContact = function(event, c) {
+      event.preventDefault();
       c.company = "פלאפון תקשורת"
 
       swal({
