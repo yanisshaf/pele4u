@@ -23,7 +23,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
       // default ttl is one year
       if (typeof ttl === 'undefined')
         ttl = yearTtl;
-      if (typeof $localStorage[varname] === 'undefined' || $localStorage[varname] === null || isExpired($localStorage[varname])) {
+      if (typeof $localStorage[varname] === 'undefined' || $localStorage[varname] === null || checkExpired($localStorage[varname])) {
         $localStorage[varname] = {};
         $localStorage[varname].data = data;
         $localStorage[varname].ttl = ttl;
