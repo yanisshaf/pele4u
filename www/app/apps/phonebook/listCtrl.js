@@ -2,8 +2,19 @@
  * Created by User on 25/08/2016.
  */
 angular.module('pele')
-  .controller('phonebookListCtrl', function($scope, ApiService, StorageService, $stateParams, $ionicLoading, $state, PelApi, Contact, $ionicModal, $ionicNavBarDelegate) {
+  .controller('phonebookListCtrl', function($scope, ApiService, StorageService, $stateParams, $ionicLoading, $state, PelApi, Contact, $ionicModal, $ionicNavBarDelegate, $ionicHistory) {
 
+    $scope.$on('$ionicView.beforeEnter', function() {
+      // Ignore cacheView when previous state is ManiMenu
+      if (!$ionicHistory.viewHistory().forwardView) {
+        $scope.formData = {
+          term: "",
+          sectorId: ""
+        };
+        $scope.setForm()
+      }
+
+    });
     var AppId = $stateParams.AppId;
 
     function safeApply(scope, fn) {
@@ -30,8 +41,8 @@ angular.module('pele')
         cursor: {},
         list: []
       }
-      $scope.modals.operunits.hide();
-
+      if ($scope.modals.operunits.hide)
+        $scope.modals.operunits.hide();
     }
     $scope.goBack = function() {
 

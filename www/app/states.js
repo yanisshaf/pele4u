@@ -244,6 +244,7 @@ angular.module('pele.states', [])
   }, {
     state: "app.phonebook",
     url: '/phonebook/:AppId/:reload',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: function() {

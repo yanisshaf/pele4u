@@ -9,7 +9,6 @@ app.controller('P1_appsListCtrl',
   function($scope, $http, $state, $ionicLoading, PelApi, $rootScope, $ionicPopup, $ionicHistory, $sessionStorage, $localStorage, appSettings, srvShareData, $cordovaNetwork) {
 
     $ionicHistory.clearHistory();
-
     PelApi.lagger.checkFile().then(function(logStat) {
       if (logStat.size > (1024 * 1024)) {
         PelApi.lagger.deleteLogfile().then(function() {
@@ -285,10 +284,7 @@ app.controller('P1_appsListCtrl',
         $state.go(path, {
           "AppId": i.AppId,
           "Title": i.Title,
-          "Pin": i.Pin,
-          reload: new Date().getTime()
-        }, {
-          reload: path
+          "Pin": i.Pin
         });
         //$state.go("app.p2_test");
 
