@@ -90,8 +90,8 @@
           </p>
         </div>
         <div class="icon">
-          <a href="# " ng-href="tel:{{contact.mobilePhone}} "><img class="pel_icon " src="img/new_icons/green_mobile.png "></a>
-          <a href="# " ng-href="tel:{{contact.workPhone}} "><img class="pel_icon " src="img/new_icons/gray_phone.png "></a>
+          <a href="#" ng-href="tel:{{contact.workPhone}}" ng-show="contact.workPhone"><img class="pel_icon" src="img/new_icons/gray_phone.png"></a>
+          <a href="#" ng-href="tel:{{contact.mobilePhone}}" ng-show="contact.mobilePhone"><img class="pel_icon" src="img/new_icons/green_mobile.png "></a>
         </div>
       </div>
     </div>
