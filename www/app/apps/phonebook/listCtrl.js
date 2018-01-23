@@ -24,10 +24,7 @@ angular.module('pele')
       term: "",
       sectorId: ""
     };
-    $scope.modals = {
-      operunits: {},
 
-    }
 
     $scope.title = "אלפון"
     $scope.goHome = function() {
@@ -41,8 +38,7 @@ angular.module('pele')
         cursor: {},
         list: []
       }
-      if ($scope.modals.operunits.hide)
-        $scope.modals.operunits.hide();
+
     }
     $scope.goBack = function() {
 
@@ -52,12 +48,6 @@ angular.module('pele')
     }
 
 
-    $ionicModal.fromTemplateUrl('operunits.html', {
-      scope: $scope,
-      animation: 'slide-in-up'
-    }).then(function(modal) {
-      $scope.modals.operunits = modal;
-    });
 
     $scope.options = {
       loop: false,
@@ -120,11 +110,12 @@ angular.module('pele')
 
 
     $scope.swalContact = function(event, c) {
-      event.preventDefault();
+      //event.preventDefault();
+
       c.company = "פלאפון תקשורת"
 
       swal({
-        target: "#swal-target",
+
         html: '<div>' + 'האם לשמור איש קשר זה במכשירכם ? ' + '</div>' +
           '<div class="alert">' + "שים לב, איש הקשר ישמר בנייד כאיש קשר חדש" + '</div>',
         showCloseButton: true,
@@ -135,7 +126,6 @@ angular.module('pele')
         cancelButtonText: 'ביטול',
         cancelButtonAriaLabel: 'Thumbs down',
       }).then(function(btn) {
-
         if (btn.value) {
           $scope.addContact(c)
         }
@@ -164,7 +154,16 @@ angular.module('pele')
     }
 
 
-    $scope.search = function() {
+    $scope.search = function(type) {
+      $scope.searchType = type;
+      if (!$scope.searchType)
+        $scope.searchType == "search"
+
+      if (type == "operunits") {
+        $scope.page = 'result';
+        $scope.title = "יחידות תפעוליות"
+        return true;
+      }
 
       var cursor = _.get($scope.searchResult, "cursor", {});
       var quantity = cursor.quantity || 0;
