@@ -294,7 +294,7 @@ app.controller('P1_appsListCtrl',
     //-----------------------------------------------------------//
     //--                 forwardToApp
     //-----------------------------------------------------------//
-    $scope.forwardToApp = function(statePath, appId, titleDisp) {
+    $scope.forwardToApp = function(statePath, appId, titleDisp, appConfig) {
 
       $sessionStorage.PeleAppId = appId;
 
@@ -314,9 +314,11 @@ app.controller('P1_appsListCtrl',
         PIN: $sessionStorage.AuthInfo.pinCode,
         TOKEN: $sessionStorage.AuthInfo.token
       };
-
-      $scope.appSwitch(i);
-
+      if (appConfig.ApplicationType === "EXT") {
+        window.open(appConfig.Path, '_system');
+      } else {
+        $scope.appSwitch(i);
+      }
     };
     //-------------------------------//
     //--       Code Section        --//
