@@ -57,10 +57,9 @@ angular.module('pele')
         })
       }
 
-      $scope.swalContact = function(event,c) {
+      $scope.swalContact = function(event, c) {
         swal({
-          html: '<div>' + 'האם לשמור איש קשר זה במכשירכם ? ' + '</div>' +
-            '<div class="alert">' + "שים לב, איש הקשר ישמר בנייד כאיש קשר חדש" + '</div>',
+          html: '<div>' + "שים לב, איש הקשר ישמר בנייד כאיש קשר חדש" + '</div>',
           showCloseButton: true,
           showCancelButton: true,
           focusConfirm: false,
