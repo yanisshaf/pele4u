@@ -1,5 +1,5 @@
 /*********************/
-const env = "QA";
+const env = "PD";
 /********************/
 
 const EnvCodes = {
@@ -173,7 +173,7 @@ angular.module('pele.config', [])
     api_timeout: 20,
     config: {
       contactIdPrefix: "pelephone",
-      APP_VERSION: "117.0",
+      APP_VERSION: "118.2",
       SCAN_PRINT_SCANNING_ERROR: "שגיאה בסריקה",
       PIN_CODE_AUTHENTICATION_REQUIRED_CODE: "10000",
       IS_TOKEN_VALID: "N",
@@ -286,7 +286,7 @@ angular.module('pele.config', [])
       "InValid": "", // - general error
       "Valid": "",
       "SYS_ERROR": "שגיאה מערכתי ...",
-      "OLD": "הגרסה אינה עדכנית, נדרש לבצע התקנה לגרסה אחרונה. "
+      "OLD": "גרסת האפליקציה אינה מעודכנת. יש לבצע עדכון לגרסה האחרונה בחנות."
     },
     tabs: [{
       "text": "סבב מאשרים"

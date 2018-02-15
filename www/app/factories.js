@@ -456,7 +456,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
 
       },
-     isValidNote: function(note) {
+      isValidNote: function(note) {
         var chkNote = note;
         if (!chkNote) return false;
         if (chkNote.replace(/[^\wא-ת]+/g, "").length < 2)
@@ -935,7 +935,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           showCloseButton: true,
           showCancelButton: true,
           focusConfirm: false,
-          confirmButtonText: 'שדרג',
+          confirmButtonText: 'עדכן',
           confirmButtonAriaLabel: 'Thumbs up, great!',
           cancelButtonText: 'ביטול',
           cancelButtonAriaLabel: 'Thumbs down',
@@ -1507,7 +1507,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
               text: '<a class="pele-popup-positive-text-collot">המשך</a>',
               type: 'button-positive',
               onTap: function(e) {
-              if (!self.isValidNote(scope.actionNote.text)) {
+                if (!self.isValidNote(scope.actionNote.text)) {
                   e.preventDefault();
                   self.showPopup("יש להזין הערה", "יש להזין לפחות 2 אותיות");
                 } else {
