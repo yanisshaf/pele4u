@@ -476,8 +476,16 @@ table.pele_rtl td.label {
   white-space: nowrap;
   text-decoration: underline;
 }
+table.pele_rtl td.pb.label {
+  white-space: nowrap;
+  font-weight:bold;
+  text-decoration: none;
+}
+
 
 span.label  { font-weight:bold}
+
+
 span.info  { padding-left:10px}
 table.pele_rtl td.info {
   padding-right:8px
@@ -785,7 +793,7 @@ top:11px;
 
 
 .contact-avatar {
-    width: 100px;
+    --width: 100px;
     height: 100px;
     position: relative;
     overflow: hidden;

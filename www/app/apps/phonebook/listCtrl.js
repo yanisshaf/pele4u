@@ -136,6 +136,7 @@ angular.module('pele')
       var deviceContact = Contact.newContact();
       deviceContact = Contact.setContactData(deviceContact, c);
       deviceContact.save(function(result) {
+
         swal({
           type: 'success',
           title: 'איש הקשר נשמר במכשירכם',
@@ -161,7 +162,7 @@ angular.module('pele')
 
       if (type == "operunits") {
         $scope.page = 'result';
-        $scope.title = "יחידות תפעוליות"
+        $scope.title = "טלפונים חשובים"
         return true;
       }
 
