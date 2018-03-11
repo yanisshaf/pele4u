@@ -282,7 +282,7 @@ angular.module('pele.states', [])
     state: 'app.leads',
     url: '/leads',
     views: {
-      'menuContent': {
+      'menuContent@app': {
         templateUrl: function() {
           return 'app/apps/leads/menu.html';
         },
