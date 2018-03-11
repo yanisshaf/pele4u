@@ -515,10 +515,12 @@ h2.pele_rtl{
   unicode-bidi: plaintext;
 }
 
+.text-left {text-align:left}
+.text-right {text-align:right}
 .apps-front-menu {padding: 0 10%}
 .apps-front-menu .menu-item {margin-top:3px}
 .apps-front-menu button { height:70px;position: relative;background-color: #E3F2FD;border-radius: 6px;min-height:70px;}
-.apps-front-menu button {text-align:right}
+.apps-front-menu button.text-right {text-align: right}
 .apps-front-menu .menu-item.reduce button {min-height:60px;height:60px}
 .apps-front-menu .menu-item.reduce2 button {min-height:50px;height:50px}
 .apps-front-menu button.activated {border-radius: 6px;background:#BBDEFB}
@@ -829,3 +831,8 @@ top:11px;
 .item-checkbox.text-right {padding-right:60px}
 .leads-notes {height:200px;min-height: 200px}
 .white {color:white}
+.list.lead-form .item-input {padding:0px 0 5px 1px}
+.list.lead-form label .input-label {padding:0px 0 5px 4px;line-height: 16px;}
+
+.list.lead-form .item-input input  {background:#E8E8E8 ;border-bottom: 1px dotted #444;padding-right:10px}
+.list.lead-form .item-input textarea {min-height:50px ;background:#E8E8E8 ;border-bottom: 1px dotted #444;padding-right:10px}

@@ -279,27 +279,39 @@ angular.module('pele.states', [])
     },
     src: ["app/apps/scanPrint/p2_scan_printCtrl.js"]
   }, {
-    state: 'app.lead',
-    url: '/lead',
+    state: 'app.leads',
+    url: '/leads',
     views: {
       'menuContent': {
         templateUrl: function() {
-          return 'app/apps/lead/lead.html';
+          return 'app/apps/leads/menu.html';
         },
-        controller: 'leadCtrl'
+        controller: 'leadsCtrl'
       }
     },
-    src: ["app/apps/lead/leadCtrl.js"]
+    src: ["app/apps/leads/leadsCtrl.js"]
   }, {
-    state: 'app.lead.report',
-    url: '/report',
+    state: 'app.leads.lead',
+    url: '/lead',
     views: {
       'menuContent@app': {
         templateUrl: function() {
-          return 'app/apps/lead/report.html';
+          return 'app/apps/leads/lead.html';
         },
-        controller: 'reportCtrl'
+        controller: 'leadsCtrl'
       }
     },
-    src: ["app/apps/lead/reportCtrl.js"]
+    src: ["app/apps/leads/leadsCtrl.js"]
+  }, {
+    state: 'app.leads.report',
+    url: '/report/:personal/',
+    views: {
+      'menuContent@app': {
+        templateUrl: function() {
+          return 'app/apps/leads/report.html';
+        },
+        controller: 'leadsReportsCtrl'
+      }
+    },
+    src: ["app/apps/leads/reportCtrl.js"]
   }]);

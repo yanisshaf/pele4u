@@ -1,0 +1,98 @@
+<ion-nav-buttons side="right">
+  <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+</ion-nav-buttons>
+<ion-nav-title>
+  <div class="bar bar-header bar-positive">
+    <div class="title">{{title}}
+    </div>
+  </div>
+</ion-nav-title>
+<ion-content style="height: calc(100% - 100px);" id="new_lead">
+
+  <!--<fancy-select header-text="Select an option" items="items" value="selected" icon-property="icon" value-property="id" text-property="id" allow-empty='true' multi-select="true" text="Nothing selected" modal-template-url="lib/ionic-fancy-select/templates/fancy-select-modal-template.html"
+      template-url="lib/ionic-fancy-select/templates/item-template.html" note-text="A Note text" note-img="img/foo.png" note-img-class="icon" value-changed="onValueChanged(value)" get-custom-text="getCustomText(value)">
+    </fancy-select>dsdsdsd
+  -->
+  <fancy-select header-text="בחר סוג ליד" items="conf.types" value="lead.type" value-property="TYPE" text-property="DESCRIPTION" allow-empty='false' text="בחרו סוג ליד" not-img-class="hidden" note-text="סוג ליד" value-changed="onValueChanged(value)" get-custom-text="getCustomText(value)"
+    note-img-class="icon ion-android-checkmark-circle" item-class="text-right"> </fancy-select>
+
+
+  <div class="item item-divider item-icon-right item-icon-left" ng-init="info_elm=true" ng-click="info_elm=!info_elm">
+    <i class="pel_icon icon icon-sm" ng-class="info_elm ? 'ion-chevron-down' :'ion-chevron-left'"></i>
+    <h2 class="text-right pele_rtl">פרטי לקוח</h2>
+    <i class="icon pel_icon icon-md ion-clipboard"></i>
+  </div>
+  <div class="item-section" ng-show="info_elm">
+    <div class="list lead-form pele_rtl">
+      <label class="item no-border item-input">
+              <span class="input-label">שם פרטי</span>
+              <input type="text">
+            </label>
+      <label class="item no-border item-input">
+          <span class="input-label">שם משפחה</span>
+          <input type="text">
+        </label>
+      <label class="item no-border item-input item-text-wrap">
+          <span class="input-label">מס טלפון לחזרה</span>
+          <input type="text">
+        </label>
+      <label class="item no-border item-input item-text-wrap">
+            <span class="input-label">מספר טלפון נוסף</span>
+            <input type="text">
+        </label>
+      <label class="item no-border item-input">
+          <span class="input-label">ת.ז לקוח</span>
+          <input type="text">
+        </label>
+      <label class="item no-border item-input item-text-wrap">
+          <span class="input-label">שעות רצויות לחזרה</span>
+          <input type="text">
+        </label>
+      <label class="item no-border item-input item-text-wrap">
+              <span class="input-label">הערות</span>
+          <textarea></textarea>
+        </label>
+    </div>
+  </div>
+  <div class="item item-divider item-icon-right item-icon-left" ng-init="add_info_elm=true" ng-click="add_info_elm=!add_info_elm">
+    <i class="pel_icon icon icon-sm" ng-class="add_info_elm ? 'ion-chevron-down' :'ion-chevron-left'"></i>
+    <h2 class="text-right pele_rtl">נתונים נוספים</h2>
+    <i class="icon pel_icon icon-md ion-clipboard"></i>
+  </div>
+  <div class="item-section" ng-show="add_info_elm">
+    <div class="list lead-form pele_rtl">
+      <label class="item no-border item-input">
+              <span class="input-label">שם פרטי</span>
+              <input type="text">
+            </label>
+      <label class="item no-border item-input">
+          <span class="input-label">שם משפחה</span>
+          <input type="text">
+        </label>
+      <label class="item no-border item-input item-text-wrap">
+          <span class="input-label">מס טלפון לחזרה</span>
+          <input type="text">
+        </label>
+      <label class="item no-border item-input item-text-wrap">
+            <span class="input-label">מספר טלפון נוסף</span>
+            <input type="text">
+        </label>
+      <label class="item no-border item-input">
+          <span class="input-label">ת.ז לקוח</span>
+          <input type="text">
+        </label>
+      <label class="item no-border item-input item-text-wrap">
+          <span class="input-label">שעות רצויות לחזרה</span>
+          <input type="text">
+        </label>
+      <label class="item no-border item-input item-text-wrap">
+              <span class="input-label">הערות</span>
+          <textarea></textarea>
+        </label>
+    </div>
+  </div>
+</ion-content>
+
+<div style="height:50px;max-height:50px" class="bar bar-footer bar-positive">
+  <a ng-click="submit()" class="title">פתיחת ליד</a>
+</div>

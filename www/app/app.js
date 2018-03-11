@@ -232,7 +232,8 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
 
     // if none of the above states are matched, use this as the fallback
     //$urlRouterProvider.deferIntercept();
-    $urlRouterProvider.otherwise('/apps/home.html', {
+    //$urlRouterProvider.otherwise('/apps/home.html', {
+    $urlRouterProvider.otherwise('/app/leads', {
       'showLoading': 'Y'
     });
   })
