@@ -5,24 +5,35 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadsCtrl', ['StorageService', 'ApiGateway', '$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing',
-    function(StorageService, ApiGateway, $scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing) {
+  .controller('leadsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing',
+    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing) {
       $scope.lead = {}
+
+      if ($state.params.lead) {
+        PelApi.safeApply($scope, function() {
+          $scope.lead = $state.params.lead
+        })
+      }
+
+      console.log("lead in ctrl  :", $scope.lead)
+
       $scope.getConf = function() {
         $scope.conf = StorageService.getData("leads_conf")
         if ($scope.conf) return;
-
         ApiGateway.get("leads/conf").success(function(data) {
           StorageService.set("leads_conf", data, 1000 * 60 * 60)
           $scope.conf = data;
         }).error(function(err) {
-          alert("Error get conf for leads application")
+          console.log(err)
         })
       }
       $scope.getConf();
 
       $scope.submit = function() {
+        console.log($scope.lead)
         ApiGateway.post("leads", $scope.lead).success(function(data) {
+          swal("ליד נוצר בהצלחה !")
+          $scope.lead = {};
           console.log(data)
         }).error(function(err) {
           swal(JSON.stringify(err))

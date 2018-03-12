@@ -293,6 +293,9 @@ angular.module('pele.states', [])
   }, {
     state: 'app.leads.lead',
     url: '/lead',
+    params: {
+      lead: {}
+    },
     views: {
       'menuContent@app': {
         templateUrl: function() {

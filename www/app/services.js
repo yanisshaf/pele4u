@@ -168,23 +168,59 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   var env = PelApi.appSettings.env
   var urlBase = PelApi.cordovaNetwork.getNetwork() === "wifi" ? PelApi.appSettings.apiConfig.wifi_uri : PelApi.appSettings.apiConfig.uri;
   var urlBase = urlBase + '/mobileAppGw/' + env.toLowerCase() + '/';
+
+
+
+  function buildHeader(params) {
+    var headers = params || {};
+    headers['x-appid'] = $sessionStorage.PeleAppId;
+    headers['x-token'] = $sessionStorage.ApiServiceAuthParams.TOKEN;
+    headers['x-pincode'] = $sessionStorage.ApiServiceAuthParams.PIN;
+    headers['x-username'] = $sessionStorage.userName;
+    headers['x-msisdn'] = ($sessionStorage.PELE4U_MSISDN || appSettings.config.MSISDN_VALUE) || $localStorage.PELE4U_MSISDN;
+    return headers;
+  }
+
+
+
+
   //return PelApi.throwError("api", "ApiService.checkResponse-InvalidJsonResponse", "(httpStatus : " + httpStatus + ") " + errorMsg)
   //return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ") " + JSON.stringify(data), false)
 
   this.get = function(service, params, headers) {
-    return $http.get(urlBase + service, params, headers);
+    var headerParams = {
+      headers: buildHeader(headers)
+    }
+    var url = urlBase + service;
+
+    var paramsString = PelApi.toQueryString(params || {})
+    if (paramsString)
+      url = url + '?' + authParamsString;
+    return $http.get(url, headerParams);
   };
   this.post = function(service, params, headers) {
-    return $http.post(urlBase + service, params, headers);
+    var headerParams = {
+      headers: buildHeader(headers)
+    }
+    return $http.post(urlBase + service, params || {}, headerParams);
   };
   this.head = function(service, headers) {
-    return $http.head(urlBase + service, {}, headers);
+    var headerParams = {
+      headers: buildHeader(headers)
+    }
+    return $http.head(urlBase + service, {}, headerParams);
   };
   this.delete = function(service, params, headers) {
-    return $http.delete(urlBase + service, params, headers);
+    var headerParams = {
+      headers: buildHeader(headers)
+    }
+    return $http.delete(urlBase + service, params || {}, headerParams);
   };
   this.put = function(service, params, headers) {
-    return $http.put(urlBase + service, params, headers);
+    var headerParams = {
+      headers: buildHeader(headers)
+    }
+    return $http.put(urlBase + service, params || {}, headerParams);
   };
 }]).service('srvShareData', function($window) {
   var KEY = 'App.SelectedValue';

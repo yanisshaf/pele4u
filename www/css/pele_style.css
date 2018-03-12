@@ -836,3 +836,4 @@ top:11px;
 
 .list.lead-form .item-input input  {background:#E8E8E8 ;border-bottom: 1px dotted #444;padding-right:10px}
 .list.lead-form .item-input textarea {min-height:50px ;background:#E8E8E8 ;border-bottom: 1px dotted #444;padding-right:10px}
+.fancy-select .item-note {padding-left:30px ;font-weight:bolder ;color:black}

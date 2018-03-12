@@ -7,7 +7,9 @@ angular.module('pele')
   //=================================================================
   .controller('leadsReportsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing) {
-      console.log("$state.params.personal", $state.params.personal)
+
+
+
       $scope.title = "לידים שלי";
 
       if ($state.params.personal === "true") {
@@ -23,6 +25,13 @@ angular.module('pele')
           $scope.conf = data;
         }).error(function(err) {
           alert("Error get conf for leads application")
+        })
+      }
+
+      $scope.showLead = function(lead) {
+        lead.SELF = true;
+        $state.go("app.leads.lead", {
+          lead: lead
         })
       }
 

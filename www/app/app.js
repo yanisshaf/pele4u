@@ -217,6 +217,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         url: state.url,
         views: state.views,
         cache: state.cache || true,
+        params: state.params || {},
         resolve: {
           deps: ['$ocLazyLoad', function($ocLazyLoad) {
             if (!state.src)

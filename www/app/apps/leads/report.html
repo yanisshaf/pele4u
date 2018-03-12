@@ -9,8 +9,12 @@
     </div>
   </ion-nav-title>
   <ion-content id="leads_list">
-    <ion-list>
-      <ion-item ng-repeat="i in leads">{{i}}</ion-item>
+    <ion-list class="pele_rtl text-right">
+      <ion-item ng-repeat="l in leads" class="item-icon-left">
+        <div><strong>שם לקוח :</strong> {{l.FIRST_NAME}} {{l.LAST_NAME}}</div>
+        <div><strong>נוצר : </strong>{{l.CREATED|date :'d/M/yyyy HH:mm'}}</div>
+        <i ng-click="showLead(l)" class="icon ion-edit"></i>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>
