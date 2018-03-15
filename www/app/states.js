@@ -299,7 +299,7 @@ angular.module('pele.states', [])
     views: {
       'menuContent@app': {
         templateUrl: function() {
-          return 'app/apps/leads/lead.html';
+          return 'app/apps/leads/lead_tabs.html';
         },
         controller: 'leadsCtrl'
       }

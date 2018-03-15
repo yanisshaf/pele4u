@@ -8,7 +8,7 @@ angular.module('pele')
   .controller('leadsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing) {
       $scope.lead = {}
-
+      $scope.forms = {}
       if ($state.params.lead) {
         PelApi.safeApply($scope, function() {
           $scope.lead = $state.params.lead
@@ -29,8 +29,19 @@ angular.module('pele')
       }
       $scope.getConf();
 
-      $scope.submit = function() {
-        console.log($scope.lead)
+      $scope.submit = function(leadForm) {
+        console.log(leadForm)
+        $scope.submitted = true;
+        if (leadForm.$invalid) {
+          swal({
+            text: "נתוני טופס לא תקינים",
+            confirmButtonText: 'אישור'
+          }).then(function(ret) {
+            console.log(ret)
+            console.log(leadForm)
+          })
+          return false;
+        }
         ApiGateway.post("leads", $scope.lead).success(function(data) {
           swal("ליד נוצר בהצלחה !")
           $scope.lead = {};

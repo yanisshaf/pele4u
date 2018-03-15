@@ -227,7 +227,7 @@ angular.module('tabSlideBox', [])
         if (attrs.templateUrl) {
           return "<ng-include src=\"'" + attrs.templateUrl + "'\"></ng-include>";
         } else {
-          return '<ion-list ng-class="listClass"> <ion-item ng-click=showItems($event)> {{text}} <span class=item-note>{{noteText}} <img ng-show="noteImg" class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> </ion-item> </ion-list>';
+          return '<ion-list ng-class="listClass"> <ion-item ng-click=showItems($event)> <span ng-class="headerClass">{{text}}</span> <span class=item-note>{{noteText}} <img ng-show="noteImg" class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> </ion-item> </ion-list>';
         }
       },
 
@@ -259,7 +259,7 @@ angular.module('tabSlideBox', [])
         scope.valueProperty = attrs.valueProperty || "id";
         scope.listClass = attrs.listClass || "fancy-list";
         scope.itemClass = attrs.itemClass || "fancy-item";
-
+        scope.headerClass = attrs.headerClass || "fancy-header";
 
         // The modal properties
         scope.modalTemplateUrl = attrs.modalTemplateUrl;
@@ -287,7 +287,7 @@ angular.module('tabSlideBox', [])
 
         } else {
           scope.modal = $ionicModal.fromTemplate(
-            '<ion-modal-view> <ion-header-bar class="bar-positive"> <button class="button button-positive button-icon ion-ios-arrow-back" ng-click="hideItems()"/> <h1 class="title">{{headerText}}</h1> <button class="button button-positive button-icon ion-checkmark" ng-show="multiSelect" ng-click="validate()"/> </ion-header-bar> <ion-content> <ion-list> <ion-item ng-class="itemClass" class="item-checkbox" ng-if="multiSelect" ng-repeat="item in items"> <label class="checkbox"> <input type="checkbox" ng-checked="item.checked" ng-model="item.checked"> </label>{{item[textProperty]}}</ion-item> <label ng-class="itemClass" class="item" ng-click="validate(item)" ng-if="!multiSelect" ng-repeat="item in items">{{item[textProperty]}}</label> </div></ion-content></ion-modal-view>', {
+            '<ion-modal-view> <ion-header-bar class="bar-positive"> <button class="button button-positive button-icon ion-ios-arrow-back" ng-click="hideItems()"/> <h1 class="title" ng-class="headerClass">{{headerText}}</h1> <button class="button button-positive button-icon ion-checkmark" ng-show="multiSelect" ng-click="validate()"/> </ion-header-bar> <ion-content> <ion-list> <ion-item ng-class="itemClass" class="item-checkbox" ng-if="multiSelect" ng-repeat="item in items"> <label class="checkbox"> <input type="checkbox" ng-checked="item.checked" ng-model="item.checked"> </label>{{item[textProperty]}}</ion-item> <label ng-class="itemClass" class="item" ng-click="validate(item)" ng-if="!multiSelect" ng-repeat="item in items">{{item[textProperty]}}</label> </div></ion-content></ion-modal-view>', {
               scope: scope,
               animation: scope.modalAnimation
             }

@@ -1,0 +1,112 @@
+<ion-view>
+  <ion-nav-buttons side="right">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-nav-title>
+    <div class="bar bar-header bar-positive">
+      <div class="title">{{title}}
+      </div>
+    </div>
+  </ion-nav-title>
+  <ng-form name="leadForm" ng-init="forms.leadForm=leadForm" novalidate>
+
+    <ion-content style="height: calc(100% - 100px);" id="new_lead" padding="true">
+      <fancy-select class="fancy-select text-right" header-text="בחר סוג ליד" items="conf.types" value="lead.LEAD_TYPE" value-property="TYPE" text-property="DESCRIPTION" allow-empty='false' text="בחרו סוג ליד" not-img-class="hidden" note-text=" : סוג ליד "
+        value-changed="onValueChanged(value)" get-custom-text="getCustomText(value)" note-img-class="icon ion-android-checkmark-circle" item-class="text-right pele_rtl">
+      </fancy-select>
+
+      <label class="item no-border item-toggle pele_rtl text-right">
+          ליד עצמי
+          <label class="toggle toggle-positive">
+               <input type="checkbox" ng-model="lead.SELF">
+               <div class="track">
+                 <div class="handle"></div>
+               </div>
+             </label>
+      </label>
+      <label class="pele_rtl item-text-wrap"><small>** ליד עצמי לא יעבור להמשך טיפול אצל הגורמים השונים בפלאפון</small>
+        </label>
+      <tab-slide-box>
+        <div class="tsb-icons ">
+          <div class="tsb-ic-wrp ">
+            <ion-scroll has-bouncing="false " scrollX="false " direction="x " scrollY="false " class="tsb-hscroll ">
+              <a class="triangle-isosceles small " on-finish-render="test() ">
+              פרטים נוספים
+            </a>
+              <a class="triangle-isosceles small " on-finish-render="test() ">
+            פרטי לקוח
+            </a>
+            </ion-scroll>
+          </div>
+        </div>
+
+        <ion-slide-box show-pager="false " on-slide-changed="slideHasChanged($index) ">
+          <ion-slide>
+            <div>
+              dYNAMIC FORM
+
+
+            </div>
+          </ion-slide>
+          <ion-slide>
+            <div class="list lead-form pele_rtl text-right">
+              <label class="item no-border item-input ">
+              <span class="input-label ">שם פרטי</span>
+              <input type="text " name="FIRST_NAME "  ng-model="lead.FIRST_NAME " required>
+            </label>
+              <label ng-show="leadForm.first_name.$invalid && (leadForm.first_name.$dirty || submitted)" class="item no-border item-input input-error ">
+              יש להזין שם פרטי
+          </label>
+
+              <label class="item no-border item-input ">
+          <span class="input-label ">שם משפחה</span>
+          <input type="text "  name="LAST_NAME "  ng-model="lead.LAST_NAME " required>
+        </label>
+              <label ng-show="leadForm.LAST_NAME.$invalid && (leadForm.LAST_NAME.$dirty || submitted)" class="item no-border item-input input-error ">
+            יש להזין שם משפחה
+        </label>
+
+              <label class="item no-border item-input item-text-wrap ">
+            <span class="input-label ">מס טלפון לחזרה</span>
+            <input type="text "  name="PHONE_NO_1 "  ng-model="lead.PHONE_NO_1 " required ng-pattern="/^0[0-9]{2}-?[0-9]{1}-?[0-9]{2}-?[0-9]{4}$/ ">
+          </label>
+              <label ng-show="leadForm.PHONE_NO_1.$invalid &&  (leadForm.PHONE_NO_1.$dirty  || submitted)" class="item no-border item-input input-error ">
+            יש להזין מס' סלולארי תקין
+         </label>
+
+              <label class="item no-border item-input item-text-wrap ">
+            <span class="input-label ">מספר טלפון נוסף</span>
+            <input type="text " name="PHONE_NO_2" ng-model="lead.PHONE_NO_2" ng-pattern="/^0[0-9]{2}-?[0-9]{1}-?[0-9]{2}-?[0-9]{3,4}$/ ">
+          </label>
+
+              <label ng-show="leadForm.PHONE_NO_2.$invalid && (leadForm.PHONE_NO_2.$dirty  || submitted)" class="item no-border item-input input-error ">
+            יש להזין מס' נוסף תקין
+          </label>
+              <label class="item no-border item-input ">
+          <span class="input-label ">ת.ז לקוח</span>
+          <input type="text " name="CUSTOMER_ID " ng-model="lead.CUSTOMER_ID " ng-pattern="/^[0-9]{2,10}$/ ">
+        </label>
+              <label ng-show="leadForm.CUSTOMER_ID.$invalid && (leadForm.CUSTOMER_ID.$dirty  || submitted)" class="item no-border item-input input-error ">
+        יש להזין מס' תקין'
+        </label>
+              <label class="item no-border item-input item-text-wrap ">
+          <span class="input-label ">שעות רצויות לחזרה</span>
+          <input type="text " ng-model="lead.PREFRRED_HOURS ">
+        </label>
+              <label class="item no-border item-input item-text-wrap ">
+              <span class="input-label ">הערות</span>
+              <textarea ng-modle="lead.NOTE "></textarea>
+
+            </label>
+            </div>
+          </ion-slide>
+      </tab-slide-box>
+
+    </ion-content>
+    <div style="height:50px;max-height:50px " class="bar bar-footer bar-dark ">
+      <a class="button button-stable " ng-show="!lead.LEAD_ID " ng-click="submit(leadForm)" class="title ">פתיחת ליד</a>
+      <a class="button button-stable " ng-show="lead.LEAD_ID " ng-click="submit(leadForm)" class="title ">עדכן ליד עצמי</a>
+      <a class="button button-stable " ng-show="lead.LEAD_ID " ng-click="delete(lead.LEAD_ID) " class="title ">מחק ליד עצמי</a>
+    </div>
+  </ng-form>
+</ion-view>

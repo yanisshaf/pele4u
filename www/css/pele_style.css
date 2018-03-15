@@ -580,7 +580,9 @@ a.triangle-isosceles.active:after {
   width:0;
 }
 a.triangle-isosceles.active { font-weight:bolder}
-
+a.triangle-isosceles.small {
+  padding:3px;
+}
 table.mix-alpha-numeric-table tr td {padding-left:5px}
 div#main-apps-menu div.row-bottom {margin-top:15px}
 /* fix ios 10 title  proble*/
@@ -837,3 +839,6 @@ top:11px;
 .list.lead-form .item-input input  {background:#E8E8E8 ;border-bottom: 1px dotted #444;padding-right:10px}
 .list.lead-form .item-input textarea {min-height:50px ;background:#E8E8E8 ;border-bottom: 1px dotted #444;padding-right:10px}
 .fancy-select .item-note {padding-left:30px ;font-weight:bolder ;color:black}
+label.input-error {color:red !important}
+.fancy-header {color:red}
+.fancy-select .item {padding:12px}

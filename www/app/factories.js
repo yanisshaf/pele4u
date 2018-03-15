@@ -251,6 +251,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         //{"Content-Type": "application/json; charset=utf-8"};
         var envUrl = links + "&UserName=" + appSettings.config.userName + "&ID=" + appSettings.config.user;
 
+
+
         if (deviceReady && "wifi" === $cordovaNetwork.getNetwork()) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
@@ -889,6 +891,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //--                    GetServiceUrl                     --//
       //----------------------------------------------------------//
       getDocApproveServiceUrl: function(serviceName) {
+        let currentNetwork = $cordovaNetwork.getNetwork();
+        console.log("currentNetwork:", currentNetwork)
+
         var self = this;
         var serviceConf = appSettings.apiConfig.services[serviceName];
         if (!serviceConf || serviceConf == undefined) {
