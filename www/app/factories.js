@@ -77,6 +77,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
       cordovaInit: function() {
         //file in device file system
+        $sessionStorage.ApiServiceAuthParams = $sessionStorage.ApiServiceAuthParams || {};
 
         var self = this;
         deviceReady = true;
