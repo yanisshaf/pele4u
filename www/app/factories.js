@@ -893,8 +893,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //----------------------------------------------------------//
       getDocApproveServiceUrl: function(serviceName) {
         let currentNetwork = $cordovaNetwork.getNetwork();
-        console.log("currentNetwork:", currentNetwork)
-
+        self.lagger.info("currentNetwork:", currentNetwork)
         var self = this;
         var serviceConf = appSettings.apiConfig.services[serviceName];
         if (!serviceConf || serviceConf == undefined) {
