@@ -10,6 +10,11 @@
   </ion-nav-title>
   <ion-content id="leads_list">
     <ion-list class="pele_rtl text-right">
+      <ion-item ng-show="!leads.length">
+        לא נמצאו לידים שלך - תמיד תוכל לפתוח
+      </ion-item>
+    </ion-list>
+    <ion-list class="pele_rtl text-right">
       <ion-item ng-repeat="l in leads" class="item-icon-left">
         <div><strong>שם לקוח :</strong> {{l.FIRST_NAME}} {{l.LAST_NAME}}</div>
         <div><strong>נוצר : </strong>{{l.CREATED|date :'d/M/yyyy HH:mm'}}</div>

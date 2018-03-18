@@ -173,9 +173,10 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
 
   function buildHeader(params) {
     var headers = params || {};
+    let ApiServiceAuthParams = _.get($sessionStorage, "ApiServiceAuthParams", {});
     headers['x-appid'] = $sessionStorage.PeleAppId;
-    headers['x-token'] = $sessionStorage.ApiServiceAuthParams.TOKEN;
-    headers['x-pincode'] = $sessionStorage.ApiServiceAuthParams.PIN;
+    headers['x-token'] = ApiServiceAuthParams.TOKEN;
+    headers['x-pincode'] = ApiServiceAuthParams.PIN;
     headers['x-username'] = $sessionStorage.userName;
     headers['x-msisdn'] = ($sessionStorage.PELE4U_MSISDN || appSettings.config.MSISDN_VALUE) || $localStorage.PELE4U_MSISDN;
     return headers;

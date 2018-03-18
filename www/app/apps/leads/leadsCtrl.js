@@ -1,37 +1,47 @@
 /**
  * Created by User on 25/08/2016.
  */
-angular.module('pele')
+angular.module('pele', ['formFor', 'formFor.defaultTemplates'])
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing',
-    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing) {
-      $scope.lead = {}
-      $scope.forms = {}
+  .controller('leadsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing', '$templateCache',
+    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing, $templateCache) {
+
+      let vm = this;
+      vm.lead = {}
+      vm.forms = {}
       if ($state.params.lead) {
         PelApi.safeApply($scope, function() {
-          $scope.lead = $state.params.lead
+          vm.lead = $state.params.lead
         })
       }
 
-      console.log("lead in ctrl  :", $scope.lead)
+      vm.onValueChanged = function(leadType) {
+        console.log("vm.conf", vm.conf)
+        vm.extraSchema = vm.conf.extra[leadType]
+      }
 
-      $scope.getConf = function() {
-        $scope.conf = StorageService.getData("leads_conf")
-        if ($scope.conf) return;
+      console.log("lead in ctrl  :", vm.lead)
+      vm.extraData = {};
+
+      vm.getConf = function() {
+        vm.conf = StorageService.getData("leads_conf")
+
+        if (vm.conf) return;
         ApiGateway.get("leads/conf").success(function(data) {
           StorageService.set("leads_conf", data, 1000 * 60 * 60)
-          $scope.conf = data;
+          vm.conf = data;
         }).error(function(err) {
           console.log(err)
         })
       }
-      $scope.getConf();
 
-      $scope.submit = function(leadForm) {
-        console.log(leadForm)
-        $scope.submitted = true;
+      vm.getConf();
+
+      vm.submit = function(leadForm) {
+        console.log(vm.extraData)
+        vm.submitted = true;
         if (leadForm.$invalid) {
           swal({
             text: "נתוני טופס לא תקינים",
@@ -42,19 +52,18 @@ angular.module('pele')
           })
           return false;
         }
-        ApiGateway.post("leads", $scope.lead).success(function(data) {
+        ApiGateway.post("leads", vm.lead).success(function(data) {
           swal("ליד נוצר בהצלחה !")
-          $scope.lead = {};
+          vm.lead = {};
           console.log(data)
         }).error(function(err) {
           swal(JSON.stringify(err))
-          $scope.error = err;
+          vm.error = err;
           setTimeout(function() {
-            $scope.error = ""
+            vm.error = ""
           }, 3000)
         })
       }
-
-      $scope.title = "ליד חדש"
+      vm.title = "ליד חדש";
     }
   ]);

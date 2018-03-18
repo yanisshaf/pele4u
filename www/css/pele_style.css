@@ -833,12 +833,15 @@ top:11px;
 .item-checkbox.text-right {padding-right:60px}
 .leads-notes {height:200px;min-height: 200px}
 .white {color:white}
-.list.lead-form .item-input {padding:0px 0 5px 1px}
-.list.lead-form label .input-label {padding:0px 0 5px 4px;line-height: 16px;}
+.list.lead-form .item-input {padding:3px 5px 5px 3px}
+.list.lead-form label .input-label {padding:0px 0 5px 8px;line-height: 16px;font-weight: bolder}
 
-.list.lead-form .item-input input  {background:#E8E8E8 ;border-bottom: 1px dotted #444;padding-right:10px}
-.list.lead-form .item-input textarea {min-height:50px ;background:#E8E8E8 ;border-bottom: 1px dotted #444;padding-right:10px}
+.list.lead-form .item-input input  { ;border-bottom: 1px dotted #444;padding-right:10px}
+.list.lead-form .item-input textarea {border: 1px dotted #444;padding-right:10px;    min-height: 150px;
+    max-height: 300px;
+}
 .fancy-select .item-note {padding-left:30px ;font-weight:bolder ;color:black}
-label.input-error {color:red !important}
+label.input-error {color:red !important ;margin-top:0px;padding-top:0px}
 .fancy-header {color:red}
 .fancy-select .item {padding:12px}
+#extra-lead-form label { float:right}

@@ -10,6 +10,7 @@
     "ionic": "3.10.3"
   },
   "dependencies": {
+    "angular-form-for": "^4.1.11",
     "cordova-plugin-contacts": "^2.3.1"
   },
   "cordova": {

@@ -4,7 +4,8 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.messages', 'pele.controllers', 'pele.factories', 'pele.config', 'pele.services'
+angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.messages', 'pele.controllers', 'pele.factories', 'pele.config', 'formFor',
+    'pele.services'
     //-----------------------------------------//
     //--           MENU                      --//
     //-----------------------------------------//
@@ -218,6 +219,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         views: state.views,
         cache: state.cache || true,
         params: state.params || {},
+        controllerAs: state.controllerAs,
         resolve: {
           deps: ['$ocLazyLoad', function($ocLazyLoad) {
             if (!state.src)
