@@ -97,9 +97,14 @@
                 <!--input type="text" ng-model="vm.lead.PREFRRED_HOURS"-->
               </label>
               <label class="item no-border item-input item-text-wrap">
-                <input type="datetime" ng-model="vm.departure">
+                <input type="time" id="exampleInput" name="input" ng-model="vm.departureDate"
+                  placeholder="HH:mm" min="08:00" max="17:00" required />
                 <!--input type="text" ng-model="vm.lead.PREFRRED_HOURS"-->
               </label>
+              <label class="item no-border item-input item-text-wrap">
+                <input type="date" id="exampleInput" name="input" ng-model="vm.departureDate1"  required />
+              </label>
+
               <label class="item no-border item-input item-text-wrap">
               <span class="input-label">הערות</span>
 
