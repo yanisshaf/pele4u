@@ -91,11 +91,13 @@
               </label>
               <label class="item no-border item-input item-text-wrap">
                 <span class="input-label">שעות רצויות לחזרה</span>
-                <input style="border:1px solid black;border-radius:4px" ng-model="vm.from_hour" type="number" min="8" max="20" step="1" size="3">
-                <input style="border:1px solid black;border-radius:4px" ng-model="vm.from_hour" type="number" min="8" max="20" step="1" size="3">
+                <input style="border:1px solid black;border-radius:4px" ng-model="vm.from_hour" type="time" min="8" max="20" step="1" size="3">
+                <input style="border:1px solid black;border-radius:4px" ng-model="vm.from_hour" type="time" min="8" max="20" step="1" size="3">
                 <input type="datetime">
-                <input type="date">
-
+                <!--input type="text" ng-model="vm.lead.PREFRRED_HOURS"-->
+              </label>
+              <label class="item no-border item-input item-text-wrap">
+                <input type="datetime" ng-model="vm.departure">
                 <!--input type="text" ng-model="vm.lead.PREFRRED_HOURS"-->
               </label>
               <label class="item no-border item-input item-text-wrap">
