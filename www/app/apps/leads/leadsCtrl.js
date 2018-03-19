@@ -1,13 +1,12 @@
 /**
  * Created by User on 25/08/2016.
  */
-angular.module('pele', ['formFor', 'formFor.defaultTemplates'])
+angular.module('pele', ['formFor', 'formFor.defaultTemplates', 'ionic-timepicker'])
   //=================================================================
   //==                    PAGE_4
   //=================================================================
   .controller('leadsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing', '$templateCache',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing, $templateCache) {
-
       let vm = this;
       vm.lead = {}
       vm.forms = {}
@@ -16,6 +15,31 @@ angular.module('pele', ['formFor', 'formFor.defaultTemplates'])
           vm.lead = $state.params.lead
         })
       }
+
+
+      function timePickerCallback(val) {
+        if (typeof(val) === 'undefined') {
+          console.log('Time not selected');
+        } else {
+          var selectedTime = new Date(val * 1000);
+          console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), ':', selectedTime.getUTCMinutes(), 'in UTC');
+        }
+      }
+
+
+      vm.timePickerObject = {
+        inputEpochTime: ((new Date()).getHours() * 60 * 60), //Optional
+        step: 15, //Optional
+        format: 12, //Optional
+        titleLabel: '12-hour Format', //Optional
+        setLabel: 'Set', //Optional
+        closeLabel: 'Close', //Optional
+        setButtonType: 'button-positive', //Optional
+        closeButtonType: 'button-stable', //Optional
+        callback: function(val) { //Mandatory
+          timePickerCallback(val);
+        }
+      };
 
       vm.onValueChanged = function(leadType) {
         console.log("vm.conf", vm.conf)
@@ -39,6 +63,23 @@ angular.module('pele', ['formFor', 'formFor.defaultTemplates'])
 
       vm.getConf();
 
+      vm.delete = function(leadId) {
+        ApiGateway.delete("leads/" + leadId).success(function(data) {
+          swal("ליד עצמי נמחק בהצלחה")
+            .then(function(ret) {
+              $state.go("app.leads.report")
+            })
+        }).error(function(err) {
+          swal({
+            text: JSON.stringify(err)
+          })
+          vm.error = err;
+          setTimeout(function() {
+            vm.error = ""
+          }, 3000)
+        })
+      }
+
       vm.submit = function(leadForm) {
         console.log(vm.extraData)
         vm.submitted = true;
@@ -48,7 +89,7 @@ angular.module('pele', ['formFor', 'formFor.defaultTemplates'])
             confirmButtonText: 'אישור'
           }).then(function(ret) {
             console.log(ret)
-            console.log(leadForm)
+            console.log("leadForm:", leadForm)
           })
           return false;
         }

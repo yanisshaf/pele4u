@@ -303,7 +303,12 @@ angular.module('pele.states', [])
           controllerAs: "vm"
         }
       },
-      src: ["lib/form-for/form-for.css", "lib/form-for/form-for.min.js", 'lib/form-for/form-for.default-templates.js', "app/apps/leads/leadsCtrl.js"]
+      src: [
+        "lib/form-for/form-for.css",
+        "lib/form-for/form-for.min.js",
+        'lib/form-for/form-for.default-templates.js',
+        "app/apps/leads/leadsCtrl.js"
+      ]
     },
     {
       state: 'app.leads.report',
