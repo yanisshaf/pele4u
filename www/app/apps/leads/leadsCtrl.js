@@ -1,44 +1,52 @@
 /**
  * Created by User on 25/08/2016.
  */
-angular.module('pele', ['formFor', 'formFor.defaultTemplates'])
+angular.module('pele', ['ngFileUpload'])
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing', '$templateCache',
-    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing, $templateCache) {
-      let vm = this;
-      vm.lead = {}
-      vm.forms = {}
+  .controller('leadsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing', '$templateCache', 'Upload',
+    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing, $templateCache, Upload) {
+
+      $scope.lead = {}
+      $scope.forms = {}
       if ($state.params.lead) {
         PelApi.safeApply($scope, function() {
-          vm.lead = $state.params.lead
+          $scope.lead = $state.params.lead
         })
       }
 
-      vm.onValueChanged = function(leadType) {
-        console.log("vm.conf", vm.conf)
-        vm.extraSchema = vm.conf.extra[leadType]
+      $scope.onValueChanged = function(leadType) {
+
+        let extraInfo = $scope.conf.extra[leadType] || [];
+        console.log("$scope.conf", extraInfo)
+        let idx = 1;
+        extraInfo.forEach(function(e) {
+          idx++;
+          e.name = e.name || "ATTRIBUTE" + idx
+        })
+        console.log($scope.extraSchema)
+        $scope.extraSchema = extraInfo;
       }
 
-      console.log("lead in ctrl  :", vm.lead)
-      vm.extraData = {};
+      console.log("lead in ctrl  :", $scope.lead)
+      $scope.extraData = {};
 
-      vm.getConf = function() {
-        vm.conf = StorageService.getData("leads_conf")
+      $scope.getConf = function() {
+        $scope.conf = StorageService.getData("leads_conf")
 
-        if (vm.conf) return;
+        if ($scope.conf) return;
         ApiGateway.get("leads/conf").success(function(data) {
           StorageService.set("leads_conf", data, 1000 * 60 * 60)
-          vm.conf = data;
+          $scope.conf = data;
         }).error(function(err) {
           console.log(err)
         })
       }
 
-      vm.getConf();
+      $scope.getConf();
 
-      vm.delete = function(leadId) {
+      $scope.delete = function(leadId) {
         ApiGateway.delete("leads/" + leadId).success(function(data) {
           swal("ליד עצמי נמחק בהצלחה")
             .then(function(ret) {
@@ -48,16 +56,16 @@ angular.module('pele', ['formFor', 'formFor.defaultTemplates'])
           swal({
             text: JSON.stringify(err)
           })
-          vm.error = err;
+          $scope.error = err;
           setTimeout(function() {
-            vm.error = ""
+            $scope.error = ""
           }, 3000)
         })
       }
 
-      vm.submit = function(leadForm) {
-        console.log(vm.extraData)
-        vm.submitted = true;
+      $scope.submit = function(leadForm) {
+        console.log($scope.extraData)
+        $scope.submitted = true;
         if (leadForm.$invalid) {
           swal({
             text: "נתוני טופס לא תקינים",
@@ -68,18 +76,44 @@ angular.module('pele', ['formFor', 'formFor.defaultTemplates'])
           })
           return false;
         }
-        ApiGateway.post("leads", vm.lead).success(function(data) {
+        ApiGateway.post("leads", $scope.lead).success(function(data) {
           swal("ליד נוצר בהצלחה !")
-          vm.lead = {};
+          $scope.lead = {};
           console.log(data)
         }).error(function(err) {
           swal(JSON.stringify(err))
-          vm.error = err;
+          $scope.error = err;
           setTimeout(function() {
-            vm.error = ""
+            $scope.error = ""
           }, 3000)
         })
       }
-      vm.title = "ליד חדש";
+      $scope.title = "ליד חדש";
+
+      $ionicModal.fromTemplateUrl('upload.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }).then(function(modal) {
+        $scope.modal = modal;
+      });
+      $scope.openModal = function() {
+        $scope.modal.show();
+      };
+      $scope.closeModal = function() {
+        $scope.modal.hide();
+      };
+      // Cleanup the modal when we're done with it!
+      $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+      });
+      // Execute action on hide modal
+      $scope.$on('modal.hidden', function() {
+        // Execute action
+      });
+      // Execute action on remove modal
+      $scope.$on('modal.removed', function() {
+        // Execute action
+      });
     }
+
   ]);

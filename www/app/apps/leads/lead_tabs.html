@@ -33,9 +33,10 @@
         <div class="tsb-icons">
           <div class="tsb-ic-wrp">
             <ion-scroll has-bouncing="false" scrollX="false" direction="x" scrollY="false" class="tsb-hscroll">
+
               <a ng-show="vm.extraSchema" class="triangle-isosceles small" on-finish-render="test()">
-              פרטים נוספים
-            </a>
+                פרטים נוספים
+                </a>
               <a class="triangle-isosceles small" on-finish-render="test()">
             פרטי לקוח
             </a>
@@ -44,10 +45,7 @@
         </div>
         <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index) ">
           <ion-slide>
-            <div class="list">
-              <form id="extra-lead-form" ng-if="vm.extraSchema" form-for="vm.extraData" form-for-builder validation-rules="vm.extraSchema" submit-with="submit()">
-              </form>
-            </div>
+            <ng-include src="'app/apps/leads/extra.html'"></ng-include>
           </ion-slide>
           <ion-slide>
             <div class="list lead-form pele_rtl text-right">
@@ -104,7 +102,7 @@
               <label class="item no-border item-input item-text-wrap">
                 <input type="date" id="exampleInput" name="input" ng-model="vm.departureDate1"  required />
               </label>
-
+              <ng-include style="background:#CCC" src="'app/apps/leads/extra.html'"></ng-include>
               <label class="item no-border item-input item-text-wrap">
               <span class="input-label">הערות</span>
 
@@ -112,6 +110,7 @@
               <label class="item no-border item-input item-text-wrap">
             <textarea wrap="off"  ng-modle="vm.lead.NOTE"></textarea>
             </label>
+
             </div>
           </ion-slide>
       </tab-slide-box>

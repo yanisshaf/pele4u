@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "angular-form-for": "^4.1.11",
-    "cordova-plugin-contacts": "^2.3.1"
+    "angular-upload": "^1.0.13",
+    "cordova-plugin-contacts": "^2.3.1",
+    "ng-file-upload": "^12.2.13"
   },
   "cordova": {
     "plugins": {

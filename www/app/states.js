@@ -23,6 +23,23 @@ angular.module('pele.states', [])
       },
       src: ["app/apps/dev/devCtrl.js"]
     }, {
+      state: "app.dev.network",
+      url: '/log',
+      views: {
+        'menuContent@app': {
+          templateUrl: function() {
+            return 'app/apps/dev/network.html';
+          },
+          controller: function($scope, $cordovaNetwork, $interval) {
+            $interval(function() {
+              $scope.network = $cordovaNetwork.getNetwork();
+              $scope.isOnline = $cordovaNetwork.isOnline();
+            }, 500)
+          },
+        }
+      },
+      src: ["app/apps/dev/devCtrl.js"]
+    }, {
       state: "app.dev.errors",
       url: '/errors',
       views: {
@@ -297,16 +314,13 @@ angular.module('pele.states', [])
       views: {
         'menuContent@app': {
           templateUrl: function() {
-            return 'app/apps/leads/lead_tabs.html';
+            return 'app/apps/leads/lead.html';
           },
-          controller: 'leadsCtrl',
-          controllerAs: "vm"
+          controller: 'leadsCtrl'
         }
       },
       src: [
-        "lib/form-for/form-for.css",
-        "lib/form-for/form-for.min.js",
-        'lib/form-for/form-for.default-templates.js',
+        "lib/ng-upload/ng-file-upload.min.js",
         "app/apps/leads/leadsCtrl.js"
       ]
     },
