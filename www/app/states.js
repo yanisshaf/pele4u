@@ -34,7 +34,8 @@ angular.module('pele.states', [])
             $interval(function() {
               $scope.network = $cordovaNetwork.getNetwork();
               $scope.isOnline = $cordovaNetwork.isOnline();
-            }, 500)
+              $scope.date = new Date();
+            }, 200)
           },
         }
       },
