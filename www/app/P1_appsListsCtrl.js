@@ -231,7 +231,7 @@ app.controller('P1_appsListCtrl',
       //-------------------------------//
       var continueFlag = "Y";
 
-      if ("wifi" === appSettings.config.network) {
+      if ("wifi" === appSettings.config.network || appSettings.config.network === "none") {
         appSettings.config.MSISDN_VALUE = $localStorage.PELE4U_MSISDN;
 
         //appSettings.config.MSISDN_VALUE = $scope.getMSISDN();

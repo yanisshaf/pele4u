@@ -253,8 +253,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var envUrl = links + "&UserName=" + appSettings.config.userName + "&ID=" + appSettings.config.user;
 
 
-
-        if (deviceReady && "wifi" === $cordovaNetwork.getNetwork()) {
+        var netInfo = $cordovaNetwork.getNetwork();
+        if (deviceReady && (netInfo === "wifi" || netInfo === "none")) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -289,7 +289,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var headers = "";
         var version = appSettings.config.APP_VERSION
         var parameters = "/" + appSettings.config.token + "/" + appId + "/" + pin;
-        if (deviceReady && "wifi" === $cordovaNetwork.getNetwork()) {
+        var netInfo = $cordovaNetwork.getNetwork();
+        if (deviceReady && (netInfo === "wifi" || netInfo === "none")) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -325,7 +326,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         // LOADING
 
         var retry = links.retry || 0;
-        if (deviceReady && $cordovaNetwork.getNetwork() === "wifi") {
+        var netInfo = $cordovaNetwork.getNetwork();
+        if (deviceReady && (netInfo === "wifi" || netInfo === "none")) {
           retry = 0;
         }
         return $http({
@@ -907,7 +909,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           "VERSION": appSettings.config.APP_VERSION
         };
 
-        if (deviceReady && "wifi" === $cordovaNetwork.getNetwork()) {
+        var netInfo = $cordovaNetwork.getNetwork();
+        if (deviceReady && (netInfo === "wifi" || netInfo === "none")) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {

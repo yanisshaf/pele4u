@@ -187,17 +187,16 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
 
   //return PelApi.throwError("api", "ApiService.checkResponse-InvalidJsonResponse", "(httpStatus : " + httpStatus + ") " + errorMsg)
   //return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ") " + JSON.stringify(data), false)
-
   this.get = function(service, params, headers) {
     var headerParams = {
       headers: buildHeader(headers)
     }
     var url = urlBase + service;
+    params = params || {};
 
-    var paramsString = PelApi.toQueryString(params || {})
-    if (paramsString)
-      url = url + '?' + authParamsString;
-    return $http.get(url, headerParams);
+    return $http.get(url, {
+      params: params
+    }, headerParams);
   };
   this.post = function(service, params, headers) {
     var headerParams = {

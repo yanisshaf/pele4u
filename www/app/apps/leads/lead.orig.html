@@ -11,14 +11,14 @@
   <ng-form role="form" name="leadform" ng-init="forms.leadForm=leadform" novalidate>
 
     <ion-content style="height: calc(100% - 100px);" id="new_lead" padding="true">
-      <fancy-select class="fancy-select text-right" header-text="בחר סוג ליד" items="typesByFormType" value="lead.LEAD_TYPE" value-property="TYPE" text-property="DESCRIPTION" allow-empty='false' text="בחרו סוג ליד" not-img-class="hidden" note-text=" : סוג ליד "
+      <fancy-select class="fancy-select text-right" header-text="בחר סוג ליד" items="conf.types" value="lead.LEAD_TYPE" value-property="TYPE" text-property="DESCRIPTION" allow-empty='false' text="בחרו סוג ליד" not-img-class="hidden" note-text=" : סוג ליד "
         value-changed="onValueChanged(value)" get-custom-text="getCustomText(value)" note-img-class="icon ion-android-checkmark-circle" item-class="text-right pele_rtl">
       </fancy-select>
 
       <label ng-show="submitted && !lead.LEAD_TYPE" class="item no-border input-error text-right">
           נא בחר סוג ליד
       </label>
-      <!--label class="item no-border item-toggle pele_rtl text-right">
+      <label class="item no-border item-toggle pele_rtl text-right">
           ליד עצמי {{lead.LEAD_ID}}
           <label class="toggle toggle-positive">
                <input type="checkbox" ng-model="lead.FORM_LEAD_STATE"  ng-true-value="'S'" ng-false-value="'T'">
@@ -28,7 +28,7 @@
              </label>
       </label>
       <label class="pele_rtl item-text-wrap"><small>** ליד עצמי לא יעבור להמשך טיפול אצל הגורמים השונים בפלאפון</small>
-      </label-->
+        </label>
       <a href="#" style="margin-top:20px;margin-left:10px" class="fab" ng-click="openModal()">
               <i class="icon ion-upload icon-center"></i>
       </a>

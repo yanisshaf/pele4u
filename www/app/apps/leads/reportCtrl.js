@@ -10,10 +10,10 @@ angular.module('pele')
 
 
 
-      $scope.title = "לידים שלי";
-
-      if ($state.params.personal === "true") {
-        $scope.title = "לידים עצמיים";
+      if ($state.params.type === "S") {
+        $scope.title = "לידים שפתחתי";
+      } else {
+        $scope.title = "לידים שלי";
       }
 
       $scope.getConf = function() {
@@ -36,7 +36,10 @@ angular.module('pele')
       }
 
       $scope.getData = function() {
-        ApiGateway.get("leads").success(function(data) {
+
+        ApiGateway.get("leads/", {
+          type: $state.params.type
+        }).success(function(data) {
           $scope.leads = data;
         }).error(function(err) {
           alert("Error get leads")

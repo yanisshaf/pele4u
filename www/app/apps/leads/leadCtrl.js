@@ -5,16 +5,36 @@ angular.module('pele', ['ngFileUpload'])
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing', '$templateCache', 'Upload',
+  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing', '$templateCache', 'Upload',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing, $templateCache, Upload) {
 
       $scope.lead = {}
       $scope.forms = {}
-      if ($state.params.lead) {
+      $scope.getNext = function() {
+        var refStamp = new Date().getTime();
+        ApiGateway.get("leads/getnext?" + refStamp).success(function(data) {
+          $scope.lead.LEAD_ID = data.VAL;
+          $scope.lead.LEAD_STATE = 'D'; //Draft
+
+        }).error(function() {})
+      }
+
+      if ($state.params.lead && $state.params.lead.LEAD_ID) {
         PelApi.safeApply($scope, function() {
           $scope.lead = $state.params.lead
         })
+      } else {
+        if ($state.params.type === 'S') {
+          $scope.lead.FORM_LEAD_STATE = 'S'; //Draft
+          $scope.title = "פתיחת ליד עצמי";
+        } else {
+          $scope.lead.FORM_LEAD_STATE = 'T'; //Draft
+          $scope.title = "פתיחת ליד לשגרירים";
+        }
+        $scope.getNext();
       }
+
+
 
       $scope.onValueChanged = function(leadType) {
 
@@ -32,19 +52,37 @@ angular.module('pele', ['ngFileUpload'])
       console.log("lead in ctrl  :", $scope.lead)
       $scope.extraData = {};
 
-      $scope.getConf = function() {
-        $scope.conf = StorageService.getData("leads_conf")
+      $scope.getRelevantLeadsType = function(types) {
+        $scope.typesByFormType = {};
+        Object.keys(types).forEach(function(k) {
+          if ($scope.lead.FORM_LEAD_STATE === types[k].FORM_TYPE)
+            $scope.typesByFormType[k] = types[k]
+        })
 
-        if ($scope.conf) return;
+      }
+
+      $scope.getConf = function() {
+        $scope.conf = StorageService.getData("leads_conf", {})
+
+        if ($scope.conf.types) {
+          $scope.getRelevantLeadsType($scope.conf.types)
+          return;
+        }
         ApiGateway.get("leads/conf").success(function(data) {
           StorageService.set("leads_conf", data, 1000 * 60 * 60)
           $scope.conf = data;
+          $scope.getRelevantLeadsType($scope.conf.types)
+          console.log(data)
+
         }).error(function(err) {
           console.log(err)
         })
       }
 
       $scope.getConf();
+
+
+
 
       $scope.delete = function(leadId) {
         ApiGateway.delete("leads/" + leadId).success(function(data) {
@@ -65,13 +103,15 @@ angular.module('pele', ['ngFileUpload'])
 
       $scope.submit = function(leadForm) {
         console.log($scope.extraData)
+        $scope.lead.LEAD_STATE = $scope.lead.FORM_LEAD_STATE;
         $scope.submitted = true;
+        console.log($scope.lead)
+
         if (leadForm.$invalid) {
           swal({
             text: "נתוני טופס לא תקינים",
             confirmButtonText: 'אישור'
           }).then(function(ret) {
-            console.log(ret)
             console.log("leadForm:", leadForm)
           })
           return false;
@@ -81,14 +121,16 @@ angular.module('pele', ['ngFileUpload'])
           $scope.lead = {};
           console.log(data)
         }).error(function(err) {
-          swal(JSON.stringify(err))
+          swal({
+            text: JSON.stringify(err)
+          })
           $scope.error = err;
           setTimeout(function() {
             $scope.error = ""
           }, 3000)
         })
       }
-      $scope.title = "ליד חדש";
+
 
       $ionicModal.fromTemplateUrl('upload.html', {
         scope: $scope,

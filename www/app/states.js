@@ -302,13 +302,17 @@ angular.module('pele.states', [])
         'menuContent@app': {
           templateUrl: function() {
             return 'app/apps/leads/menu.html';
-          }
+          },
+          controller: 'menuCtrl',
         }
-      }
+      },
+      src: [
+        "app/apps/leads/menuCtrl.js"
+      ]
     },
     {
       state: 'app.leads.lead',
-      url: '/lead',
+      url: '/lead/:type',
       params: {
         lead: {}
       },
@@ -317,17 +321,17 @@ angular.module('pele.states', [])
           templateUrl: function() {
             return 'app/apps/leads/lead.html';
           },
-          controller: 'leadsCtrl'
+          controller: 'leadCtrl'
         }
       },
       src: [
         "lib/ng-upload/ng-file-upload.min.js",
-        "app/apps/leads/leadsCtrl.js"
+        "app/apps/leads/leadCtrl.js"
       ]
     },
     {
       state: 'app.leads.report',
-      url: '/report/:personal/',
+      url: '/report/:type/',
       views: {
         'menuContent@app': {
           templateUrl: function() {

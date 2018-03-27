@@ -11,16 +11,21 @@
 
   <ion-content class="pele-background">
 
-    <div class="apps-front-menu">
-      <button ui-sref="app.leads.lead" class="button button-large button-stable button-block text-center">
-      פתיחת ליד חדש
+    <div class="apps-front-menu text-center">
+      <button ui-sref="app.leads.lead({type:'T'})" class="button button-large button-stable button-block text-center">
+    פתיחת ליד לשגרירים
     </button>
-      <button ui-sref="app.leads.report({personal:false})" class="button button-large button-stable button-block text-center">
+      <button ui-sref="app.leads.lead({type:'S'})" class="button button-large button-stable button-block text-center">
+פתיחת ליד למעקב עצמי  </button>
+      <button ui-sref="app.leads.report({type:'T'})" class="button button-large button-stable button-block text-center">
   סטאטוס לידים שפתחתי
       </button>
-      <button ui-sref="app.leads.report({personal:true})" class="button button-large button-stable button-block text-center">
+      <button ui-sref="app.leads.report({type:'S'})" class="button button-large button-stable button-block text-center">
       ניהול לידים עצמיים
       </button>
+      <button ng-click="info()" class="button button-clear  button-light ion-information-circled">
+      תקנון
+        </button>
     </div>
   </ion-content>
 </ion-view>
