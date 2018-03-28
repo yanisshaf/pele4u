@@ -9,6 +9,7 @@ angular.module('pele')
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing) {
 
 
+      $scope.type = $state.params.type;
 
       if ($state.params.type === "S") {
         $scope.title = "לידים שפתחתי";

@@ -18,7 +18,7 @@
       <ion-item ng-repeat="l in leads" class="item-icon-left">
         <div><strong>שם לקוח :</strong> {{l.FIRST_NAME}} {{l.LAST_NAME}}</div>
         <div><strong>נוצר : </strong>{{l.CREATED|date :'d/M/yyyy HH:mm'}}</div>
-        <i ng-click="showLead(l)" class="icon ion-edit"></i>
+        <i ng-show="type=='S'" ng-click="showLead(l)" class="icon ion-edit"></i>
       </ion-item>
     </ion-list>
   </ion-content>

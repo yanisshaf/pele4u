@@ -8,13 +8,16 @@ angular.module('pele', ['ngFileUpload'])
   .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing', '$templateCache', 'Upload',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing, $templateCache, Upload) {
 
-      $scope.lead = {}
+      $scope.lead = {
+        extra: {}
+      }
+
       $scope.forms = {}
       $scope.getNext = function() {
         var refStamp = new Date().getTime();
         ApiGateway.get("leads/getnext?" + refStamp).success(function(data) {
           $scope.lead.LEAD_ID = data.VAL;
-          $scope.lead.LEAD_STATE = 'D'; //Draft
+          $scope.lead.FORM_TYPE = $state.params.type; //Draft
 
         }).error(function() {})
       }
@@ -25,40 +28,32 @@ angular.module('pele', ['ngFileUpload'])
         })
       } else {
         if ($state.params.type === 'S') {
-          $scope.lead.FORM_LEAD_STATE = 'S'; //Draft
+          $scope.lead.FORM_TYPE = 'S'; //Draft
           $scope.title = "פתיחת ליד עצמי";
         } else {
-          $scope.lead.FORM_LEAD_STATE = 'T'; //Draft
+          $scope.lead.FORM_TYPE = 'T'; //Draft
           $scope.title = "פתיחת ליד לשגרירים";
         }
         $scope.getNext();
       }
 
-
-
       $scope.onValueChanged = function(leadType) {
-
-        let extraInfo = $scope.conf.extra[leadType] || [];
-        console.log("$scope.conf", extraInfo)
-        let idx = 1;
-        extraInfo.forEach(function(e) {
-          idx++;
-          e.name = e.name || "ATTRIBUTE" + idx
-        })
-        console.log($scope.extraSchema)
+        console.log(leadType)
+        let extraInfo = _.get($scope, 'typesByFormType[' + leadType + '].SETUP.attrs', []);
         $scope.extraSchema = extraInfo;
       }
+
 
       console.log("lead in ctrl  :", $scope.lead)
       $scope.extraData = {};
 
       $scope.getRelevantLeadsType = function(types) {
         $scope.typesByFormType = {};
-        Object.keys(types).forEach(function(k) {
-          if ($scope.lead.FORM_LEAD_STATE === types[k].FORM_TYPE)
-            $scope.typesByFormType[k] = types[k]
+        types.forEach(function(t) {
+          if ($scope.lead.FORM_TYPE === t.FORM_TYPE)
+            $scope.typesByFormType[t.TYPE] = t
         })
-
+        console.log('  $scope.typesByFormType:', $scope.typesByFormType)
       }
 
       $scope.getConf = function() {
@@ -103,7 +98,6 @@ angular.module('pele', ['ngFileUpload'])
 
       $scope.submit = function(leadForm) {
         console.log($scope.extraData)
-        $scope.lead.LEAD_STATE = $scope.lead.FORM_LEAD_STATE;
         $scope.submitted = true;
         console.log($scope.lead)
 
@@ -117,9 +111,14 @@ angular.module('pele', ['ngFileUpload'])
           return false;
         }
         ApiGateway.post("leads", $scope.lead).success(function(data) {
-          swal("ליד נוצר בהצלחה !")
+          swal({
+            text: "ליד נוצר בהצלחה",
+            confirmButtonText: 'אישור'
+          }).then(function(ret) {
+            $scope.lead = {};
+            $ionicHistory.goBack();
+          })
           $scope.lead = {};
-          console.log(data)
         }).error(function(err) {
           swal({
             text: JSON.stringify(err)
