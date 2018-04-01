@@ -325,6 +325,7 @@ angular.module('pele.states', [])
         }
       },
       src: [
+        "lib/angular-sanitize.min.js",
         "lib/ng-upload/ng-file-upload.min.js",
         "app/apps/leads/leadCtrl.js"
       ]

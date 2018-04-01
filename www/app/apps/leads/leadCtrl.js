@@ -1,7 +1,7 @@
 /**
  * Created by User on 25/08/2016.
  */
-angular.module('pele', ['ngFileUpload'])
+angular.module('pele', ['ngFileUpload', 'ngSanitize'])
   //=================================================================
   //==                    PAGE_4
   //=================================================================
@@ -58,7 +58,7 @@ angular.module('pele', ['ngFileUpload'])
 
       $scope.getConf = function() {
         $scope.conf = StorageService.getData("leads_conf", {})
-
+        console.log($scope.conf)
         if ($scope.conf.types) {
           $scope.getRelevantLeadsType($scope.conf.types)
           return;
@@ -110,6 +110,7 @@ angular.module('pele', ['ngFileUpload'])
           })
           return false;
         }
+
         ApiGateway.post("leads", $scope.lead).success(function(data) {
           swal({
             text: "ליד נוצר בהצלחה",
@@ -155,6 +156,17 @@ angular.module('pele', ['ngFileUpload'])
       $scope.$on('modal.removed', function() {
         // Execute action
       });
+
+      $scope.setMinDate = function(e) {
+        if (e.min) return e.min;
+        if (e.minus_days)
+          return moment().subtract(e.minus_days, "days").format("YYYY-MM-DD");
+      }
+      $scope.setMaxDate = function(e) {
+        if (e.max) return e.min;
+        if (e.plus_days)
+          return moment().add(e.plus_days, "days").format("YYYY-MM-DD");
+      }
     }
 
   ]);
