@@ -178,7 +178,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     headers['x-token'] = ApiServiceAuthParams.TOKEN;
     headers['x-pincode'] = ApiServiceAuthParams.PIN;
     headers['x-username'] = $sessionStorage.userName;
-    headers['x-msisdn'] = ($sessionStorage.PELE4U_MSISDN || appSettings.config.MSISDN_VALUE) || $localStorage.PELE4U_MSISDN;
+    headers['x-msisdn'] = ($sessionStorage.PELE4U_MSISDN || PelApi.appSettings.config.MSISDN_VALUE) || $localStorage.PELE4U_MSISDN;
     return headers;
   }
 
