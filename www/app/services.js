@@ -163,7 +163,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     });
 
   };
-}]).service('ApiGateway', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', function($http, $ionicHistory, PelApi, $sessionStorage) {
+}]).service('ApiGateway', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', '$localStorage', function($http, $ionicHistory, PelApi, $sessionStorage, $localStorage) {
 
   var env = PelApi.appSettings.env
   var urlBase = PelApi.cordovaNetwork.getNetwork() === "wifi" ? PelApi.appSettings.apiConfig.wifi_uri : PelApi.appSettings.apiConfig.uri;
