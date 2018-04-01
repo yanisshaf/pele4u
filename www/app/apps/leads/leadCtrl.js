@@ -18,7 +18,6 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
         ApiGateway.get("leads/getnext?" + refStamp).success(function(data) {
           $scope.lead.LEAD_ID = data.VAL;
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
-
         }).error(function() {})
       }
 
@@ -100,7 +99,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
         console.log($scope.extraData)
         $scope.submitted = true;
         console.log($scope.lead)
-
+        console.log("lead form errors list:", leadForm.$error)
         if (leadForm.$invalid) {
           swal({
             text: "נתוני טופס לא תקינים",
@@ -131,6 +130,31 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
         })
       }
 
+
+      $scope.uploadFile = function() {
+        var upload = Upload.upload({
+          url: ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID),
+          headers: ApiGateway.getHeaders()
+        });
+
+        upload.then(function(resp) {
+          // file is uploaded successfully
+          console.log('file ' + resp.config.data.file.name + 'is uploaded successfully. Response: ' + resp.data);
+        }, function(resp) {
+          // handle error
+        }, function(evt) {
+          // progress notify
+          console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :' + evt.config.data.file.name);
+        });
+        upload.catch(function(err) {
+          console.log("error from uipload:", err)
+        });
+        upload.finally(function() {
+          console.log("callback uploaded")
+        }, function() {
+          console.log("notify  uploaded")
+        });
+      }
 
       $ionicModal.fromTemplateUrl('upload.html', {
         scope: $scope,

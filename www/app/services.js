@@ -183,10 +183,15 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   }
 
 
-
+  function getUrl(urlStr) {
+    return urlBase + urlStr;
+  }
 
   //return PelApi.throwError("api", "ApiService.checkResponse-InvalidJsonResponse", "(httpStatus : " + httpStatus + ") " + errorMsg)
   //return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ") " + JSON.stringify(data), false)
+  this.getHeaders = buildHeader;
+  this.getUrl = getUrl;
+
   this.get = function(service, params, headers) {
     var headerParams = {
       headers: buildHeader(headers)

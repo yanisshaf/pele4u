@@ -73,11 +73,25 @@
               </label>
         <label class="item no-border item-input item-text-wrap">
                 <span class="input-label">שעות רצויות לחזרה</span>
-                <input style="border:1px solid black;border-radius:4px" ng-model="from_hour" type="time" min="8" max="20" step="1" size="3">
-                <input style="border:1px solid black;border-radius:4px" ng-model="from_hour" type="time" min="8" max="20" step="1" size="3">
+                <select name="from_hour" class="form-control" ng-model="from_hour" required />
+                    <option ng-repeat="option in from_hours" value="{{option}}">{{option}}</option>
+                </select>
+                <select name="to_hour" class="form-control" ng-model="to_hour" required />
+                    <option ng-repeat="option in to_hours" value="{{option}}">{{option}}</option>
+                </select>
+                <input style="border:1px solid black;border-radius:4px" ng-model="from_hour" type="time" min="8" max="20" step="1" size="3" required />
+                <input style="border:1px solid black;border-radius:4px" ng-model="to_hour" type="time" min="8" max="20" step="1" size="3" required />
                 <input type="datetime">
                 <!--input type="text" ng-model="lead.PREFRRED_HOURS"-->
-              </label>
+          </label>
+        <label class="item no-border item-input item-text-wrap">
+                  <span class="input-label">מאשר קבלת עדכונים על מבצעים והטבות</span>
+                  <select class="select" name="from_hour" class="form-control" ng-model="from_hour" required />
+                      <option value="">אנא בחר </option>
+                      <option value="Y">כן</option>
+                      <option value="N">לא</option>
+                  </select>
+        </label>
         <!--label class="item no-border item-input item-text-wrap">
                 <input type="time" id="exampleInput" name="input" ng-model="departureDate"
                   placeholder="HH:mm" min="08:00" max="17:00" required />
@@ -127,8 +141,8 @@
         <button ui-sref="app.leads.report({personal:false})" class="button button-large button-stable button-block item-icon-left text-right">
                גלריה  <i class="icon ion-images icon-left"></i>
       </button>
-        <button ngf-select="upload($file)" class="button button-large button-stable button-block item-icon-left text-right">
-  אחסון מכשיר   <i class="icon ion-ios-folder-outline icon-left"></i>
+        <button ngf-select="upload($file)" class="button button-large button-stable button-block item-icon-left text-right" ng-model="lead.FILE" ngf-pattern="'image/*'">
+  אחסון מכשיר   <i class=" icon ion-ios-folder-outline icon-left "></i>
       </button>
       </div>
     </ion-content>
