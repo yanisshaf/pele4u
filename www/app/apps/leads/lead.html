@@ -29,7 +29,7 @@
       </label>
       <label class="pele_rtl item-text-wrap"><small>** ליד עצמי לא יעבור להמשך טיפול אצל הגורמים השונים בפלאפון</small>
       </label-->
-      <a href="#" style="margin-top:20px;margin-left:10px" class="fab" ng-click="openModal()">
+      <a href="#" style="margin-top:7px;margin-left:7px" class="fab" ng-click="openModal()">
               <i class="icon ion-upload icon-center"></i>
       </a>
       <div class="list lead-form pele_rtl text-right">
@@ -129,22 +129,56 @@
 </ion-view>
 <script id="upload.html" type="text/ng-template">
   <ion-modal-view class="pele-background">
-    <div class="bar bar-header bar-positive">
+    <ion-header-bar class="bar bar-header bar-positive">
       <h1 class="title">צירוף קבצים לליד</h1>
       <button ng-click="closeModal()" class="button button-icon ion-close-circled"></button>
-    </div>
+    </ion-header-bar>
     <ion-content>
-      <div style="margin-top:120px" class="apps-front-menu">
+      <!--div class="apps-front-menu">
         <button ui-sref="app.leads.lead" class="button button-large button-stable button-block text-right item-icon-left">
       מצלמה <i class="icon ion-ios-camera-outline icon-left"></i>
     </button>
         <button ui-sref="app.leads.report({personal:false})" class="button button-large button-stable button-block item-icon-left text-right">
                גלריה  <i class="icon ion-images icon-left"></i>
       </button>
-        <button ngf-select="upload($file)" class="button button-large button-stable button-block item-icon-left text-right" ng-model="lead.FILE" ngf-pattern="'image/*'">
+        <button ngf-select="upload($file)" class="button button-large button-stable button-block item-icon-left text-right" ng-model="picFile" ngf-pattern="'image/*'">
   אחסון מכשיר   <i class=" icon ion-ios-folder-outline icon-left "></i>
       </button>
+    </div-->
+      <ng-form role="form" name="attachForm">
+        <div style="margin-top:20px" class="row text-center">
+          <div class="col col-33"> <button ngf-select ngf-capture="'other'" class="button  button-stable text-center" ngf-pattern="'image/*'" ng-model="picFile">
+         <i class="icon ion-ios-camera-outline"></i>
+      </button></div>
+          <div class="col col-33"> <button ngf-select ngf-capture="'camera'" class="button  button-stable   text-center" ngf-pattern="'image/*'" ng-model="picFile">
+                   <i class="icon ion-images"></i>
+        </button></div>
+          <div class="col col-33"><button ngf-select ngf-max-size="5MB" class="button  button-stable   text-center" ng-model="picFile">
+   <i class=" icon ion-ios-folder-outline"></i>
+      </button></div>
+        </div>
+        <input ng-hide="1" type="file" name="file" ng-model="picFile">
+      </ng-form>
+
+      <div style="margin-top:10px" class="row text-center">
+        <div class="col" style="padding:15%">
+          <div class="thumb-container">
+            <img ng-show="attachForm.file.$valid" ngf-thumbnail="picFile" class="upload thumb">
+          </div>
+        </div>
       </div>
+
+
+      <button class="button button-stable" ng-show="picFile">Remove</button>
+      <button class="button button-stable" ng-disabled="!attachForm.file.$valid" ng-click="uploadFile(picFile)">Submit</button>
+      <span class="progress" ng-show="picFile.progress >= 0">
+    <div style="width:{{picFile.progress}}%"
+        ng-bind="picFile.progress + '%'"></div>
+  </span>
+      <div>
+        <span ng-show="picFile.result">Upload Successful</span>
+      </div>
+      <div><span class="err" ng-show="errorMsg">{{errorMsg}}</span></div>
     </ion-content>
   </ion-modal-view>
 </script>

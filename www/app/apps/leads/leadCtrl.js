@@ -131,19 +131,48 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
       }
 
 
-      $scope.uploadFile = function() {
+      $scope.openCamera = function() {
+        var srcType = navigator.camera.PictureSourceType.CAMERA;
+        var options = {};
+        var func = createNewFileEntry;
+        navigator.camera.getPicture(function cameraSuccess(imageUri) {
+          $scope.selectedFile = imageUri;
+        }, function cameraError(error) {
+          console.debug("Unable to obtain picture: " + error, "app");
+        }, options);
+      }
+
+      $scope.openFilePicker = function() {
+        var srcType = navigator.camera.PictureSourceType.SAVEDPHOTOALBUM;
+        var options = {};
+        var func = createNewFileEntry;
+        navigator.camera.getPicture(function cameraSuccess(imageUri) {
+          $scope.selectedFile = imageUri;
+        }, function cameraError(error) {
+          console.debug("Unable to obtain picture: " + error, "app");
+        }, options);
+      }
+
+
+      $scope.uploadFile = function(picFile) {
+        console.log(picFile);
         var upload = Upload.upload({
           url: ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID),
-          headers: ApiGateway.getHeaders()
+          headers: ApiGateway.getHeaders(),
+          data: {
+            file: picFile
+          }
         });
 
         upload.then(function(resp) {
           // file is uploaded successfully
           console.log('file ' + resp.config.data.file.name + 'is uploaded successfully. Response: ' + resp.data);
-        }, function(resp) {
-          // handle error
-        }, function(evt) {
-          // progress notify
+          swal(
+            'Good job!',
+            'You clicked the button!',
+            'success'
+          )
+        }, function(error) {}, function(evt) {
           console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :' + evt.config.data.file.name);
         });
         upload.catch(function(err) {

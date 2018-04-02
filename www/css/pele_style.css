@@ -836,13 +836,13 @@ top:11px;
 .list.lead-form .item-input {padding:3px 5px 3px 3px}
 .list.lead-form label .input-label {padding:0px 0 5px 8px;line-height: 16px;font-weight: bolder}
 
-.list.lead-form .item-input input  { ;border-bottom: 1px dotted #444;padding-right:10px}
+.list.lead-form .item-input input  { ;border-bottom: 1px dotted #444;padding-right:10px !important}
 .list.lead-form .item-input textarea {border: 1px dotted #444;padding-right:10px;    min-height: 150px;
     max-height: 300px;
 }
 .fancy-select .item-note {padding-left:30px ;font-weight:bolder ;color:black}
 label.input-error {color:red !important ;margin-top:0px;padding-top:0px;padding-bottom: 2px;margin-bottom: 2px}
-.fancy-select .item {padding:10px}
+.fancy-select .item {padding:10px;margin-left: 60px;}
 #extra-lead-form label { float:right}
 
 
@@ -850,7 +850,6 @@ select.select :not([multiple]) {
     padding-right: 2.5em;
 }
  select.select  {
-
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
@@ -882,3 +881,6 @@ select.select :not([multiple]) {
     max-width: 100%;
     outline: none;
   }
+img.upload.thumb { width: 100%;
+    height: auto;}
+.thumb-container {padding:5px;border:border: 3px dashed #DDD;background:#FFF;clear: both}

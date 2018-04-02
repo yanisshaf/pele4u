@@ -5,7 +5,7 @@
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
-      <h1 class="title">הלידים שלי</h1>
+      <h1 class="title">תפריט לידים</h1>
     </div>
   </ion-nav-title>
 
@@ -23,9 +23,33 @@
       <button ui-sref="app.leads.report({type:'S'})" class="button button-large button-stable button-block text-center">
       ניהול לידים עצמיים
       </button>
-      <button ng-click="info()" class="button button-clear  button-light ion-information-circled">
+      <button ng-click="openModal()" class="button button-clear  button-light ion-information-circled">
       תקנון
         </button>
     </div>
   </ion-content>
 </ion-view>
+<script type="text/ng-template" id="leadInfo.html">
+  <ion-modal-view class="">
+    <ion-header-bar class="bar bar-header bar-positive">
+      <h1 class="title">מידע נוסף</h1>
+      <button ng-click="closeModal()" class="button button-icon ion-close-circled"></button>
+    </ion-header-bar>
+    <ion-content ng-show="info" ng-bind-html="info" class="pele_rtl">
+    </ion-content>
+    <ion-content ng-show="!info" padding="true">
+      <div class="card pele_rtl">
+        <div class="item item-text-wrap">
+          <h3>ליד לשגרירים </h3>
+          <p>הליד יעבור להמשך טיפול של צוות רלוונטי בפלאפון.</p>
+        </div>
+      </div>
+      <div class="card pele_rtl">
+        <div class="item item-text-wrap">
+          <h3>ליד למעקב עצמי</h3>
+          <p>הליד יישאר אצלך בלבד. הליד לא יעבור לגורם מטפל אחר בפלאפון.</p>
+        </div>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
