@@ -73,25 +73,29 @@
               </label>
         <label class="item no-border item-input item-text-wrap">
                 <span class="input-label">שעות רצויות לחזרה</span>
-                <select name="from_hour" class="form-control" ng-model="from_hour" required />
-                    <option ng-repeat="option in from_hours" value="{{option}}">{{option}}</option>
+                <select ng-change="recreateEndHour()" name="from_hour" class="form-control select" ng-model="lead.from_hour" required />
+                    <option ng-repeat="option in from_hour_range" ng-selected="option==lead.from_hour" value="{{option}}">{{option}}</option>
+                </select> &nbsp; - &nbsp;
+                <select name="to_hour" class="form-control select" ng-model="lead.to_hour" required />
+                    <option ng-repeat="option in to_hour_range"  ng-selected="option==lead.to_hour" value="{{option}}">{{option}}</option>
                 </select>
-                <select name="to_hour" class="form-control" ng-model="to_hour" required />
-                    <option ng-repeat="option in to_hours" value="{{option}}">{{option}}</option>
-                </select>
-                <input style="border:1px solid black;border-radius:4px" ng-model="from_hour" type="time" min="8" max="20" step="1" size="3" required />
-                <input style="border:1px solid black;border-radius:4px" ng-model="to_hour" type="time" min="8" max="20" step="1" size="3" required />
-                <input type="datetime">
-                <!--input type="text" ng-model="lead.PREFRRED_HOURS"-->
           </label>
+        <label ng-show="leadform.from_hour.$invalid &&  (leadform.from_hour.$dirty  || submitted)" class="item no-border input-error">
+              נא סמנו שעות רצויות  לחזרה
+               </label>
+
         <label class="item no-border item-input item-text-wrap">
                   <span class="input-label">מאשר קבלת עדכונים על מבצעים והטבות</span>
-                  <select class="select" name="from_hour" class="form-control" ng-model="from_hour" required />
+                  <select class="select" name="PROACTIVE_IND" class="form-control" ng-model="lead.PROACTIVE_IND" required />
                       <option value="">אנא בחר </option>
                       <option value="Y">כן</option>
                       <option value="N">לא</option>
                   </select>
         </label>
+        <label ng-show="leadform.PROACTIVE_IND.$invalid &&  (leadform.PROACTIVE_IND.$dirty  || submitted)" class="item no-border input-error">
+             נא סמנו
+       </label>
+
         <!--label class="item no-border item-input item-text-wrap">
                 <input type="time" id="exampleInput" name="input" ng-model="departureDate"
                   placeholder="HH:mm" min="08:00" max="17:00" required />
@@ -126,15 +130,15 @@
       <a class="button button-block  button-danger icon-right ion-document-text" ng-show="lead.LEAD_ID" ng-click="delete(lead.LEAD_ID)" class="title">מחק ליד עצמי</a>
     </div>
   </ng-form>
-</ion-view>
-<script id="upload.html" type="text/ng-template">
-  <ion-modal-view class="pele-background">
-    <ion-header-bar class="bar bar-header bar-positive">
-      <h1 class="title">צירוף קבצים לליד</h1>
-      <button ng-click="closeModal()" class="button button-icon ion-close-circled"></button>
-    </ion-header-bar>
-    <ion-content>
-      <!--div class="apps-front-menu">
+
+  <script id="upload.html" type="text/ng-template">
+    <ion-modal-view class="pele-background">
+      <ion-header-bar class="bar bar-header bar-positive">
+        <h1 class="title">צירוף קבצים לליד</h1>
+        <button ng-click="closeModal()" class="button button-icon ion-close-circled"></button>
+      </ion-header-bar>
+      <ion-content>
+        <!--div class="apps-front-menu">
         <button ui-sref="app.leads.lead" class="button button-large button-stable button-block text-right item-icon-left">
       מצלמה <i class="icon ion-ios-camera-outline icon-left"></i>
     </button>
@@ -145,40 +149,43 @@
   אחסון מכשיר   <i class=" icon ion-ios-folder-outline icon-left "></i>
       </button>
     </div-->
-      <ng-form role="form" name="attachForm">
-        <div style="margin-top:20px" class="row text-center">
-          <div class="col col-33"> <button ngf-select ngf-capture="'other'" class="button  button-stable text-center" ngf-pattern="'image/*'" ng-model="picFile">
+        <ng-form role="form" name="attachForm">
+          <div style="margin-top:20px" class="row text-center">
+            <div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'other'" class="button  button-stable text-center" ngf-pattern="'image/*'" ng-model="picFile">
          <i class="icon ion-ios-camera-outline"></i>
       </button></div>
-          <div class="col col-33"> <button ngf-select ngf-capture="'camera'" class="button  button-stable   text-center" ngf-pattern="'image/*'" ng-model="picFile">
+            <div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'camera'" class="button  button-stable  text-center" ngf-pattern="'image/*'" ng-model="picFile">
                    <i class="icon ion-images"></i>
         </button></div>
-          <div class="col col-33"><button ngf-select ngf-max-size="5MB" class="button  button-stable   text-center" ng-model="picFile">
+            <div class="col col-33"><button ngf-select ngf-max-size="5MB" ngf-multiple="false" class="button  button-stable   text-center" ng-model="picFile">
    <i class=" icon ion-ios-folder-outline"></i>
       </button></div>
-        </div>
-        <input ng-hide="1" type="file" name="file" ng-model="picFile">
-      </ng-form>
+          </div>
+          <input ng-hide="1" type="file" name="file" ng-model="picFile" multiple>
+        </ng-form>
 
-      <div style="margin-top:10px" class="row text-center">
-        <div class="col" style="padding:15%">
-          <div class="thumb-container">
-            <img ng-show="attachForm.file.$valid" ngf-thumbnail="picFile" class="upload thumb">
+        <div nstyle="margin-top:10px" class="row text-center">
+          <div class="col" style="padding:15%">
+            <div class="thumb-container">
+              <img ng-show="fileSrc && attachForm.file.$valid" ngf-thumbnail="picFile" class="upload thumb">
+            </div>
           </div>
         </div>
-      </div>
 
+        <button class="button button-stable" ng-show="picFile">Remove</button>
 
-      <button class="button button-stable" ng-show="picFile">Remove</button>
-      <button class="button button-stable" ng-disabled="!attachForm.file.$valid" ng-click="uploadFile(picFile)">Submit</button>
-      <span class="progress" ng-show="picFile.progress >= 0">
+        <button class="button button-stable" ng-click="uploadFile(picFile)">Submit</button>
+
+        <span class="progress" ng-show="picFile.progress >= 0">
     <div style="width:{{picFile.progress}}%"
         ng-bind="picFile.progress + '%'"></div>
   </span>
-      <div>
-        <span ng-show="picFile.result">Upload Successful</span>
-      </div>
-      <div><span class="err" ng-show="errorMsg">{{errorMsg}}</span></div>
-    </ion-content>
-  </ion-modal-view>
-</script>
+        <div>
+          ff: {{uploadState}}
+          <span ng-show="picFile.result">Upload Successful</span>
+        </div>
+        <div><span class="err" ng-show="errorMsg">{{errorMsg}}</span></div>
+      </ion-content>
+    </ion-modal-view>
+  </script>
+</ion-view>

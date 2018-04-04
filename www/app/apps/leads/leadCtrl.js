@@ -12,7 +12,30 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
         extra: {}
       }
 
+      function getHHRange(start, end, interval) {
+        return _.range(start, end, interval).map(function(e) {
+          var hh = "0" + e.toString().replace(/\./, ":").replace(/:\d+/, ":30");
+          return (hh.match(":") ? hh : hh + ":00").replace(/0(\d\d)/, '$1');
+        })
+      }
+
+      function toNumber(hhstr) {
+        return _.toNumber(hhstr.replace(":30", ".5").replace(":00", ""));
+      }
+
+      $scope.from_hour_range = getHHRange(9, 17, 0.5);
+      $scope.to_hour_range = getHHRange(9.5, 17.5, 0.5);
+
+      $scope.recreateEndHour = function() {
+        $scope.to_hour_range = getHHRange(toNumber($scope.lead.from_hour) + 0.5, 17.5, 0.5);
+      }
+
+      console.log("$scope.from_hour_range:", $scope.from_hour_range);
+      console.log("$scope.to_hour_range:", $scope.to_hour_range);
+
+
       $scope.forms = {}
+
       $scope.getNext = function() {
         var refStamp = new Date().getTime();
         ApiGateway.get("leads/getnext?" + refStamp).success(function(data) {
@@ -23,7 +46,10 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
 
       if ($state.params.lead && $state.params.lead.LEAD_ID) {
         PelApi.safeApply($scope, function() {
-          $scope.lead = $state.params.lead
+          $scope.lead = $state.params.lead;
+          var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/);
+          $scope.lead.from_hour = found[1];
+          $scope.lead.to_hour = found[2];
         })
       } else {
         if ($state.params.type === 'S') {
@@ -100,6 +126,8 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
         $scope.submitted = true;
         console.log($scope.lead)
         console.log("lead form errors list:", leadForm.$error)
+        $scope.lead.PREFERRED_HOURS = $scope.lead.from_hour + " - " + $scope.lead.to_hour
+        console.log("$scope.lead.PREFERRED_HOURS", $scope.lead.PREFERRED_HOURS)
         if (leadForm.$invalid) {
           swal({
             text: "נתוני טופס לא תקינים",
@@ -154,9 +182,16 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
       }
 
 
+      $scope.uploadState = {};
+
+
       $scope.uploadFile = function(picFile) {
-        console.log(picFile);
-        var upload = Upload.upload({
+        $scope.uploadState = {
+          src: picFile,
+          state: "start"
+        }
+
+        picFile.upload = Upload.upload({
           url: ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID),
           headers: ApiGateway.getHeaders(),
           data: {
@@ -164,24 +199,30 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           }
         });
 
-        upload.then(function(resp) {
+        picFile.upload.then(function(resp) {
           // file is uploaded successfully
-          console.log('file ' + resp.config.data.file.name + 'is uploaded successfully. Response: ' + resp.data);
-          swal(
-            'Good job!',
-            'You clicked the button!',
-            'success'
-          )
-        }, function(error) {}, function(evt) {
-          console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :' + evt.config.data.file.name);
-        });
-        upload.catch(function(err) {
-          console.log("error from uipload:", err)
-        });
-        upload.finally(function() {
-          console.log("callback uploaded")
-        }, function() {
-          console.log("notify  uploaded")
+          console.log('file ' + resp.config.data.file.name + 'is uploaded successfully. Response: ', resp.data);
+          $scope.uploadState = {
+            src: picFile,
+            state: "success",
+            server: resp.data
+          }
+
+
+        }, function(error) {
+          $scope.uploadState = {
+            src: picFile,
+            state: "error",
+            server: error
+          }
+
+        }, function(evt) {
+          var percent = parseInt(100.0 * evt.loaded / evt.total);
+          $scope.uploadState = {
+            src: picFile,
+            state: "progress",
+            percent: percent
+          }
         });
       }
 

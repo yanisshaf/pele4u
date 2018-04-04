@@ -9,11 +9,11 @@
   </author>
     <platform name="android">
         <allow-intent href="market:*" />
-        <config-file target="AndroidManifest.xml" parent="/manifest">
+        <!--config-file target="AndroidManifest.xml" parent="/manifest">
           <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
           <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
           <uses-permission android:name="android.permission.CAMERA" />
-        </config-file>
+        </config-file-->
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
