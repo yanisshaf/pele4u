@@ -75,7 +75,7 @@
                 <span class="input-label">שעות רצויות לחזרה</span>
                 <select ng-change="recreateEndHour()" name="from_hour" class="form-control select" ng-model="lead.from_hour" required />
                     <option ng-repeat="option in from_hour_range" ng-selected="option==lead.from_hour" value="{{option}}">{{option}}</option>
-                </select> &nbsp; - &nbsp;
+                </select> &nbsp;  &nbsp;  &nbsp; - &nbsp; &nbsp; &nbsp;
                 <select name="to_hour" class="form-control select" ng-model="lead.to_hour" required />
                     <option ng-repeat="option in to_hour_range"  ng-selected="option==lead.to_hour" value="{{option}}">{{option}}</option>
                 </select>
