@@ -58,7 +58,7 @@ angular.module('pele', ['ngSanitize'])
           console.log("got camera success ", imageUri);
           window.FilePath.resolveNativePath(imageUri, function(path) {
             PelApi.safeApply($scope, function() {
-              $scope.imageUri = fileEntry.nativeURL;
+              $scope.imageUri = path;
             });
           }, function(err) {
 
