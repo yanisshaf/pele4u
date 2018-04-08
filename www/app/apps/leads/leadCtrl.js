@@ -35,13 +35,14 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
       */
 
       $scope.takePic = function(sourceType) {
+        $scope.imageUri = "";
 
         var options = {
           quality: 50,
           encodingType: Camera.EncodingType.JPEG,
           sourceType: Camera.PictureSourceType.CAMERA,
           encodingType: 0,
-          destinationType: Camera.DestinationType.NATIVE_URI,
+          destinationType: Camera.DestinationType.FILE_URI,
           saveToPhotoAlbum: true
 
         };
@@ -53,6 +54,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
         }
 
         $cordovaCamera.getPicture(options).then(function(imageURI) {
+
           //console.log("got camera success ", imageURI);
           window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
             $scope.fileEntry = fileEntry
@@ -258,6 +260,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           console.log("Code = " + r.responseCode);
           console.log("Response = " + r.response);
           console.log("Sent = " + r.bytesSent);
+          $scope.imageUri = "";
         }
 
         function fail(error) {
