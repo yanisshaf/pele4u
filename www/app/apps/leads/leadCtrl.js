@@ -37,9 +37,12 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
       $scope.takePic = function(sourceType) {
         var options = {
           quality: 50,
+          encodingType: Camera.EncodingType.JPEG,
           sourceType: Camera.PictureSourceType.CAMERA,
           encodingType: 0,
-          destinationType: Camera.DestinationType.FILE_URI
+          destinationType: Camera.DestinationType.NATIVE_URI,
+          saveToPhotoAlbum: true
+
         };
 
         if (sourceType === 'CAMERA') {
@@ -79,6 +82,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
       $scope.recreateEndHour = function() {
         $scope.to_hour_range = getHHRange(toNumber($scope.lead.from_hour) + 0.5, 17.5, 0.5);
       }
+
 
       console.log("$scope.from_hour_range:", $scope.from_hour_range);
       console.log("$scope.to_hour_range:", $scope.to_hour_range);
