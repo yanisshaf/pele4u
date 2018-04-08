@@ -1,12 +1,12 @@
 /**
  * Created by User on 25/08/2016.
  */
-angular.module('pele', ['ngFileUpload', 'ngSanitize'])
+angular.module('pele', ['ngSanitize'])
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaCamera', '$templateCache', '$cordovaFileTransfer',
-    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaCamera, $templateCache) {
+  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$templateCache', '$cordovaFileTransfer',
+    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $templateCache) {
 
       /* var uploadPhotoOptions = {
         quality: 50,
@@ -54,10 +54,9 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
         }
 
-        $cordovaCamera.getPicture(options).then(function(imageURI) {
-
-          //console.log("got camera success ", imageURI);
-          window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
+        navigator.camera.getPicture(function(imageUri) {
+          console.log("got camera success ", imageUri);
+          window.resolveLocalFileSystemURL(imageUri, function(fileEntry) {
             $scope.fileEntry = fileEntry
             PelApi.safeApply($scope, function() {
               $scope.imageUri = fileEntry.nativeURL;
@@ -69,7 +68,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
 
         }, function(err) {
           console.log("takePic err:", err)
-        });
+        }, options);
 
         return true;
       }
