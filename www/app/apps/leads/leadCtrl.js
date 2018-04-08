@@ -37,16 +37,15 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
       $scope.takePic = function(sourceType) {
         var options = {
           quality: 50,
-          destinationType: destinationType,
-          sourceType: pictureSource,
+          sourceType: Camera.PictureSourceType.CAMERA,
           encodingType: 0,
-          destinationType: navigator.camera.DestinationType.FILE_URI
+          destinationType: Camera.DestinationType.FILE_URI
         };
 
         if (sourceType === 'CAMERA') {
-          options.pictureSource = navigator.camera.PictureSourceType.CAMERA;
+          options.sourceType = Camera.PictureSourceType.CAMERA;
         } else {
-          options.pictureSource = navigator.camera.PictureSourceType.PHOTOLIBRARY;
+          options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
         }
 
         $cordovaCamera.getPicture(options).then(function(imageURI) {

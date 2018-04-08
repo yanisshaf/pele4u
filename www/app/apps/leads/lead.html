@@ -161,7 +161,8 @@
             test 3: <input type="file" accept="image/*" capture>
           </div>
           <div>
-            <button class="button  button-stable  text-center" ng-click="takePic()">Take a pic </button>
+            <button class="button  button-stable  text-center" ng-click="takePic('CAMERA')">Take a pic from camera</button>
+            <button class="button  button-stable  text-center" ng-click="takePic('LIBRARY')">Take a pic from library</button>
           </div>
           <div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'other'" class="button  button-stable text-center" ngf-pattern="'image/*'" ng-model="picFile">
          <i class="icon ion-ios-camera-outline"></i>
