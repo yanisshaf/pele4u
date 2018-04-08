@@ -5,9 +5,40 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing', '$templateCache', 'Upload',
-    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing, $templateCache, Upload) {
+  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaCamera', '$templateCache', 'Upload',
+    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaCamera, $templateCache, Upload) {
 
+      var uploadPhotoOptions = {
+        quality: 50,
+        destinationType: Camera.DestinationType.DATA_URL, //FILE_URI, NATIVE_URI, or DATA_URL. DATA_URL could produce memory issues.
+        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+        encodingType: Camera.EncodingType.JPEG,
+        allowEdit: true,
+        targetWidth: 300,
+        targetHeight: 300,
+        saveToPhotoAlbum: false,
+      };
+
+
+      uploadPhotoOptions.sourceType = Camera.PictureSourceType.CAMERA;
+      //    uploadPhotoOptions.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
+      function takePictureSuccess(success) {
+        vm.userProfile.image = "data:image/jpeg;base64," + success; //this is how I store the image to firebase
+      };
+
+      function takePictureError(error) {
+        $ionicPopup.alert({
+          title: 'Photo Error',
+          template: error,
+        });
+      };
+
+      $scope.takePic = function() {
+        $cordovaCamera.getPicture(uploadPhotoOptions).then(takePictureSuccess, takePictureError);
+
+        return true;
+
+      }
       $scope.lead = {
         extra: {}
       }
