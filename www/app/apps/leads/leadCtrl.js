@@ -35,6 +35,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
       */
 
       $scope.takePic = function(sourceType) {
+
         var options = {
           quality: 50,
           encodingType: Camera.EncodingType.JPEG,
@@ -59,14 +60,14 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           }, function(e) {
             $scope.fileError = e
           });
-
         }, function(err) {
           console.log("takePic err:", err)
-        }, );
+        });
 
         return true;
 
       }
+
       $scope.lead = {
         extra: {}
       }

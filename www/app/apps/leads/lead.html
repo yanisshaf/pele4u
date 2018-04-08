@@ -163,7 +163,7 @@
             <button class="button  button-stable  text-center" ng-click="takePic('CAMERA')">Take a pic from camera</button>
             <button class="button  button-stable  text-center" ng-click="takePic('LIBRARY')">Take a pic from library</button>
           </div>
-          <div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'other'" class="button  button-stable text-center" ngf-pattern="'image/*'" ng-model="picFile">
+          <!--div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'other'" class="button  button-stable text-center" ngf-pattern="'image/*'" ng-model="picFile">
          <i class="icon ion-ios-camera-outline"></i>
       </button></div>
           <div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'camera'" class="button  button-stable  text-center" ngf-pattern="'image/*'" ng-model="picFile">
@@ -171,36 +171,25 @@
         </button></div>
           <div class="col col-33"><button ngf-select ngf-max-size="5MB" ngf-multiple="false" class="button  button-stable   text-center" ng-model="picFile">
    <i class=" icon ion-ios-folder-outline"></i>
-      </button></div>
-          </div>
+ </button></div-->
+
 
         </ng-form>
 
         <div nstyle="margin-top:10px" class="row text-center">
           <div class="col" style="padding:15%">
             <div class="thumb-container">
-              <img ng-src="imageUri" class="upload thumb">
+              <img style="height:40px" ng-if="imageUri" ng-src="imageUri" class="upload thumb">
             </div>
           </div>
         </div>
         <div nstyle="margin-top:10px" class="row text-center">
           <div class="col" style="padding:15%">
             <div class="thumb-container">
-              -- fileError:{{fileError}} --
-              <img ng-src="fileError" class="upload thumb">
+              <img style="height:40px" ng-src="{{imageUri}}" class="upload thumb">
             </div>
           </div>
         </div>
-
-        <div nstyle="margin-top:10px" class="row text-center">
-          <div class="col" style="padding:15%">
-            <div class="thumb-container">
-              -- imageUri:{{imageUri}} --
-              <img ng-src="imageUri" class="upload thumb">
-            </div>
-          </div>
-        </div>
-
         <button class="button button-stable" ng-show="imageUri">Remove</button>
 
         <button class="button button-stable" ng-click="uploadFile(imageUri)">Submit</button>
