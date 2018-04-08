@@ -53,12 +53,13 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
 
         $cordovaCamera.getPicture(options).then(function(imageURI) {
           //console.log("got camera success ", imageURI);
-          window.resolveLocalFileSystemURI(imageURI, function(fileEntry) {
+          window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
             $scope.fileEntry = fileEntry
+            $scope.imageUri = fileEntry.nativeURL;
           }, function(e) {
             $scope.fileError = e
           });
-          $scope.imageUri = imageURI;
+
         }, function(err) {
           console.log("takePic err:", err)
         }, );

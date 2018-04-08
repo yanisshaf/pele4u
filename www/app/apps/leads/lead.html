@@ -137,7 +137,7 @@
         <h1 class="title">צירוף קבצים לליד</h1>
         <button ng-click="closeModal()" class="button button-icon ion-close-circled"></button>
       </ion-header-bar>
-      <ion-content>
+      <ion-content scroll="true">
         <!--div class="apps-front-menu">
         <button ui-sref="app.leads.lead" class="button button-large button-stable button-block text-right item-icon-left">
       מצלמה <i class="icon ion-ios-camera-outline icon-left"></i>
@@ -150,8 +150,7 @@
       </button>
     </div-->
         <ng-form role="form" name="attachForm">
-          <div style="margin-top:20px" class="row text-center">
-
+          <!--div style="margin-top:20px" class="row text-center">
             teste 1 : <input type="file" capture="camera" accept="image/*">
           </div>
           <div>
@@ -159,7 +158,7 @@
           </div>
           <div>
             test 3: <input type="file" accept="image/*" capture>
-          </div>
+          </div-->
           <div>
             <button class="button  button-stable  text-center" ng-click="takePic('CAMERA')">Take a pic from camera</button>
             <button class="button  button-stable  text-center" ng-click="takePic('LIBRARY')">Take a pic from library</button>
@@ -180,8 +179,7 @@
         <div nstyle="margin-top:10px" class="row text-center">
           <div class="col" style="padding:15%">
             <div class="thumb-container">
-              -- fileEntry:{{fileEntry}} --
-              <img ng-src="fileEntry" class="upload thumb">
+              <img ng-src="imageUri" class="upload thumb">
             </div>
           </div>
         </div>
