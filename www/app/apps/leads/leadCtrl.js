@@ -5,8 +5,8 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaCamera', '$templateCache', 'Upload',
-    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaCamera, $templateCache, Upload) {
+  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$templateCache', '$cordovaFileTransfer',
+    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaCamera, $templateCache) {
 
       /* var uploadPhotoOptions = {
         quality: 50,
@@ -41,7 +41,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           encodingType: Camera.EncodingType.JPEG,
           sourceType: Camera.PictureSourceType.CAMERA,
           encodingType: 0,
-          destinationType: Camera.DestinationType.NATIVE_URI,
+          destinationType: Camera.DestinationType.FILE_URI,
           saveToPhotoAlbum: true
 
         };
@@ -54,18 +54,19 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
 
         $cordovaCamera.getPicture(options).then(function(imageURI) {
           //console.log("got camera success ", imageURI);
-          window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
-            $scope.fileEntry = fileEntry
-            $scope.imageUri = fileEntry.nativeURL;
-          }, function(e) {
-            $scope.fileError = e
-          });
+          $scope.imageUri = imageURI;
+          /*  window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
+              $scope.fileEntry = fileEntry
+              $scope.imageUri = fileEntry.nativeURL;
+            }, function(e) {
+              $scope.fileError = e
+            });
+            */
         }, function(err) {
           console.log("takePic err:", err)
         });
 
         return true;
-
       }
 
       $scope.lead = {
@@ -252,40 +253,40 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           state: "start"
         }
 
-        picFile.upload = Upload.upload({
-          url: ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID),
-          headers: ApiGateway.getHeaders(),
-          data: {
-            file: picFile
-          }
-        });
+        function win(r) {
+          console.log("Code = " + r.responseCode);
+          console.log("Response = " + r.response);
+          console.log("Sent = " + r.bytesSent);
+        }
 
-        picFile.upload.then(function(resp) {
-          // file is uploaded successfully
-          console.log('file ' + resp.config.data.file.name + 'is uploaded successfully. Response: ', resp.data);
-          $scope.uploadState = {
-            src: picFile,
-            state: "success",
-            server: resp.data
-          }
+        function fail(error) {
+          alert("An error has occurred: Code = " + error.code);
+          console.log("upload error source " + error.source);
+          console.log("upload error target " + error.target);
+        }
+        var uri = encodeURI(ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID));
+        var options = new FileUploadOptions();
+        var params = {};
+        params.file = picFile;
+        params.title = "hello title";
+        options.params = params;
 
+        var headers = ApiGateway.getHeaders();
+        options.headers = headers;
 
-        }, function(error) {
-          $scope.uploadState = {
-            src: picFile,
-            state: "error",
-            server: error
-          }
+        var ft = new FileTransfer();
 
-        }, function(evt) {
-          var percent = parseInt(100.0 * evt.loaded / evt.total);
-          $scope.uploadState = {
-            src: picFile,
-            state: "progress",
-            percent: percent
+        ft.onprogress = function(progressEvent) {
+          if (progressEvent.lengthComputable) {
+            $scope.pregress = progressEvent.loaded / progressEvent.total;
+          } else {
+            $scope.increment++;
           }
-        });
+        };
+
+        ft.upload(fileURL, uri, win, fail, options);
       }
+
 
       $ionicModal.fromTemplateUrl('upload.html', {
         scope: $scope,
