@@ -254,6 +254,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
         }
 
         function win(r) {
+          alert("success :" + r.response.success)
           console.log("Code = " + r.responseCode);
           console.log("Response = " + r.response);
           console.log("Sent = " + r.bytesSent);
