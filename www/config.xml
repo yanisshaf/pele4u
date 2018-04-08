@@ -9,11 +9,10 @@
   </author>
     <platform name="android">
         <allow-intent href="market:*" />
-        <config-file target="AndroidManifest.xml" parent="/*" mode="merge">
       <uses-permission android:name="android.permission.CAMERA" />
       <uses-feature android:name="android.hardware.camera" />
       <uses-feature android:name="android.hardware.camera.autofocus" />
-  </config-file>
+
         <!--config-file target="AndroidManifest.xml" parent="/manifest">
           <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
           <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
