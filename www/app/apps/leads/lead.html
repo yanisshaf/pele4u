@@ -159,19 +159,14 @@
           <div>
             test 3: <input type="file" accept="image/*" capture>
           </div-->
-          <div>
-            <button class="button  button-stable  text-center" ng-click="takePic('CAMERA')">Take a pic from camera</button>
-            <button class="button  button-stable  text-center" ng-click="takePic('LIBRARY')">Take a pic from library</button>
+          <div style="margin-top:20px" class="row text-center">
+            <div class="col col-50">
+              <button class="button  button-stable  text-center" ng-click="takePic('CAMERA')"><i class="icon ion-ios-camera-outline"></i> מצלמה</button>
+            </div>
+            <div class="col col-50">
+              <button class="button  button-stable  text-center" ng-click="takePic('LIBRARY')"><i class="icon ion-images"></i> גלריה</button>
+            </div>
           </div>
-          <!--div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'other'" class="button  button-stable text-center" ngf-pattern="'image/*'" ng-model="picFile">
-         <i class="icon ion-ios-camera-outline"></i>
-      </button></div>
-          <div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'camera'" class="button  button-stable  text-center" ngf-pattern="'image/*'" ng-model="picFile">
-                   <i class="icon ion-images"></i>
-        </button></div>
-          <div class="col col-33"><button ngf-select ngf-max-size="5MB" ngf-multiple="false" class="button  button-stable   text-center" ng-model="picFile">
-   <i class=" icon ion-ios-folder-outline"></i>
- </button></div-->
 
           {{imageUri}}
         </ng-form>
@@ -180,15 +175,17 @@
         <div ng-if="imageUri" nstyle="margin-top:10px" class="row text-center">
           <div class="col" style="padding:15%">
             <div class="thumb-container">
-              <img style="height:40px" ng-src="{{imageUri}}" class="upload thumb">
+              <img style="height:100px;width:auto" ng-src="{{imageUri}}" class="upload thumb">
             </div>
           </div>
         </div>
 
-        <button class="button button-stable" ng-show="imageUri">Remove</button>
-
-        <button class="button button-stable" ng-click="uploadFile()">Submit</button>
-
+        <!--button class="button button-stable" ng-show="imageUri">Remove</button-->
+        <div ng-show="imageUri" style="margin-top:20px" class="row text-center">
+          <div class="col">
+            <button class="button button-stable" ng-click="uploadFile()"><i class="icon ion-paper-airplane"></i> שלח</button>
+          </div>
+        </div>
         <span class="progress" ng-show="progress >= 0">
     <div style="width:{{progress}}%"
         ng-bind="progress + '%'"></div>

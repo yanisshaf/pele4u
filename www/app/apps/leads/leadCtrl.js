@@ -40,13 +40,12 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
         });
 
         var options = {
-          quality: 50,
+          quality: 75,
           encodingType: Camera.EncodingType.JPEG,
           sourceType: Camera.PictureSourceType.CAMERA,
-          encodingType: 0,
+          encodingType: Camera.EncodingType.JPEG,
           destinationType: Camera.DestinationType.FILE_URI,
           saveToPhotoAlbum: true
-
         };
 
         if (sourceType === 'CAMERA') {
