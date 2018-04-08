@@ -151,13 +151,26 @@
     </div-->
         <ng-form role="form" name="attachForm">
           <div style="margin-top:20px" class="row text-center">
-            <div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'other'" class="button  button-stable text-center" ngf-pattern="'image/*'" ng-model="picFile">
+
+            teste 1 : <input type="file" capture="camera" accept="image/*">
+          </div>
+          <div>
+            test 2: <input type="file" accept="image/*;capture=camera">
+          </div>
+          <div>
+            test 3: <input type="file" accept="image/*" capture>
+          </div>
+          <div>
+            <h3>test 4 (capture bool, video)</h3>
+            <input type="file" accept="video/*" capture>
+          </div>
+          <div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'other'" class="button  button-stable text-center" ngf-pattern="'image/*'" ng-model="picFile">
          <i class="icon ion-ios-camera-outline"></i>
       </button></div>
-            <div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'camera'" class="button  button-stable  text-center" ngf-pattern="'image/*'" ng-model="picFile">
+          <div class="col col-33"> <button ngf-select ngf-multiple="false" ngf-capture="'camera'" class="button  button-stable  text-center" ngf-pattern="'image/*'" ng-model="picFile">
                    <i class="icon ion-images"></i>
         </button></div>
-            <div class="col col-33"><button ngf-select ngf-max-size="5MB" ngf-multiple="false" class="button  button-stable   text-center" ng-model="picFile">
+          <div class="col col-33"><button ngf-select ngf-max-size="5MB" ngf-multiple="false" class="button  button-stable   text-center" ng-model="picFile">
    <i class=" icon ion-ios-folder-outline"></i>
       </button></div>
           </div>
