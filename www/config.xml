@@ -9,6 +9,11 @@
   </author>
     <platform name="android">
         <allow-intent href="market:*" />
+        <custom-config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.CAMERA" />
+          </custom-config-file>
         <!--config-file target="AndroidManifest.xml" parent="/manifest">
           <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
           <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
