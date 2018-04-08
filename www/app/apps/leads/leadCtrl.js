@@ -8,7 +8,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
   .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaCamera', '$templateCache', 'Upload',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaCamera, $templateCache, Upload) {
 
-      var uploadPhotoOptions = {
+      /* var uploadPhotoOptions = {
         quality: 50,
         destinationType: Camera.DestinationType.DATA_URL, //FILE_URI, NATIVE_URI, or DATA_URL. DATA_URL could produce memory issues.
         sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
@@ -32,9 +32,29 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           template: error,
         });
       };
+      */
 
-      $scope.takePic = function() {
-        $cordovaCamera.getPicture(uploadPhotoOptions).then(takePictureSuccess, takePictureError);
+      $scope.takePic = function(sourceType) {
+        var options = {
+          quality: 50,
+          destinationType: destinationType,
+          sourceType: pictureSource,
+          encodingType: 0,
+          destinationType: navigator.camera.DestinationType.FILE_URI
+        };
+
+        if (sourceType === 'CAMERA') {
+          options.pictureSource = navigator.camera.PictureSourceType.CAMERA;
+        } else {
+          options.pictureSource = navigator.camera.PictureSourceType.PHOTOLIBRARY;
+        }
+
+        $cordovaCamera.getPicture(options).then(function(imageURI) {
+          //console.log("got camera success ", imageURI);
+          $scope.imageUri = imageURI;
+        }, function(err) {
+          console.log("takePic err:", err)
+        }, );
 
         return true;
 
