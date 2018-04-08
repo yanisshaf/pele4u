@@ -41,7 +41,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           encodingType: Camera.EncodingType.JPEG,
           sourceType: Camera.PictureSourceType.CAMERA,
           encodingType: 0,
-          destinationType: Camera.DestinationType.FILE_URI,
+          destinationType: Camera.DestinationType.NATIVE_URI,
           saveToPhotoAlbum: true
 
         };
@@ -247,7 +247,8 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
       $scope.uploadState = {};
 
 
-      $scope.uploadFile = function(picFile) {
+      $scope.uploadFile = function() {
+        picFile = $scope.imageUri;
         $scope.uploadState = {
           src: picFile,
           state: "start"
@@ -278,13 +279,13 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
 
         ft.onprogress = function(progressEvent) {
           if (progressEvent.lengthComputable) {
-            $scope.pregress = progressEvent.loaded / progressEvent.total;
+            $scope.pregress = progressEvent.loaded / (progressEvent.total + 1);
           } else {
             $scope.increment++;
           }
         };
 
-        ft.upload(fileURL, uri, win, fail, options);
+        ft.upload(picFile, uri, win, fail, options);
       }
 
 
