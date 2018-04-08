@@ -86,12 +86,8 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       });
     }
   ])
-  .config([’$compileProvider’,
-    function($compileProvider) {
-      $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image/ / );
-    }
-  ])
-  .config(function($stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
+  .config(function($compileProvider, $stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
     $ionicConfigProvider.navBar.alignTitle('center');
