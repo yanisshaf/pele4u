@@ -56,7 +56,15 @@ angular.module('pele', ['ngSanitize'])
 
         navigator.camera.getPicture(function(imageUri) {
           console.log("got camera success ", imageUri);
-          window.resolveLocalFileSystemURL(imageUri, function(fileEntry) {
+          window.FilePath.resolveNativePath(imageUri, function(path) {
+            PelApi.safeApply($scope, function() {
+              $scope.imageUri = fileEntry.nativeURL;
+            });
+          }, function(err) {
+
+          });
+
+          /*  window.resolveLocalFileSystemURL(imageUri, function(fileEntry) {
             $scope.fileEntry = fileEntry
             PelApi.safeApply($scope, function() {
               $scope.imageUri = fileEntry.nativeURL;
@@ -65,7 +73,7 @@ angular.module('pele', ['ngSanitize'])
           }, function(e) {
             $scope.fileError = e
           });
-
+*/
         }, function(err) {
           console.log("takePic err:", err)
         }, options);
