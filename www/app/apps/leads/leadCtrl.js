@@ -54,14 +54,13 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
 
         $cordovaCamera.getPicture(options).then(function(imageURI) {
           //console.log("got camera success ", imageURI);
-          $scope.imageUri = imageURI;
-          /*  window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
-              $scope.fileEntry = fileEntry
-              $scope.imageUri = fileEntry.nativeURL;
-            }, function(e) {
-              $scope.fileError = e
-            });
-            */
+          window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
+            $scope.fileEntry = fileEntry
+            $scope.imageUri = fileEntry.nativeURL;
+          }, function(e) {
+            $scope.fileError = e
+          });
+          */
         }, function(err) {
           console.log("takePic err:", err)
         });
@@ -261,10 +260,11 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
         }
 
         function fail(error) {
-          alert("An error has occurred: Code = " + error.code);
+          //alert("An error has occurred: Code = " + error.code);
           console.log("upload error source " + error.source);
           console.log("upload error target " + error.target);
         }
+
         var uri = encodeURI(ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID));
         var options = new FileUploadOptions();
         var params = {};

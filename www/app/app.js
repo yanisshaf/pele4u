@@ -86,6 +86,11 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
       });
     }
   ])
+  .config([’$compileProvider’,
+    function($compileProvider) {
+      $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image/ / );
+    }
+  ])
   .config(function($stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
