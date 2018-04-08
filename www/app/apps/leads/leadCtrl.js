@@ -35,7 +35,9 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
       */
 
       $scope.takePic = function(sourceType) {
-        $scope.imageUri = "";
+        PelApi.safeApply($scope, function() {
+          $scope.imageUri = "";
+        });
 
         var options = {
           quality: 50,
@@ -58,7 +60,10 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           //console.log("got camera success ", imageURI);
           window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
             $scope.fileEntry = fileEntry
-            $scope.imageUri = fileEntry.nativeURL;
+            PelApi.safeApply($scope, function() {
+              $scope.imageUri = fileEntry.nativeURL;
+            });
+
           }, function(e) {
             $scope.fileError = e
           });
@@ -222,29 +227,6 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
       }
 
 
-      $scope.openCamera = function() {
-        var srcType = navigator.camera.PictureSourceType.CAMERA;
-        var options = {};
-        var func = createNewFileEntry;
-        navigator.camera.getPicture(function cameraSuccess(imageUri) {
-          $scope.selectedFile = imageUri;
-        }, function cameraError(error) {
-          console.debug("Unable to obtain picture: " + error, "app");
-        }, options);
-      }
-
-      $scope.openFilePicker = function() {
-        var srcType = navigator.camera.PictureSourceType.SAVEDPHOTOALBUM;
-        var options = {};
-        var func = createNewFileEntry;
-        navigator.camera.getPicture(function cameraSuccess(imageUri) {
-          $scope.selectedFile = imageUri;
-        }, function cameraError(error) {
-          console.debug("Unable to obtain picture: " + error, "app");
-        }, options);
-      }
-
-
       $scope.uploadState = {};
 
 
@@ -260,8 +242,13 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           console.log("Code = " + r.responseCode);
           console.log("Response = " + r.response);
           console.log("Sent = " + r.bytesSent);
-          $scope.imageUri = "";
+
+          PelApi.safeApply($scope, function() {
+            $scope.uploadState = r.response
+            $scope.imageUri = "";
+          });
         }
+
 
         function fail(error) {
           //alert("An error has occurred: Code = " + error.code);
@@ -283,7 +270,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
 
         ft.onprogress = function(progressEvent) {
           if (progressEvent.lengthComputable) {
-            $scope.pregress = progressEvent.loaded / (progressEvent.total + 1);
+            $scope.progress = progressEvent.loaded / (progressEvent.total + 1);
           } else {
             $scope.increment++;
           }
@@ -300,6 +287,9 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
         $scope.modal = modal;
       });
       $scope.openModal = function() {
+        PelApi.safeApply($scope, function() {
+          $scope.imageUri = "";
+        });
         $scope.modal.show();
       };
       $scope.closeModal = function() {
