@@ -60,7 +60,7 @@ angular.module('pele', ['ngFileUpload', 'ngSanitize'])
           }, function(e) {
             $scope.fileError = e
           });
-          */
+
         }, function(err) {
           console.log("takePic err:", err)
         });
