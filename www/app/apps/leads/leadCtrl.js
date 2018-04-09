@@ -49,7 +49,10 @@ angular.module('pele', ['ngSanitize'])
           sourceType: Camera.PictureSourceType.CAMERA,
           encodingType: Camera.EncodingType.JPEG,
           destinationType: Camera.DestinationType.FILE_URI,
-          saveToPhotoAlbum: true
+          targetWidth: 794,
+          targetHeight: 1024,
+          saveToPhotoAlbum: false,
+          correctOrientation: true
         };
 
         if (sourceType === 'CAMERA') {
@@ -280,7 +283,7 @@ angular.module('pele', ['ngSanitize'])
         params.file = picFile;
         params.title = "hello title";
         options.params = params;
-
+        options.chunkedMode = false;
         var headers = ApiGateway.getHeaders();
         options.headers = headers;
 
@@ -293,7 +296,7 @@ angular.module('pele', ['ngSanitize'])
             $scope.increment++;
           }
         };
-        ft.upload(picFile, uri, win, fail, options);
+        ft.upload(picFile, uri, win, fail, options, true);
       }
 
 
