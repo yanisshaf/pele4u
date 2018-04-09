@@ -44,7 +44,7 @@ angular.module('pele', ['ngSanitize'])
         });
 
         var options = {
-          quality: 75,
+          quality: 100,
           encodingType: Camera.EncodingType.JPEG,
           sourceType: Camera.PictureSourceType.CAMERA,
           encodingType: Camera.EncodingType.JPEG,
