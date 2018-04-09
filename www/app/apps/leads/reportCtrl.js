@@ -24,8 +24,8 @@ angular.module('pele')
         ApiGateway.get("leads/conf").success(function(data) {
           StorageService.set("leads_conf", data, 1000 * 60 * 60)
           $scope.conf = data;
-        }).error(function(err) {
-          alert("Error get conf for leads application")
+        }).error(function(error, httpStatus, headers, config) {
+          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
         })
       }
 
@@ -37,13 +37,12 @@ angular.module('pele')
       }
 
       $scope.getData = function() {
-
         ApiGateway.get("leads/", {
           type: $state.params.type
         }).success(function(data) {
           $scope.leads = data;
-        }).error(function(err) {
-          alert("Error get leads")
+        }).error(function(error, httpStatus, headers, config) {
+          PelApi.throwError("api", "fetch leads list by type ", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
         })
       }
 

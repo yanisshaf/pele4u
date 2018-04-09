@@ -7,7 +7,7 @@ angular.module('pele', ['ngSanitize'])
   //=================================================================
   .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$templateCache', '$cordovaFileTransfer',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $templateCache) {
-
+      $scope.imageUri = "https://www.istockphoto.com/resources/images/PhotoFTLP/img_67920257.jpg";
       /* var uploadPhotoOptions = {
         quality: 50,
         destinationType: Camera.DestinationType.DATA_URL, //FILE_URI, NATIVE_URI, or DATA_URL. DATA_URL could produce memory issues.
@@ -56,13 +56,19 @@ angular.module('pele', ['ngSanitize'])
 
         navigator.camera.getPicture(function(imageUri) {
           console.log("got camera success ", imageUri);
-          window.FilePath.resolveNativePath(imageUri, function(path) {
-            PelApi.safeApply($scope, function() {
-              $scope.imageUri = path;
-            });
-          }, function(err) {
+          if (PelApi.isAndroid) {
+            window.FilePath.resolveNativePath(imageUri, function(path) {
+              PelApi.safeApply($scope, function() {
+                $scope.imageUri = path;
+              });
+            }, function(err) {
 
+            });
+          }
+          PelApi.safeApply($scope, function() {
+            $scope.imageUri = imageUri;
           });
+
 
           /*  window.resolveLocalFileSystemURL(imageUri, function(fileEntry) {
             $scope.fileEntry = fileEntry
@@ -84,6 +90,7 @@ angular.module('pele', ['ngSanitize'])
       $scope.lead = {
         extra: {}
       }
+
 
       function getHHRange(start, end, interval) {
         return _.range(start, end, interval).map(function(e) {
@@ -115,7 +122,9 @@ angular.module('pele', ['ngSanitize'])
         ApiGateway.get("leads/getnext?" + refStamp).success(function(data) {
           $scope.lead.LEAD_ID = data.VAL;
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
-        }).error(function() {})
+        }).error(function(error, httpStatus, headers, config) {
+          PelApi.throwError("api", "get new Lead seq", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
+        })
       }
 
       if ($state.params.lead && $state.params.lead.LEAD_ID) {
@@ -168,8 +177,8 @@ angular.module('pele', ['ngSanitize'])
           $scope.getRelevantLeadsType($scope.conf.types)
           console.log(data)
 
-        }).error(function(err) {
-          console.log(err)
+        }).error(function(error, httpStatus, headers, config) {
+          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
         })
       }
 
@@ -184,24 +193,20 @@ angular.module('pele', ['ngSanitize'])
             .then(function(ret) {
               $state.go("app.leads.report")
             })
-        }).error(function(err) {
-          swal({
-            text: JSON.stringify(err)
-          })
-          $scope.error = err;
-          setTimeout(function() {
-            $scope.error = ""
-          }, 3000)
+        }).error(function(error, httpStatus, headers, config) {
+          PelApi.throwError("api", "delete lead by id ", "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
         })
       }
 
       $scope.submit = function(leadForm) {
-        console.log($scope.extraData)
+
         $scope.submitted = true;
-        console.log($scope.lead)
-        console.log("lead form errors list:", leadForm.$error)
+        $scope.lead.TASK_LEVEL = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".TASK_LEVEL");
+        $scope.lead.TASK_FOLLOWUP_TYPE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".TASK_FOLLOWUP_TYPE");
+        $scope.lead.RESOURCE_TYPE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".RESOURCE_TYPE");
+        $scope.lead.RESOURCE_VALUE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".RESOURCE_VALUE");
         $scope.lead.PREFERRED_HOURS = $scope.lead.from_hour + " - " + $scope.lead.to_hour
-        console.log("$scope.lead.PREFERRED_HOURS", $scope.lead.PREFERRED_HOURS)
+
         if (leadForm.$invalid) {
           swal({
             text: "נתוני טופס לא תקינים",
@@ -212,6 +217,8 @@ angular.module('pele', ['ngSanitize'])
           return false;
         }
 
+
+        PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {
           swal({
             text: "ליד נוצר בהצלחה",
@@ -221,14 +228,10 @@ angular.module('pele', ['ngSanitize'])
             $ionicHistory.goBack();
           })
           $scope.lead = {};
-        }).error(function(err) {
-          swal({
-            text: JSON.stringify(err)
-          })
-          $scope.error = err;
-          setTimeout(function() {
-            $scope.error = ""
-          }, 3000)
+        }).error(function(error, httpStatus, headers, config) {
+          PelApi.throwError("api", "Post new lead", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
+        }).finally(function() {
+          PelApi.hideLoading();
         })
       }
 

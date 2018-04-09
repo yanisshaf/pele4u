@@ -71,26 +71,38 @@
         <label ng-show="leadform.CUSTOMER_ID.$invalid && (leadform.CUSTOMER_ID.$dirty  || submitted)" class="item no-border  input-error">
               יש להזין מס' תקין'
               </label>
-        <label class="item no-border item-input item-text-wrap">
-                <span class="input-label">שעות רצויות לחזרה</span>
-                <select ng-change="recreateEndHour()" name="from_hour" class="form-control select" ng-model="lead.from_hour" required />
-                    <option ng-repeat="option in from_hour_range" ng-selected="option==lead.from_hour" value="{{option}}">{{option}}</option>
-                </select> &nbsp;  &nbsp;  &nbsp; - &nbsp; &nbsp; &nbsp;
-                <select name="to_hour" class="form-control select" ng-model="lead.to_hour" required />
-                    <option ng-repeat="option in to_hour_range"  ng-selected="option==lead.to_hour" value="{{option}}">{{option}}</option>
-                </select>
-          </label>
+        <label class="item no-border item-input item-text-wrap margin-top-10">
+            <table style="width:100%" class="table margin-top-5">
+              <tr>
+                <td class="text-right"><span class="label">שעות רצויות לחזרה</span></td>
+                <td class="text-center"> <select ng-change="recreateEndHour()" name="from_hour" class="form-control select" ng-model="lead.from_hour" required />
+                      <option ng-repeat="option in from_hour_range" ng-selected="option==lead.from_hour" value="{{option}}">{{option}}</option>
+                  </select></td>
+                  <td class="text-center" style="width:10%;"> - </td>
+                <td class="text-left">  <select name="to_hour" class="form-control select" ng-model="lead.to_hour" required />
+                      <option ng-repeat="option in to_hour_range"  ng-selected="option==lead.to_hour" value="{{option}}">{{option}}</option>
+                  </select></td>
+              </tr>
+            </table>
+            </label>
         <label ng-show="leadform.from_hour.$invalid &&  (leadform.from_hour.$dirty  || submitted)" class="item no-border input-error">
               נא סמנו שעות רצויות  לחזרה
                </label>
 
         <label class="item no-border item-input item-text-wrap">
-                  <span class="input-label">מאשר קבלת עדכונים על מבצעים והטבות</span>
-                  <select class="select" name="PROACTIVE_IND" class="form-control" ng-model="lead.PROACTIVE_IND" required />
-                      <option value="">אנא בחר </option>
-                      <option value="Y">כן</option>
-                      <option value="N">לא</option>
-                  </select>
+          <table style="width:100%" class="table margin-top-10">
+            <tr>
+              <td style="width:70%" class="text-right">  <span class="label">מאשר קבלת עדכונים על מבצעים והטבות</span></td>
+              <td class="text-left">
+                <select class="select" name="PROACTIVE_IND" class="form-control" ng-model="lead.PROACTIVE_IND" required />
+                        <option value="">אנא בחר </option>
+                        <option value="Y">כן</option>
+                        <option value="N">לא</option>
+                    </select></td>
+            </tr>
+          </table>
+
+
         </label>
         <label ng-show="leadform.PROACTIVE_IND.$invalid &&  (leadform.PROACTIVE_IND.$dirty  || submitted)" class="item no-border input-error">
              נא סמנו
@@ -105,7 +117,7 @@
                 <input type="date" id="exampleInput" name="input" ng-model="departureDate1"  required />
               </label-->
         <ng-include style="background:#CCC" src="'app/apps/leads/extra.html'"></ng-include>
-        <label class="item no-border item-input item-text-wrap">
+        <label class="item no-border item-input item-text-wrap margin-top-10">
               <span class="input-label">פרטי הבקשה</span>
 
             </label>
@@ -161,10 +173,10 @@
           </div-->
           <div style="margin-top:20px" class="row text-center">
             <div class="col col-50">
-              <button class="button  button-stable  text-center" ng-click="takePic('CAMERA')"><i class="icon ion-ios-camera-outline"></i> מצלמה</button>
+              <a class="text-center white" ng-click="takePic('CAMERA')"><i class="icon ion-ios-camera-outline icon-lg icon-top"></i>מצלמה</a>
             </div>
             <div class="col col-50">
-              <button class="button  button-stable  text-center" ng-click="takePic('LIBRARY')"><i class="icon ion-images"></i> גלריה</button>
+              <a class="text-center white" ng-click="takePic('LIBRARY')"><i class="icon ion-images  icon-lg icon-top"></i> גלריה</a>
             </div>
           </div>
 
@@ -172,9 +184,9 @@
         </ng-form>
 
 
-        <div ng-if="imageUri" nstyle="margin-top:10px" class="row text-center">
-          <div class="col" style="padding:15%">
-            <div class="thumb-container">
+        <div ng-if="imageUri" nstyle="margin-top:10px" class="text-center">
+          <div class="">
+            <div class="preview-container">
               <img style="height:100px;width:auto" ng-src="{{imageUri}}" class="upload thumb">
             </div>
           </div>
@@ -183,18 +195,17 @@
         <!--button class="button button-stable" ng-show="imageUri">Remove</button-->
         <div ng-show="imageUri" style="margin-top:20px" class="row text-center">
           <div class="col">
-            <button class="button button-stable" ng-click="uploadFile()"><i class="icon ion-paper-airplane"></i> שלח</button>
+            <a class="text-center white" ng-click="uploadFile()"><i class="icon ion-paper-airplane icon-lg icon-top"></i> שלח</a>
           </div>
         </div>
         <span class="progress" ng-show="progress >= 0">
-    <div style="width:{{progress}}%"
-        ng-bind="progress + '%'"></div>
-  </span>
+            <div style="width:{{progress}}%"
+              ng-bind="progress + '%'"></div>
+        </span>
         <div>
-          ff: {{uploadState}}
-          <span ng-show="picFile.result">Upload Successful</span>
+          <span ng-show="uploadSuccess">Upload Successful</span>
         </div>
-        <div><span class="err" ng-show="errorMsg">{{errorMsg}}</span></div>
+        <div><span class="err" ng-show="uploadError">{{errorMsg}}</span></div>
       </ion-content>
     </ion-modal-view>
   </script>

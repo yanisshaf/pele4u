@@ -23,8 +23,8 @@ angular.module('pele')
           StorageService.set("leads_conf", data, 1000 * 60 * 60);
           $scope.conf = data;
           $scope.info = getInfo();
-        }).error(function(err) {
-          console.log(err)
+        }).error(function(error, httpStatus, headers, config) {
+          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
         })
       }
 
