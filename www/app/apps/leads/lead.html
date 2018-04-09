@@ -66,7 +66,7 @@
               </label>
         <label class="item no-border item-input">
               <span class="input-label">ת.ז לקוח</span>
-              <input type="text" name="CUSTOMER_ID" ng-model="lead.CUSTOMER_ID" ng-pattern="/^[0-9]{8,9}$/">
+              <input type="number" name="CUSTOMER_ID" ng-model="lead.CUSTOMER_ID" ng-pattern="/^[0-9]{8,9}$/">
             </label>
         <label ng-show="leadform.CUSTOMER_ID.$invalid && (leadform.CUSTOMER_ID.$dirty  || submitted)" class="item no-border  input-error">
               יש להזין מס' תקין'
@@ -75,13 +75,20 @@
             <table style="width:100%" class="table margin-top-5">
               <tr>
                 <td class="text-right"><span class="label">שעות רצויות לחזרה</span></td>
-                <td class="text-center"> <select ng-change="recreateEndHour()" name="from_hour" class="form-control select" ng-model="lead.from_hour" required />
-                      <option ng-repeat="option in from_hour_range" ng-selected="option==lead.from_hour" value="{{option}}">{{option}}</option>
+                <td class="text-center">
+                  <select ng-change="recreateEndHour()" name="from_hour" class="form-control select" ng-model="lead.from_hour"
+                  ng-options="option for option in from_hour_range"  ng-selected="option==lead.from_hour"  required />
+                      <!--option ng-repeat="option in from_hour_range" ng-selected="option==lead.from_hour" value="{{option}}">{{option}}</option-->
                   </select></td>
                   <td class="text-center" style="width:10%;"> - </td>
-                <td class="text-left">  <select name="to_hour" class="form-control select" ng-model="lead.to_hour" required />
+                <td class="text-left">
+                  <select ng-click="recreateEndHour()" name="to_hour" class="form-control select" ng-model="lead.to_hour"
+                  ng-options="option for option in to_hour_range"  ng-selected="option==lead.to_hour"  required />
+
+                  <!--select name="to_hour" class="form-control select" ng-model="lead.to_hour" required />
                       <option ng-repeat="option in to_hour_range"  ng-selected="option==lead.to_hour" value="{{option}}">{{option}}</option>
-                  </select></td>
+                  </select-->
+                </td>
               </tr>
             </table>
             </label>
@@ -180,12 +187,17 @@
             </div>
           </div>
         </ng-form>
-
-
-        <div ng-if="imageUri" nstyle="margin-top:10px" class="text-center">
+        <div ng-if="imageUri" nstyle="margin:10px" class="text-center">
           <div class="">
             <div class="preview-container">
-              <img style="height:100px;width:auto" ng-src="{{imageUri}}" class="upload thumb">
+              <img style="" ng-src="{{imageUri}}" class="upload thumb">
+            </div>
+          </div>
+          <div style="margin:10px 40px 10px 40px">
+            <div class="image-title item item-input-inset">
+              <label class="item-input-wrapper">
+                <input type="text" placeholder="תיאור קצר" ng-model="imageTitle">
+              </label>
             </div>
           </div>
         </div>

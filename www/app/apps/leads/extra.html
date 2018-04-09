@@ -5,7 +5,7 @@
     <span class="input-label"><span ng-show="e.require">*</span> {{e.label}}</span>
       <input name="{{e.attribute_name}}" ng-switch-when="text" type="text" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required">
       <input name="{{e.attribute_name}}" ng-switch-when="date" type="date" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required" min="setMinDate(e)" max="setMaxDate(e)">
-      <input name="{{e.attribute_name}}" ng-switch-when="number" type="text" ng-model="lead.ATTRIBUTES[e.attribute_name]"  ng-required="e.required">
+      <input name="{{e.attribute_name}}" ng-switch-when="number" type="number" ng-model="lead.ATTRIBUTES[e.attribute_name]"  ng-required="e.required">
       <select class="select" name="{{e.attribute_name}}" ng-switch-when="select" class="form-control" ng-model="e.value" ng-required="e.required">
          <option ng-if="option.k != undefined" ng-repeat="option in e.options" value="{{option.k}}">{{option.v}}</option>
          <option ng-if="option.k == undefined" ng-repeat="option in e.options" value="{{option}}">{{option}}</option>

@@ -7,7 +7,7 @@ angular.module('pele', ['ngSanitize'])
   //=================================================================
   .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$templateCache', '$cordovaFileTransfer',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $templateCache) {
-
+      $scope.imageUri = "https://www.istockphoto.com/resources/images/PhotoFTLP/img_67920257.jpg";
       /* var uploadPhotoOptions = {
         quality: 50,
         destinationType: Camera.DestinationType.DATA_URL, //FILE_URI, NATIVE_URI, or DATA_URL. DATA_URL could produce memory issues.
@@ -265,23 +265,24 @@ angular.module('pele', ['ngSanitize'])
             $scope.uploadState.progress = 100;
             $scope.uploadState.success = true;
             $scope.uploadState.error = false;
-
+            PelApi.hideLoading();
             $scope.imageUri = "";
+            $scope.imageTitle = "";
           });
         }
-
 
         function fail(error) {
           console.log("error from upload :", error)
           $scope.uploadState.progress = 100;
           $scope.uploadState.error = true;
+          PelApi.hideLoading();
         }
 
         var uri = encodeURI(ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID));
         var options = new FileUploadOptions();
         var params = {};
         params.file = picFile;
-        params.title = "hello title";
+        params.title = $scope.imageTitle
         options.params = params;
         options.chunkedMode = false;
         var headers = ApiGateway.getHeaders();
@@ -296,6 +297,7 @@ angular.module('pele', ['ngSanitize'])
             $scope.increment++;
           }
         };
+        PelApi.showLoading();
         ft.upload(picFile, uri, win, fail, options, true);
       }
 
