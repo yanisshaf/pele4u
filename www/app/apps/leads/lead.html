@@ -179,8 +179,6 @@
               <a class="text-center white" ng-click="takePic('LIBRARY')"><i class="icon ion-images  icon-lg icon-top"></i> גלריה</a>
             </div>
           </div>
-
-          {{imageUri}}
         </ng-form>
 
 
@@ -198,14 +196,14 @@
             <a class="text-center white" ng-click="uploadFile()"><i class="icon ion-paper-airplane icon-lg icon-top"></i> שלח</a>
           </div>
         </div>
-        <span class="progress" ng-show="progress >= 0">
-            <div style="width:{{progress}}%"
-              ng-bind="progress + '%'"></div>
+        <div><span class="progress" ng-show="uploadState.progress >= 0">
+            <div style="width:{{uploadState.progress}}%" ng-bind="uploadState.progress + '%'"></div>
         </span>
-        <div>
-          <span ng-show="uploadSuccess">Upload Successful</span>
         </div>
-        <div><span class="err" ng-show="uploadError">{{errorMsg}}</span></div>
+        <div>
+          <span ng-show="uploadState.success">Upload Successful</span>
+        </div>
+        <div><span class="err" ng-show="uploadState.error">Upload failed</span></div>
       </ion-content>
     </ion-modal-view>
   </script>

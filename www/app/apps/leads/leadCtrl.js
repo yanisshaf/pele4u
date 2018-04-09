@@ -7,7 +7,7 @@ angular.module('pele', ['ngSanitize'])
   //=================================================================
   .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$templateCache', '$cordovaFileTransfer',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $templateCache) {
-      $scope.imageUri = "https://www.istockphoto.com/resources/images/PhotoFTLP/img_67920257.jpg";
+
       /* var uploadPhotoOptions = {
         quality: 50,
         destinationType: Camera.DestinationType.DATA_URL, //FILE_URI, NATIVE_URI, or DATA_URL. DATA_URL could produce memory issues.
@@ -33,6 +33,10 @@ angular.module('pele', ['ngSanitize'])
         });
       };
       */
+      $scope.uploadState = {
+        progress: 0
+      };
+
 
       $scope.takePic = function(sourceType) {
         PelApi.safeApply($scope, function() {
@@ -55,19 +59,22 @@ angular.module('pele', ['ngSanitize'])
         }
 
         navigator.camera.getPicture(function(imageUri) {
-          console.log("got camera success ", imageUri);
+
           if (PelApi.isAndroid) {
             window.FilePath.resolveNativePath(imageUri, function(path) {
+              console.log("got camera success ", imageUri);
               PelApi.safeApply($scope, function() {
                 $scope.imageUri = path;
               });
             }, function(err) {
 
             });
+          } else {
+            PelApi.safeApply($scope, function() {
+              $scope.imageUri = imageUri;
+            });
           }
-          PelApi.safeApply($scope, function() {
-            $scope.imageUri = imageUri;
-          });
+
 
 
           /*  window.resolveLocalFileSystemURL(imageUri, function(fileEntry) {
@@ -236,33 +243,35 @@ angular.module('pele', ['ngSanitize'])
       }
 
 
-      $scope.uploadState = {};
 
 
       $scope.uploadFile = function() {
-        picFile = $scope.imageUri;
+        var picFile = $scope.imageUri;
+
         $scope.uploadState = {
-          src: picFile,
-          state: "start"
+          progress: 0
         }
 
         function win(r) {
-          alert("success :" + r.response.success)
+          console.log(" response from upload:", r)
           console.log("Code = " + r.responseCode);
           console.log("Response = " + r.response);
           console.log("Sent = " + r.bytesSent);
 
           PelApi.safeApply($scope, function() {
-            $scope.uploadState = r.response
+            $scope.uploadState.progress = 100;
+            $scope.uploadState.success = true;
+            $scope.uploadState.error = false;
+
             $scope.imageUri = "";
           });
         }
 
 
         function fail(error) {
-          //alert("An error has occurred: Code = " + error.code);
-          console.log("upload error source " + error.source);
-          console.log("upload error target " + error.target);
+          console.log("error from upload :", error)
+          $scope.uploadState.progress = 100;
+          $scope.uploadState.error = true;
         }
 
         var uri = encodeURI(ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID));
@@ -279,12 +288,11 @@ angular.module('pele', ['ngSanitize'])
 
         ft.onprogress = function(progressEvent) {
           if (progressEvent.lengthComputable) {
-            $scope.progress = progressEvent.loaded / (progressEvent.total + 1);
+            $scope.uploadState.progress = progressEvent.loaded / (progressEvent.total + 1);
           } else {
             $scope.increment++;
           }
         };
-
         ft.upload(picFile, uri, win, fail, options);
       }
 
@@ -294,6 +302,8 @@ angular.module('pele', ['ngSanitize'])
         animation: 'slide-in-up'
       }).then(function(modal) {
         $scope.modal = modal;
+      }).catch(function(err) {
+        console.log(err)
       });
       $scope.openModal = function() {
         PelApi.safeApply($scope, function() {
