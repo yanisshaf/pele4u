@@ -4,8 +4,9 @@
       <label class="item no-border item-input">
     <span class="input-label"><span ng-show="e.require">*</span> {{e.label}}</span>
       <input name="{{e.attribute_name}}" ng-switch-when="text" type="text" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required">
-      <input name="{{e.attribute_name}}" ng-switch-when="date" type="date" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required" min="setMinDate(e)" max="setMaxDate(e)">
+      <input name="{{e.attribute_name}}" ng-switch-when="date" type="date" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required" min="{{e.computedMin}}" max="{{e.computedMax}}">
       <input name="{{e.attribute_name}}" ng-switch-when="number" type="number" ng-model="lead.ATTRIBUTES[e.attribute_name]"  ng-required="e.required">
+
       <select class="select" name="{{e.attribute_name}}" ng-switch-when="select" class="form-control" ng-model="e.value" ng-required="e.required">
          <option ng-if="option.k != undefined" ng-repeat="option in e.options" value="{{option.k}}">{{option.v}}</option>
          <option ng-if="option.k == undefined" ng-repeat="option in e.options" value="{{option}}">{{option}}</option>
@@ -35,7 +36,22 @@
       ערך לא תקין
     </label-->
       <label ng-if="e.attribute_name" ng-show="leadform.attributes[e.attribute_name].$invalid && submitted" class="item no-border input-error">
-      ערך לא תקין
+      <span ng-if="e.message">{{e.message}}</span>
+      <div ng-if="!e.message">
+          <span ng-if="leadform.attributes[e.attribute_name].$error.required">יש להזין ערך</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.min">ערך נמוך מדי</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.max">ערך גבוה מדי</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.email">אימייל לא תקין</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.maxlength">אורך גדול מדי</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.minlength">אורך קטן מדי</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.number">יש להזין ספרות בלבד</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.pattern">הערך שהזנתם אינו תקין</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.url">כתובת אינה תקינה</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.date">תאריך אינו תקין</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.time">השעה אינה תקינה</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.week">ערך השבוע אינו תקין</span>
+          <span ng-if="leadform.attributes[e.attribute_name].$error.month">ערך החודש אינו תקין</span>
+    </div>
     </label>
       <!--
     leadform.attributes[e.attribute_name].$error.pattern

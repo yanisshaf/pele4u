@@ -155,10 +155,18 @@ angular.module('pele', ['ngSanitize'])
         $scope.getNext();
       }
 
+      function setDynamicValidation(varr) {
+        varr.forEach(function(v) {
+          if (v.type === "date") {
+            v = $scope.setValidationDate(v)
+          }
+        })
+      }
       $scope.onValueChanged = function(leadType) {
         console.log(leadType)
         let extraInfo = _.get($scope, 'typesByFormType[' + leadType + '].SETUP.attrs', []);
         $scope.extraSchema = extraInfo;
+        setDynamicValidation($scope.extraSchema)
       }
 
 
@@ -332,16 +340,19 @@ angular.module('pele', ['ngSanitize'])
         // Execute action
       });
 
-      $scope.setMinDate = function(e) {
-        if (e.min) return e.min;
-        if (e.minus_days)
-          return moment().subtract(e.minus_days, "days").format("YYYY-MM-DD");
+
+      $scope.setValidationDate = function(e) {
+        if (e.min) e.computedMin = e.min;
+        if (e.minus_days || e.minus_days === 0) {
+          e.computedMin = moment().subtract(e.minus_days, "days").format("YYYY-MM-DD");
+        }
+        if (e.max) e.computedMax = e.max;
+        if (e.plus_days) {
+          e.computedMax = moment().add(e.plus_days, "days").format("YYYY-MM-DD");
+        }
+        return e;
       }
-      $scope.setMaxDate = function(e) {
-        if (e.max) return e.min;
-        if (e.plus_days)
-          return moment().add(e.plus_days, "days").format("YYYY-MM-DD");
-      }
+
     }
 
   ]);
