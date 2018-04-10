@@ -74,7 +74,7 @@
         <label class="item no-border margin-top-10">
             <table style="width:100%" class="table margin-top-5">
               <tr>
-                <td class="text-right  item-input item-text-wrap"><span class="label">שעות רצויות לחזרה</span></td>
+                <td class="text-right"><span class="label">שעות רצויות לחזרה</span></td>
                 <td class="text-center">
                   <select ng-change="recreateEndHour()" name="from_hour" class="form-control select" ng-model="lead.from_hour"
                   ng-options="option for option in from_hour_range"  ng-selected="option==lead.from_hour"  required />
@@ -92,9 +92,9 @@
               </tr>
             </table>
             </label>
-        <label ng-show="leadform.from_hour.$invalid &&  (leadform.from_hour.$dirty  || submitted)" class="item no-border input-error">
+        <label ng-show="(leadform.to_hour.$invalid || leadform.from_hour.$invalid) &&  (leadform.from_hour.$dirty  || leadform.to_hour.$dirty || submitted)" class="item no-border input-error">
               נא סמנו שעות רצויות  לחזרה
-               </label>
+            </label>
 
         <label class="item no-border item-input item-text-wrap">
           <table style="width:100%" class="table margin-top-10">

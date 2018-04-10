@@ -2,11 +2,10 @@
   <div ng-repeat="e in extraSchema">
     <ng-switch on="e.type">
       <label class="item no-border item-input">
-    <span class="input-label"><span ng-show="e.required">*</span> {{e.label}}</span>
+      <span class="input-label"><span ng-show="e.required">*</span> {{e.label}}</span>
       <input name="{{e.attribute_name}}" ng-switch-when="text" type="text" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required">
       <input name="{{e.attribute_name}}" ng-switch-when="date" type="date" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required" min="{{e.computedMin}}" max="{{e.computedMax}}">
       <input name="{{e.attribute_name}}" ng-switch-when="number" type="number" ng-model="lead.ATTRIBUTES[e.attribute_name]"  ng-required="e.required">
-
       <select class="select" name="{{e.attribute_name}}" ng-switch-when="select" class="form-control" ng-model="e.value" ng-required="e.required">
          <option ng-if="option.k != undefined" ng-repeat="option in e.options" value="{{option.k}}">{{option.v}}</option>
          <option ng-if="option.k == undefined" ng-repeat="option in e.options" value="{{option}}">{{option}}</option>
@@ -53,25 +52,6 @@
           <label class="item no-border input-error" ng-if="leadform.attributes[e.attribute_name].$error.month">ערך החודש אינו תקין</label>
     </div>
   </div>
-      <!--
-    leadform.attributes[e.attribute_name].$error.pattern
-    leadform.attributes[e.attribute_name].$error.required
-    all list :
-    email
-    max
-    maxlength
-    min
-    minlength
-    number
-    pattern
-    required
-    url
-    date
-    datetimelocal
-    time
-    week
-    month
-    -->
     </ng-switch>
   </div>
 </ng-form>
