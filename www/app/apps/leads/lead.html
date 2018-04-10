@@ -9,7 +9,7 @@
     </div>
   </ion-nav-title>
   <ion-content scroll="true" style="height: calc(100% - 100px);" id="new_lead" padding="true">
-    <ng-form role="form" name="leadform" ng-init="forms.leadForm=leadform" novalidate>
+    <ng-form role="form" name="forms.leadform" novalidate>
 
 
       <fancy-select class="fancy-select text-right" header-text="בחר סוג ליד" items="typesByFormType" value="lead.LEAD_TYPE" value-property="TYPE" text-property="DESCRIPTION" allow-empty='false' text="בחרו סוג ליד" not-img-class="hidden" note-text=" : סוג ליד "
@@ -38,7 +38,7 @@
               <span class="input-label">* שם פרטי</span>
               <input type="text" name="FIRST_NAME"  ng-model="lead.FIRST_NAME" required>
             </label>
-        <label ng-show="leadform.FIRST_NAME.$invalid && (leadform.FIRST_NAME.$dirty || submitted)" class="item no-border input-error">
+        <label ng-show="forms.leadform.FIRST_NAME.$invalid && (forms.leadform.FIRST_NAME.$dirty || submitted)" class="item no-border input-error">
               יש להזין שם פרטי
               </label>
 
@@ -46,7 +46,7 @@
                 <span class="input-label">* שם משפחה</span>
                 <input type="text"  name="LAST_NAME"  ng-model="lead.LAST_NAME" required>
               </label>
-        <label ng-show="leadform.LAST_NAME.$invalid && (leadform.LAST_NAME.$dirty || submitted)" class="item no-border input-error">
+        <label ng-show="forms.leadform.LAST_NAME.$invalid && (forms.leadform.LAST_NAME.$dirty || submitted)" class="item no-border input-error">
                   יש להזין שם משפחה
               </label>
 
@@ -54,7 +54,7 @@
                 <span class="input-label">* מס טלפון לחזרה</span>
                 <input type="tel"  name="PHONE_NO_1"  ng-model="lead.PHONE_NO_1" required ng-pattern="/^05\d-?[0-9]{1}-?[0-9]{2}-?[0-9]{4}$/">
               </label>
-        <label ng-show="leadform.PHONE_NO_1.$invalid &&  (leadform.PHONE_NO_1.$dirty  || submitted)" class="item no-border input-error">
+        <label ng-show="forms.leadform.PHONE_NO_1.$invalid &&  (forms.leadform.PHONE_NO_1.$dirty  || submitted)" class="item no-border input-error">
                 יש להזין מס' סלולארי תקין
              </label>
 
@@ -62,14 +62,14 @@
                 <span class="input-label">מספר טלפון נוסף</span>
                 <input type="tel" name="PHONE_NO_2" ng-model="lead.PHONE_NO_2" ng-pattern="/^0[0-9]{2}-?[0-9]{1}-?[0-9]{2}-?[0-9]{3,4}$/">
               </label>
-        <label ng-show="leadform.PHONE_NO_2.$invalid && (leadform.PHONE_NO_2.$dirty  || submitted)" class="item no-border  input-error">
+        <label ng-show="forms.leadform.PHONE_NO_2.$invalid && (forms.leadform.PHONE_NO_2.$dirty  || submitted)" class="item no-border  input-error">
                 יש להזין מס' נוסף תקין
               </label>
         <label class="item no-border item-input">
               <span class="input-label">ת.ז לקוח</span>
               <input type="number" name="CUSTOMER_ID" ng-model="lead.CUSTOMER_ID" ng-pattern="/^[0-9]{8,9}$/">
             </label>
-        <label ng-show="leadform.CUSTOMER_ID.$invalid && (leadform.CUSTOMER_ID.$dirty  || submitted)" class="item no-border  input-error">
+        <label ng-show="forms.leadform.CUSTOMER_ID.$invalid && (forms.leadform.CUSTOMER_ID.$dirty  || submitted)" class="item no-border  input-error">
               יש להזין מס' תקין'
               </label>
         <label class="no-border margin-top-10">
@@ -94,7 +94,7 @@
               </tr>
             </table>
             </label>
-        <label ng-show="(leadform.to_hour.$invalid || leadform.from_hour.$invalid) &&  (leadform.from_hour.$dirty  || leadform.to_hour.$dirty || submitted)" class="item no-border input-error">
+        <label ng-show="(forms.leadform.to_hour.$invalid || forms.leadform.from_hour.$invalid) &&  (forms.leadform.from_hour.$dirty  || forms.leadform.to_hour.$dirty || submitted)" class="item no-border input-error">
               נא סמנו שעות רצויות  לחזרה
             </label>
 
@@ -113,7 +113,7 @@
 
 
         </label>
-        <label ng-show="leadform.PROACTIVE_IND.$invalid &&  (leadform.PROACTIVE_IND.$dirty  || submitted)" class="item no-border input-error">
+        <label ng-show="forms.leadform.PROACTIVE_IND.$invalid &&  (forms.leadform.PROACTIVE_IND.$dirty  || submitted)" class="item no-border input-error">
              נא סמנו
        </label>
 
@@ -134,14 +134,15 @@
             <textarea class="ion-item item item-text-wrap" ng-model="lead.NOTE"></textarea>
         </label>
       </div>
+
     </ng-form>
   </ion-content>
-
   <div style="" class="bar bar-footer bar-clean">
-    <a class="button button-block  button-positive icon-right ion-paper-airplane" ng-show="!lead.LEAD_ID" ng-click="submit(leadform)" class="title">פתיחת ליד</a>
-    <a class="button button-block  button-balanced icon-right ion-document-text" ng-show="lead.LEAD_ID" ng-click="submit(leadform)" class="title">עדכן ליד עצמי</a>
+    <a class="button button-block  button-positive icon-right ion-paper-airplane" ng-show="!lead.LEAD_ID" ng-click="submit()" class="title">פתיחת ליד</a>
+    <a class="button button-block  button-balanced icon-right ion-document-text" ng-show="lead.LEAD_ID" ng-click="submit()" class="title">עדכן ליד עצמי</a>
     <a class="button button-block  button-danger icon-right ion-document-text" ng-show="lead.LEAD_ID" ng-click="delete(lead.LEAD_ID)" class="title">מחק ליד עצמי</a>
   </div>
+
   <script id="upload.html" type="text/ng-template">
     <ion-modal-view class="pele-background">
       <ion-header-bar class="bar bar-header bar-positive">

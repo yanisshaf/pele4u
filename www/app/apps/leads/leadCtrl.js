@@ -8,6 +8,7 @@ angular.module('pele', ['ngSanitize'])
   .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$templateCache', '$cordovaFileTransfer',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $templateCache) {
       $scope.imageUri = "https://www.istockphoto.com/resources/images/PhotoFTLP/img_67920257.jpg";
+      $scope.forms = {}
       /* var uploadPhotoOptions = {
         quality: 50,
         destinationType: Camera.DestinationType.DATA_URL, //FILE_URI, NATIVE_URI, or DATA_URL. DATA_URL could produce memory issues.
@@ -216,7 +217,7 @@ angular.module('pele', ['ngSanitize'])
         })
       }
 
-      $scope.submit = function(leadForm) {
+      $scope.submit = function() {
 
         $scope.submitted = true;
         $scope.lead.TASK_LEVEL = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".TASK_LEVEL");
@@ -225,12 +226,12 @@ angular.module('pele', ['ngSanitize'])
         $scope.lead.RESOURCE_VALUE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".RESOURCE_VALUE");
         $scope.lead.PREFERRED_HOURS = $scope.lead.from_hour + " - " + $scope.lead.to_hour
 
-        if (leadForm.$invalid) {
+        if ($scope.forms.leadForm.$invalid) {
           swal({
             text: "נתוני טופס לא תקינים",
             confirmButtonText: 'אישור'
           }).then(function(ret) {
-            console.log("leadForm:", leadForm)
+            console.log("leadForm:", $scope.forms.leadForm)
           })
           return false;
         }
