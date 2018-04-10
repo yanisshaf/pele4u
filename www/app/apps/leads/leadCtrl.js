@@ -117,6 +117,7 @@ angular.module('pele', ['ngSanitize'])
         PelApi.safeApply($scope, function() {
           $scope.lead = $state.params.lead;
           var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/);
+          $scope.lead.ATTRIBUTES = JSON.parse($scope.lead.ADD_INFO);
           $scope.lead.from_hour = found[1];
           $scope.lead.to_hour = found[2];
         })
