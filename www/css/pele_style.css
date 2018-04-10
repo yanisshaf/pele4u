@@ -834,7 +834,7 @@ top:11px;
 .leads-notes {height:200px;min-height: 200px}
 .white {color:white}
 .list.lead-form .item-input {padding:3px 5px 3px 3px}
-.list.lead-form label .input-label {padding:0px 0 5px 8px;line-height: 16px;font-weight: bolder}
+.list.lead-form label .input-label {padding:0px 0 8px 8px;line-height: 16px;font-weight: bolder}
 
 .list.lead-form .item-input input  { ;border-bottom: 1px dotted #444;padding-right:10px !important}
 .list.lead-form .item-input textarea {border: 1px dotted #444;padding-right:10px;    min-height: 150px;

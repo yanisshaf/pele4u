@@ -7,37 +7,12 @@ angular.module('pele', ['ngSanitize'])
   //=================================================================
   .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$templateCache', '$cordovaFileTransfer',
     function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $templateCache) {
-      $scope.imageUri = "https://www.istockphoto.com/resources/images/PhotoFTLP/img_67920257.jpg";
+
       $scope.forms = {}
-      /* var uploadPhotoOptions = {
-        quality: 50,
-        destinationType: Camera.DestinationType.DATA_URL, //FILE_URI, NATIVE_URI, or DATA_URL. DATA_URL could produce memory issues.
-        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-        encodingType: Camera.EncodingType.JPEG,
-        allowEdit: true,
-        targetWidth: 300,
-        targetHeight: 300,
-        saveToPhotoAlbum: false,
-      };
 
-
-      uploadPhotoOptions.sourceType = Camera.PictureSourceType.CAMERA;
-      //    uploadPhotoOptions.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
-      function takePictureSuccess(success) {
-        vm.userProfile.image = "data:image/jpeg;base64," + success; //this is how I store the image to firebase
-      };
-
-      function takePictureError(error) {
-        $ionicPopup.alert({
-          title: 'Photo Error',
-          template: error,
-        });
-      };
-      */
       $scope.uploadState = {
         progress: 0
       };
-
 
       $scope.takePic = function(sourceType) {
         PelApi.safeApply($scope, function() {
@@ -126,7 +101,7 @@ angular.module('pele', ['ngSanitize'])
       console.log("$scope.to_hour_range:", $scope.to_hour_range);
 
 
-      $scope.forms = {}
+
 
       $scope.getNext = function() {
         var refStamp = new Date().getTime();
