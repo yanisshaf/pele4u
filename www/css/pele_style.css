@@ -842,7 +842,7 @@ top:11px;
 }
 .fancy-select .item-note {padding-left:30px ;font-weight:bolder ;color:black}
 label.input-error {color:red !important ;margin-top:0px;padding-top:0px;padding-bottom: 2px;margin-bottom: 2px}
-.fancy-select .item {padding:10px;margin-left: 60px;}
+.fancy-select .item {padding:10px;}
 #extra-lead-form label { float:right}
 
 
@@ -894,3 +894,6 @@ a.white {color:white}
     border: 1px solid #000;
     border-radius: 3px;
   }
+.upload-success h3,.upload-success h2 {color:white;padding:5px 20px 5px 20px}
+.upload-success img {height:160px}
+.lead-footer.bar-footer{height:auto}

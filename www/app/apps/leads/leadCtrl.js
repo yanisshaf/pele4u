@@ -41,7 +41,6 @@ angular.module('pele', ['ngSanitize'])
 
           if (PelApi.isAndroid) {
             window.FilePath.resolveNativePath(imageUri, function(path) {
-              console.log("got camera success ", imageUri);
               PelApi.safeApply($scope, function() {
                 $scope.imageUri = path;
               });
@@ -134,6 +133,9 @@ angular.module('pele', ['ngSanitize'])
 
       function setDynamicValidation(varr) {
         varr.forEach(function(v) {
+          if (v.type === "upload") {
+            $scope.uploadRequired = true
+          }
           if (v.type === "date") {
             v = $scope.setValidationDate(v)
           }
@@ -207,13 +209,7 @@ angular.module('pele', ['ngSanitize'])
         }
         PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {
-          swal({
-            text: "ליד נוצר בהצלחה",
-            confirmButtonText: 'אישור'
-          }).then(function(ret) {
-            $scope.lead = {};
-            $ionicHistory.goBack();
-          })
+          $scope.leadSuccess = true;
           $scope.lead = {};
         }).error(function(error, httpStatus, headers, config) {
           PelApi.throwError("api", "Post new lead", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
@@ -259,7 +255,8 @@ angular.module('pele', ['ngSanitize'])
         var options = new FileUploadOptions();
         var params = {};
         params.file = picFile;
-        params.title = $scope.imageTitle
+        params.title = $scope.imageTitle;
+
         options.params = params;
         options.chunkedMode = false;
         var headers = ApiGateway.getHeaders();
