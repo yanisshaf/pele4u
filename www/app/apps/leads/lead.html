@@ -71,18 +71,18 @@
         <label ng-show="leadform.CUSTOMER_ID.$invalid && (leadform.CUSTOMER_ID.$dirty  || submitted)" class="item no-border  input-error">
               יש להזין מס' תקין'
               </label>
-        <label class="item no-border margin-top-10">
+        <label class="no-border margin-top-10">
             <table style="width:100%" class="table margin-top-5">
               <tr>
-                <td class="text-right"><span class="label">שעות רצויות לחזרה</span></td>
-                <td class="text-center ion-item">
+                <td class="text-right"> <span class="label"> שעות רצויות לחזרה </span> </td>
+                <td class="item text-center ion-item">
                   <select ng-change="recreateEndHour()" name="from_hour" class="form-control select" ng-model="lead.from_hour"
                   ng-options="option for option in from_hour_range"  ng-selected="option==lead.from_hour"  required />
                       <!--option ng-repeat="option in from_hour_range" ng-selected="option==lead.from_hour" value="{{option}}">{{option}}</option-->
                   </select>
                 </td>
                 <td class="text-center" style="width:10%;"> - </td>
-                <td class="text-left  ion-item">
+                <td class="item  text-left  ion-item">
                   <select ng-click="recreateEndHour()" name="to_hour" class="form-control select" ng-model="lead.to_hour"
                   ng-options="option for option in to_hour_range"  ng-selected="option==lead.to_hour"  required />
 
