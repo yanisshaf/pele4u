@@ -201,17 +201,9 @@ angular.module('pele', ['ngSanitize'])
         $scope.lead.RESOURCE_VALUE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".RESOURCE_VALUE");
         $scope.lead.PREFERRED_HOURS = $scope.lead.from_hour + " - " + $scope.lead.to_hour
 
-        if ($scope.forms.leadForm.$invalid) {
-          swal({
-            text: "נתוני טופס לא תקינים",
-            confirmButtonText: 'אישור'
-          }).then(function(ret) {
-            console.log("leadForm:", $scope.forms.leadForm)
-          })
+        if ($scope.forms.leadForm.$invalid || !$scope.lead.LEAD_TYPE) {
           return false;
         }
-
-
         PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {
           swal({
