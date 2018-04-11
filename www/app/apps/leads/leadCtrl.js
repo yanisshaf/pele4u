@@ -5,8 +5,8 @@ angular.module('pele', ['ngSanitize'])
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicModal', 'PelApi', '$ionicScrollDelegate', '$sce', '$compile',
-    function(StorageService, ApiGateway, $scope, $state, $ionicModal, PelApi, $ionicScrollDelegate, $sce, $compile) {
+  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicModal', 'PelApi', '$ionicScrollDelegate', '$sce', '$compile','$q',
+    function(StorageService, ApiGateway, $scope, $state, $ionicModal, PelApi, $ionicScrollDelegate, $sce, $compile,$q) {
 
       $scope.forms = {}
 
@@ -89,6 +89,9 @@ angular.module('pele', ['ngSanitize'])
         setDynamicValidation($scope.extraSchema)
       }
 
+      $scope.$watch('extraSchema', function () {
+        console.log("CHANGED" ,$scope.extraSchema)
+      })
 
 
       $scope.getNext = function() {
@@ -132,7 +135,19 @@ angular.module('pele', ['ngSanitize'])
         $scope.uploadRequired = false
         $scope.uploadIsExists = false;
         $scope.files = [];
-        varr.forEach(function(v) {
+        _.set($scope.lead,'ATTRIBUTES',{});
+        var idx = -1;
+        varr.forEach(function(v,index) {
+          idx++;
+          if(v.service){ 
+            ApiGateway.get(v.service).success(function(data){
+               _.set($scope.lead,'ATTRIBUTES['+v.attribute_name+']', data.value);
+               $scope.extraSchema[index] =  _.extend($scope.extraSchema[index], data);
+            }).error(function(error, httpStatus, headers, config) {
+              PelApi.throwError("api", "get Leads form Element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error))
+            })
+          }
+
           if (v.type === "date") {
 
           }
