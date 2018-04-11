@@ -4,11 +4,20 @@
       <span class="input-label"><span ng-show="e.required">*</span> {{e.label}} </span>
       <a href="#" ng-click="openLink(e)">קישור</a>
     </div>
+
     <ng-switch on="e.type">
       <label class="item no-border item-input item-text-wrap">
       <span  ng-show="!(e.type=='html' || e.type=='link')" class="input-label"><span ng-show="e.required">*</span> {{e.label}} </span>
       <input name="{{e.attribute_name}}" ng-switch-when="text" type="text" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required">
-      <input name="{{e.attribute_name}}" ng-switch-when="date" type="date" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required" min="{{e.computedMin}}" max="{{e.computedMax}}">
+      <div ng-switch-when="date">
+          <button ng-click="bb='picker'">click</button>
+          <span ng-show="bb=='picker'">
+              <input date-input ng-change="bb='val'" name="{{e.attribute_name}}" type="date" ng-model="lead.ATTRIBUTES[e.attribute_name]"  ng-required="e.required" min="{{e.computedMin}}" max="{{e.computedMax}}">
+          </span>
+          bb:{{bb}}
+        <span>{{lead.ATTRIBUTES[e.attribute_name]|date :'dd/MM/yyyy'}}</span>
+    </div>
+
       <input name="{{e.attribute_name}}" ng-switch-when="number" type="number" ng-model="lead.ATTRIBUTES[e.attribute_name]"  ng-required="e.required">
       <input name="{{e.attribute_name}}" ng-switch-when="int" type="number" ng-model="lead.ATTRIBUTES[e.attribute_name]"  min="{{e.min}}" max="{{e.max}}" step="1" ng-min="e.min" ng-max="e.max" ng-required="e.required">
       <select class="select" name="{{e.attribute_name}}" ng-switch-when="select" class="form-control" ng-model="e.value" ng-required="e.required">

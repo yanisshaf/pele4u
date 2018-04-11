@@ -99,7 +99,9 @@ angular.module('pele', ['ngSanitize'])
         PelApi.safeApply($scope, function() {
           $scope.lead = $state.params.lead;
           var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/);
-          $scope.lead.ATTRIBUTES = JSON.parse($scope.lead.ADD_INFO);
+          console.log($scope.lead.ADD_INFO)
+          //$scope.lead.ATTRIBUTES = JSON.parse($scope.lead.ADD_INFO);
+
           $scope.lead.from_hour = found[1];
           $scope.lead.to_hour = found[2];
         })
@@ -126,7 +128,7 @@ angular.module('pele', ['ngSanitize'])
         $scope.uploadRequired = false
         $scope.uploadIsExists = false;
         varr.forEach(function(v) {
-          if (v.type === "html") {
+          if (v.type === "date") {
 
           }
           if (v.type === "upload") {
@@ -141,6 +143,10 @@ angular.module('pele', ['ngSanitize'])
             v = $scope.setValidationDate(v)
           }
         })
+      }
+
+      $scope.display = function(e) {
+        e.show = "true"
       }
 
       $scope.onValueChanged = function(leadType) {

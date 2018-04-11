@@ -836,7 +836,7 @@ top:11px;
 .list.lead-form .item-input {padding:3px 5px 3px 3px}
 .list.lead-form label .input-label {padding:0px 0 8px 8px;line-height: 16px;font-weight: bolder}
 
-.list.lead-form .item-input input  { ;border-bottom: 1px dotted #444;padding-right:5px !important;margin-right:5px;font-size:14px}
+.list.lead-form .item-input input  { ;border-bottom: 1px dotted #444;padding-right:5px !important;margin-right:5px;font-size:14px;    text-align: right;}
 .list.lead-form .item-input textarea {border: 1px dotted #444;padding-right:5px;    min-height: 150px;margin-right:5px;font-size:14px;
     max-height: 300px;
 }

@@ -10,8 +10,8 @@
   </ion-nav-title>
   <ion-content id="leads_list">
     <ion-list class="pele_rtl text-right">
-      <ion-item ng-show="!leads.length">
-        לא נמצאו לידים שלך - תמיד תוכל לפתוח
+      <ion-item ng-show="leads && leads.length==0">
+        לא נמצאו לידים
       </ion-item>
     </ion-list>
     <ion-list class="pele_rtl text-right">
