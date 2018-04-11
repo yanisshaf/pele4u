@@ -83,6 +83,12 @@ angular.module('pele', ['ngSanitize'])
         $scope.to_hour_range = getHHRange(toNumber($scope.lead.from_hour) + 0.5, 17.5, 0.5);
       }
 
+      $scope.onValueChanged = function(leadType) {
+        var extraInfo = _.get($scope, 'typesByFormType[' + leadType + '].SETUP.attrs', []);
+        $scope.extraSchema = extraInfo;
+        setDynamicValidation($scope.extraSchema)
+      }
+
 
 
       $scope.getNext = function() {
@@ -99,9 +105,7 @@ angular.module('pele', ['ngSanitize'])
         PelApi.safeApply($scope, function() {
           $scope.lead = $state.params.lead;
           var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/);
-          console.log($scope.lead.ADD_INFO)
-          //$scope.lead.ATTRIBUTES = JSON.parse($scope.lead.ADD_INFO);
-
+          $scope.files = $scope.lead.files;
           $scope.lead.from_hour = found[1];
           $scope.lead.to_hour = found[2];
         })
@@ -150,11 +154,7 @@ angular.module('pele', ['ngSanitize'])
         e.show = "true"
       }
 
-      $scope.onValueChanged = function(leadType) {
-        var extraInfo = _.get($scope, 'typesByFormType[' + leadType + '].SETUP.attrs', []);
-        $scope.extraSchema = extraInfo;
-        setDynamicValidation($scope.extraSchema)
-      }
+
 
 
       console.log("lead in ctrl  :", $scope.lead)

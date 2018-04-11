@@ -125,7 +125,7 @@
   <div ng-show="!leadSuccess" style="" class="lead-footer bar bar-footer bar-positive">
     <a class="button  button-clear icon-right ion-paper-airplane" ng-show="lead.LEAD_ID" ng-click="submit()" class="title"> שמור </a>
     <!--a class="button icon-right ion-document-text" ng-show="lead.LEAD_ID" ng-click="submit()" class="title">עדכן ליד עצמי</a-->
-    <a class="button button-clear icon-right ion-paperclip" ng-show="uploadIsExists" ng-click="openModal()" class="title"> <span class="pel-badge">{{files.length}}</span> צרף מסמכים </a>
+    <a class="button button-clear icon-right ion-paperclip" ng-show="uploadIsExists ||files" ng-click="openModal()" class="title"> <span class="pel-badge">{{files.length}}</span> צרף מסמכים </a>
   </div>
 
   <script id="upload.html" type="text/ng-template">
