@@ -5,8 +5,8 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadsReportsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaSocialSharing',
-    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaSocialSharing) {
+  .controller('leadsReportsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', 'PelApi',
+    function(StorageService, ApiGateway, $scope, $state, PelApi) {
 
 
       $scope.type = $state.params.type;
@@ -20,7 +20,6 @@ angular.module('pele')
       $scope.getConf = function() {
         $scope.conf = StorageService.getData("leads_conf")
         if ($scope.conf) return;
-
         ApiGateway.get("leads/conf").success(function(data) {
           StorageService.set("leads_conf", data, 1000 * 60 * 60)
           $scope.conf = data;
@@ -35,19 +34,20 @@ angular.module('pele')
           lead: lead
         })
       }
-
       $scope.getData = function() {
+        PelApi.showLoading();
         ApiGateway.get("leads/", {
           type: $state.params.type
         }).success(function(data) {
           $scope.leads = data;
         }).error(function(error, httpStatus, headers, config) {
           PelApi.throwError("api", "fetch leads list by type ", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
+        }).finally(function() {
+          PelApi.hideLoading();
         })
       }
 
       $scope.getConf();
       $scope.getData();
-      console.log($state.params);
     }
   ]);

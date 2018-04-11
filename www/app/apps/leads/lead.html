@@ -21,20 +21,6 @@
       <label ng-show="submitted && !lead.LEAD_TYPE" class="item no-border input-error text-right">
           נא בחר סוג ליד
       </label>
-      <!--label class="item no-border item-toggle pele_rtl text-right">
-          ליד עצמי {{lead.LEAD_ID}}
-          <label class="toggle toggle-positive">
-               <input type="checkbox" ng-model="lead.FORM_LEAD_STATE"  ng-true-value="'S'" ng-false-value="'T'">
-               <div class="track">
-                 <div class="handle"></div>
-               </div>
-             </label>
-      </label>
-      <label class="pele_rtl item-text-wrap"><small>** ליד עצמי לא יעבור להמשך טיפול אצל הגורמים השונים בפלאפון</small>
-      </label-->
-      <!--a href="#" style="margin-top:7px;margin-left:7px" class="fab" ng-click="openModal()">
-              <i class="icon ion-upload icon-center"></i>
-      </a-->
       <div class="list lead-form pele_rtl text-right">
         <label class="item no-border item-input">
               <span class="input-label">* שם פרטי</span>
@@ -140,37 +126,17 @@
   <div ng-show="!leadSuccess" style="" class="lead-footer bar bar-footer bar-positive">
     <a class="button  button-clear icon-right ion-paper-airplane" ng-show="lead.LEAD_ID" ng-click="submit()" class="title"> שמור </a>
     <!--a class="button icon-right ion-document-text" ng-show="lead.LEAD_ID" ng-click="submit()" class="title">עדכן ליד עצמי</a-->
-    <a class="button button-clear icon-right ion-paperclip" ng-show="uploadRequired" ng-click="openModal()" class="title"> <span class="pel-badge">3</span> צרף מסמכים </a>
+    <a class="button button-clear icon-right ion-paperclip" ng-show="uploadIsExists" ng-click="openModal()" class="title"> <span class="pel-badge">3</span> צרף מסמכים </a>
   </div>
 
   <script id="upload.html" type="text/ng-template">
-    <ion-modal-view class="pele-background">
+    <ion-modal-view class="pele-background" cache-view="false">
       <ion-header-bar class="bar bar-header bar-positive">
         <h1 class="title">צירוף קבצים לליד</h1>
         <button ng-click="closeModal()" class="button button-icon ion-close-circled"></button>
       </ion-header-bar>
-      <ion-content scroll="true">
-        <!--div class="apps-front-menu">
-        <button ui-sref="app.leads.lead" class="button button-large button-stable button-block text-right item-icon-left">
-      מצלמה <i class="icon ion-ios-camera-outline icon-left"></i>
-    </button>
-        <button ui-sref="app.leads.report({personal:false})" class="button button-large button-stable button-block item-icon-left text-right">
-               גלריה  <i class="icon ion-images icon-left"></i>
-      </button>
-        <button ngf-select="upload($file)" class="button button-large button-stable button-block item-icon-left text-right" ng-model="picFile" ngf-pattern="'image/*'">
-  אחסון מכשיר   <i class=" icon ion-ios-folder-outline icon-left "></i>
-      </button>
-    </div-->
+      <ion-content scroll="true" delegate-handle="modalContent">
         <ng-form role="form" name="attachForm">
-          <!--div style="margin-top:20px" class="row text-center">
-            teste 1 : <input type="file" capture="camera" accept="image/*">
-          </div>
-          <div>
-            test 2: <input type="file" accept="image/*;capture=camera">
-          </div>
-          <div>
-            test 3: <input type="file" accept="image/*" capture>
-          </div-->
           <div style="margin-top:20px" class="row text-center">
             <div class="col col-50">
               <a class="text-center white" ng-click="takePic('CAMERA')"><i class="icon ion-ios-camera-outline icon-lg icon-top"></i>מצלמה</a>

@@ -5,8 +5,8 @@ angular.module('pele', ['ngSanitize'])
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$templateCache', '$cordovaFileTransfer',
-    function(StorageService, ApiGateway, $scope, $state, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $templateCache) {
+  .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicModal', 'PelApi', '$ionicScrollDelegate', '$sce', '$compile',
+    function(StorageService, ApiGateway, $scope, $state, $ionicModal, PelApi, $ionicScrollDelegate, $sce, $compile) {
 
       $scope.forms = {}
 
@@ -26,7 +26,7 @@ angular.module('pele', ['ngSanitize'])
           encodingType: Camera.EncodingType.JPEG,
           destinationType: Camera.DestinationType.FILE_URI,
           targetWidth: 794,
-          targetHeight: 1024,
+          targetHeight: 1122,
           saveToPhotoAlbum: false,
           correctOrientation: true
         };
@@ -53,18 +53,6 @@ angular.module('pele', ['ngSanitize'])
             });
           }
 
-
-
-          /*  window.resolveLocalFileSystemURL(imageUri, function(fileEntry) {
-            $scope.fileEntry = fileEntry
-            PelApi.safeApply($scope, function() {
-              $scope.imageUri = fileEntry.nativeURL;
-            });
-
-          }, function(e) {
-            $scope.fileError = e
-          });
-*/
         }, function(err) {
           console.log("takePic err:", err)
         }, options);
@@ -94,11 +82,6 @@ angular.module('pele', ['ngSanitize'])
       $scope.recreateEndHour = function() {
         $scope.to_hour_range = getHHRange(toNumber($scope.lead.from_hour) + 0.5, 17.5, 0.5);
       }
-
-
-      console.log("$scope.from_hour_range:", $scope.from_hour_range);
-      console.log("$scope.to_hour_range:", $scope.to_hour_range);
-
 
 
 
@@ -131,19 +114,37 @@ angular.module('pele', ['ngSanitize'])
         $scope.getNext();
       }
 
+      $scope.trust = function(html) {
+        return $sce.trustAsHtml(html);
+      }
+
+      $scope.openLink = function(e) {
+        window.open(e.link, "_system")
+      }
+
       function setDynamicValidation(varr) {
+        $scope.uploadRequired = false
+        $scope.uploadIsExists = false;
         varr.forEach(function(v) {
+          if (v.type === "html") {
+
+          }
           if (v.type === "upload") {
-            $scope.uploadRequired = true
+            $scope.uploadIsExists = true;
+            $scope.uploadRequired = v.required
+          }
+          if (v.type === "checkbox") {
+            v.trueValue = v.trueValue || 1;
+            v.falseValue = v.falseValue || 0;
           }
           if (v.type === "date") {
             v = $scope.setValidationDate(v)
           }
         })
       }
+
       $scope.onValueChanged = function(leadType) {
-        console.log(leadType)
-        let extraInfo = _.get($scope, 'typesByFormType[' + leadType + '].SETUP.attrs', []);
+        var extraInfo = _.get($scope, 'typesByFormType[' + leadType + '].SETUP.attrs', []);
         $scope.extraSchema = extraInfo;
         setDynamicValidation($scope.extraSchema)
       }
@@ -228,12 +229,7 @@ angular.module('pele', ['ngSanitize'])
           progress: 0
         }
 
-        function win(r) {
-          console.log(" response from upload:", r)
-          console.log("Code = " + r.responseCode);
-          console.log("Response = " + r.response);
-          console.log("Sent = " + r.bytesSent);
-
+        function fileUploadSuccess(r) {
           PelApi.safeApply($scope, function() {
             $scope.uploadState.progress = 100;
             $scope.uploadState.success = true;
@@ -244,8 +240,8 @@ angular.module('pele', ['ngSanitize'])
           });
         }
 
-        function fail(error) {
-          console.log("error from upload :", error)
+        function fileUploadFailure(error) {
+          PelApi.throwError("api", "upload doc", JSON.stringify(error), false);
           $scope.uploadState.progress = 100;
           $scope.uploadState.error = true;
           PelApi.hideLoading();
@@ -271,8 +267,9 @@ angular.module('pele', ['ngSanitize'])
             $scope.increment++;
           }
         };
+
         PelApi.showLoading();
-        ft.upload(picFile, uri, win, fail, options, true);
+        ft.upload(picFile, uri, fileUploadSuccess, fileUploadFailure, options, true);
       }
 
 
@@ -285,8 +282,12 @@ angular.module('pele', ['ngSanitize'])
         console.log(err)
       });
       $scope.openModal = function() {
+        $ionicScrollDelegate.$getByHandle('modalContent').scrollTop(true);
         PelApi.safeApply($scope, function() {
           $scope.imageUri = "";
+          $scope.uploadState = {
+            progress: 0
+          };
         });
         $scope.modal.show();
       };
@@ -320,5 +321,4 @@ angular.module('pele', ['ngSanitize'])
       }
 
     }
-
   ]);
