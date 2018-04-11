@@ -127,6 +127,7 @@ angular.module('pele', ['ngSanitize'])
       function setDynamicValidation(varr) {
         $scope.uploadRequired = false
         $scope.uploadIsExists = false;
+        $scope.files = [];
         varr.forEach(function(v) {
           if (v.type === "date") {
 
@@ -243,6 +244,10 @@ angular.module('pele', ['ngSanitize'])
             PelApi.hideLoading();
             $scope.imageUri = "";
             $scope.imageTitle = "";
+            $scope.files.push({
+              uri: $scope.imageUri,
+              title: $scope.imageTitle
+            })
           });
         }
 
