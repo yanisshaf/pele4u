@@ -35,8 +35,13 @@ angular.module('pele')
         })
       }
       $scope.getData = function() {
+        var service = "leads/";
+
+        if ($state.params.type === "T")
+          service += "tasks";
+
         PelApi.showLoading();
-        ApiGateway.get("leads/", {
+        ApiGateway.get(service, {
           type: $state.params.type
         }).success(function(data) {
           $scope.leads = data;

@@ -8,17 +8,28 @@
       </div>
     </div>
   </ion-nav-title>
-  <ion-content id="leads_list">
+  <ion-content class="leads-report" id="leads_list">
     <ion-list class="pele_rtl text-right">
       <ion-item ng-show="leads && leads.length==0">
         לא נמצאו לידים
       </ion-item>
     </ion-list>
-    <ion-list class="pele_rtl text-right">
+    <ion-list ng-if="type=='T'" class="pele_rtl text-right">
+      <ion-item ng-repeat="l in leads.DATA">
+        <div class="row">
+          <div class="col text-right"><span class="pel-badge">{{$index+1}}</span> <strong>שם לקוח :</strong> {{l.CUSTOMER_NAME}}</div>
+        </div>
+        <div class="row">
+          <div class="col col-65"><strong>סטאטוס : </strong>{{l.TASK_STATUS}}</div>
+          <div class="col col-35"><strong>נוצר : </strong>{{l.CREATION_DATE|date :'d/M/yyyy HH:mm'}}</div>
+        </div>
+      </ion-item>
+    </ion-list>
+    <ion-list ng-if="type=='S'" class="pele_rtl text-right">
       <ion-item ng-repeat="l in leads" class="item-icon-left">
-        <div><strong>שם לקוח :</strong> {{l.FIRST_NAME}} {{l.LAST_NAME}}</div>
-        <div><strong>נוצר : </strong>{{l.CREATED|date :'d/M/yyyy HH:mm'}}</div>
-        <i ng-show="type=='S'" ng-click="showLead(l)" class="icon ion-edit"></i>
+        <div><span class="pel-badge">{{$index+1}}</span> <strong>שם לקוח :</strong> {{l.FIRST_NAME}} {{l.LAST_NAME}}</div>
+        <div style="padding-right:30px"><strong>נוצר : </strong>{{l.CREATED|date :'d/M/yyyy HH:mm'}}</div>
+        <span class="pele-badge"><i ng-show="type=='S'" ng-click="showLead(l)" class="icon ion-edit"></i></span>
       </ion-item>
     </ion-list>
   </ion-content>
