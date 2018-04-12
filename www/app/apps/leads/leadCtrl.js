@@ -13,6 +13,7 @@ angular.module('pele', ['ngSanitize'])
       $scope.uploadState = {
         progress: 0
       };
+      $scope.storedLead = false;
 
       $scope.lead = {
         ATTRIBUTES: {}
@@ -59,7 +60,7 @@ angular.module('pele', ['ngSanitize'])
           }
 
         }, function(err) {
-          console.log("takePic err:", err)
+
         }, options);
 
         return true;
@@ -91,13 +92,9 @@ angular.module('pele', ['ngSanitize'])
       $scope.onValueChanged = function(leadType) {
         var extraInfo = _.get($scope, 'typesByFormType[' + leadType + '].SETUP.attrs', []);
         $scope.extraSchema = extraInfo;
+        console.log("extraSchema:", $scope.extraSchema)
         setDynamicValidation($scope.extraSchema)
       }
-
-      $scope.$watch('extraSchema', function() {
-        console.log("CHANGED", $scope.extraSchema)
-      })
-
 
       $scope.getNext = function() {
         var refStamp = new Date().getTime();
@@ -111,6 +108,7 @@ angular.module('pele', ['ngSanitize'])
 
       if ($state.params.lead && $state.params.lead.LEAD_ID) {
 
+        $scope.onValueChanged($state.params.lead.LEAD_TYPE);
 
         PelApi.safeApply($scope, function() {
           $scope.lead = $state.params.lead;
@@ -119,7 +117,7 @@ angular.module('pele', ['ngSanitize'])
           $scope.lead.from_hour = found[1];
           $scope.lead.to_hour = found[2];
           $scope.savedAttributes = _.clone($state.params.lead.ATTRIBUTES)
-          console.log("savedAttributes :", $scope.savedAttributes);
+          $scope.storedLead = true;
         })
       } else {
         if ($state.params.type === 'S') {
@@ -142,13 +140,12 @@ angular.module('pele', ['ngSanitize'])
 
       function setDynamicValidation(varr) {
         $scope.uploadRequired = false
-        $scope.uploadIsExists = false;
-        $scope.files = [];
+        $scope.uploadExists = false;
+
         _.set($scope.lead, 'ATTRIBUTES', {});
 
         varr.forEach(function(v, index) {
           var savedAttrValeu = _.get($scope.savedAttributes, v.attribute_name);
-
           _.set($scope.lead.ATTRIBUTES, v.attribute_name, savedAttrValeu);
           if (v.service) {
             ApiGateway.get(v.service).success(function(data) {
@@ -163,8 +160,14 @@ angular.module('pele', ['ngSanitize'])
 
           }
           if (v.type === "upload") {
-            $scope.uploadIsExists = true;
-            $scope.uploadRequired = v.required
+            PelApi.safeApply($scope, function() {
+              $scope.uploadExists = true;
+              $scope.uploadRequired = v.required;
+              alert($scope.uploadExists)
+            })
+
+
+
           }
           if (v.type === "checkbox") {
             v.trueValue = v.trueValue || 1;
@@ -183,7 +186,7 @@ angular.module('pele', ['ngSanitize'])
 
 
 
-      console.log("lead in ctrl  :", $scope.lead)
+
       $scope.extraData = {};
 
       $scope.getRelevantLeadsType = function(types) {
@@ -192,12 +195,12 @@ angular.module('pele', ['ngSanitize'])
           if ($scope.lead.FORM_TYPE === t.FORM_TYPE)
             $scope.typesByFormType[t.TYPE] = t
         })
-        console.log('  $scope.typesByFormType:', $scope.typesByFormType)
+
       }
 
       $scope.getConf = function() {
         $scope.conf = StorageService.getData("leads_conf", {})
-        console.log($scope.conf)
+
         if ($scope.conf.types) {
           $scope.getRelevantLeadsType($scope.conf.types)
           return;
@@ -206,7 +209,6 @@ angular.module('pele', ['ngSanitize'])
           StorageService.set("leads_conf", data, 1000 * 60 * 60)
           $scope.conf = data;
           $scope.getRelevantLeadsType($scope.conf.types)
-          console.log(data)
 
         }).error(function(error, httpStatus, headers, config) {
           PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
@@ -219,7 +221,7 @@ angular.module('pele', ['ngSanitize'])
 
 
       $scope.delete = function(leadId) {
-        ApiGateway.delete("leads/" + leadId).success(function(data) {
+        ApiGateway.delete("leads/" + $scope.lead.LEAD_ID).success(function(data) {
           swal("ליד עצמי נמחק בהצלחה")
             .then(function(ret) {
               $state.go("app.leads.report")
@@ -230,7 +232,7 @@ angular.module('pele', ['ngSanitize'])
       }
 
       $scope.submit = function() {
-        console.log($scope.lead)
+
         $scope.submitted = true;
         $scope.lead.TASK_LEVEL = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".TASK_LEVEL");
         $scope.lead.TASK_FOLLOWUP_TYPE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".TASK_FOLLOWUP_TYPE");
@@ -319,7 +321,7 @@ angular.module('pele', ['ngSanitize'])
       }).then(function(modal) {
         $scope.modal = modal;
       }).catch(function(err) {
-        console.log(err)
+
       });
       $scope.openModal = function() {
         $ionicScrollDelegate.$getByHandle('modalContent').scrollTop(true);

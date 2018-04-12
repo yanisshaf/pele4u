@@ -897,4 +897,6 @@ a.white {color:white}
 .upload-success h3,.upload-success h2 {color:white;padding:5px 20px 5px 20px}
 .upload-success img {height:160px}
 .lead-footer.bar-footer{height:auto}
+.lead-footer.bar-footer .button {margin:0;margin-left:5px}
+.lead-footer.bar-footer .button.ion-trash-a {background:#FF5252;color:white}
 .leads-report .item {padding:10px}

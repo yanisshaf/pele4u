@@ -122,17 +122,17 @@
       </div>
     </ng-form>
   </ion-content>
-  <div ng-show="!leadSuccess" style="" class="lead-footer bar bar-footer bar-positive">
-    <a class="button  button-clear icon-right ion-paper-airplane" ng-show="lead.LEAD_ID" ng-click="submit()" class="title"> שמור </a>
-    <!--a class="button icon-right ion-document-text" ng-show="lead.LEAD_ID" ng-click="submit()" class="title">עדכן ליד עצמי</a-->
-    <a class="button button-clear icon-right ion-paperclip" ng-show="uploadIsExists ||files" ng-click="openModal()" class="title"> <span class="pel-badge">{{files.length}}</span> צרף מסמכים </a>
+  <div ng-show="!leadSuccess" style="background:#01579B" class="lead-footer bar bar-footer bar-positive">
+    <a class="button  button-outline button-block icon-left ion-paper-airplane" ng-show="lead.LEAD_ID" ng-click="submit()"> שמור </a>
+    <a class="button button-outline  button-block icon-right ion-paperclip" ng-if="uploadExists" ng-click="openModal()"> <span class="pel-badge">{{files.length||"0"}}</span> צרף מסמכים </a>
+    <a class="button button-outline button-block icon-left ion-trash-a" ng-show="storedLead" ng-click="delete()"> מחק </a>
   </div>
 
   <script id="upload.html" type="text/ng-template">
     <ion-modal-view class="pele-background" cache-view="false">
       <ion-header-bar class="bar bar-header bar-positive">
         <h1 class="title">צירוף קבצים לליד</h1>
-        <button ng-click="closeModal()" class="button button-icon ion-close-circled"></button>
+        <button ng-click="closeModal()" class="button button-icon ion-arrow-down-b"></button>
       </ion-header-bar>
       <ion-content scroll="true" delegate-handle="modalContent">
         <ng-form role="form" name="attachForm">
