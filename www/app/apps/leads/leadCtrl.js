@@ -155,9 +155,10 @@ angular.module('pele', ['ngSanitize'])
             })
           }
 
-          if (v.type === "date") {
-
+          if (v.type === "select" && v.min && v.max && v.step) {
+            v.options = [""].concat(_.range(v.min, v.max, v.step));
           }
+
           if (v.type === "upload") {
             PelApi.safeApply($scope, function() {
               $scope.uploadExists = true;
