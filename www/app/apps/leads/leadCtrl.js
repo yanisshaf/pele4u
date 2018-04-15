@@ -234,8 +234,10 @@ angular.module('pele', ['ngSanitize'])
             ApiGateway.delete("leads/" + $scope.lead.LEAD_ID).success(function(data) {
               swal("ליד עצמי נמחק בהצלחה")
                 .then(function(ret) {
-                  $ionicHistory.clearHistory();
-                  $state.go("app.leads.report")
+
+                  $state.go("app.leads.report", {}, {
+                    location: 'replace'
+                  })
                 })
             }).error(function(error, httpStatus, headers, config) {
               PelApi.throwError("api", "delete lead by id ", "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
