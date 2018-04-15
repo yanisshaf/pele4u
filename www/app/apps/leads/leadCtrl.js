@@ -156,7 +156,7 @@ angular.module('pele', ['ngSanitize'])
           }
 
           if (v.type === "select" && v.min && v.max && v.step) {
-            v.options = [""].concat(_.range(v.min, v.max, v.step));
+            v.options = [""].concat(_.range(v.min, v.max + v.step, v.step));
           }
 
           if (v.type === "upload") {
