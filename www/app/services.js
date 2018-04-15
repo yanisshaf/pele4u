@@ -193,15 +193,13 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   this.getUrl = getUrl;
 
   this.get = function(service, params, headers) {
-    var headerParams = {
-      headers: buildHeader(headers)
-    }
     var url = urlBase + service;
     params = params || {};
-
-    return $http.get(url, {
-      params: params
-    }, headerParams);
+    var httpConfig = {
+      params: params,
+      headers: buildHeader(headers)
+    }
+    return $http.get(url, httpConfig);
   };
   this.post = function(service, params, headers) {
     var headerParams = {
@@ -216,11 +214,14 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     return $http.head(urlBase + service, {}, headerParams);
   };
   this.delete = function(service, params, headers) {
-    var headerParams = {
+    params = params || {};
+    var httpConfig = {
+      params: params,
       headers: buildHeader(headers)
-    }
-    return $http.delete(urlBase + service, params || {}, headerParams);
+    };
+    return $http.delete(urlBase + service, httpConfig);
   };
+
   this.put = function(service, params, headers) {
     var headerParams = {
       headers: buildHeader(headers)

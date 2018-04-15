@@ -54,7 +54,7 @@ const apiConfig = {
       logLevel: 0
     },
     LP: {
-      appId: "922ef47f-6abc-4df5-80ea-801a8b081fa1",
+      appId: "430ad45c-c555-41f5-87c4-46f9d4be0cc1",
       visualLevel: 0,
       logLevel: 0
     },
