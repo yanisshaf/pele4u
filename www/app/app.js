@@ -4,16 +4,21 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.messages', 'pele.controllers', 'pele.factories', 'pele.config',
+angular.module('pele', [
+    'ionic',
+    'ngCordova',
+    'ngStorage',
+    'tabSlideBox',
+    'pele.messages',
+    'pele.controllers',
+    'pele.factories',
+    'pele.config',
     'pele.services',
-    //-----------------------------------------//
-    //--           MENU                      --//
-    //-----------------------------------------//
-    , 'pele.P1_appsListCtrl'
-    //-----------------------------------------//
-    //--       Authentication                --//
-    //-----------------------------------------//
-    , 'pele.authCtrl', 'pele.states', , 'fileLogger', 'oc.lazyLoad'
+    'pele.P1_appsListCtrl',
+    'pele.authCtrl',
+    'pele.states',
+    'fileLogger',
+    'oc.lazyLoad'
   ])
 
   .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings',
@@ -220,7 +225,6 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
         views: state.views,
         cache: state.cache || true,
         params: state.params || {},
-        controllerAs: state.controllerAs,
         resolve: {
           deps: ['$ocLazyLoad', function($ocLazyLoad) {
             if (!state.src)
@@ -236,8 +240,7 @@ angular.module('pele', ['ionic', 'ngCordova', 'ngStorage', 'tabSlideBox', 'pele.
 
     // if none of the above states are matched, use this as the fallback
     //$urlRouterProvider.deferIntercept();
-    //$urlRouterProvider.otherwise('/apps/home.html', {
-    $urlRouterProvider.otherwise('/app/leads', {
+    $urlRouterProvider.otherwise('/apps/home.html', {
       'showLoading': 'Y'
     });
   })

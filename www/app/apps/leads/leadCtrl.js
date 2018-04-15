@@ -92,7 +92,6 @@ angular.module('pele', ['ngSanitize'])
       $scope.onValueChanged = function(leadType) {
         var extraInfo = _.get($scope, 'typesByFormType[' + leadType + '].SETUP.attrs', []);
         $scope.extraSchema = extraInfo;
-        console.log("extraSchema:", $scope.extraSchema)
         setDynamicValidation($scope.extraSchema)
       }
 
@@ -163,7 +162,6 @@ angular.module('pele', ['ngSanitize'])
             PelApi.safeApply($scope, function() {
               $scope.uploadExists = true;
               $scope.uploadRequired = v.required;
-              alert($scope.uploadExists)
             })
 
 
