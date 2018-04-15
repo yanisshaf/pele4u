@@ -220,13 +220,26 @@ angular.module('pele', ['ngSanitize'])
 
 
       $scope.delete = function(leadId) {
-        ApiGateway.delete("leads/" + $scope.lead.LEAD_ID).success(function(data) {
-          swal("ליד עצמי נמחק בהצלחה")
-            .then(function(ret) {
-              $state.go("app.leads.report")
+        swal({
+          html: 'נא אשרו מחיקת ליד עצמי ',
+          showCloseButton: true,
+          showCancelButton: true,
+          focusConfirm: false,
+          confirmButtonText: 'אשור',
+          confirmButtonAriaLabel: 'Thumbs up, great!',
+          cancelButtonText: 'ביטול',
+          cancelButtonAriaLabel: 'Thumbs down',
+        }).then(function(btn) {
+          if (btn.value) {
+            ApiGateway.delete("leads/" + $scope.lead.LEAD_ID).success(function(data) {
+              swal("ליד עצמי נמחק בהצלחה")
+                .then(function(ret) {
+                  $state.go("app.leads.report")
+                })
+            }).error(function(error, httpStatus, headers, config) {
+              PelApi.throwError("api", "delete lead by id ", "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
             })
-        }).error(function(error, httpStatus, headers, config) {
-          PelApi.throwError("api", "delete lead by id ", "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
+          }
         })
       }
 
