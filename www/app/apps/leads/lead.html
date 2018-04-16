@@ -123,9 +123,12 @@
     </ng-form>
   </ion-content>
   <div ng-show="!leadSuccess" style="background:#01579B" class="lead-footer bar bar-footer bar-positive">
-    <a class="button  button-outline button-block icon-left ion-paper-airplane" ng-show="lead.LEAD_ID" ng-click="submit()"> שמור </a>
-    <a class="button button-outline  button-block icon-right ion-paperclip" ng-if="uploadExists" ng-click="openModal()"> <span class="pel-badge">{{files.length||"0"}}</span> צרף מסמכים </a>
-    <a class="button button-outline button-block icon-left ion-trash-a" ng-show="storedLead" ng-click="delete()"> מחק </a>
+    <a class="button  buttub-send button-block icon-left ion-paper-airplane" ng-show="lead.LEAD_ID" ng-click="submit()">
+    <span ng-if="storedLead">עדכן</span>
+      <span ng-if="!storedLead">שלח</span>
+    </a>
+    <a class="button  buttun-files button-block icon-right ion-paperclip" ng-if="uploadExists" ng-click="openModal()"> <span class="pel-badge">{{files.length||"0"}}</span> צרף מסמכים </a>
+    <a class="button  buttun-danger button-block icon-left ion-trash-a" ng-show="storedLead" ng-click="delete()"> מחק </a>
   </div>
 
   <script id="upload.html" type="text/ng-template">

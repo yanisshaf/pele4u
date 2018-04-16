@@ -830,17 +830,25 @@ top:11px;
 }
 .main-menu-content .item .item-content .icon:before { background:#939292}
 
+
+#new_lead {
+    font-size:18px;
+  }
+#new_lead  input{
+    font-size: 1rem;
+  }
 .item-checkbox.text-right {padding-right:60px}
 .leads-notes {height:200px;min-height: 200px}
 .white {color:white}
 .list.lead-form .item-input {padding:3px 5px 3px 3px}
-.list.lead-form label .input-label {padding:0px 0 8px 8px;line-height: 16px;font-weight: bolder}
+.list.lead-form label .input-label {padding:0px 0 8px 8px;line-height: 16px;}
 
-.list.lead-form .item-input input  { ;border-bottom: 1px dotted #444;padding-right:5px !important;margin-right:5px;font-size:14px;    text-align: right;}
-.list.lead-form .item-input textarea {border: 1px dotted #444;padding-right:5px;    min-height: 150px;margin-right:5px;font-size:14px;
+
+.list.lead-form .item-input input  { ;border-bottom: 1px dotted #444;padding-right:5px !important;margin-right:5px; text-align: right;}
+.list.lead-form .item-input textarea {border: 1px dotted #444;padding-right:5px;    min-height: 150px;margin-right:5px;
     max-height: 300px;
 }
-.fancy-select .item-note {padding-left:30px ;font-weight:bolder ;color:black}
+.fancy-select .item-note {padding-left:30px ;color:black}
 label.input-error {color:red !important ;margin-top:0px;padding-top:0px;padding-bottom: 2px;margin-bottom: 2px}
 .fancy-select .item {padding:10px;}
 #extra-lead-form label { float:right}
@@ -897,6 +905,9 @@ a.white {color:white}
 .upload-success h3,.upload-success h2 {color:white;padding:5px 20px 5px 20px}
 .upload-success img {height:160px}
 .lead-footer.bar-footer{height:auto}
-.lead-footer.bar-footer .button {margin:0;margin-left:5px}
+.lead-footer.bar-footer .button {margin:0;margin-left:5px;border-radius: 10%;font-weight:bold}
+.buttun-files {border:2px solid red;background: }
+.buttun-send {border:2px solid red;background: }
+.buttun-danger  {border:2px solid red;background: }
 .lead-footer.bar-footer .button.ion-trash-a {background:#FF5252;color:white}
 .leads-report .item {padding:10px}
