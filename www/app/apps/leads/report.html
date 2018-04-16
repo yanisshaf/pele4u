@@ -1,9 +1,9 @@
-<ion-view>
+<ion-view hide-back-button="true" cache-view="false">
   <ion-nav-buttons side="right">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-nav-buttons side="left">
-    <button ui-sref="app.leads" class="button button-icon icon ion-arrow-left-a"></button>
+    <button ui-sref="app.leads" class="button back-button buttons button-clear header-item ion-arrow-left-a"></button>
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
@@ -29,7 +29,7 @@
       </ion-item>
     </ion-list>
     <ion-list ng-if="type=='S'" class="pele_rtl text-right">
-      <ion-item ng-repeat="l in leads" class="item-icon-left">
+      <ion-item ng-repeat="l in leads |orderBy:l.CREATED:true" class="item-icon-left">
         <div><span class="pel-badge">{{$index+1}}</span> <strong>שם לקוח :</strong> {{l.FIRST_NAME}} {{l.LAST_NAME}}</div>
         <div style="padding-right:30px"><strong>נוצר : </strong>{{l.CREATED|date :'d/M/yyyy HH:mm'}}</div>
         <span class="pele-badge"><i ng-show="type=='S'" ng-click="showLead(l)" class="icon ion-edit"></i></span>

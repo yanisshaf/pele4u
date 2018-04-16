@@ -234,8 +234,10 @@ angular.module('pele', ['ngSanitize'])
             ApiGateway.delete("leads/" + $scope.lead.LEAD_ID).success(function(data) {
               swal("ליד עצמי נמחק בהצלחה")
                 .then(function(ret) {
-
-                  $state.go("app.leads.report", {}, {
+                  $state.go("app.leads.report", {
+                    type: $scope.lead.FORM_TYPE
+                  }, {
+                    reload: true,
                     location: 'replace'
                   })
                 })
@@ -324,7 +326,7 @@ angular.module('pele', ['ngSanitize'])
             $scope.increment++;
           }
         };
-
+        $ionicScrollDelegate.$getByHandle('modalContent').scrollTop(true);
         PelApi.showLoading();
         ft.upload(picFile, uri, fileUploadSuccess, fileUploadFailure, options, true);
       }

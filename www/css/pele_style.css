@@ -905,9 +905,9 @@ a.white {color:white}
 .upload-success h3,.upload-success h2 {color:white;padding:5px 20px 5px 20px}
 .upload-success img {height:160px}
 .lead-footer.bar-footer{height:auto}
-.lead-footer.bar-footer .button {margin:0;margin-left:5px;border-radius: 10%;font-weight:bold}
-.buttun-files {border:2px solid red;background: }
-.buttun-send {border:2px solid red;background: }
-.buttun-danger  {border:2px solid red;background: }
-.lead-footer.bar-footer .button.ion-trash-a {background:#FF5252;color:white}
+.lead-footer.bar-footer .button {margin:0;margin-left:5px;border-radius: 6%;    font-size: 16px;padding-right:10px}
+#buttun-files {border:2px solid #bbb;background:#ddd ;color:#000}
+#buttun-send { color:#fff;border:2px solid #9cb5de;background:#269CE9;}
+#buttun-send span {color:#fff}
+#buttun-danger  {border:2px solid #c43c35;background:#ca3535; color:#fff }
 .leads-report .item {padding:10px}

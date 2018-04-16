@@ -5,10 +5,10 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('leadsReportsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', 'PelApi', '$ionicNavBarDelegate',
-    function(StorageService, ApiGateway, $scope, $state, PelApi, $ionicNavBarDelegate) {
+  .controller('leadsReportsCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', 'PelApi',
+    function(StorageService, ApiGateway, $scope, $state, PelApi) {
 
-      $ionicNavBarDelegate.showBackButton(false);
+      //$ionicHistory.clearHistory();
       $scope.type = $state.params.type;
 
       if ($state.params.type === "S") {
