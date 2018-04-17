@@ -127,7 +127,7 @@
        <span ng-if="storedLead">עדכן</span>
       <span ng-if="!storedLead">שלח</span>&nbsp;
     </a>
-    <a id="buttun-files" class="button   button-block icon-right ion-paperclip" ng-if="uploadExists" ng-click="openModal()"> <span class="pel-badge">{{files.length||"0"}}</span> צרף מסמכים &nbsp;</a>
+    <a id="buttun-files" class="button   button-block icon-right ion-paperclip" ng-if="uploadExists" ng-click="openModal()"> <span class="pel-badge">{{files.length||lead.files ||"0"}}</span> צרף מסמכים &nbsp;</a>
     <a id="buttun-danger" class="button   button-block icon-right ion-trash-a" ng-show="storedLead" ng-click="delete()"> מחק &nbsp;</a>
   </div>
 
@@ -169,12 +169,10 @@
             <a class="text-center white" ng-click="uploadFile()"><i class="icon ion-paper-airplane icon-lg icon-top"></i> שלח</a>
           </div>
         </div>
-
-
         <div ng-show="uploadState.success" class="upload-success text-center">
           <img src="img/new_icons/vi.png">
-          <h2>הקובץ הועלה בהצלחה </h2>
-          <h3>נא המשך להעלות קבצים נוספים או חזור לטופס הליד</h3>
+          <h3>הקובץ הועלה בהצלחה </h3>
+          <h4>העלו קבצים נוספים או חזרו לטופס הליד</h4>
         </div>
         <div><span class="err" ng-show="uploadState.error">Upload failed</span></div>
       </ion-content>
