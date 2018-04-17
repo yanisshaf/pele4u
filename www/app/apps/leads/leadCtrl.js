@@ -14,7 +14,7 @@ angular.module('pele', ['ngSanitize'])
         progress: 0
       };
       $scope.storedLead = false;
-
+      $scope.files = [];
       $scope.lead = {
         ATTRIBUTES: {}
       };
@@ -23,6 +23,9 @@ angular.module('pele', ['ngSanitize'])
       $scope.takePic = function(sourceType) {
         PelApi.safeApply($scope, function() {
           $scope.imageUri = "";
+          $scope.uploadState = {
+            progress: 0
+          };
         });
 
         var options = {
