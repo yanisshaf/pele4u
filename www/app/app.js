@@ -60,7 +60,9 @@ angular.module('pele', [
 
 
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {});
-
+      $ionicPlatform.on('resume', function(){
+           $state.go("app.p1_appsLists");
+      });
       $ionicPlatform.ready(function() {
         //----------------------------------------
         //--    Get Version from config.xml
