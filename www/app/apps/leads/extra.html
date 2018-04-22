@@ -7,14 +7,14 @@
     </div>
     <div ng-show="e.type=='html'" class="item no-border item-input item-text-wrap">
       <span ng-show="e.label" class="input-label"> {{e.label}} </span>
-      <div bind-html-compile="e.html"></div>
+      <div ng-bind-html="trust(e.html)"></div>
     </div>
     <div ng-show="e.type=='const'" class="item no-border item-input item-text-wrap">
       <span ng-show="e.label" class="input-label"> {{e.label}} </span>
-      <div bind-html-compile="lead.ATTRIBUTES[e.attribute_name]"></div>
+      <div ng-bind-html="trust(lead.ATTRIBUTES[e.attribute_name])"></div>
     </div>
     <div ng-show="e.type=='upload' && e.label" class="item no-border item-input item-text-wrap">
-      <span bind-html-compile="e.label"></span>
+      <span ng-bind-html="trust(e.label)"></span>
     </div>
     <ng-switch on="e.type">
       <label class="item no-border item-input item-text-wrap">
