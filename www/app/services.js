@@ -192,6 +192,15 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   this.getHeaders = buildHeader;
   this.getUrl = getUrl;
 
+  this.reauthOnForbidden = function(httpStatus, msg) {
+    var errmsg = msg || "Auth failed - jump to entry page for reauth"
+    if (httpStatus == 401 || httpStatus == 403) {
+      PelApi.throwError("api", msg, "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
+      return PelApi.goHome();
+    }
+    return true;
+  }
+
   this.get = function(service, params, headers) {
     var url = urlBase + service;
     params = params || {};

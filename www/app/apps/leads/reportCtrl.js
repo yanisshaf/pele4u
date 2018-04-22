@@ -24,6 +24,7 @@ angular.module('pele')
           StorageService.set("leads_conf", data, 1000 * 60 * 60)
           $scope.conf = data;
         }).error(function(error, httpStatus, headers, config) {
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api");
           PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
         })
       }
@@ -46,6 +47,7 @@ angular.module('pele')
         }).success(function(data) {
           $scope.leads = data;
         }).error(function(error, httpStatus, headers, config) {
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads  api");
           PelApi.throwError("api", "fetch leads list by type ", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
         }).finally(function() {
           PelApi.hideLoading();

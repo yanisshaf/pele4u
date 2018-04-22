@@ -104,6 +104,7 @@ angular.module('pele', ['ngSanitize'])
           $scope.lead.LEAD_ID = data.VAL;
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
         }).error(function(error, httpStatus, headers, config) {
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized getnext api")
           PelApi.throwError("api", "get new Lead seq", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
         })
       }
@@ -154,6 +155,7 @@ angular.module('pele', ['ngSanitize'])
               _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', data.value);
               $scope.extraSchema[index] = _.extend($scope.extraSchema[index], data);
             }).error(function(error, httpStatus, headers, config) {
+              ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized " + v.service + " api")
               PelApi.throwError("api", "get Leads form Element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
             })
           }
@@ -213,6 +215,7 @@ angular.module('pele', ['ngSanitize'])
           $scope.getRelevantLeadsType($scope.conf.types)
 
         }).error(function(error, httpStatus, headers, config) {
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized leads/conf api")
           PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
         })
       }
@@ -245,6 +248,7 @@ angular.module('pele', ['ngSanitize'])
                   })
                 })
             }).error(function(error, httpStatus, headers, config) {
+              ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized delete lead api")
               PelApi.throwError("api", "delete lead by id ", "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
             })
           }
@@ -271,6 +275,7 @@ angular.module('pele', ['ngSanitize'])
           $scope.lead = {};
           $ionicScrollDelegate.$getByHandle('mainContent').scrollTop(true);
         }).error(function(error, httpStatus, headers, config) {
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized post lead  lead api");
           PelApi.throwError("api", "Post new lead", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
         }).finally(function() {
           PelApi.hideLoading();
