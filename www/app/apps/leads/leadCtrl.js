@@ -142,14 +142,28 @@ angular.module('pele', ['ngSanitize'])
       }
 
       function setDynamicValidation(varr) {
+
         $scope.uploadRequired = false
         $scope.uploadExists = false;
 
         _.set($scope.lead, 'ATTRIBUTES', {});
 
         varr.forEach(function(v, index) {
+          v.inputFieldInd = true;
           var savedAttrValeu = _.get($scope.savedAttributes, v.attribute_name);
           _.set($scope.lead.ATTRIBUTES, v.attribute_name, savedAttrValeu);
+
+          if (v.type === "const") {
+            v.inputFieldInd = false;
+            PelApi.safeApply($scope, function() {
+              _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', v.value);
+              $scope.extraSchema[index] = _.extend($scope.extraSchema[index], v.value);
+            })
+          }
+
+          if (v.type === "html" || v.type === "link") {
+            v.inputFieldInd = false;
+          }
           if (v.service) {
             ApiGateway.get(v.service).success(function(data) {
               _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', data.value);
@@ -165,13 +179,11 @@ angular.module('pele', ['ngSanitize'])
           }
 
           if (v.type === "upload") {
+            v.inputFieldInd = false;
             PelApi.safeApply($scope, function() {
               $scope.uploadExists = true;
               $scope.uploadRequired = v.required;
             })
-
-
-
           }
           if (v.type === "checkbox") {
             v.trueValue = v.trueValue || 1;
@@ -256,7 +268,6 @@ angular.module('pele', ['ngSanitize'])
       }
 
       $scope.submit = function() {
-
         $scope.submitted = true;
         $scope.lead.TASK_LEVEL = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".TASK_LEVEL");
         $scope.lead.TASK_FOLLOWUP_TYPE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".TASK_FOLLOWUP_TYPE");
@@ -265,8 +276,16 @@ angular.module('pele', ['ngSanitize'])
         $scope.lead.PREFERRED_HOURS = $scope.lead.from_hour + " - " + $scope.lead.to_hour
         $scope.lead.ATTRIBUTES['customer_id'] = $scope.lead.CUSTOMER_ID;
         $scope.lead.ATTRIBUTES['phone_no_2'] = $scope.lead.PHONE_NO_2;
-
         if ($scope.forms.leadForm.$invalid || !$scope.lead.LEAD_TYPE) {
+          return false;
+        }
+        if ($scope.uploadRequired && !$scope.files.length) {
+          swal({
+            type: 'error',
+            title: '',
+            text: 'נא צרפו מסמכים כנדרש',
+            confirmButtonText: 'אשור',
+          })
           return false;
         }
         PelApi.showLoading();

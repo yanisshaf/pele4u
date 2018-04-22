@@ -1,18 +1,25 @@
 <ng-form name="attributes">
   <div ng-repeat="e in extraSchema">
+
     <div ng-show="e.type=='link'" class="item no-border item-input item-text-wrap">
       <span class="input-label">{{e.label}} </span>
       <a href="#" ng-click="openLink(e)">קישור</a>
     </div>
     <div ng-show="e.type=='html'" class="item no-border item-input item-text-wrap">
-      <span class="input-label"> {{e.label}} </span>
+      <span ng-show="e.label" class="input-label"> {{e.label}} </span>
+      <div bind-html-compile="e.html"></div>
+    </div>
+    <div ng-show="e.type=='const'" class="item no-border item-input item-text-wrap">
+      <span ng-show="e.label" class="input-label"> {{e.label}} </span>
       <div bind-html-compile="lead.ATTRIBUTES[e.attribute_name]"></div>
+    </div>
+    <div ng-show="e.type=='upload' && e.label" class="item no-border item-input item-text-wrap">
+      <span bind-html-compile="e.label"></span>
     </div>
     <ng-switch on="e.type">
       <label class="item no-border item-input item-text-wrap">
-      <span  ng-show="!(e.type=='html' || e.type=='link')" class="input-label"><span ng-show="e.required">*</span> {{e.label}} </span>
+      <span  ng-show="e.inputFieldInd" class="input-label"><span ng-show="e.required">*</span> {{e.label}} </span>
       <input name="{{e.attribute_name}}" ng-switch-when="text" type="text" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required" ng-disabled="e.disabled">
-
       <input date-input  ng-switch-when="date" name="{{e.attribute_name}}" type="date"  ng-model="lead.ATTRIBUTES[e.attribute_name]"  ng-required="e.required" min="{{e.computedMin}}" max="{{e.computedMax}}" ng-disabled="e.disabled">
       <input name="{{e.attribute_name}}" ng-switch-when="number" type="number" ng-model="lead.ATTRIBUTES[e.attribute_name]"  ng-required="e.required">
       <input name="{{e.attribute_name}}" ng-switch-when="int" type="number" ng-model="lead.ATTRIBUTES[e.attribute_name]"  min="{{e.min}}" max="{{e.max}}" step="1" ng-min="e.min" ng-max="e.max" ng-required="e.required">
