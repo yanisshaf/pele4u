@@ -18,16 +18,30 @@ angular.module('pele', [
     'pele.authCtrl',
     'pele.states',
     'fileLogger',
-    'oc.lazyLoad'
+    'oc.lazyLoad',
+    'ngIdle'
   ])
 
-  .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings',
-    function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings) {
+  .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings', 'Idle',
+    function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings, Idle) {
       PelApi.init();
+      Idle.watch();
+      $rootScope.$on('IdleStart', function() {
+        PelApi.goHome();
+      });
+
+      $rootScope.$on('IdleWarn', function(e, countdown) {
+        //  Idle.watch();
+        //  console.log("IDLE WARN !")
+        //  PelApi.goHome();
+        // follows after the IdleStart event, but includes a countdown until the user is considered timed out
+        // the countdown arg is the number of seconds remaining until then.
+        // you can change the title or display a warning dialog from here.
+        // you can let them resume their session by calling Idle.watch()
+      });
 
       $rootScope.$on('$stateChangeStart',
         function(event, toState, toParams, fromState, fromParams) {
-
           if (PelApi.global.get('debugFlag')) {
             PelApi.lagger.info("start StateChange ->  from :  " + fromState.name + " to: ", toState.name);
             PelApi.lagger.info(" new State params :  ", toParams);
@@ -60,7 +74,7 @@ angular.module('pele', [
 
 
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {});
-     
+
       $ionicPlatform.ready(function() {
         //----------------------------------------
         //--    Get Version from config.xml
@@ -91,11 +105,12 @@ angular.module('pele', [
       });
     }
   ])
-  .config(function($compileProvider, $stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
+  .config(function($compileProvider, $stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider, IdleProvider) {
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
     $ionicConfigProvider.navBar.alignTitle('center');
+    IdleProvider.idle(60 * 3);
 
     $stateProvider
       .state('app', {
