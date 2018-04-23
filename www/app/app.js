@@ -27,6 +27,7 @@ angular.module('pele', [
       PelApi.init();
       Idle.watch();
       $rootScope.$on('IdleStart', function() {
+        Idle.watch();
         PelApi.goHome();
       });
 
@@ -110,7 +111,7 @@ angular.module('pele', [
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
     $ionicConfigProvider.navBar.alignTitle('center');
-    IdleProvider.idle(60 * 3);
+    IdleProvider.idle(60 * 5);
 
     $stateProvider
       .state('app', {
@@ -318,5 +319,6 @@ angular.module('pele', [
     };
   })
   .config(function($httpProvider) {
+    $httpProvider.defaults.withCredentials = true;
     $httpProvider.interceptors.push('httpRequestInterceptor');
   })
