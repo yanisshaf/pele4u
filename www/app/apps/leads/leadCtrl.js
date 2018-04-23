@@ -169,6 +169,10 @@ angular.module('pele', ['ngSanitize'])
               _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', data.value);
               $scope.extraSchema[index] = _.extend($scope.extraSchema[index], data);
             }).error(function(error, httpStatus, headers, config) {
+              if(v.default) {
+                  _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', v.default);
+                   $scope.extraSchema[index] = _.extend($scope.extraSchema[index], v.default);
+              }
               ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized " + v.service + " api")
               PelApi.throwError("api", "get Leads form Element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
             })
