@@ -169,9 +169,9 @@ angular.module('pele', ['ngSanitize'])
               _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', data.value);
               $scope.extraSchema[index] = _.extend($scope.extraSchema[index], data);
             }).error(function(error, httpStatus, headers, config) {
-              if(v.default) {
-                  _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', v.default);
-                   $scope.extraSchema[index] = _.extend($scope.extraSchema[index], v.default);
+              if (v.default) {
+                _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', v.default);
+                $scope.extraSchema[index] = _.extend($scope.extraSchema[index], v.default);
               }
               ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized " + v.service + " api")
               PelApi.throwError("api", "get Leads form Element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
@@ -278,8 +278,8 @@ angular.module('pele', ['ngSanitize'])
         $scope.lead.RESOURCE_TYPE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".RESOURCE_TYPE");
         $scope.lead.RESOURCE_VALUE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".RESOURCE_VALUE");
         $scope.lead.PREFERRED_HOURS = $scope.lead.from_hour + " - " + $scope.lead.to_hour
-        $scope.lead.ATTRIBUTES['customer_id'] = $scope.lead.CUSTOMER_ID;
-        $scope.lead.ATTRIBUTES['phone_no_2'] = $scope.lead.PHONE_NO_2;
+        //        $scope.lead.ATTRIBUTES['customer_id'] = $scope.lead.CUSTOMER_ID;
+        //        $scope.lead.ATTRIBUTES['phone_no_2'] = $scope.lead.PHONE_NO_2;
         if ($scope.forms.leadForm.$invalid || !$scope.lead.LEAD_TYPE) {
           return false;
         }
