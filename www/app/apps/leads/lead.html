@@ -38,7 +38,7 @@
               </label>
 
         <label class="item no-border item-input item-text-wrap">
-                <span class="input-label">* מס טלפון לחזרה</span>
+                <span class="input-label">* מספר סלולרי לחזרה</span>
                 <input type="tel"  name="PHONE_NO_1"  ng-model="lead.PHONE_NO_1" required ng-pattern="/^05\d-?[0-9]{1}-?[0-9]{2}-?[0-9]{4}$/">
               </label>
         <label ng-show="forms.leadForm.PHONE_NO_1.$invalid &&  (forms.leadForm.PHONE_NO_1.$dirty  || submitted)" class="item no-border input-error">
@@ -86,7 +86,7 @@
             </label>
 
         <label class="item no-border item-input item-text-wrap">
-          <table style="width:100%" class="table margin-top-10">
+          <table style="width:100%" class="table margin-top-10 ">
             <tr>
               <td style="width:70%" class="text-right">  <span class="label">מאשר קבלת עדכונים על מבצעים והטבות</span></td>
               <td class="text-left">
@@ -100,10 +100,10 @@
 
 
         </label>
-        <label ng-show="forms.leadForm.PROACTIVE_IND.$invalid &&  (forms.leadForm.PROACTIVE_IND.$dirty  || submitted)" class="item no-border input-error">
+        <label ng-show="forms.leadForm.PROACTIVE_IND.$invalid &&  (forms.leadForm.PROACTIVE_IND.$dirty  || submitted)" class="item no-border input-error ">
              נא סמנו
        </label>
-
+        <div class="margin-top-10 margin-bottom-15"></div>
         <!--label class="item no-border item-input item-text-wrap">
                 <input type="time" id="exampleInput" name="input" ng-model="departureDate"
                   placeholder="HH:mm" min="08:00" max="17:00" required />
