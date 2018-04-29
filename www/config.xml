@@ -106,9 +106,6 @@
         <string>118.2</string>
     </gap:config-file>
     <access origin="*" />
-    <access origin="http://msso.pelephone.co.il" />
-    <access origin="https://msso.pelephone.co.il" />
-    <allow-navigation href="*://msso.pelephone.co.il/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="file://*/*" />
