@@ -106,6 +106,9 @@
         <string>118.2</string>
     </gap:config-file>
     <access origin="*" />
+    <access origin="http://msso.pelephone.co.il" />
+    <access origin="https://msso.pelephone.co.il" />
+    <allow-navigation href="*://msso.pelephone.co.il/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="file://*/*" />
@@ -113,6 +116,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+
     <plugin name="cordova-plugin-badge" spec="~0.8.5" />
     <plugin name="cordova-plugin-x-socialsharing" source="npm" />
     <plugin name="onesignal-cordova-plugin" source="npm" spec="2.3.3" />
