@@ -11,6 +11,12 @@ angular.module('pele')
       //$ionicHistory.clearHistory();
       $scope.type = $state.params.type;
 
+      $scope.statusClass = {
+        'סגור ללא הצלחה': 'string-badge pel-badge pink',
+        'טופל בהצלחה': 'string-badge pel-badge green',
+        'לקוח לא ענה': 'string-badge pel-badge  light-blue',
+        'ממתין למלאי': 'string-badge pel-badge  cyan'
+      }
       if ($state.params.type === "S") {
         $scope.title = "לידים שפתחתי";
         $scope.prevState = "app.leads.self"
