@@ -919,3 +919,4 @@ a.white {color:white}
 #buttun-send span {color:#fff}
 #buttun-danger  {border:2px solid #c43c35;background:#ca3535; color:#fff }
 .leads-report .item {padding:10px}
+.action-sheet-backdrop.active.lead-actions-sheet  buttun {text-align: center;border-top:1px solid #CCC;font-size:15px;}

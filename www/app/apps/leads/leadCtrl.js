@@ -221,7 +221,14 @@ angular.module('pele', ['ngSanitize'])
         }, {
           text: "סגור ללא הצלחה"
         }]
-        PelApi.actionSheet($scope, "עדכון סטאטוס", btns, null, function(index, btn) {
+
+        var actionsObject = {
+          title: "עדכון סטאטוס",
+          btns: btns,
+          cssClass: "lead-actions-sheet"
+        };
+
+        PelApi.actionSheet(actionsObject, function(index, btn) {
           $scope.lead.ATTRIBUTES['lead_status'] = btn.text;
           $scope.savedAttributes['lead_status'] = btn.text;
           return true;

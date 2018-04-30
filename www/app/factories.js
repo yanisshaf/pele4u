@@ -1328,16 +1328,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           }
         })
       },
-      actionSheet: function(scope, title, buttons, cancelText, cb) {
-        if (!cancelText)
-          cancelText = "ביטול"
-
+      actionSheet: function(actionsObject, cb) {
         var self = this;
-
         var hideSheet = $ionicActionSheet.show({
-          buttons: buttons,
-          titleText: title,
-          cancelText: cancelText,
+          cssClass: (actionsObject.cssClass || "custom-action-sheet"),
+          buttons: actionsObject.btns,
+          titleText: (actionsObject.title || "פעולות"),
+          cancelText: (actionsObject.cancelText || "ביטול"),
           cancel: function() {
             return true;
           },
