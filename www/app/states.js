@@ -298,6 +298,10 @@ angular.module('pele.states', [])
     }, {
       state: 'app.leads',
       url: '/leads',
+      abstract: true
+    }, {
+      state: 'app.leads.task',
+      url: '/leads',
       views: {
         'menuContent@app': {
           templateUrl: function() {
@@ -311,6 +315,20 @@ angular.module('pele.states', [])
       ]
     },
     {
+      state: 'app.leads.self',
+      url: '/leads',
+      views: {
+        'menuContent@app': {
+          templateUrl: function() {
+            return 'app/apps/leads/menu.html';
+          },
+          controller: 'menuCtrl',
+        }
+      },
+      src: [
+        "app/apps/leads/menuCtrl.js"
+      ]
+    }, {
       state: 'app.leads.lead',
       url: '/lead/:type',
       params: {

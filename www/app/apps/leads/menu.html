@@ -10,16 +10,18 @@
   </ion-nav-title>
 
   <ion-content class="pele-background">
-
-    <div class="apps-front-menu text-center">
+    <div class="apps-front-menu text-center" ng-show="stateType=='T'">
       <button ui-sref="app.leads.lead({type:'T'})" class="button button-large button-stable button-block text-center">
     פתיחת ליד לשגרירים
     </button>
-      <button ui-sref="app.leads.lead({type:'S'})" class="button button-large button-stable button-block text-center">
-פתיחת ליד למעקב עצמי  </button>
       <button ui-sref="app.leads.report({type:'T'})" class="button button-large button-stable button-block text-center">
-  סטאטוס לידים שפתחתי
-      </button>
+     סטאטוס לידים שפתחתי
+    </button>
+    </div>
+    <div class="apps-front-menu text-center" ng-show="stateType=='S'">
+      <button ui-sref="app.leads.lead({type:'S'})" class="button button-large button-stable button-block text-center">
+      פתיחת ליד למעקב עצמי  </button>
+
       <button ui-sref="app.leads.report({type:'S'})" class="button button-large button-stable button-block text-center">
       ניהול לידים עצמיים
       </button>

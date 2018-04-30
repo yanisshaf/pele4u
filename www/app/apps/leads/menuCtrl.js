@@ -7,6 +7,17 @@ angular.module('pele')
   //=================================================================
   .controller('menuCtrl', ['$scope', '$state', 'StorageService', 'ApiGateway', 'PelApi', '$ionicModal',
     function($scope, $state, StorageService, ApiGateway, PelApi, $ionicModal) {
+      $scope.stateType = ""
+      $scope.prevState = "";
+      if ($state.is("app.leads.self")) {
+        $scope.stateType = "S"
+        $scope.prevState = "app.leads.self";
+      } else if ($state.is("app.leads.task")) {
+        $scope.stateType = "T"
+        $scope.prevState = "app.leads.task";
+      }
+
+
 
       var getInfo = function() {
         return _.get($scope.conf, "clientConfig['leads.client.infoModal']")
@@ -20,7 +31,7 @@ angular.module('pele')
           return;
         }
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 60);
+          StorageService.set("leads_conf", data, 1000 * 60 * 30);
           $scope.conf = data;
           $scope.info = getInfo();
         }).error(function(error, httpStatus, headers, config) {

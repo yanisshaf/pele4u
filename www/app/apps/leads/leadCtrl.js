@@ -110,9 +110,7 @@ angular.module('pele', ['ngSanitize'])
       }
 
       if ($state.params.lead && $state.params.lead.LEAD_ID) {
-
         $scope.onValueChanged($state.params.lead.LEAD_TYPE);
-
         PelApi.safeApply($scope, function() {
           $scope.lead = $state.params.lead;
           var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/);
@@ -121,6 +119,7 @@ angular.module('pele', ['ngSanitize'])
           $scope.lead.to_hour = found[2];
           $scope.savedAttributes = _.clone($state.params.lead.ATTRIBUTES)
           $scope.storedLead = true;
+          $scope.title = "פרטי ליד";
         })
       } else {
         if ($state.params.type === 'S') {
@@ -134,6 +133,8 @@ angular.module('pele', ['ngSanitize'])
       }
 
       $scope.trust = function(html) {
+        if (typeof html === "undefined")
+          html = "<span></span>";
         return $sce.trustAsHtml(html);
       }
 
@@ -190,13 +191,17 @@ angular.module('pele', ['ngSanitize'])
             })
           }
           if (v.type === "checkbox") {
-            v.trueValue = v.trueValue || 1;
-            v.falseValue = v.falseValue || 0;
+            if (typeof v.trueValue === "undefined")
+              v.trueValue = 1;
+            if (typeof v.falseValue === "undefined")
+              v.falseValue = 0;
           }
           if (v.type === "date") {
             v = $scope.setValidationDate(v)
           }
         })
+
+
       }
 
       $scope.display = function(e) {
@@ -204,8 +209,24 @@ angular.module('pele', ['ngSanitize'])
       }
 
 
-
-
+      $scope.actionSheet = function() {
+        var btns = [{
+          text: "לא רלוונטי"
+        }, {
+          text: "טופל בהצלחה"
+        }, {
+          text: "ממתין למלאי"
+        }, {
+          text: "לקוח לא ענה"
+        }, {
+          text: "סגור ללא הצלחה"
+        }]
+        PelApi.actionSheet($scope, "עדכון סטאטוס", btns, null, function(index, btn) {
+          $scope.lead.ATTRIBUTES['lead_status'] = btn.text;
+          $scope.savedAttributes['lead_status'] = btn.text;
+          return true;
+        })
+      }
 
       $scope.extraData = {};
 
@@ -226,7 +247,7 @@ angular.module('pele', ['ngSanitize'])
           return;
         }
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 60)
+          StorageService.set("leads_conf", data, 1000 * 60 * 30)
           $scope.conf = data;
           $scope.getRelevantLeadsType($scope.conf.types)
 

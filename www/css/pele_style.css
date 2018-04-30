@@ -837,11 +837,15 @@ top:11px;
 #new_lead  input{
     font-size: 1rem;
   }
+
+
+#new_lead   .lead-status {border:2px solid #0D47A1;border-radius:5px;font-size:16px;padding:3px;margin: 3px;color:white;background:#1E88E5}
 .item-checkbox.text-right {padding-right:60px}
 .leads-notes {height:200px;min-height: 200px}
 .white {color:white}
 .list.lead-form .item-input {padding:3px 5px 3px 3px}
 .list.lead-form label .input-label {padding:0px 0 8px 8px;line-height: 16px;}
+
 
 
 .list.lead-form .item-input input  { ;border-bottom: 1px dotted #444;padding-right:5px !important;margin-right:5px; text-align: right;}

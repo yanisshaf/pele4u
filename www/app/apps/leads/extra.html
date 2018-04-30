@@ -1,19 +1,21 @@
 <ng-form name="attributes">
+
   <div ng-repeat="e in extraSchema">
 
     <div ng-show="e.type=='link'" class="item no-border item-input item-text-wrap">
       <span class="input-label">{{e.label}} </span>
       <a href="#" ng-click="openLink(e)">קישור</a>
     </div>
-    <div ng-show="e.type=='html'" class="item no-border item-input item-text-wrap">
+    <div ng-if="e.type=='html'" class="item no-border item-input item-text-wrap">
       <span ng-show="e.label" class="input-label"> {{e.label}} </span>
       <div ng-bind-html="trust(e.html)"></div>
     </div>
-    <div ng-show="e.type=='const'" class="item no-border item-input item-text-wrap">
+    <div ng-if="e.type=='const'" class="item no-border item-input item-text-wrap">
       <span ng-show="e.label" class="input-label"> {{e.label}} </span>
       <div ng-bind-html="trust(lead.ATTRIBUTES[e.attribute_name])"></div>
     </div>
-    <div ng-show="e.type=='upload' && e.label" class="item no-border item-input item-text-wrap">
+
+    <div ng-if="e.type=='upload' && e.label" class="item no-border item-input item-text-wrap">
       <span ng-bind-html="trust(e.label)"></span>
     </div>
     <ng-switch on="e.type">
@@ -27,19 +29,13 @@
          <option ng-if="option.k != undefined" ng-repeat="option in e.options" value="{{option.k}}">{{option.v}}</option>
          <option ng-if="option.k == undefined" ng-repeat="option in e.options" value="{{option}}">{{option}}</option>
 			</select>
+    </label>
       <label ng-switch-when="checkbox" class="toggle toggle-positive">
-               <input type="checkbox" name="{{e.attribute_name}}" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-true-value="{{e.trueValue}}" ng-false-value="{{e.falseValue}}" ng-required="e.required">
+             <input type="checkbox" name="{{e.attribute_name}}" ng-model="lead.ATTRIBUTES['e.attribute_name']" ng-true-value="{{e.trueValue}}" ng-false-value="{{e.falseValue}}" ng-required="e.required">
                <div class="track">
                  <div class="handle"></div>
-               </div>
+           </div>
      </label>
-      <fieldset ng-switch-when="checkboxes">
-        <label ng-repeat="option in e.options">
-			   <input name="{{e.attribute_name}}" type="checkbox" ng-model="e.value[tokenize(option.name)]" value="{{option.value}}" ng-required="e.required"> {{option.name}} &nbsp;
-			</label>
-      </fieldset>
-
-      </label>
       <label ng-switch-when="textarea" class="item no-border item-input item-text-wrap">
         <textarea name="{{e.attribute_name}}"  rows="e.rows" cols="e.cols" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required"></textarea>
     </label>
@@ -50,7 +46,7 @@
         <label class="item no-border input-error" ng-if="e.message">{{e.message}}</label>
         <div ng-if="!e.message">
           <label class="item no-border input-error" ng-if="forms.leadForm.attributes[e.attribute_name].$error.required">יש להזין ערך</label>
-          <span class="item no-border input-error" ng-if="forms.leadForm.attributes[e.attribute_name].$error.min">ערך נמוך מדי</label>
+          <label class="item no-border input-error" ng-if="forms.leadForm.attributes[e.attribute_name].$error.min">ערך נמוך מדי</label>
           <label class="item no-border input-error" ng-if="forms.leadForm.attributes[e.attribute_name].$error.max">ערך גבוה מדי</label>
           <label class="item no-border input-error" ng-if="forms.leadForm.attributes[e.attribute_name].$error.email">אימייל לא תקין</label>
           <label class="item no-border input-error" ng-if="forms.leadForm.attributes[e.attribute_name].$error.maxlength">אורך גדול מדי</label>
@@ -62,8 +58,8 @@
           <label class="item no-border input-error" ng-if="forms.leadForm.attributes[e.attribute_name].$error.time">השעה אינה תקינה</label>
           <label class="item no-border input-error" ng-if="forms.leadForm.attributes[e.attribute_name].$error.week">ערך השבוע אינו תקין</label>
           <label class="item no-border input-error" ng-if="forms.leadForm.attributes[e.attribute_name].$error.month">ערך החודש אינו תקין</label>
-    </div>
-  </div>
+        </div>
+      </div>
     </ng-switch>
   </div>
 </ng-form>

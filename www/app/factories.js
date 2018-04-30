@@ -579,7 +579,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
       throwError: function(category, from, errorString, redirectInd) {
         var self = this;
-        var redirect = redirectInd || true;
+        if (redirectInd === undefined) redirectInd = false;
+
+        var redirect = redirectInd;
         var network = "none";
         if (deviceReady) {
           netwrok = $cordovaNetwork.getNetwork();
@@ -1325,6 +1327,22 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             action.left_icon = "";
           }
         })
+      },
+      actionSheet: function(scope, title, buttons, cancelText, cb) {
+        if (!cancelText)
+          cancelText = "ביטול"
+
+        var self = this;
+
+        var hideSheet = $ionicActionSheet.show({
+          buttons: buttons,
+          titleText: title,
+          cancelText: cancelText,
+          cancel: function() {
+            return true;
+          },
+          buttonClicked: cb
+        });
       },
       showBtnActions: function(scope, butttons) {
         var self = this;

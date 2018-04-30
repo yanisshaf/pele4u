@@ -227,7 +227,10 @@ angular.module('tabSlideBox', [])
         if (attrs.templateUrl) {
           return "<ng-include src=\"'" + attrs.templateUrl + "'\"></ng-include>";
         } else {
-          return '<ion-list ng-class="listClass"> <ion-item ng-click=showItems($event)> <span ng-class="headerClass">{{text}}</span> <span class=item-note>{{noteText}} <img ng-show="noteImg" class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> </ion-item> </ion-list>';
+          return '<ion-list ng-class="listClass"> ' +
+            '<ion-item ng-click=showItems($event)> <span ng-class="headerClass" ng-bind-html="text"></span>' +
+            ' <span class=item-note>{{noteText}} <img ng-show="noteImg" class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> ' +
+            '</ion-item> </ion-list>';
         }
       },
 
