@@ -9,7 +9,51 @@ angular.module('pele')
     function(StorageService, ApiGateway, $scope, $state, PelApi) {
 
       //$ionicHistory.clearHistory();
+
+      $scope.activeGroup = PelApi.sessionStorage.activeAccordionGroup;
+      $scope.toggleActive = function(g) {
+
+        if ($scope.activeGroup === g.groupName)
+          $scope.activeGroup = ""
+        else
+          $scope.activeGroup = g.groupName;
+        alert($scope.activeGroup + ':' + g.groupName)
+        PelApi.sessionStorage.activeAccordionGroup = $scope.activeGroup;
+
+      }
+
       $scope.type = $state.params.type;
+
+      $scope.createGroups = function() {
+        $scope.docsGroups = {};
+        if ($state.params.type === "S") {
+          $scope.docsGroups['פתוח'] = {
+            groupName: "פתוח",
+            leads: []
+          };
+          $scope.leads.forEach(function(l) {
+            var leadStatus = _.get(l.ATTRIBUTES, 'lead_status', "פתוח");
+            if (typeof $scope.docsGroups[leadStatus] == "undefined")
+              $scope.docsGroups[leadStatus] = {
+                groupName: leadStatus,
+                leads: []
+              };
+            $scope.docsGroups[leadStatus].leads.push(l)
+          })
+        } else if ($state.params.type === "T") {
+
+          $scope.leads.forEach(function(l) {
+            if (typeof $scope.docsGroups[l.TASK_STATUS] == "undefined")
+              $scope.docsGroups[l.TASK_STATUS] = {
+                groupName: l.TASK_STATUS,
+                leads: []
+              };
+            $scope.docsGroups[l.TASK_STATUS].leads.push(l)
+          })
+        }
+
+      }
+
 
       $scope.statusClass = {
         'סגור ללא הצלחה': 'string-badge pel-badge pink',
@@ -54,6 +98,7 @@ angular.module('pele')
           type: $state.params.type
         }).success(function(data) {
           $scope.leads = data;
+          $scope.createGroups();
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads  api");
           PelApi.throwError("api", "fetch leads list by type ", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
