@@ -171,7 +171,7 @@ app.controller('P1_appsListCtrl',
           var time = config.responseTimestamp - config.requestTimestamp;
           var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
 
-          PelApi.throwError("api-400", "GetUserMenu", "httpStatus : " + httpStatus + tr)
+          PelApi.throwError("api-400", "GetUserMenu", "httpStatus : " + httpStatus + tr, true)
           //PelApi.showPopup(appSettings.config.getUserModuleTypesErrorMag, "");
         }
       ).finally(function() {

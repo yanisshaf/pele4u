@@ -151,16 +151,16 @@ angular.module('pele', ['ngSanitize'])
         _.set($scope.lead, 'ATTRIBUTES', {});
 
         if ($scope.lead.FORM_TYPE == 'S') {
-          var leadDescription = _.get($scope, 'typesByFormType[' + $scope.lead.LEAD_TYPE + '].DESCRIPTION', "")
-          $scope.lead.ATTRIBUTES['lead_description'] = leadDescription;
-          $scope.savedAttributes['lead_description'] = leadDescription;
+          var leadDescription = _.get($scope, 'typesByFormType[' + $scope.lead.FORM_TYPE + '].DESCRIPTION', "")
+          _.set($scope.lead.ATTRIBUTES, 'lead_description', leadDescription);
+          _.set($scope.savedAttributes, 'lead_description', leadDescription);
         }
 
         varr.forEach(function(v, index) {
           v.inputFieldInd = true;
+          console.log(v.inputFieldInd)
           var savedAttrValeu = _.get($scope.savedAttributes, v.attribute_name);
           _.set($scope.lead.ATTRIBUTES, v.attribute_name, savedAttrValeu);
-
           if (v.type === "const") {
             v.inputFieldInd = false;
             PelApi.safeApply($scope, function() {

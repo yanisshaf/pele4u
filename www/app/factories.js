@@ -579,7 +579,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
       throwError: function(category, from, errorString, redirectInd) {
         var self = this;
-        if (redirectInd === undefined) redirectInd = false;
+        var redirect = redirectInd;
+        if (typeof redirectInd == "undefined") redirect = true;
 
         var redirect = redirectInd;
         var network = "none";

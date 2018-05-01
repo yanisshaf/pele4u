@@ -14,12 +14,12 @@
       <span ng-show="e.label" class="input-label"> {{e.label}} </span>
       <div ng-bind-html="trust(lead.ATTRIBUTES[e.attribute_name])"></div>
     </div>
-
     <div ng-if="e.type=='upload' && e.label" class="item no-border item-input item-text-wrap">
       <span ng-bind-html="trust(e.label)"></span>
     </div>
     <ng-switch on="e.type">
       <label class="item no-border item-input item-text-wrap">
+    
       <span  ng-show="e.inputFieldInd" class="input-label"><span ng-show="e.required">*</span> {{e.label}} </span>
       <input name="{{e.attribute_name}}" ng-switch-when="text" type="text" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required" ng-disabled="e.disabled">
       <input date-input  ng-switch-when="date" name="{{e.attribute_name}}" type="date"  ng-model="lead.ATTRIBUTES[e.attribute_name]"  ng-required="e.required" min="{{e.computedMin}}" max="{{e.computedMax}}" ng-disabled="e.disabled">
@@ -29,13 +29,13 @@
          <option ng-if="option.k != undefined" ng-repeat="option in e.options" value="{{option.k}}">{{option.v}}</option>
          <option ng-if="option.k == undefined" ng-repeat="option in e.options" value="{{option}}">{{option}}</option>
 			</select>
-    </label>
       <label ng-switch-when="checkbox" class="toggle toggle-positive">
              <input type="checkbox" name="{{e.attribute_name}}" ng-model="lead.ATTRIBUTES['e.attribute_name']" ng-true-value="{{e.trueValue}}" ng-false-value="{{e.falseValue}}" ng-required="e.required">
                <div class="track">
                  <div class="handle"></div>
            </div>
      </label>
+      </label>
       <label ng-switch-when="textarea" class="item no-border item-input item-text-wrap">
         <textarea name="{{e.attribute_name}}"  rows="e.rows" cols="e.cols" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required"></textarea>
     </label>
