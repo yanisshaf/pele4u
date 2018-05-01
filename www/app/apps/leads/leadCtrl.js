@@ -151,7 +151,9 @@ angular.module('pele', ['ngSanitize'])
         _.set($scope.lead, 'ATTRIBUTES', {});
 
         if ($scope.lead.FORM_TYPE == 'S') {
-          var leadDescription = _.get($scope, 'typesByFormType[' + $scope.lead.FORM_TYPE + '].DESCRIPTION', "")
+          console.log($scope.typesByFormType)
+          var leadDescription = _.get($scope, 'typesByFormType[' + $scope.lead.LEAD_TYPE + '].DESCRIPTION', "")
+          //alert(leadDescription)
           _.set($scope.lead.ATTRIBUTES, 'lead_description', leadDescription);
           _.set($scope.savedAttributes, 'lead_description', leadDescription);
         }
