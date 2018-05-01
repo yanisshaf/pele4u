@@ -30,10 +30,14 @@
     </ion-list>
     <ion-list ng-if="type=='S'" class="pele_rtl text-right">
       <ion-item ng-repeat="l in leads |orderBy:l.CREATED:true" class="item-icon-left">
-        <div><span class="pel-badge">{{$index+1}}</span> <strong>שם לקוח :</strong> {{l.FIRST_NAME}} {{l.LAST_NAME}}
-          <span ng-if="l.ATTRIBUTES['lead_status']" class="" ng-class="statusClass[l.ATTRIBUTES['lead_status']]||'string-badge'"> {{l.ATTRIBUTES['lead_status']}}</span></div>
-        <div></div>
-        <div style=" padding-right:30px "><strong>נוצר : </strong>{{l.CREATED|date :'d/M/yyyy HH:mm'}}</div>
+        <div><span class="pel-badge">{{$index+1}}</span> <strong>שם לקוח :</strong> {{l.FIRST_NAME}} {{l.LAST_NAME}} </div>
+
+        <div ng-if="l.ATTRIBUTES.lead_description">
+          <stong>סוג ליד :</strong>
+            {{l.ATTRIBUTES.lead_description}} </div>
+        <div class="padd-right-15"><strong>נוצר : </strong>{{l.CREATED|date :'d/M/yyyy HH:mm'}}
+          <span ng-if="l.ATTRIBUTES['lead_status']" class="" ng-class="statusClass[l.ATTRIBUTES['lead_status']]||'string-badge'"> {{l.ATTRIBUTES['lead_status']}}</span>
+        </div>
         <span class="pele-badge "><i ng-click="showLead(l) " class="icon ion-edit "></i></span>
 
       </ion-item>

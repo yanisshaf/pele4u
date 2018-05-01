@@ -1333,6 +1333,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var hideSheet = $ionicActionSheet.show({
           cssClass: (actionsObject.cssClass || "custom-action-sheet"),
           buttons: actionsObject.btns,
+          destructiveText: actionsObject.destructiveText,
+          destructiveButtonClicked: (actionsObject.destructiveButtonClicked || function() {
+            return false
+          }),
           titleText: (actionsObject.title || "פעולות"),
           cancelText: (actionsObject.cancelText || "ביטול"),
           cancel: function() {

@@ -794,7 +794,7 @@ top:11px;
 
 .phonebook.list .item   {background:none}
 .contact-icons img  {height:50px}
-
+.swal2-container {z-index:100000000 !important;pointer-events: all;}
 
 .contact-avatar {
     --width: 100px;
@@ -919,4 +919,4 @@ a.white {color:white}
 #buttun-send span {color:#fff}
 #buttun-danger  {border:2px solid #c43c35;background:#ca3535; color:#fff }
 .leads-report .item {padding:10px}
-.action-sheet-backdrop.active.lead-actions-sheet  buttun {text-align: center;border-top:1px solid #CCC;font-size:15px;}
+.lead-actions-sheet  buttun {text-align:center;border-top:1px solid #CCC !important;font-size:15px;}

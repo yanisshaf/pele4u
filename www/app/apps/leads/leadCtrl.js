@@ -117,6 +117,7 @@ angular.module('pele', ['ngSanitize'])
           $scope.files = $scope.lead.files;
           $scope.lead.from_hour = found[1];
           $scope.lead.to_hour = found[2];
+          console.log(found)
           $scope.savedAttributes = _.clone($state.params.lead.ATTRIBUTES)
           $scope.storedLead = true;
           $scope.title = "פרטי ליד";
@@ -148,6 +149,12 @@ angular.module('pele', ['ngSanitize'])
         $scope.uploadExists = false;
 
         _.set($scope.lead, 'ATTRIBUTES', {});
+
+        if ($scope.lead.FORM_TYPE == 'S') {
+          var leadDescription = _.get($scope, 'typesByFormType[' + $scope.lead.LEAD_TYPE + '].DESCRIPTION', "")
+          $scope.lead.ATTRIBUTES['lead_description'] = leadDescription;
+          $scope.savedAttributes['lead_description'] = leadDescription;
+        }
 
         varr.forEach(function(v, index) {
           v.inputFieldInd = true;
@@ -223,9 +230,16 @@ angular.module('pele', ['ngSanitize'])
         }]
 
         var actionsObject = {
-          title: "עדכון סטאטוס",
+          title: "<h3 class='pele_rtl text-center'>" + "עדכון סטאטוס" + "</h3>",
           btns: btns,
-          cssClass: "lead-actions-sheet"
+          cssClass: "lead-actions-sheet",
+          destructiveText: '<i class="icon ion-trash-a"></i> ' + 'מחק ליד',
+          cancelText: 'ביטול',
+          destructiveButtonClicked: function(index) {
+            $scope.delete();
+            //your function
+            return false;
+          }
         };
 
         PelApi.actionSheet(actionsObject, function(index, btn) {
@@ -320,6 +334,8 @@ angular.module('pele', ['ngSanitize'])
           })
           return false;
         }
+        console.log($scope.lead)
+
         PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {
           $scope.leadSuccess = true;
