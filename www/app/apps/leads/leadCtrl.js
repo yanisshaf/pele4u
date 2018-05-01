@@ -317,7 +317,12 @@ angular.module('pele', ['ngSanitize'])
 
       $scope.submit = function() {
         $scope.submitted = true;
+        if ($scope.forms.leadForm.$invalid || !$scope.lead.LEAD_TYPE) {
+          return false;
+        }
+
         var leadConf = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE);
+        console.log($scope.typesByFormType)
         if (!leadConf)
           PelApi.throwError("app", "Failed to fetch lead Config ,leadType:" + $scope.lead.LEAD_TYPE, "");
 
@@ -330,9 +335,7 @@ angular.module('pele', ['ngSanitize'])
         $scope.lead.PREFERRED_HOURS = $scope.lead.from_hour + " - " + $scope.lead.to_hour
         //        $scope.lead.ATTRIBUTES['customer_id'] = $scope.lead.CUSTOMER_ID;
         //        $scope.lead.ATTRIBUTES['phone_no_2'] = $scope.lead.PHONE_NO_2;
-        if ($scope.forms.leadForm.$invalid || !$scope.lead.LEAD_TYPE) {
-          return false;
-        }
+
         if ($scope.uploadRequired && !$scope.files.length) {
           swal({
             type: 'error',
