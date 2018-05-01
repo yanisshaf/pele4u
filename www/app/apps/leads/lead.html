@@ -11,8 +11,7 @@
   <ion-content scroll="true" style="height: calc(100% - 100px);" id="new_lead" padding="true" delegate-handle="mainContent">
     <div ng-show="leadSuccess" class="lead-success text-center">
       <img src="img/new_icons/vi.png">
-      <h1>ליד נשמר בהצלחה </h1>
-      <h3>{{successMessage}}</h3>
+      <div ng-bind-html="successMessage"></div>
     </div>
     <ng-form ng-show="!leadSuccess" role="form" name="forms.leadForm" novalidate autocomplete="off">
       <fancy-select class="fancy-select text-right" header-text="בחרו סוג ליד" items="typesByFormType" value="lead.LEAD_TYPE" value-property="TYPE" text-property="DESCRIPTION" allow-empty='false' text="בחרו סוג ליד <i class='icon ion-arrow-down-b'></i>" not-img-class="hidden"

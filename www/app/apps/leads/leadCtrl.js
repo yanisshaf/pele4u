@@ -350,7 +350,7 @@ angular.module('pele', ['ngSanitize'])
         PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {
           $scope.leadSuccess = true;
-          $scope.successMessage = leadConf.SUCCESS_MESSAGE;
+          $scope.successMessage = $scope.trust(leadConf.SUCCESS_MESSAGE);
           $scope.lead = {};
           $ionicScrollDelegate.$getByHandle('mainContent').scrollTop(true);
         }).error(function(error, httpStatus, headers, config) {
