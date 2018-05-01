@@ -919,5 +919,5 @@ a.white {color:white}
 #buttun-send span {color:#fff}
 #buttun-danger  {border:2px solid #c43c35;background:#ca3535; color:#fff }
 .leads-report .item {padding:10px}
-.platform-android .lead-actions-sheet  button {text-align:center;border-top:1px solid #CCC !important;font-size:15px;}
-.lead-actions-sheet  button.destructive {color:red;}
+.lead-actions-sheet  button {text-align:center !important;border-top:1px solid #CCC !important;font-size:15px;}
+.lead-actions-sheet  button.destructive {color:red !important;font-size:16px !important}
