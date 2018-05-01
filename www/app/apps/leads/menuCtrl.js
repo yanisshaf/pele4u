@@ -11,8 +11,10 @@ angular.module('pele')
       $scope.prevState = "";
       if ($state.is("app.leads.self")) {
         $scope.stateType = "S"
+        $scope.title = "הלידים שלי"
         $scope.prevState = "app.leads.self";
       } else if ($state.is("app.leads.task")) {
+        $scope.title = "שגרירים כאן בשבילך"
         $scope.stateType = "T"
         $scope.prevState = "app.leads.task";
       }

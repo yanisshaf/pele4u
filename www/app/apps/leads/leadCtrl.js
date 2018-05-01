@@ -317,10 +317,16 @@ angular.module('pele', ['ngSanitize'])
 
       $scope.submit = function() {
         $scope.submitted = true;
-        $scope.lead.TASK_LEVEL = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".TASK_LEVEL");
-        $scope.lead.TASK_FOLLOWUP_TYPE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".TASK_FOLLOWUP_TYPE");
-        $scope.lead.RESOURCE_TYPE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".RESOURCE_TYPE");
-        $scope.lead.RESOURCE_VALUE = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE + ".RESOURCE_VALUE");
+        var leadConf = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE);
+        if (!leadConf)
+          PelApi.throwError("app", "Failed to fetch lead Config ,leadType:" + $scope.lead.LEAD_TYPE, "");
+
+
+        $scope.lead.TASK_LEVEL = leadConf.TASK_LEVEL;
+        $scope.lead.TASK_FOLLOWUP_TYPE = leadConf.TASK_FOLLOWUP_TYPE;
+        $scope.lead.RESOURCE_TYPE = leadConf.RESOURCE_TYPE;
+        $scope.lead.RESOURCE_VALUE = leadConf.RESOURCE_VALUE;
+
         $scope.lead.PREFERRED_HOURS = $scope.lead.from_hour + " - " + $scope.lead.to_hour
         //        $scope.lead.ATTRIBUTES['customer_id'] = $scope.lead.CUSTOMER_ID;
         //        $scope.lead.ATTRIBUTES['phone_no_2'] = $scope.lead.PHONE_NO_2;
@@ -341,6 +347,7 @@ angular.module('pele', ['ngSanitize'])
         PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {
           $scope.leadSuccess = true;
+          $scope.successMessage = leadConf.SUCCESS_MESSAGE;
           $scope.lead = {};
           $ionicScrollDelegate.$getByHandle('mainContent').scrollTop(true);
         }).error(function(error, httpStatus, headers, config) {

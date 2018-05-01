@@ -12,14 +12,11 @@ angular.module('pele')
 
       $scope.activeGroup = PelApi.sessionStorage.activeAccordionGroup;
       $scope.toggleActive = function(g) {
-
         if ($scope.activeGroup === g.groupName)
           $scope.activeGroup = ""
         else
           $scope.activeGroup = g.groupName;
-        alert($scope.activeGroup + ':' + g.groupName)
         PelApi.sessionStorage.activeAccordionGroup = $scope.activeGroup;
-
       }
 
       $scope.type = $state.params.type;
@@ -65,7 +62,7 @@ angular.module('pele')
         $scope.title = "לידים שפתחתי";
         $scope.prevState = "app.leads.self"
       } else {
-        $scope.title = "לידים שלי";
+        $scope.title = "לידים שלי לשגרירים";
         $scope.prevState = "app.leads.task"
       }
 

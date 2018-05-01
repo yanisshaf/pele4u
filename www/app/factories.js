@@ -581,8 +581,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var self = this;
         var redirect = redirectInd;
         if (typeof redirectInd == "undefined") redirect = true;
-
-        var redirect = redirectInd;
         var network = "none";
         if (deviceReady) {
           netwrok = $cordovaNetwork.getNetwork();
