@@ -296,9 +296,23 @@ angular.module('pele.states', [])
       },
       src: ["app/apps/scanPrint/p2_scan_printCtrl.js"]
     }, {
+      state: 'app.leads.all',
+      url: '/leads',
+      views: {
+        'menuContent@app': {
+          templateUrl: function() {
+            return 'app/apps/leads/menu.html';
+          },
+          controller: 'menuCtrl',
+        }
+      },
+      src: [
+        "app/apps/leads/menuCtrl.js"
+      ]
+    }, {
       state: 'app.leads',
       url: '/leads',
-      abstract: true
+      abstract: true,
     }, {
       state: 'app.leads.task',
       url: '/leads',

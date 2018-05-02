@@ -105,7 +105,6 @@ app.controller('P1_appsListCtrl',
           $scope.feeds_categories = appSettings.config.GetUserMenu;
           $scope.feeds_categories.menuItems = $scope.insertOnTouchFlag($scope.feeds_categories.menuItems);
 
-
           //---------------------------------------------
           //-- Send User Tag for push notifications
           //---------------------------------------------

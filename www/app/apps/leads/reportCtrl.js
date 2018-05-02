@@ -60,6 +60,7 @@ angular.module('pele')
         'התקבל מענה': 'string-badge pel-badge  green',
         'נסגר טיפול': 'string-badge pel-badge  light-blue',
       }
+      console.log($state);
       if ($state.params.type === "S") {
         $scope.title = "לידים שפתחתי";
         $scope.prevState = "app.leads.self"

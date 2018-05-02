@@ -113,7 +113,7 @@ angular.module('pele', ['ngSanitize'])
         $scope.onValueChanged($state.params.lead.LEAD_TYPE);
         PelApi.safeApply($scope, function() {
           $scope.lead = $state.params.lead;
-          var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/);
+          var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/) || ["", ""];
           $scope.files = $scope.lead.files;
           $scope.lead.from_hour = found[1] || "";
           $scope.lead.to_hour = found[2] || "";
