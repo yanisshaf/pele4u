@@ -405,11 +405,12 @@ angular.module('pele', ['ngSanitize'])
         }
 
         function fileUploadFailure(error) {
+          PelApi.hideLoading();
           PelApi.throwError("api", "upload doc", JSON.stringify(error), false);
           $scope.uploadState.progress = 100;
           $scope.uploadState.error = true;
-          PelApi.hideLoading();
         }
+
 
         var uri = encodeURI(ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID));
         var options = new FileUploadOptions();
@@ -433,6 +434,9 @@ angular.module('pele', ['ngSanitize'])
         };
         $ionicScrollDelegate.$getByHandle('modalContent').scrollTop(true);
         PelApi.showLoading();
+        setTimeout(function() {
+          PelApi.hideLoading();
+        }, 10000)
         ft.upload(picFile, uri, fileUploadSuccess, fileUploadFailure, options, true);
       }
 

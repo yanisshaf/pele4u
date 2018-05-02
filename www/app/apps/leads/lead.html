@@ -178,7 +178,9 @@
           <h3>הקובץ הועלה בהצלחה </h3>
           <h4>העלו קבצים נוספים או חזרו לטופס הליד</h4>
         </div>
-        <div><span class="err" ng-show="uploadState.error">Upload failed</span></div>
+        <div ng-show="uploadState.error">
+          <h4 style="color:red">העלאת הקובץ נכשלה - נא נסו שוב</h4>
+        </div>
       </ion-content>
     </ion-modal-view>
   </script>
