@@ -115,9 +115,9 @@ angular.module('pele', ['ngSanitize'])
           $scope.lead = $state.params.lead;
           var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/);
           $scope.files = $scope.lead.files;
-          $scope.lead.from_hour = found[1];
-          $scope.lead.to_hour = found[2];
-          console.log(found)
+          $scope.lead.from_hour = found[1] || "";
+          $scope.lead.to_hour = found[2] || "";
+
           $scope.savedAttributes = _.clone($state.params.lead.ATTRIBUTES)
           $scope.storedLead = true;
           $scope.title = "פרטי ליד";
@@ -160,9 +160,22 @@ angular.module('pele', ['ngSanitize'])
 
         varr.forEach(function(v, index) {
           v.inputFieldInd = true;
-          console.log(v.inputFieldInd)
+          if (!v.attribute_name) {
+            v.attribute_name = "junk_attribute"
+            v.inputFieldInd = false;
+          }
+
           var savedAttrValeu = _.get($scope.savedAttributes, v.attribute_name);
           _.set($scope.lead.ATTRIBUTES, v.attribute_name, savedAttrValeu);
+
+          if (v.type === "identity.id") {
+            v.inputFieldInd = false;
+            PelApi.safeApply($scope, function() {
+              _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', "");
+              $scope.extraSchema[index] = _.extend($scope.extraSchema[index], "");
+            })
+          }
+
           if (v.type === "const") {
             v.inputFieldInd = false;
             PelApi.safeApply($scope, function() {
@@ -332,7 +345,8 @@ angular.module('pele', ['ngSanitize'])
         $scope.lead.RESOURCE_TYPE = leadConf.RESOURCE_TYPE;
         $scope.lead.RESOURCE_VALUE = leadConf.RESOURCE_VALUE;
 
-        $scope.lead.PREFERRED_HOURS = $scope.lead.from_hour + " - " + $scope.lead.to_hour
+        $scope.lead.PREFERRED_HOURS = ($scope.lead.from_hour || "") + " - " + ($scope.lead.to_hour || "");
+
         //        $scope.lead.ATTRIBUTES['customer_id'] = $scope.lead.CUSTOMER_ID;
         //        $scope.lead.ATTRIBUTES['phone_no_2'] = $scope.lead.PHONE_NO_2;
 
@@ -350,7 +364,7 @@ angular.module('pele', ['ngSanitize'])
         PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {
           $scope.leadSuccess = true;
-          if ($state.params.lead)
+          if ($state.params.lead && $state.params.lead.LEAD_ID)
             $scope.successMessage = "הליד נשמר בהצלחה";
           else
             $scope.successMessage = $scope.trust(leadConf.SUCCESS_MESSAGE);

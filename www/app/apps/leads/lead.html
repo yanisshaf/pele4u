@@ -12,6 +12,7 @@
     <div ng-show="leadSuccess" class="lead-success text-center">
       <img src="img/new_icons/vi.png">
       <div ng-bind-html="successMessage"></div>
+
     </div>
     <ng-form ng-show="!leadSuccess" role="form" name="forms.leadForm" novalidate autocomplete="off">
       <fancy-select class="fancy-select text-right" header-text="בחרו סוג ליד" items="typesByFormType" value="lead.LEAD_TYPE" value-property="TYPE" text-property="DESCRIPTION" allow-empty='false' text="בחרו סוג ליד <i class='icon ion-arrow-down-b'></i>" not-img-class="hidden"
@@ -50,7 +51,7 @@
 
         <label class="item no-border item-input item-text-wrap">
                 <span class="input-label">מספר טלפון נוסף</span>
-                <input type="tel" name="PHONE_NO_2" ng-model="lead.PHONE_NO_2" ng-pattern="/^0[0-9]{2}-?[0-9]{1}-?[0-9]{2}-?[0-9]{3,4}$/" autocomplete="off">
+                <input type="tel" name="PHONE_NO_2" ng-model="lead.PHONE_NO_2" ng-pattern="/^05\d-?[0-9]{1}-?[0-9]{2}-?[0-9]{4}$|^0[0-9]{2}-?[2-9]{1}-?[0-9]{2}-?[0-9]{3,4}$/" autocomplete="off">
               </label>
         <label ng-show="forms.leadForm.PHONE_NO_2.$invalid && (forms.leadForm.PHONE_NO_2.$dirty  || submitted)" class="item no-border  input-error">
                 יש להזין מס' נוסף תקין
@@ -126,7 +127,7 @@
     </ng-form>
   </ion-content>
   <div ng-show="!leadSuccess" style="background:#01579B" class="lead-footer bar bar-footer bar-positive">
-    <a id="buttun-send" class="button   button-block icon-right ion-paper-airplane" ng-show="lead.LEAD_ID" ng-click="submit()">
+    <a id="buttun-send" class="button   button-block icon-right ion-paper-airplane" ng-click="submit()">
        <span ng-if="storedLead">שמור</span>
       <span ng-if="!storedLead">שלח</span>&nbsp;
     </a>
