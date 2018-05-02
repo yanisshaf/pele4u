@@ -12,12 +12,12 @@
     </div>
   </ion-nav-title>
   <ion-content class="leads-report" id="leads_list">
-    <ion-list class="pele_rtl text-right">
-      <ion-item ng-show="leads && leads.length==0">
+    <ion-list class="pele_rtl text-right" ng-show="leads && leads.length==0">
+      <ion-item>
         לא נמצאו לידים
       </ion-item>
     </ion-list>
-    <label class="item item-input item-search pele_rtl text-right">
+    <label class="item item-input item-search pele_rtl text-right" ng-show="leads && leads.length>1">
       <input type="search" class="search-area" style="color:#fafafa;" placeholder="חיפוש" ng-model="searchText">
       <a class="search-icon" ></a>
     </label>
@@ -58,25 +58,23 @@
           </div>
         </ion-item>
 
-        <ion-item ng-if="type=='S'" class="docs-menu-details item-icon-left pele_rtl" ng-repeat="l in docsGroup.leads | filter:searchText as filtered" ng-show="activeGroup == docsGroup.groupName" ng-click="forwardToDoc(docsGroup.DOC_ID, item.DOC_INIT_ID,item.TASK.NOTIFICATION_ID)">
-          <div><span class="pel-badge">{{$index+1}}</span> <strong>שם לקוח :</strong> {{l.FIRST_NAME}} {{l.LAST_NAME}} </div>
+        <ion-item ng-if="type=='S'" class="docs-menu-details item-icon-left pele_rtl" ng-repeat="l in docsGroup.leads | filter:searchText as filtered" ng-show="activeGroup == docsGroup.groupName">
+          <div><span ng-show="0" class="pel-badge">{{$index+1}}</span> <strong>שם לקוח :</strong> {{l.FIRST_NAME}} {{l.LAST_NAME}} </div>
 
           <div ng-if="l.ATTRIBUTES.lead_description">
             <strong>סוג ליד :</strong> {{l.ATTRIBUTES.lead_description}} </div>
           <div class="padd-right-15"><strong>נוצר : </strong>{{l.CREATED|date :'d/M/yyyy HH:mm'}}
             <span ng-if="l.ATTRIBUTES['lead_status']" class="" ng-class="statusClass[l.ATTRIBUTES['lead_status']]||'string-badge'"> {{l.ATTRIBUTES['lead_status']}}</span>
           </div>
-          <span class="pele-badge "><i ng-click="showLead(l)" class="icon ion-edit "></i></span>
+          <img ng-click="showLead(l)" class="icon" src="img/new_icons/edit.png">
         </ion-item>
 
 
-        <ion-item ng-if="type=='T'" class="docs-menu-details item-icon-left pele_rtl" ng-repeat="l in docsGroup.leads | filter:searchText as filtered" ng-show="activeGroup == docsGroup.groupName" ng-click="forwardToDoc(docsGroup.DOC_ID, item.DOC_INIT_ID,item.TASK.NOTIFICATION_ID)">
-          <div class="row">
-            <div class="col text-right"><span class="pel-badge">{{$index+1}}</span> <strong>שם לקוח :</strong> {{l.CUSTOMER_NAME}}</div>
-          </div>
-          <div class="row">
-            <div class="col col-65"><strong>סטאטוס : </strong>{{l.TASK_STATUS}}</div>
-            <div class="col col-35"><strong>נוצר : </strong>{{l.CREATION_DATE|date :'d/M/yyyy HH:mm'}}</div>
+        <ion-item ng-if="type=='T'" class="docs-menu-details item-icon-left pele_rtl" ng-repeat="l in docsGroup.leads | filter:searchText as filtered" ng-show="activeGroup == docsGroup.groupName">
+          <div><strong>סוג ליד :</strong> {{l.TASK_TYPE}} </div>
+          <div><strong>שם לקוח :</strong> {{l.CUSTOMER_NAME}} </div>
+          <div><strong>נוצר : </strong>{{l.CREATION_DATE|date :'d/M/yyyy HH:mm'}}
+            <span ng-if="l.TASK_STATUS" class="" ng-class="statusClass[l.TASK_STATUS]||'string-badge'"> {{l.TASK_STATUS}}</span>
           </div>
         </ion-item>
     </ion-list>

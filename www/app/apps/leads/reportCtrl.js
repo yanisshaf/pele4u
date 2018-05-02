@@ -56,7 +56,9 @@ angular.module('pele')
         'סגור ללא הצלחה': 'string-badge pel-badge pink',
         'טופל בהצלחה': 'string-badge pel-badge green',
         'לקוח לא ענה': 'string-badge pel-badge  light-blue',
-        'ממתין למלאי': 'string-badge pel-badge  cyan'
+        'ממתין למלאי': 'string-badge pel-badge  cyan',
+        'התקבל מענה': 'string-badge pel-badge  green',
+        'נסגר טיפול': 'string-badge pel-badge  light-blue',
       }
       if ($state.params.type === "S") {
         $scope.title = "לידים שפתחתי";
