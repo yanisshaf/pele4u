@@ -218,7 +218,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     config = config || {};
     var headerParams = {
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
-      headers: buildHeader(headers)
+      headers: buildHeader(config.headers)
     }
     return $http.post(urlBase + service, params || {}, headerParams);
   };
@@ -226,7 +226,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     config = config || {};
     var headerParams = {
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
-      headers: buildHeader(headers)
+      headers: buildHeader(config.headers)
     }
 
     return $http.head(urlBase + service, {}, headerParams);
@@ -237,16 +237,16 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     var headerParams = {
       params: params,
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
-      headers: buildHeader(headers)
+      headers: buildHeader(config.headers)
     }
-    return $http.delete(urlBase + service, httpConfig);
+    return $http.delete(urlBase + service, headerParams);
   };
 
   this.put = function(service, params, config) {
     config = config || {};
     var headerParams = {
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
-      headers: buildHeader(headers)
+      headers: buildHeader(config.headers)
     }
     return $http.put(urlBase + service, params || {}, headerParams);
   };
