@@ -206,6 +206,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     var url = urlBase + service;
     params = params || {};
     var httpConfig = {
+      retry: 2,
       timeout: PelApi.appSettings.gw_timeout || 10000,
       params: params,
       headers: buildHeader(headers)

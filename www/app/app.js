@@ -291,7 +291,6 @@ angular.module('pele', [
       },
       response: function(response) {
         response.config.responseTimestamp = new Date().getTime();
-
         if (response.config.url.match(/^http/)) {
           var PelApi = $injector.get('PelApi');
           PelApi.hideLoading();
