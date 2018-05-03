@@ -178,6 +178,7 @@
         </div>
       </ng-form>
     </ion-content>
+
     <div ng-show="!leadSuccess" style="background:#01579B" class="lead-footer bar bar-footer bar-positive">
       <a id="buttun-send" class="button   button-block icon-right ion-paper-airplane" ng-click="submit()">
        <span ng-if="storedLead">שמור</span>
@@ -186,7 +187,7 @@
       <a id="buttun-files" class="button   button-block icon-right ion-paperclip" ng-if="uploadExists" ng-click="openModal()"> <span class="pel-badge">{{files.length||lead.files ||"0"}}</span> צרף מסמכים &nbsp;</a>
       <a id="buttun-actions" class="button  button-block button-stable icon-right ion-android-list" ng-show="storedLead" ng-click="actionSheet()"> פעולות נוספות &nbsp;</a>
     </div>
-
+  </div>
     <script id="upload.html" type="text/ng-template">
       <ion-modal-view class="pele-background" cache-view="false">
         <ion-header-bar class="bar bar-header bar-positive">
@@ -234,7 +235,7 @@
             <h4 style="color:red">העלאת הקובץ נכשלה - נא נסו שוב</h4>
           </div>
         </ion-content>
-  </div>
+
   </ion-modal-view>
   </script>
 </ion-view>
