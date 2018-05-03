@@ -103,6 +103,9 @@ angular.module('pele', ['ngSanitize'])
         var refStamp = new Date().getTime();
         ApiGateway.get("leads/getnext", {
           refStamp: refStamp
+        }, {
+          retry: 2,
+          timeout: 4 * 1000
         }).success(function(data) {
           $scope.lead.LEAD_ID = data.VAL;
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
