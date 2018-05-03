@@ -243,7 +243,8 @@ angular.module('pele', ['ngSanitize'])
         }, {
           text: "סגור ללא הצלחה"
         }]
-
+        var conf_actions =  _.get($scope.conf, "clientConfig['leads.client.actions']");
+        if(conf_actions) btns = conf_actions;
         var actionsObject = {
           title: "<h3 class='pele_rtl text-center'>" + "עדכון סטאטוס" + "</h3>",
           btns: btns,
