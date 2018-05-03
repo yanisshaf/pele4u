@@ -358,7 +358,7 @@ angular.module('pele', ['ngSanitize'])
           })
           return false;
         }
-        console.log($scope.lead)
+   
 
         PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {
@@ -434,7 +434,7 @@ angular.module('pele', ['ngSanitize'])
           }
         };
         $ionicScrollDelegate.$getByHandle('modalContent').scrollTop(true);
-        PelApi.showLoading({noBackdrop: true});
+        PelApi.showLoading({scope:$scope});
         $scope.inUpload=true;
         setTimeout(function() {
           if($scope.inUpload){
