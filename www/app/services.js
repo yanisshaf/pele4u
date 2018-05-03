@@ -202,44 +202,50 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     return true;
   }
 
-  this.get = function(service, params, headers) {
+  this.get = function(service, params, config) {
     var url = urlBase + service;
     params = params || {};
+    config = config || {};
     var httpConfig = {
-      retry: 2,
-      timeout: PelApi.appSettings.gw_timeout || 10000,
+      retry: (config.retry || 2),
+      timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       params: params,
-      headers: buildHeader(headers)
+      headers: buildHeader(config.headers)
     }
     return $http.get(url, httpConfig);
   };
-  this.post = function(service, params, headers) {
+  this.post = function(service, params, config) {
+    config = config || {};
     var headerParams = {
-      timeout: PelApi.appSettings.gw_timeout || 10000,
+      timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(headers)
     }
     return $http.post(urlBase + service, params || {}, headerParams);
   };
-  this.head = function(service, headers) {
+  this.head = function(service, config) {
+    config = config || {};
     var headerParams = {
-      timeout: PelApi.appSettings.gw_timeout || 10000,
+      timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(headers)
     }
+
     return $http.head(urlBase + service, {}, headerParams);
   };
-  this.delete = function(service, params, headers) {
+  this.delete = function(service, params, config) {
     params = params || {};
-    var httpConfig = {
-      timeout: PelApi.appSettings.gw_timeout || 10000,
+    config = config || {};
+    var headerParams = {
       params: params,
+      timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(headers)
-    };
+    }
     return $http.delete(urlBase + service, httpConfig);
   };
 
-  this.put = function(service, params, headers) {
+  this.put = function(service, params, config) {
+    config = config || {};
     var headerParams = {
-      timeout: PelApi.appSettings.gw_timeout || 10000,
+      timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(headers)
     }
     return $http.put(urlBase + service, params || {}, headerParams);
