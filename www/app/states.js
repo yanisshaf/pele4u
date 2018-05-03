@@ -346,7 +346,8 @@ angular.module('pele.states', [])
       state: 'app.leads.lead',
       url: '/lead/:type',
       params: {
-        lead: {}
+        lead: {},
+        task: {}
       },
       views: {
         'menuContent@app': {

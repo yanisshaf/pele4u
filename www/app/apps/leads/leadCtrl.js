@@ -7,6 +7,7 @@ angular.module('pele', ['ngSanitize'])
   //=================================================================
   .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicModal', 'PelApi', '$ionicScrollDelegate', '$sce', '$ionicHistory',
     function(StorageService, ApiGateway, $scope, $state, $ionicModal, PelApi, $ionicScrollDelegate, $sce, $ionicHistory) {
+      $scope.view = "lead";
 
       $scope.forms = {}
 
@@ -109,7 +110,12 @@ angular.module('pele', ['ngSanitize'])
         })
       }
 
-      if ($state.params.lead && $state.params.lead.LEAD_ID) {
+
+      if ($state.params.task && $state.params.task.TASK_NUMBER) {
+        $scope.view = 'task';
+        $scope.task = $state.params.task;
+        $scope.title = "פרטי ליד: " + $scope.task.TASK_NUMBER;
+      } else if ($state.params.lead && $state.params.lead.LEAD_ID) {
         $scope.onValueChanged($state.params.lead.LEAD_TYPE);
         PelApi.safeApply($scope, function() {
           $scope.lead = $state.params.lead;
@@ -117,7 +123,6 @@ angular.module('pele', ['ngSanitize'])
           $scope.files = $scope.lead.files;
           $scope.lead.from_hour = found[1] || "";
           $scope.lead.to_hour = found[2] || "";
-
           $scope.savedAttributes = _.clone($state.params.lead.ATTRIBUTES)
           $scope.storedLead = true;
           $scope.title = "פרטי ליד";
@@ -151,7 +156,7 @@ angular.module('pele', ['ngSanitize'])
         _.set($scope.lead, 'ATTRIBUTES', {});
 
         if ($scope.lead.FORM_TYPE == 'S') {
-          console.log($scope.typesByFormType)
+
           var leadDescription = _.get($scope, 'typesByFormType[' + $scope.lead.LEAD_TYPE + '].DESCRIPTION', "")
           //alert(leadDescription)
           _.set($scope.lead.ATTRIBUTES, 'lead_description', leadDescription);
@@ -243,8 +248,8 @@ angular.module('pele', ['ngSanitize'])
         }, {
           text: "סגור ללא הצלחה"
         }]
-        var conf_actions =  _.get($scope.conf, "clientConfig['leads.client.actions']");
-        if(conf_actions) btns = conf_actions;
+        var conf_actions = _.get($scope.conf, "clientConfig['leads.client.actions']");
+        if (conf_actions) btns = conf_actions;
         var actionsObject = {
           title: "<h3 class='pele_rtl text-center'>" + "עדכון סטאטוס" + "</h3>",
           btns: btns,
@@ -335,7 +340,6 @@ angular.module('pele', ['ngSanitize'])
         }
 
         var leadConf = _.get($scope.typesByFormType, $scope.lead.LEAD_TYPE);
-        console.log($scope.typesByFormType)
         if (!leadConf)
           PelApi.throwError("app", "Failed to fetch lead Config ,leadType:" + $scope.lead.LEAD_TYPE, "");
 
@@ -359,7 +363,7 @@ angular.module('pele', ['ngSanitize'])
           })
           return false;
         }
-   
+
 
         PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {
@@ -380,9 +384,9 @@ angular.module('pele', ['ngSanitize'])
       }
 
 
-       $scope.stopLoading = function() { 
-         PelApi.hideLoading();
-       }
+      $scope.stopLoading = function() {
+        PelApi.hideLoading();
+      }
 
       $scope.uploadFile = function() {
         var picFile = $scope.imageUri;
@@ -393,7 +397,7 @@ angular.module('pele', ['ngSanitize'])
 
         function fileUploadSuccess(r) {
           PelApi.hideLoading();
-          $scope.inUpload=false;
+          $scope.inUpload = false;
           PelApi.safeApply($scope, function() {
             $scope.uploadState.progress = 100;
             $scope.uploadState.success = true;
@@ -408,7 +412,7 @@ angular.module('pele', ['ngSanitize'])
         }
 
         function fileUploadFailure(error) {
-          $scope.inUpload=false;
+          $scope.inUpload = false;
           PelApi.hideLoading();
           PelApi.throwError("api", "upload doc", JSON.stringify(error), false);
           $scope.uploadState.progress = 100;
@@ -437,11 +441,14 @@ angular.module('pele', ['ngSanitize'])
           }
         };
         $ionicScrollDelegate.$getByHandle('modalContent').scrollTop(true);
-        PelApi.showLoading({ template: '<img ng-click="stopLoading()" class="spinner" src="./img/spinners/puff.svg">',scope:$scope});
-        $scope.inUpload=true;
+        PelApi.showLoading({
+          template: '<img ng-click="stopLoading()" class="spinner" src="./img/spinners/puff.svg">',
+          scope: $scope
+        });
+        $scope.inUpload = true;
         setTimeout(function() {
-          if($scope.inUpload){
-            $scope.inUpload=false;
+          if ($scope.inUpload) {
+            $scope.inUpload = false;
             ft.abort();
           }
         }, 10000)

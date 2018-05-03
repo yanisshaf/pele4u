@@ -66,7 +66,7 @@
           <div class="padd-right-15"><strong>נוצר : </strong>{{l.CREATED|date :'d/M/yyyy HH:mm'}}
             <span ng-if="l.ATTRIBUTES['lead_status']" class="" ng-class="statusClass[l.ATTRIBUTES['lead_status']]||'string-badge'"> {{l.ATTRIBUTES['lead_status']}}</span>
           </div>
-          <img ng-click="showLead(l)" class="icon" src="img/new_icons/edit.png">
+          <img ng-click="showLead(l)" class="icon" src="img/new_icons/edit_form.png">
         </ion-item>
 
 
@@ -76,6 +76,8 @@
           <div><strong>נוצר : </strong>{{l.CREATION_DATE|date :'d/M/yyyy HH:mm'}}
             <span ng-if="l.TASK_STATUS" class="" ng-class="statusClass[l.TASK_STATUS]||'string-badge'"> {{l.TASK_STATUS}}</span>
           </div>
+          <div><strong>תאריך עדכון : </strong>{{l.ACTUAL_END_DATE|date :'d/M/yyyy HH:mm'}} </div>
+          <img ng-click="showTask(l)" class="icon" src="img/new_icons/show.png">
         </ion-item>
     </ion-list>
     </div>
