@@ -101,7 +101,9 @@ angular.module('pele', ['ngSanitize'])
 
       $scope.getNext = function() {
         var refStamp = new Date().getTime();
-        ApiGateway.get("leads/getnext?" + refStamp).success(function(data) {
+        ApiGateway.get("leads/getnext", {
+          refStamp: refStamp
+        }).success(function(data) {
           $scope.lead.LEAD_ID = data.VAL;
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
         }).error(function(error, httpStatus, headers, config) {
