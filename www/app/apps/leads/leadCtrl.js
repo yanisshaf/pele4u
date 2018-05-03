@@ -206,7 +206,7 @@ angular.module('pele', ['ngSanitize'])
               ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized " + v.service + " api")
               var time = config.responseTimestamp - config.requestTimestamp;
               var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
-              PelApi.throwError("api", "get Leads form Element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr, false)
+              PelApi.throwError("api", "get Leads form element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr, false)
             })
           }
 

@@ -577,10 +577,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
       },
 
-      throwError: function(category, from, errorString, redirectInd) {
+      throwError: function(category, from, errorString, redirect) {
         var self = this;
-        var redirect = redirectInd;
-        if (typeof redirectInd == "undefined") redirect = true;
+        if (redirect !== false) {
+          redirect = true;
+        }
+
         var network = "none";
         if (deviceReady) {
           netwrok = $cordovaNetwork.getNetwork();
@@ -648,11 +650,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         if (category.match(/api|eai|app/i)) {
           message = "API request " + from + " endedd with failure : " + errorString;
         }
-        if (redirect) {
+        if (redirect === true) {
           $state.go("app.error", {
             error: lastError
           })
-        }
+        } else {
+          return true
+        };
       },
 
       getApiStatus: function(data, interface) {
