@@ -7,7 +7,7 @@ angular.module('pele', ['ngSanitize'])
   //=================================================================
   .controller('leadCtrl', ['StorageService', 'ApiGateway', '$scope', '$state', '$ionicModal', 'PelApi', '$ionicScrollDelegate', '$sce', '$ionicHistory',
     function(StorageService, ApiGateway, $scope, $state, $ionicModal, PelApi, $ionicScrollDelegate, $sce, $ionicHistory) {
-      $scope.view = "lead";
+      $scope.view = "";
 
       $scope.forms = {}
 
@@ -125,6 +125,7 @@ angular.module('pele', ['ngSanitize'])
       } else if ($state.params.lead && $state.params.lead.LEAD_ID) {
         $scope.onValueChanged($state.params.lead.LEAD_TYPE);
         PelApi.safeApply($scope, function() {
+             $scope.view = "lead";
           $scope.lead = $state.params.lead;
           var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/) || ["", ""];
           $scope.files = $scope.lead.files;
@@ -135,6 +136,7 @@ angular.module('pele', ['ngSanitize'])
           $scope.title = "פרטי ליד";
         })
       } else {
+           $scope.view = "lead";
         if ($state.params.type === 'S') {
           $scope.lead.FORM_TYPE = 'S'; //Draft
           $scope.title = "פתיחת ליד עצמי";
