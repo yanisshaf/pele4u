@@ -285,8 +285,7 @@ angular.module('pele', ['ngSanitize'])
         ApiGateway.get("leads/conf").success(function(data) {
           StorageService.set("leads_conf", data, 1000 * 60 * 30)
           $scope.conf = data;
-          $scope.getRelevantLeadsType($scope.conf.types)
-
+          $scope.getRelevantLeadsType($scope.conf.types);
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized leads/conf api")
           PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
@@ -390,11 +389,12 @@ angular.module('pele', ['ngSanitize'])
         }
 
         function fileUploadSuccess(r) {
+          PelApi.hideLoading();
+          $scope.inUpload=false;
           PelApi.safeApply($scope, function() {
             $scope.uploadState.progress = 100;
             $scope.uploadState.success = true;
             $scope.uploadState.error = false;
-            PelApi.hideLoading();
             $scope.imageUri = "";
             $scope.imageTitle = "";
             $scope.files.push({
@@ -405,6 +405,7 @@ angular.module('pele', ['ngSanitize'])
         }
 
         function fileUploadFailure(error) {
+          $scope.inUpload=false;
           PelApi.hideLoading();
           PelApi.throwError("api", "upload doc", JSON.stringify(error), false);
           $scope.uploadState.progress = 100;
@@ -433,9 +434,13 @@ angular.module('pele', ['ngSanitize'])
           }
         };
         $ionicScrollDelegate.$getByHandle('modalContent').scrollTop(true);
-        PelApi.showLoading();
+        PelApi.showLoading({noBackdrop: true});
+        $scope.inUpload=true;
         setTimeout(function() {
-          PelApi.hideLoading();
+          if($scope.inUpload){
+            $scope.inUpload=false;
+            ft.abort();
+          }
         }, 10000)
         ft.upload(picFile, uri, fileUploadSuccess, fileUploadFailure, options, true);
       }
