@@ -8,7 +8,7 @@
       </div>
     </div>
   </ion-nav-title>
-  <div ng-if="view=='task'">
+  <!--div ng-if="view=='task'">
     <ion-content scroll="true" id="task_view" padding="true">
       <div class="item-section lead-section">
         <h3 class="text-center pele_rtl">ליד מס' : {{task.TASK_NUMBER}}</h3>
@@ -59,8 +59,8 @@
         </table>
       </div>
     </ion-content>
-  </div>
-  <div ng-if="view=='lead'">
+  </div!-->
+
     <ion-content scroll="true" style="height: calc(100% - 100px);" id="new_lead" padding="true" delegate-handle="mainContent">
       <div ng-show="leadSuccess" class="lead-success text-center">
         <img src="img/new_icons/vi.png">
@@ -178,8 +178,8 @@
         </div>
       </ng-form>
     </ion-content>
-  </div>
-    <div   ng-if="view=='lead'" ng-show="!leadSuccess" style="background:#01579B" class="lead-footer bar bar-footer bar-positive">
+
+    <div  ng-show="!leadSuccess" style="background:#01579B" class="lead-footer bar bar-footer bar-positive">
       <a id="buttun-send" class="button   button-block icon-right ion-paper-airplane" ng-click="submit()">
        <span ng-if="storedLead">שמור</span>
       <span ng-if="!storedLead">שלח</span>&nbsp;
