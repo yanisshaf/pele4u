@@ -171,6 +171,7 @@ angular.module('pele.config', [])
     EnvCodes: EnvCodes,
     SSOEnv: SSOEnv,
     api_timeout: 20,
+    gw_timeout: 15000,
     config: {
       contactIdPrefix: "pelephone",
       APP_VERSION: "118.2",

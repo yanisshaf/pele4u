@@ -106,7 +106,9 @@ angular.module('pele', ['ngSanitize'])
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized getnext api")
-          PelApi.throwError("api", "get new Lead seq", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+          PelApi.throwError("api", "get new Lead seq", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
         })
       }
 
@@ -202,7 +204,9 @@ angular.module('pele', ['ngSanitize'])
                 $scope.extraSchema[index] = _.extend($scope.extraSchema[index], v.default);
               }
               ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized " + v.service + " api")
-              PelApi.throwError("api", "get Leads form Element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
+              var time = config.responseTimestamp - config.requestTimestamp;
+              var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+              PelApi.throwError("api", "get Leads form Element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr, false)
             })
           }
 
@@ -294,7 +298,9 @@ angular.module('pele', ['ngSanitize'])
           $scope.getRelevantLeadsType($scope.conf.types);
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized leads/conf api")
-          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
         })
       }
 
@@ -327,7 +333,9 @@ angular.module('pele', ['ngSanitize'])
                 })
             }).error(function(error, httpStatus, headers, config) {
               ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized delete lead api")
-              PelApi.throwError("api", "delete lead by id ", "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
+              var time = config.responseTimestamp - config.requestTimestamp;
+              var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+              PelApi.throwError("api", "delete lead by id ", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr, false)
             })
           }
         })
@@ -377,7 +385,9 @@ angular.module('pele', ['ngSanitize'])
           $ionicScrollDelegate.$getByHandle('mainContent').scrollTop(true);
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized post lead  lead api");
-          PelApi.throwError("api", "Post new lead", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+          PelApi.throwError("api", "Post new lead", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
         }).finally(function() {
           PelApi.hideLoading();
         })

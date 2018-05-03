@@ -77,7 +77,9 @@ angular.module('pele')
           $scope.conf = data;
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api");
-          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
         })
       }
 
@@ -105,8 +107,10 @@ angular.module('pele')
           $scope.leads = data;
           $scope.createGroups();
         }).error(function(error, httpStatus, headers, config) {
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads  api");
-          PelApi.throwError("api", "fetch leads list by type ", "httpStatus : " + httpStatus + " " + JSON.stringify(error))
+          PelApi.throwError("api", "fetch leads list by type ", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
         }).finally(function() {
           PelApi.hideLoading();
         })
