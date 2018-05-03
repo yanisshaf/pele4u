@@ -379,7 +379,9 @@ angular.module('pele', ['ngSanitize'])
       }
 
 
-
+       $scope.stopLoading = function() { 
+         PelApi.hideLoading();
+       }
 
       $scope.uploadFile = function() {
         var picFile = $scope.imageUri;
@@ -434,7 +436,7 @@ angular.module('pele', ['ngSanitize'])
           }
         };
         $ionicScrollDelegate.$getByHandle('modalContent').scrollTop(true);
-        PelApi.showLoading({scope:$scope});
+        PelApi.showLoading({ template: '<img ng-click="stopLoading()" class="spinner" src="./img/spinners/puff.svg">',scope:$scope});
         $scope.inUpload=true;
         setTimeout(function() {
           if($scope.inUpload){
