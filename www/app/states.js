@@ -352,7 +352,7 @@ angular.module('pele.states', [])
       views: {
         'menuContent@app': {
           templateUrl: function($stateParams) {
-            if($stateParams.lead && $stateParams.lead.TASK_NUMBER)
+            if($stateParams.task && $stateParams.task.TASK_NUMBER)
               return  'app/apps/leads/task.html';
             return 'app/apps/leads/lead.html';
           },
