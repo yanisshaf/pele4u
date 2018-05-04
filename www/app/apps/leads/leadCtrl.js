@@ -412,30 +412,9 @@ angular.module('pele', ['ngSanitize'])
           progress: 0
         }
 
-        function fileUploadSuccess(r) {
-          PelApi.hideLoading();
-          $scope.inUpload = false;
-          PelApi.safeApply($scope, function() {
-            $scope.uploadState.progress = 100;
-            $scope.uploadState.success = true;
-            $scope.uploadState.error = false;
-            $scope.imageUri = "";
-            $scope.imageTitle = "";
-            $scope.files.push({
-              uri: $scope.imageUri,
-              title: $scope.imageTitle
-            })
-          });
-        }
-
-        function fileUploadFailure(error) {
-          $scope.inUpload = false;
-          PelApi.hideLoading();
-          PelApi.throwError("api", "upload doc", JSON.stringify(error), false);
-          $scope.uploadState.progress = 100;
-          $scope.uploadState.error = true;
-        }
-
+     
+        
+      
 
         var uri = encodeURI(ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID));
         var options = new FileUploadOptions();
@@ -449,7 +428,36 @@ angular.module('pele', ['ngSanitize'])
         options.headers = headers;
 
         var ft = new FileTransfer();
+        var uploadTimer = setTimeout(function() {
+          if ($scope.inUpload) {
+             ft.abort();
+          }
+        }, 15000);
+          function fileUploadSuccess(r) {
+           clearTimeout(uploadTimer);  
+            PelApi.hideLoading();
+            PelApi.safeApply($scope, function() {
+            $scope.uploadState.progress = 100;
+            $scope.uploadState.success = true;
+            $scope.uploadState.error = false;
+            $scope.imageUri = "";
+            $scope.imageTitle = "";
+            $scope.files.push({
+              uri: $scope.imageUri,
+              title: $scope.imageTitle
+            })
+          });
+        }
 
+        function fileUploadFailure(error) {
+         clearTimeout(uploadTimer);
+          PelApi.hideLoading();
+          PelApi.throwError("api", "upload doc", JSON.stringify(error), false);
+          $scope.uploadState.progress = 100;
+          $scope.uploadState.error = true;
+        }
+
+        
         ft.onprogress = function(progressEvent) {
           if (progressEvent.lengthComputable) {
             $scope.uploadState.progress = progressEvent.loaded / (progressEvent.total + 1);
@@ -463,12 +471,7 @@ angular.module('pele', ['ngSanitize'])
           scope: $scope
         });
         $scope.inUpload = true;
-        setTimeout(function() {
-          if ($scope.inUpload) {
-            $scope.inUpload = false;
-            ft.abort();
-          }
-        }, 10000)
+        
         ft.upload(picFile, uri, fileUploadSuccess, fileUploadFailure, options, true);
       }
 
