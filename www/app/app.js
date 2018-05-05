@@ -28,7 +28,6 @@ angular.module('pele', [
     
       $rootScope.$on('IdleStart', function() {
         PelApi.lagger.info("Idle found !");
-        Idle.watch();
         PelApi.goHome();
       });
       $rootScope.$on('$stateChangeStart',
