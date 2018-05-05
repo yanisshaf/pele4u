@@ -104,8 +104,8 @@ angular.module('pele', ['ngSanitize'])
         ApiGateway.get("leads/getnext", {
           refStamp: refStamp
         }, {
-          retry: 2,
-          timeout: 4 * 1000
+          retry: 3,
+          timeout: 5 * 1000
         }).success(function(data) {
           $scope.lead.LEAD_ID = data.VAL;
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
@@ -202,7 +202,10 @@ angular.module('pele', ['ngSanitize'])
             v.inputFieldInd = false;
           }
           if (v.service) {
-            ApiGateway.get(v.service).success(function(data) {
+            ApiGateway.get(v.service,{}, {
+                            retry: 3,
+                             timeout: 10 * 1000
+             }).success(function(data) {
               _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', data.value);
               $scope.extraSchema[index] = _.extend($scope.extraSchema[index], data);
             }).error(function(error, httpStatus, headers, config) {
