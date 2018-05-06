@@ -4,6 +4,7 @@ angular.module('pele.controllers', ['ngStorage'])
     $rootScope.stopLoading = function() {
       PelApi.hideLoading()
     }
+    
     $scope.gateway = function() { 
       $scope.gateway_r="";
       ApiGateway.get("leads/conf").success(function(data){
@@ -11,7 +12,8 @@ angular.module('pele.controllers', ['ngStorage'])
       }).error(function(error){
          $scope.gateway_r="error"
       });
-      
+    }
+    
     $scope.getLocalStorageUsage = function() {
       return PelApi.getLocalStorageUsage();
     }
