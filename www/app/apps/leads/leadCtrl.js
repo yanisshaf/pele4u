@@ -99,6 +99,7 @@ angular.module('pele', ['ngSanitize'])
         setDynamicValidation($scope.extraSchema)
       }
 
+
       $scope.getNext = function() {
         var refStamp = new Date().getTime();
         ApiGateway.get("leads/getnext", {
@@ -200,19 +201,25 @@ angular.module('pele', ['ngSanitize'])
             v.inputFieldInd = false;
           }
           if (v.service) {
+            v.progress = true;
+            v.serviceStatus = "";
             ApiGateway.get(v.service, {}, {
               retry: 3,
               timeout: 10 * 1000
             }).success(function(data) {
+              v.serviceStatus = "success"
               _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', data.value);
               $scope.extraSchema[index] = _.extend($scope.extraSchema[index], data);
             }).error(function(error, httpStatus, headers, config) {
+              v.serviceStatus = "error"
               if (v.default) {
                 _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', v.default);
                 $scope.extraSchema[index] = _.extend($scope.extraSchema[index], v.default);
               }
               ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized " + v.service + " api", config)
               PelApi.throwError("api", "get Leads form element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")", false)
+            }).finally(function() {
+              v.progress = false;
             })
           }
 
@@ -237,10 +244,9 @@ angular.module('pele', ['ngSanitize'])
             v = $scope.setValidationDate(v)
           }
         })
-
-
       }
 
+      $scope.setDynamicValidation = setDynamicValidation;
       $scope.display = function(e) {
         e.show = "true"
       }

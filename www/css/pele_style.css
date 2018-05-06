@@ -834,17 +834,18 @@ top:11px;
 #new_lead {
     font-size:18px;
   }
+
 #new_lead  input{
     font-size: 1rem;
   }
 
 
-#new_lead   .lead-status {border:2px solid #0D47A1;border-radius:5px;font-size:16px;padding:3px;margin: 3px;color:white;background:#1E88E5}
+#new_lead   .lead-status {border:2px solid #0D47A1;border-radius:5px;font-size:18px;padding:3px;margin: 3px;color:white;background:#1E88E5}
 .item-checkbox.text-right {padding-right:60px}
 .leads-notes {height:200px;min-height: 200px}
 .white {color:white}
 .list.lead-form .item-input {padding:3px 5px 3px 3px}
-.list.lead-form label .input-label {padding:0px 0 8px 8px;line-height: 16px;}
+.list.lead-form label .input-label {padding:0px 0 8px 8px;line-height: 18px;}
 
 
 
@@ -919,7 +920,7 @@ a.white {color:white}
 #buttun-send span {color:#fff}
 #buttun-danger  {border:2px solid #c43c35;background:#ca3535; color:#fff }
 .leads-report .item {padding:10px}
-.lead-actions-sheet  button {border-top:1px solid #CCC !important;font-size:15px;}
-.lead-actions-sheet  button.destructive {color:red !important;font-size:16px !important}
-#task_view td.label{font-size:16px;font-weight:bolder;padding:5px;}
-#task_view td.info{font-size:16px;padding-left:15px}
+.lead-actions-sheet  button {border-top:1px solid #CCC !important;font-size:18px;}
+.lead-actions-sheet  button.destructive {color:red !important;font-size:18px !important}
+#task_view td.label{font-size:18px;font-weight:bolder;padding:5px;}
+#task_view td.info{font-size:18px;padding-left:15px}

@@ -18,8 +18,7 @@
       <span ng-bind-html="trust(e.label)"></span>
     </div>
     <ng-switch on="e.type">
-      <label class="item no-border item-input item-text-wrap">
-
+      <label class="item no-border item-input item-text-wrap margin-top-10">
       <span  ng-show="e.inputFieldInd" class="input-label"><span ng-show="e.required">*</span> {{e.label}} </span>
       <input name="{{e.attribute_name}}" ng-switch-when="text" type="text" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required" ng-disabled="e.disabled">
       <input date-input  ng-switch-when="date" name="{{e.attribute_name}}" type="date"  ng-model="lead.ATTRIBUTES[e.attribute_name]"  ng-required="e.required" min="{{e.computedMin}}" max="{{e.computedMax}}" ng-disabled="e.disabled">
@@ -35,13 +34,21 @@
                  <div class="handle"></div>
            </div>
      </label>
+      <img ng-if="e.service && e.progress" src="img/spinners/little_spin.svg">
       </label>
-      <label ng-switch-when="textarea" class="item no-border item-input item-text-wrap">
+      <label ng-switch-when="textarea" class="item no-border item-input item-text-wrap margin-top-15">
         <textarea name="{{e.attribute_name}}"  rows="e.rows" cols="e.cols" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required"></textarea>
+        <img ng-if="e.service && e.progress" src="img/spinners/little_spin.svg">
     </label>
       <!--label ng-if="e.attribute_name" ng-show="leadForm.attributes[e.attribute_name].$invalid && (leadForm.attributes[e.attribute_name].$dirty || submitted)" class="item no-border input-error">
       ערך לא תקין
     </label-->
+      <div ng-if="e.service && e.serviceStatus==='error'">
+        <label class="item no-border input-error pele_rtl" ng-click="setDynamicValidation(extraSchema)">
+          לחצו כאן לנסות שוב
+          <i class="icon pel_icon icon-md  ion-refresh"></i>
+        </label>
+      </div>
       <div ng-if="e.attribute_name" ng-show="forms.leadForm.attributes[e.attribute_name].$invalid && submitted">
         <label class="item no-border input-error" ng-if="e.message">{{e.message}}</label>
         <div ng-if="!e.message">
