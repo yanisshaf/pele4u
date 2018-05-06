@@ -117,7 +117,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   }
 
 
-  this.checkResponse = function(data, httpStatus) {
+  this.checkResponse = function(data, httpStatus, config) {
     var errorMsg = "InvalidJsonResponse";
     var sys = ""
     if (isValidJson(data) == false || !data) {
@@ -125,7 +125,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
       if (typeof data === "string") {
         errorMsg = data;
       }
-      return PelApi.throwError("api", "ApiService.checkResponse-InvalidJsonResponse", "(httpStatus : " + httpStatus + ") " + errorMsg)
+      return PelApi.throwError("api", "ApiService.checkResponse-InvalidJsonResponse", "(httpStatus : " + httpStatus + ") " + errorMsg + "(ms:" + config.ms + ")")
     }
     if (data.Error && data.Error.errorCode) {
       errorMsg = "Application Error";
@@ -135,11 +135,11 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
         $ionicHistory.clearHistory();
         return PelApi.goHome();
       }
-      return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ") " + JSON.stringify(data), false)
+      return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ") " + JSON.stringify(data) + "(ms:" + config.ms + ")", false)
     }
     if (httpStatus != 200) {
       errorMsg = "http resource error";
-      return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ")")
+      return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ")" + "(ms:" + config.ms + ")")
     }
     return data;
   }
@@ -196,7 +196,8 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   this.reauthOnForbidden = function(httpStatus, msg) {
     var errmsg = msg || "Auth failed - jump to entry page for reauth"
     if (httpStatus == 401 || httpStatus == 403) {
-      PelApi.throwError("api", msg, "httpStatus : " + httpStatus + " " + JSON.stringify(error), false)
+      PelApi.throwError("api", msg, "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")", false)
+      appSettings.config.IS_TOKEN_VALID = "N";
       return PelApi.goHome();
     }
     return true;

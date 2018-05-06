@@ -25,7 +25,7 @@ angular.module('pele', [
   .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings', 'Idle',
     function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings, Idle) {
       PelApi.init();
-    
+
       $rootScope.$on('IdleStart', function() {
         PelApi.lagger.info("Idle found !");
         PelApi.goHome();
@@ -101,7 +101,7 @@ angular.module('pele', [
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
     $ionicConfigProvider.navBar.alignTitle('center');
-    IdleProvider.idle(60*3);
+    IdleProvider.idle(60 * 3);
 
     $stateProvider
       .state('app', {
@@ -280,6 +280,7 @@ angular.module('pele', [
       },
       response: function(response) {
         response.config.responseTimestamp = new Date().getTime();
+        response.config.ms = response.config.responseTimestamp - response.config.requestTimestamp;
         if (response.config.url.match(/^http/)) {
           var PelApi = $injector.get('PelApi');
           PelApi.hideLoading();
@@ -296,7 +297,7 @@ angular.module('pele', [
         var PelApi = $injector.get('PelApi');
 
         rejection.config.responseTimestamp = new Date().getTime();
-
+        rejection.config.ms = rejection.config.responseTimestamp - rejection.config.requestTimestamp;
         if (retries < (rejection.config.retry || 0)) {
           PelApi.lagger.error("Reject & Retry . number :  " + retries, "on Config : ", rejection.config)
           retries++;

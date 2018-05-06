@@ -110,10 +110,8 @@ angular.module('pele', ['ngSanitize'])
           $scope.lead.LEAD_ID = data.VAL;
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
         }).error(function(error, httpStatus, headers, config) {
-          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized getnext api")
-          var time = config.responseTimestamp - config.requestTimestamp;
-          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
-          PelApi.throwError("api", "get new Lead seq", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized getnext api", config)
+          PelApi.throwError("api", "get new Lead seq", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
         })
       }
 
@@ -125,7 +123,7 @@ angular.module('pele', ['ngSanitize'])
       } else if ($state.params.lead && $state.params.lead.LEAD_ID) {
         $scope.onValueChanged($state.params.lead.LEAD_TYPE);
         PelApi.safeApply($scope, function() {
-             $scope.view = "lead";
+          $scope.view = "lead";
           $scope.lead = $state.params.lead;
           var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/) || ["", ""];
           $scope.files = $scope.lead.files;
@@ -136,7 +134,7 @@ angular.module('pele', ['ngSanitize'])
           $scope.title = "פרטי ליד";
         })
       } else {
-           $scope.view = "lead";
+        $scope.view = "lead";
         if ($state.params.type === 'S') {
           $scope.lead.FORM_TYPE = 'S'; //Draft
           $scope.title = "פתיחת ליד עצמי";
@@ -202,10 +200,10 @@ angular.module('pele', ['ngSanitize'])
             v.inputFieldInd = false;
           }
           if (v.service) {
-            ApiGateway.get(v.service,{}, {
-                            retry: 3,
-                             timeout: 10 * 1000
-             }).success(function(data) {
+            ApiGateway.get(v.service, {}, {
+              retry: 3,
+              timeout: 10 * 1000
+            }).success(function(data) {
               _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', data.value);
               $scope.extraSchema[index] = _.extend($scope.extraSchema[index], data);
             }).error(function(error, httpStatus, headers, config) {
@@ -213,10 +211,8 @@ angular.module('pele', ['ngSanitize'])
                 _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', v.default);
                 $scope.extraSchema[index] = _.extend($scope.extraSchema[index], v.default);
               }
-              ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized " + v.service + " api")
-              var time = config.responseTimestamp - config.requestTimestamp;
-              var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
-              PelApi.throwError("api", "get Leads form element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr, false)
+              ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized " + v.service + " api", config)
+              PelApi.throwError("api", "get Leads form element  service :" + v.service, "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")", false)
             })
           }
 
@@ -303,14 +299,12 @@ angular.module('pele', ['ngSanitize'])
           return;
         }
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 30)
+          StorageService.set("leads_conf", data, 1000 * 60 * 1)
           $scope.conf = data;
           $scope.getRelevantLeadsType($scope.conf.types);
         }).error(function(error, httpStatus, headers, config) {
-          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized leads/conf api")
-          var time = config.responseTimestamp - config.requestTimestamp;
-          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
-          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized leads/conf api", config)
+          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
         })
       }
 
@@ -342,10 +336,8 @@ angular.module('pele', ['ngSanitize'])
                   })
                 })
             }).error(function(error, httpStatus, headers, config) {
-              ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized delete lead api")
-              var time = config.responseTimestamp - config.requestTimestamp;
-              var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
-              PelApi.throwError("api", "delete lead by id ", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr, false)
+              ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized delete lead api", config)
+              PelApi.throwError("api", "delete lead by id ", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")", false)
             })
           }
         })
@@ -394,10 +386,8 @@ angular.module('pele', ['ngSanitize'])
           $scope.lead = {};
           $ionicScrollDelegate.$getByHandle('mainContent').scrollTop(true);
         }).error(function(error, httpStatus, headers, config) {
-          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized post lead  lead api");
-          var time = config.responseTimestamp - config.requestTimestamp;
-          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
-          PelApi.throwError("api", "Post new lead", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized post lead  lead api", config);
+          PelApi.throwError("api", "Post new lead", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
         }).finally(function() {
           PelApi.hideLoading();
         })
@@ -415,9 +405,9 @@ angular.module('pele', ['ngSanitize'])
           progress: 0
         }
 
-     
-        
-      
+
+
+
 
         var uri = encodeURI(ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID));
         var options = new FileUploadOptions();
@@ -433,13 +423,14 @@ angular.module('pele', ['ngSanitize'])
         var ft = new FileTransfer();
         var uploadTimer = setTimeout(function() {
           if ($scope.inUpload) {
-             ft.abort();
+            ft.abort();
           }
         }, 15000);
-          function fileUploadSuccess(r) {
-           clearTimeout(uploadTimer);  
-            PelApi.hideLoading();
-            PelApi.safeApply($scope, function() {
+
+        function fileUploadSuccess(r) {
+          clearTimeout(uploadTimer);
+          PelApi.hideLoading();
+          PelApi.safeApply($scope, function() {
             $scope.uploadState.progress = 100;
             $scope.uploadState.success = true;
             $scope.uploadState.error = false;
@@ -453,14 +444,14 @@ angular.module('pele', ['ngSanitize'])
         }
 
         function fileUploadFailure(error) {
-         clearTimeout(uploadTimer);
+          clearTimeout(uploadTimer);
           PelApi.hideLoading();
           PelApi.throwError("api", "upload doc", JSON.stringify(error), false);
           $scope.uploadState.progress = 100;
           $scope.uploadState.error = true;
         }
 
-        
+
         ft.onprogress = function(progressEvent) {
           if (progressEvent.lengthComputable) {
             $scope.uploadState.progress = progressEvent.loaded / (progressEvent.total + 1);
@@ -474,7 +465,7 @@ angular.module('pele', ['ngSanitize'])
           scope: $scope
         });
         $scope.inUpload = true;
-        
+
         ft.upload(picFile, uri, fileUploadSuccess, fileUploadFailure, options, true);
       }
 

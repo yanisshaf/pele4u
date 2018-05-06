@@ -33,14 +33,12 @@ angular.module('pele')
           return;
         }
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 30);
+          StorageService.set("leads_conf", data, 1000 * 60 * 1);
           $scope.conf = data;
           $scope.info = getInfo();
         }).error(function(error, httpStatus, headers, config) {
-          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api");
-          var time = config.responseTimestamp - config.requestTimestamp;
-          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
-          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api", config);
+          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
         })
       }
 

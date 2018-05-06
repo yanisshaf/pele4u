@@ -73,13 +73,11 @@ angular.module('pele')
         $scope.conf = StorageService.getData("leads_conf")
         if ($scope.conf) return;
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 30)
+          StorageService.set("leads_conf", data, 1000 * 60 * 1)
           $scope.conf = data;
         }).error(function(error, httpStatus, headers, config) {
-          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api");
-          var time = config.responseTimestamp - config.requestTimestamp;
-          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
-          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api", config);
+          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
         })
       }
 
@@ -108,9 +106,7 @@ angular.module('pele')
           $scope.createGroups();
         }).error(function(error, httpStatus, headers, config) {
           var time = config.responseTimestamp - config.requestTimestamp;
-          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
-          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads  api");
-          PelApi.throwError("api", "fetch leads list by type ", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + tr)
+          PelApi.throwError("api", "fetch leads list by type ", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
         }).finally(function() {
           PelApi.hideLoading();
         })

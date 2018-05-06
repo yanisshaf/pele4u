@@ -68,7 +68,7 @@ angular.module('pele')
       } else {
         ApiService.post("PhonebookGetSector", AppId)
           .success(function(data, status, headers, config) {
-            var result = ApiService.checkResponse(data, status)
+            var result = ApiService.checkResponse(data, status, config)
             $scope.sectors = result.sectors;
             $scope.operunits = result.operunits;
             StorageService.set("phonebook_sectors", result, 60 * 60 * 3)
@@ -76,7 +76,7 @@ angular.module('pele')
           .error(function(errorStr, httpStatus, headers, config) {
             ApiService.checkResponse({
               error: errorStr
-            }, httpStatus);
+            }, httpStatus, config);
           })
       }
     }
@@ -196,7 +196,7 @@ angular.module('pele')
           p6: p6
         })
         .success(function(data, status, headers, config) {
-          var result = ApiService.checkResponse(data, status)
+          var result = ApiService.checkResponse(data, status, config)
           $scope.searchResult.cursor = result.cursor;
           $scope.searchResult.list = _.concat($scope.searchResult.list, result.list);
           $scope.searchResult.isFound = result.list.length ? true : false;
@@ -210,7 +210,7 @@ angular.module('pele')
         .error(function(errorStr, httpStatus, headers, config) {
           ApiService.checkResponse({
             error: errorStr
-          }, httpStatus);
+          }, httpStatus, config);
 
         })
     }
