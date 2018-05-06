@@ -431,7 +431,7 @@ angular.module('pele', ['ngSanitize'])
           if ($scope.inUpload) {
             ft.abort();
           }
-        }, 15000);
+        }, 25000);
 
         function fileUploadSuccess(r) {
           clearTimeout(uploadTimer);

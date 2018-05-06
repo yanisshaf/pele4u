@@ -174,7 +174,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
 
   function buildHeader(params) {
     var headers = params || {};
-    headers['withCredentials'] = 'true';
+    //headers['withCredentials'] = 'true';
     var ApiServiceAuthParams = _.get($sessionStorage, "ApiServiceAuthParams", {});
     headers['x-appid'] = $sessionStorage.PeleAppId;
     headers['x-token'] = ApiServiceAuthParams.TOKEN;
