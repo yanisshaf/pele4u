@@ -7,6 +7,12 @@ angular.module('pele')
   //=================================================================
   .controller('menuCtrl', ['$scope', '$state', 'StorageService', 'ApiGateway', 'PelApi', '$ionicModal',
     function($scope, $state, StorageService, ApiGateway, PelApi, $ionicModal) {
+
+      ApiGateway.head("leads").success(function(data) {}).error(function(error, httpStatus, headers, config) {
+        ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api", config);
+
+      });
+
       $scope.stateType = ""
       $scope.prevState = "";
       if ($state.is("app.leads.self")) {
@@ -18,7 +24,6 @@ angular.module('pele')
         $scope.stateType = "T"
         $scope.prevState = "app.leads.task";
       }
-
 
 
       var getInfo = function() {
@@ -33,7 +38,8 @@ angular.module('pele')
           return;
         }
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 1);
+          PelApi.showLoading();
+          StorageService.set("leads_conf", data, 1000 * 60 * 10);
           $scope.conf = data;
           $scope.info = getInfo();
         }).error(function(error, httpStatus, headers, config) {

@@ -71,9 +71,9 @@ angular.module('pele')
 
       $scope.getConf = function() {
         $scope.conf = StorageService.getData("leads_conf")
-        if ($scope.conf) return;
+        if ($scope.conf.types) return;
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 1)
+          StorageService.set("leads_conf", data, 1000 * 60 * 10)
           $scope.conf = data;
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api", config);
@@ -94,10 +94,8 @@ angular.module('pele')
       }
       $scope.getData = function() {
         var service = "leads/";
-
         if ($state.params.type === "T")
           service += "tasks";
-
         PelApi.showLoading();
         ApiGateway.get(service, {
           type: $state.params.type
@@ -105,6 +103,7 @@ angular.module('pele')
           $scope.leads = data;
           $scope.createGroups();
         }).error(function(error, httpStatus, headers, config) {
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/tasks  api", config);
           var time = config.responseTimestamp - config.requestTimestamp;
           PelApi.throwError("api", "fetch leads list by type ", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
         }).finally(function() {

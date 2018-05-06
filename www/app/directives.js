@@ -229,7 +229,7 @@ angular.module('tabSlideBox', [])
         } else {
           return '<ion-list ng-class="listClass"> ' +
             '<ion-item ng-click=showItems($event) class="item-text-wrap"> ' +
-            ' <span class="item-note">{{noteText}} <img ng-show="noteImg" class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> ' +
+            ' <span class="item-note">{{noteText}} <img ng-show="noteImg" class={{noteImgClass}} ng-if="noteImg != null" ng-src="{{noteImg}}"/> </span> ' +
             '<span ng-class="headerClass" ng-bind-html="text"></span>' +
             '</ion-item> </ion-list>';
         }

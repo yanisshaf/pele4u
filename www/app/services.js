@@ -165,11 +165,12 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   };
 }]).service('ApiGateway', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', '$localStorage', function($http, $ionicHistory, PelApi, $sessionStorage, $localStorage) {
 
-  var env = _.get(PelApi.appSettings.EnvCodes, PelApi.appSettings.env).toLowerCase()
-  var urlBase = PelApi.cordovaNetwork.getNetwork() === "wifi" ? PelApi.appSettings.apiConfig.wifi_uri : PelApi.appSettings.apiConfig.uri;
-  var urlBase = urlBase + '/mobileAppGw/' + env + '/';
-
-
+  function getUrlBase() {
+    var env = _.get(PelApi.appSettings.EnvCodes, PelApi.appSettings.env).toLowerCase()
+    var urlBase = PelApi.cordovaNetwork.getNetwork() === "wifi" ? PelApi.appSettings.apiConfig.wifi_uri : PelApi.appSettings.apiConfig.uri;
+    var urlBase = urlBase + '/mobileAppGw/' + env + '/';
+    return urlBase;
+  }
 
   function buildHeader(params) {
     var headers = params || {};
@@ -185,7 +186,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
 
 
   function getUrl(urlStr) {
-    return urlBase + urlStr;
+    return getUrlBase() + urlStr;
   }
 
   //return PelApi.throwError("api", "ApiService.checkResponse-InvalidJsonResponse", "(httpStatus : " + httpStatus + ") " + errorMsg)
@@ -193,18 +194,18 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   this.getHeaders = buildHeader;
   this.getUrl = getUrl;
 
-  this.reauthOnForbidden = function(httpStatus, msg) {
+  this.reauthOnForbidden = function(httpStatus, msg, config) {
     var errmsg = msg || "Auth failed - jump to entry page for reauth"
     if (httpStatus == 401 || httpStatus == 403) {
-      PelApi.throwError("api", msg, "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")", false)
-      appSettings.config.IS_TOKEN_VALID = "N";
+      PelApi.throwError("api", msg, "httpStatus : " + httpStatus + " (MS:" + config.ms + ")", false)
+      PelApi.appSettings.config.IS_TOKEN_VALID = "N";
       return PelApi.goHome();
     }
     return true;
   }
 
   this.get = function(service, params, config) {
-    var url = urlBase + service;
+    var url = getUrlBase() + service;
     params = params || {};
     config = config || {};
     var httpConfig = {
@@ -216,23 +217,25 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     return $http.get(url, httpConfig);
   };
   this.post = function(service, params, config) {
+    var url = getUrlBase() + service;
     config = config || {};
     var headerParams = {
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(config.headers)
     }
-    return $http.post(urlBase + service, params || {}, headerParams);
+    return $http.post(url, params || {}, headerParams);
   };
   this.head = function(service, config) {
+    var url = getUrlBase() + service;
     config = config || {};
     var headerParams = {
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(config.headers)
     }
-
-    return $http.head(urlBase + service, {}, headerParams);
+    return $http.head(url, headerParams);
   };
   this.delete = function(service, params, config) {
+    var url = getUrlBase() + service;
     params = params || {};
     config = config || {};
     var headerParams = {
@@ -240,16 +243,17 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(config.headers)
     }
-    return $http.delete(urlBase + service, headerParams);
+    return $http.delete(url, headerParams);
   };
 
   this.put = function(service, params, config) {
+    var url = getUrlBase() + service;
     config = config || {};
     var headerParams = {
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(config.headers)
     }
-    return $http.put(urlBase + service, params || {}, headerParams);
+    return $http.put(url, params || {}, headerParams);
   };
 }]).service('srvShareData', function($window) {
   var KEY = 'App.SelectedValue';

@@ -20,7 +20,6 @@ angular.module('pele', ['ngSanitize'])
         ATTRIBUTES: {}
       };
 
-
       $scope.takePic = function(sourceType) {
         PelApi.safeApply($scope, function() {
           $scope.imageUri = "";
@@ -48,7 +47,6 @@ angular.module('pele', ['ngSanitize'])
         }
 
         navigator.camera.getPicture(function(imageUri) {
-
           if (PelApi.isAndroid) {
             window.FilePath.resolveNativePath(imageUri, function(path) {
               PelApi.safeApply($scope, function() {
@@ -299,13 +297,13 @@ angular.module('pele', ['ngSanitize'])
 
       $scope.getConf = function() {
         $scope.conf = StorageService.getData("leads_conf", {})
-
         if ($scope.conf.types) {
           $scope.getRelevantLeadsType($scope.conf.types)
           return;
         }
+
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 1)
+          StorageService.set("leads_conf", data, 1000 * 60 * 10)
           $scope.conf = data;
           $scope.getRelevantLeadsType($scope.conf.types);
         }).error(function(error, httpStatus, headers, config) {
