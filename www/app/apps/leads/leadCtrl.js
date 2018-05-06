@@ -105,7 +105,7 @@ angular.module('pele', ['ngSanitize'])
           refStamp: refStamp
         }, {
           retry: 3,
-          timeout: 5 * 1000
+          timeout: 15 * 1000
         }).success(function(data) {
           $scope.lead.LEAD_ID = data.VAL;
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
