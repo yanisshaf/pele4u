@@ -100,6 +100,7 @@ angular.module('pele', ['ngSanitize'])
 
       $scope.getNext = function() {
         var refStamp = new Date().getTime();
+        PelApi.showLoading();
         ApiGateway.get("leads/getnext", {
           refStamp: refStamp
         }, {
@@ -111,6 +112,8 @@ angular.module('pele', ['ngSanitize'])
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized getnext api", config)
           PelApi.throwError("api", "get new Lead seq", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
+        }).finally(function() {
+          PelApi.hideLoading();
         })
       }
 
@@ -377,7 +380,6 @@ angular.module('pele', ['ngSanitize'])
           })
           return false;
         }
-
 
         PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {

@@ -104,14 +104,13 @@ angular.module('pele')
           $scope.createGroups();
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/tasks  api", config);
-          var time = config.responseTimestamp - config.requestTimestamp;
           PelApi.throwError("api", "fetch leads list by type ", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
         }).finally(function() {
           PelApi.hideLoading();
         })
       }
 
-      $scope.getConf();
+      //$scope.getConf();
       $scope.getData();
     }
   ]);
