@@ -304,7 +304,7 @@ angular.module('pele', ['ngSanitize'])
           $scope.getRelevantLeadsType($scope.conf.types)
           return;
         }
-
+          PelApi.showLoading();
         ApiGateway.get("leads/conf").success(function(data) {
           StorageService.set("leads_conf", data, 1000 * 60 * 10)
           $scope.conf = data;
@@ -312,6 +312,8 @@ angular.module('pele', ['ngSanitize'])
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized leads/conf api", config)
           PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
+        }).finally(function() {
+          PelApi.hideLoading();
         })
       }
 
