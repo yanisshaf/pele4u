@@ -1,10 +1,19 @@
 angular.module('pele.controllers', ['ngStorage'])
-  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory, $ionicPopup) {
+  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory, $ionicPopup,ApiGateway) {
 
     $rootScope.stopLoading = function() {
       PelApi.hideLoading()
     }
-
+    
+    $scope.gateway = function() { 
+      $scope.gateway_r="";
+      ApiGateway.get("leads/conf").success(function(data){
+         $scope.gateway_r = "success";
+      }).error(function(error){
+         $scope.gateway_r="error"
+      });
+    }
+    
     $scope.getLocalStorageUsage = function() {
       return PelApi.getLocalStorageUsage();
     }
