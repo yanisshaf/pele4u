@@ -97,7 +97,7 @@ angular.module('pele', [
       });
     }
   ])
-  .config(function($compileProvider, $stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider, IdleProvider) {
+  .config(function(/*$compileProvider, */ $stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider, IdleProvider) {
    // $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
