@@ -101,7 +101,7 @@ angular.module('pele', [
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
     $ionicConfigProvider.navBar.alignTitle('center');
-    IdleProvider.idle(60 * 3);
+    IdleProvider.idle(60 * 5);
 
     $stateProvider
       .state('app', {

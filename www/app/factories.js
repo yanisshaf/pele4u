@@ -1081,9 +1081,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         return $fileLogger;
       },
 
-      goHome: function() {
-        //window.location = "./../../index.html" ;
-        $state.go("app.p1_appsLists");
+      goHome: function(config) {
+        options = config || {};
+        $state.go("app.p1_appsLists", options.params || {}, options.options || {});
       },
       goLogIn: function() {
         $state.go("app.login");

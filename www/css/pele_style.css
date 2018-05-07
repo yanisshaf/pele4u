@@ -1,4 +1,4 @@
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, i, u, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, fieldset, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, i, u, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, fieldset, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
     margin: 0;
     padding: 0;
     border: 0;
@@ -922,5 +922,9 @@ a.white {color:white}
 .leads-report .item {padding:10px}
 .lead-actions-sheet  button {border-top:1px solid #CCC !important;font-size:18px;}
 .lead-actions-sheet  button.destructive {color:red !important;font-size:18px !important}
-#task_view td.label{font-size:18px;font-weight:bolder;padding:5px;}
-#task_view td.info{font-size:18px;padding-left:15px}
+#task-view td.label{font-size:18px;font-weight:240;padding:5px;}  
+#task-view td.info{font-size:18px;padding-left:15px}
+#new-main-menu .item {
+  background-color: transparent !important;
+  color:#fff;
+}

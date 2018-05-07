@@ -110,7 +110,7 @@ angular.module('pele', ['ngSanitize'])
           $scope.lead.LEAD_ID = data.VAL;
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
         }).error(function(error, httpStatus, headers, config) {
-          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized getnext api", config)
+          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized getnext api", config);
           PelApi.throwError("api", "get new Lead seq", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
         }).finally(function() {
           PelApi.hideLoading();

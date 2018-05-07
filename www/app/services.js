@@ -197,9 +197,9 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   this.reauthOnForbidden = function(httpStatus, msg, config) {
     var errmsg = msg || "Auth failed - jump to entry page for reauth"
     if (httpStatus == 401 || httpStatus == 403) {
-      PelApi.throwError("api", msg, "httpStatus : " + httpStatus + " (MS:" + config.ms + ")", false)
       PelApi.appSettings.config.IS_TOKEN_VALID = "N";
-      return PelApi.goHome();
+      PelApi.throwError("api", msg, "httpStatus : " + httpStatus + " (MS:" + config.ms + ")", false)
+      location.href = '/index.html';
     }
     return true;
   }

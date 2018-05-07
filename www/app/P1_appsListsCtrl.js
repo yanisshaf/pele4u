@@ -293,20 +293,20 @@ app.controller('P1_appsListCtrl',
     //-----------------------------------------------------------//
     //--                 forwardToApp
     //-----------------------------------------------------------//
-    $scope.forwardToApp = function(statePath, appId, titleDisp, appConfig) {
+    $scope.forwardToApp = function(appConfig) {
 
-      $sessionStorage.PeleAppId = appId;
+      $sessionStorage.PeleAppId = appConfig.AppId;
 
       srvShareData.addData({
         "PeleNetwork": appSettings.config.network,
         "PeleMsisdnValue": appSettings.config.MSISDN_VALUE,
-        "PeleAppId": appId
+        "PeleAppId": appConfig.AppId
       });
 
       var i = {};
-      i.Path = statePath;
-      i.AppId = appId;
-      i.Title = titleDisp;
+      i.Path = appConfig.Path;
+      i.AppId = appConfig.AppId;
+      i.Title = appConfig.DisplayName;
       i.Pin = appSettings.config.Pin;
 
       PelApi.sessionStorage.ApiServiceAuthParams = {
