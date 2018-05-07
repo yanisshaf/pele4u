@@ -104,7 +104,7 @@ angular.module('pele', ['ngSanitize'])
         ApiGateway.get("leads/getnext", {
           refStamp: refStamp
         }, {
-          retry: 3,
+          retry: 2,
           timeout: 15 * 1000
         }).success(function(data) {
           $scope.lead.LEAD_ID = data.VAL;
@@ -205,7 +205,7 @@ angular.module('pele', ['ngSanitize'])
             v.progress = true;
             v.serviceStatus = "";
             ApiGateway.get(v.service, {}, {
-              retry: 3,
+              retry: 2,
               timeout: 10 * 1000
             }).success(function(data) {
               v.serviceStatus = "success"
