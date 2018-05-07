@@ -37,7 +37,6 @@ angular.module('pele')
           return;
         }
         ApiGateway.get("leads/conf").success(function(data) {
-          PelApi.showLoading();
           StorageService.set("leads_conf", data, 1000 * 60 * 30);
           $scope.conf = data;
           $scope.info = getInfo();
