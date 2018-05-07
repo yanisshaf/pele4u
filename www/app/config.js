@@ -21,7 +21,8 @@ const spinConfig = {
   animation: 'fade-in',
   noBackdrop: false,
   minWidth: 50,
-  delay: 1000
+  delay: 1000,
+  duration :1000 * 25
 };
 
 const apiConfig = {
