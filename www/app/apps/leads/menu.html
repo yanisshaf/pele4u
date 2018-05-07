@@ -9,8 +9,7 @@
     </div>
   </ion-nav-title>
   <ion-content class="pele-background">
-
-    <div class="apps-front-menu text-center" ng-show="stateType=='T' ||!stateType">
+    <div class="apps-front-menu text-center" ng-if="stateType=='T' ||!stateType">
       <button ui-sref="app.leads.lead({type:'T'})" class="button button-large button-stable button-block text-center">
     פתיחת ליד לשגרירים
     </button>
@@ -18,7 +17,7 @@
      סטאטוס לידים שפתחתי
     </button>
     </div>
-    <div class="apps-front-menu text-center" ng-show="stateType=='S' ||!stateType">
+    <div class="apps-front-menu text-center" ng-if="stateType=='S' ||!stateType">
       <button ui-sref="app.leads.lead({type:'S'})" class="button button-large button-stable button-block text-center">
       פתיחת ליד למעקב עצמי  </button>
 
