@@ -844,7 +844,7 @@ top:11px;
 .item-checkbox.text-right {padding-right:60px}
 .leads-notes {height:200px;min-height: 200px}
 .white {color:white}
-.list.lead-form .item-input {padding:3px 5px 3px 3px}
+.list.lead-form .item-input {padding:10px 5px 3px 3px}
 .list.lead-form label .input-label {padding:0px 0 8px 8px;line-height: 18px;}
 
 
@@ -922,7 +922,7 @@ a.white {color:white}
 .leads-report .item {padding:10px}
 .lead-actions-sheet  button {border-top:1px solid #CCC !important;font-size:18px;}
 .lead-actions-sheet  button.destructive {color:red !important;font-size:18px !important}
-#task-view td.label{font-size:18px;font-weight:240;padding:5px;}  
+#task-view td.label{font-size:18px;font-weight:240;padding:5px;}
 #task-view td.info{font-size:18px;padding-left:15px}
 #new-main-menu .item {
   background-color: transparent !important;

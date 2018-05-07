@@ -36,7 +36,7 @@
      </label>
       <img ng-if="e.service && e.progress" src="img/spinners/little_spin.svg">
       </label>
-      <label ng-switch-when="textarea" class="item no-border item-input item-text-wrap margin-top-15">
+      <label ng-switch-when="textarea" class="item no-border item-input item-text-wrap margin-top-10">
         <textarea name="{{e.attribute_name}}"  rows="e.rows" cols="e.cols" ng-model="lead.ATTRIBUTES[e.attribute_name]" ng-required="e.required"></textarea>
         <img ng-if="e.service && e.progress" src="img/spinners/little_spin.svg">
     </label>
