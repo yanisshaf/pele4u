@@ -1,5 +1,5 @@
 /*********************/
-const env = "QA";
+const env = "DV";
 /********************/
 
 const EnvCodes = {
@@ -17,7 +17,7 @@ const SSOEnv = {
 }
 
 const spinConfig = {
-  template: '<img ng-click="stopLoading()" class="spinner" src="./img/spinners/puff.svg">',
+  template: '<img ng-click="PelApi.hideLoading()" class="spinner" src="./img/spinners/puff.svg">',
   animation: 'fade-in',
   noBackdrop: false,
   minWidth: 50,
