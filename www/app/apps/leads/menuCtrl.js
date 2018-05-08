@@ -41,8 +41,9 @@ angular.module('pele')
           $scope.conf = data;
           $scope.info = getInfo();
         }).error(function(error, httpStatus, headers, config) {
-          ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api", config);
-          PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
+          //  ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api", config);
+          //  PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
+          ApiGateway.throwError(httpStatus, "get Leads conf table", config);
         }).finally(function() {
 
         })

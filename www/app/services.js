@@ -204,6 +204,18 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     return true;
   }
 
+  this.throwError = function(httpStatus, from, config, redirect) {
+    var msstr = " (MS:" + config.ms + ")";
+    if (httpStatus == 401 || httpStatus == 403) {
+      PelApi.appSettings.config.IS_TOKEN_VALID = "N";
+      PelApi.throwError("api-gateway", "Auth failed - goto to UserMenu  for reauth", "httpStatus : " + httpStatus + msstr, false)
+      location.href = '/index.html';
+    } else {
+      var errorString = "httpStatus :" + httpStatus + msstr;
+      PelApi.throwError("api-gateway", from, errorString, redirect);
+    }
+
+  }
   this.get = function(service, params, config) {
     var url = getUrlBase() + service;
     params = params || {};

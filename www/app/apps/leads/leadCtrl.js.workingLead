@@ -121,21 +121,26 @@ angular.module('pele', ['ngSanitize'])
         })
       }
 
+      // remember the last failed submitted lead
+      var savedLead = _.get(PelApi.sessionStorage, 'currentLead') || $state.params.lead;
+
       if ($state.params.task && $state.params.task.TASK_NUMBER) {
         $scope.view = 'task';
         $scope.task = $state.params.task;
         $scope.title = "פרטי ליד: " + $scope.task.TASK_NUMBER;
         return true;
-      } else if ($state.params.lead && $state.params.lead.LEAD_ID) {
+      } else if (savedLead.LEAD_ID && $state.params.type === savedLead.FORM_TYPE) {
         $scope.onValueChanged($state.params.lead.LEAD_TYPE);
         PelApi.safeApply($scope, function() {
           $scope.view = "lead";
-          $scope.lead = $state.params.lead;
-          var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/) || ["", ""];
+          $scope.lead = savedLead;
+          if ($scope.lead.PREFERRED_HOURS && $scope.lead.PREFERRED_HOURS.length) {
+            var found = $scope.lead.PREFERRED_HOURS.replace(/\s+/g, "").match(/(.+)-(.+)/) || ["", ""];
+            $scope.lead.from_hour = found[1] || "";
+            $scope.lead.to_hour = found[2] || "";
+          }
           $scope.files = $scope.lead.files;
-          $scope.lead.from_hour = found[1] || "";
-          $scope.lead.to_hour = found[2] || "";
-          $scope.savedAttributes = _.clone($state.params.lead.ATTRIBUTES)
+          $scope.savedAttributes = _.clone(savedLead.ATTRIBUTES)
           $scope.storedLead = true;
           $scope.title = "פרטי ליד";
         })
@@ -302,6 +307,9 @@ angular.module('pele', ['ngSanitize'])
           $scope.getRelevantLeadsType($scope.conf.types)
           return true;
         }
+        PelApi.showLoading({
+          delay: 0
+        });
         ApiGateway.get("leads/conf").success(function(data) {
           StorageService.set("leads_conf", data, 1000 * 60 * 60)
           $scope.conf = data;
@@ -349,7 +357,9 @@ angular.module('pele', ['ngSanitize'])
       }
 
       $scope.submit = function() {
+
         $scope.submitted = true;
+        PelApi.sessionStorage.currentLead = $scope.lead;
         if ($scope.forms.leadForm.$invalid || !$scope.lead.LEAD_TYPE) {
           return false;
         }
@@ -382,6 +392,9 @@ angular.module('pele', ['ngSanitize'])
         PelApi.showLoading();
         ApiGateway.post("leads", $scope.lead).success(function(data) {
           $scope.leadSuccess = true;
+          PelApi.sessionStorage.currentLead;
+          delete PelApi.sessionStorage.currentLead;
+
           if ($state.params.lead && $state.params.lead.LEAD_ID)
             $scope.successMessage = "הליד נשמר בהצלחה";
           else
