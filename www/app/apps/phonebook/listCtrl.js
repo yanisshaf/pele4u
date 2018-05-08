@@ -71,7 +71,7 @@ angular.module('pele')
             var result = ApiService.checkResponse(data, status, config)
             $scope.sectors = result.sectors;
             $scope.operunits = result.operunits;
-            StorageService.set("phonebook_sectors", result, 60 * 60 * 3)
+            StorageService.set("phonebook_sectors", result, 60 * 60 * 1000)
           })
           .error(function(errorStr, httpStatus, headers, config) {
             ApiService.checkResponse({

@@ -73,7 +73,7 @@ angular.module('pele')
         $scope.conf = StorageService.getData("leads_conf")
         if ($scope.conf.types) return;
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 10)
+          StorageService.set("leads_conf", data, 1000 * 60 * 60)
           $scope.conf = data;
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api", config);

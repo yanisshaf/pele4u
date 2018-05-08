@@ -37,12 +37,14 @@ angular.module('pele')
           return;
         }
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 30);
+          StorageService.set("leads_conf", data, 1000 * 60 * 60);
           $scope.conf = data;
           $scope.info = getInfo();
         }).error(function(error, httpStatus, headers, config) {
           ApiGateway.reauthOnForbidden(httpStatus, "Unauthorized get leads/conf   api", config);
           PelApi.throwError("api", "get Leads conf table", "httpStatus : " + httpStatus + " " + JSON.stringify(error) + "(MS:" + config.ms + ")")
+        }).finally(function() {
+
         })
       }
 

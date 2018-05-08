@@ -5,7 +5,7 @@ var app = angular.module('pele.services', []);
 app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($http, PelApi, $localStorage) {
   // ttl - time ( seconds to live)
 
-  var yearTtl = 60 * 60 * 24 * 365;
+  var yearTtl = 60 * 60 * 24 * 365 * 1000;
 
   function currentStamp() {
     return new Date().getTime();

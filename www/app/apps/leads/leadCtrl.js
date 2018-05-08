@@ -304,9 +304,9 @@ angular.module('pele', ['ngSanitize'])
           $scope.getRelevantLeadsType($scope.conf.types)
           return;
         }
-          PelApi.showLoading();
+        PelApi.showLoading();
         ApiGateway.get("leads/conf").success(function(data) {
-          StorageService.set("leads_conf", data, 1000 * 60 * 10)
+          StorageService.set("leads_conf", data, 1000 * 60 * 60)
           $scope.conf = data;
           $scope.getRelevantLeadsType($scope.conf.types);
         }).error(function(error, httpStatus, headers, config) {
