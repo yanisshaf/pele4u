@@ -1,5 +1,5 @@
 /*********************/
-const env = "QA";
+const env = "DV";
 /********************/
 
 const EnvCodes = {
@@ -171,7 +171,7 @@ angular.module('pele.config', [])
     debug: false,
     EnvCodes: EnvCodes,
     SSOEnv: SSOEnv,
-    api_timeout: 20,
+    api_timeout: 20000,
     gw_timeout: 15000,
     config: {
       contactIdPrefix: "pelephone",

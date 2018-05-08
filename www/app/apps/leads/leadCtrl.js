@@ -103,9 +103,6 @@ angular.module('pele', ['ngSanitize'])
         PelApi.showLoading();
         ApiGateway.get("leads/getnext", {
           refStamp: refStamp
-        }, {
-          retry: 2,
-          timeout: 15 * 1000
         }).success(function(data) {
           $scope.lead.LEAD_ID = data.VAL;
           $scope.lead.FORM_TYPE = $state.params.type; //Draft
@@ -204,10 +201,7 @@ angular.module('pele', ['ngSanitize'])
           if (v.service) {
             v.progress = true;
             v.serviceStatus = "";
-            ApiGateway.get(v.service, {}, {
-              retry: 2,
-              timeout: 10 * 1000
-            }).success(function(data) {
+            ApiGateway.get(v.service, {}).success(function(data) {
               v.serviceStatus = "success"
               _.set($scope.lead, 'ATTRIBUTES[' + v.attribute_name + ']', data.value);
               $scope.extraSchema[index] = _.extend($scope.extraSchema[index], data);
@@ -432,14 +426,18 @@ angular.module('pele', ['ngSanitize'])
         options.headers = headers;
 
         var ft = new FileTransfer();
-        var uploadTimer = setTimeout(function() {
+        if ($scope.uploadTimer)
+          clearTimeout(uploadTimer);
+
+        $scope.uploadTimer = setTimeout(function() {
           if ($scope.inUpload) {
             ft.abort();
           }
-        }, 25000);
+        }, 15000);
 
         function fileUploadSuccess(r) {
-          clearTimeout(uploadTimer);
+          if ($scope.uploadTimer)
+            clearTimeout(uploadTimer);
           PelApi.hideLoading();
           PelApi.safeApply($scope, function() {
             $scope.uploadState.progress = 100;
@@ -455,7 +453,8 @@ angular.module('pele', ['ngSanitize'])
         }
 
         function fileUploadFailure(error) {
-          clearTimeout(uploadTimer);
+          if ($scope.uploadTimer)
+            clearTimeout(uploadTimer);
           PelApi.hideLoading();
           PelApi.throwError("api", "upload doc", JSON.stringify(error), false);
           $scope.uploadState.progress = 100;
@@ -472,9 +471,9 @@ angular.module('pele', ['ngSanitize'])
         };
         $ionicScrollDelegate.$getByHandle('modalContent').scrollTop(true);
         PelApi.showLoading({
-          template: '<img ng-click="stopLoading()" class="spinner" src="./img/spinners/puff.svg">',
-          scope: $scope
+          duration: 15000
         });
+
         $scope.inUpload = true;
 
         ft.upload(picFile, uri, fileUploadSuccess, fileUploadFailure, options, true);

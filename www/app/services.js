@@ -220,6 +220,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     var url = getUrlBase() + service;
     config = config || {};
     var headerParams = {
+      retry: (config.retry || 2),
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(config.headers)
     }
@@ -229,6 +230,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     var url = getUrlBase() + service;
     config = config || {};
     var headerParams = {
+      retry: (config.retry || 2),
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(config.headers)
     }
@@ -240,6 +242,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     config = config || {};
     var headerParams = {
       params: params,
+      retry: (config.retry || 2),
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(config.headers)
     }
@@ -250,6 +253,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     var url = getUrlBase() + service;
     config = config || {};
     var headerParams = {
+      retry: (config.retry || 2),
       timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
       headers: buildHeader(config.headers)
     }
