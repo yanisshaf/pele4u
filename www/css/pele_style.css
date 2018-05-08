@@ -924,7 +924,7 @@ a.white {color:white}
 .lead-actions-sheet  button.destructive {color:red !important;font-size:18px !important}
 #task-view td.label{font-size:18px;font-weight:240;padding:5px;}
 #task-view td.info{font-size:18px;padding-left:15px}
-#task-view pre {font-family: inherit;}
+#task-view pre {font-family: Verdana !important;}
 #new-main-menu .item {
   background-color: transparent !important;
   color:#fff;
