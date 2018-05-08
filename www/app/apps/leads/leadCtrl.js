@@ -297,14 +297,20 @@ angular.module('pele', ['ngSanitize'])
         })
 
       }
+      PelApi.showLoading({
+        delay: 10
+      });
 
       $scope.getConf = function() {
         $scope.conf = StorageService.getData("leads_conf", {})
         if ($scope.conf.types) {
           $scope.getRelevantLeadsType($scope.conf.types)
-          return;
+          return true;
         }
-        PelApi.showLoading();
+
+        PelApi.showLoading({
+          delay: 0
+        });
         ApiGateway.get("leads/conf").success(function(data) {
           StorageService.set("leads_conf", data, 1000 * 60 * 60)
           $scope.conf = data;
@@ -318,9 +324,6 @@ angular.module('pele', ['ngSanitize'])
       }
 
       $scope.getConf();
-
-
-
 
       $scope.delete = function(leadId) {
         swal({
