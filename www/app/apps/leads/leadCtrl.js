@@ -427,7 +427,7 @@ angular.module('pele', ['ngSanitize'])
 
         var ft = new FileTransfer();
         if ($scope.uploadTimer)
-          clearTimeout(uploadTimer);
+          clearTimeout($scope.uploadTimer);
 
         $scope.uploadTimer = setTimeout(function() {
           if ($scope.inUpload) {
@@ -437,7 +437,7 @@ angular.module('pele', ['ngSanitize'])
 
         function fileUploadSuccess(r) {
           if ($scope.uploadTimer)
-            clearTimeout(uploadTimer);
+            clearTimeout($scope.uploadTimer);
           PelApi.hideLoading();
           PelApi.safeApply($scope, function() {
             $scope.uploadState.progress = 100;
@@ -454,7 +454,7 @@ angular.module('pele', ['ngSanitize'])
 
         function fileUploadFailure(error) {
           if ($scope.uploadTimer)
-            clearTimeout(uploadTimer);
+            clearTimeout($scope.uploadTimer);
           PelApi.hideLoading();
           PelApi.throwError("api", "upload doc", JSON.stringify(error), false);
           $scope.uploadState.progress = 100;
