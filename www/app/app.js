@@ -23,17 +23,17 @@ angular.module('pele', [
   ])
 
   .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings', 'Idle',
-    function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings/*, Idle*/) {
+    function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings /*, Idle*/ ) {
       PelApi.init();
 
-    /*  $rootScope.$on('IdleStart', function() {
-        PelApi.lagger.info("Idle found !");
-        PelApi.goHome();
-      });
-      */
+      /*  $rootScope.$on('IdleStart', function() {
+          PelApi.lagger.info("Idle found !");
+          PelApi.goHome();
+        });
+        */
       $rootScope.$on('$stateChangeStart',
         function(event, toState, toParams, fromState, fromParams) {
-         // Idle.watch();
+          // Idle.watch();
           if (PelApi.global.get('debugFlag')) {
             PelApi.lagger.info("start StateChange ->  from :  " + fromState.name + " to: ", toState.name);
             PelApi.lagger.info(" new State params :  ", toParams);
@@ -97,11 +97,11 @@ angular.module('pele', [
       });
     }
   ])
-  .config(function(/*$compileProvider, */ $stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider, IdleProvider) {
-   // $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
+  .config(function( /*$compileProvider, IdleProvider*/ $stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
     $ionicConfigProvider.navBar.alignTitle('center');
+    // $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
     // IdleProvider.idle(60 * 5);
 
     $stateProvider
