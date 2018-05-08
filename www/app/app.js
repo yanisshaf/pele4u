@@ -18,19 +18,19 @@ angular.module('pele', [
     'pele.authCtrl',
     'pele.states',
     'fileLogger',
-    'oc.lazyLoad',
-    'ngIdle'
+    'oc.lazyLoad'
+    /*,'ngIdle' */
   ])
 
-  .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings', 'Idle',
-    function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings /*, Idle*/ ) {
+  .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings', /* 'Idle',*/
+    function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings /*, Idle */ ) {
       PelApi.init();
 
-      /*  $rootScope.$on('IdleStart', function() {
-          PelApi.lagger.info("Idle found !");
-          PelApi.goHome();
-        });
-        */
+      /* $rootScope.$on('IdleStart', function() {
+        PelApi.lagger.info("Idle found !");
+        PelApi.goHome();
+      });
+      */
       $rootScope.$on('$stateChangeStart',
         function(event, toState, toParams, fromState, fromParams) {
           // Idle.watch();
@@ -88,8 +88,6 @@ angular.module('pele', [
           // org.apache.cordova.statusbar required
           StatusBar.styleDefault();
         }
-
-
         //----------------------------------
         //--    Go To Application List
         //----------------------------------
@@ -97,12 +95,12 @@ angular.module('pele', [
       });
     }
   ])
-  .config(function( /*$compileProvider, IdleProvider*/ $stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
+  .config(function( /* $compileProvider,IdleProvider */ $stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
     $ionicConfigProvider.backButton.text('')
     $ionicConfigProvider.views.swipeBackEnabled(false);
     $ionicConfigProvider.navBar.alignTitle('center');
-    // $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
-    // IdleProvider.idle(60 * 5);
+    //$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
+    //  IdleProvider.idle(60 * 3);
 
     $stateProvider
       .state('app', {
@@ -124,8 +122,6 @@ angular.module('pele', [
           }
         }
       })
-
-
       //----------------------------------------------------------------------------//
       //--                         End docApprove
       //----------------------------------------------------------------------------//
