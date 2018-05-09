@@ -2,7 +2,7 @@
 const env = "QA";
 /********************/
 
-const EnvCodes = { 
+const EnvCodes = {
   PD: "PROD",
   DV: "DEV",
   QA: "QA",
