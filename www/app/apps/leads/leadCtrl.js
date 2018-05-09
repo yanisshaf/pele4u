@@ -422,8 +422,9 @@ angular.module('pele', ['ngSanitize'])
 
         options.params = params;
         options.chunkedMode = false;
-        options.Connection =  "close";
+
         var headers = ApiGateway.getHeaders();
+        headers.Connection =  "close";
         options.headers = headers;
 
         var ft = new FileTransfer();
