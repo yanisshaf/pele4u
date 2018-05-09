@@ -31,6 +31,9 @@
     עזרה
     </button>
     </div>
+    <div ng-show="stateType=='S'" ng-bind-html="info.LEAD_CLIENT_SELF_INTRO"></div>
+    <div ng-show="stateType=='T'" ng-bind-html="info.LEAD_CLIENT_TASK_INTRO"></div>
+    <div ng-show="!stateType" ng-bind-html="info.LEAD_CLIENT_GENERAL_INTRO"></div>
   </ion-content>
 </ion-view>
 <script type="text/ng-template" id="leadInfo.html">
@@ -39,9 +42,9 @@
       <h1 class="title">מידע נוסף</h1>
       <button ng-click="closeModal()" class="button button-icon ion-arrow-down-b"></button>
     </ion-header-bar>
-    <ion-content ng-show="info" ng-bind-html="info" class="pele_rtl">
+    <ion-content ng-show="info.LEAD_CLIENT_INFO_MODAL" ng-bind-html="info.LEAD_CLIENT_INFO_MODAL" class="pele_rtl">
     </ion-content>
-    <ion-content ng-show="!info" padding="true">
+    <ion-content ng-show="!info.LEAD_CLIENT_INFO_MODAL" padding="true">
       <div class="card pele_rtl">
         <div class="item item-text-wrap">
           <h3>ליד לשגרירים </h3>

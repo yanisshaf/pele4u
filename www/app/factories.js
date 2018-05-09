@@ -7,6 +7,25 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
 
     return {
+      apiGateway: {
+        url: function() {
+          var env = _.get(appSettings.EnvCodes, appSettings.env).toLowerCase()
+          var urlBase = ($cordovaNetwork.getNetwork() || "none").match(/wifi|nonde/) ? appSettings.apiConfig.wifi_uri : appSettings.apiConfig.uri;
+          var urlBase = urlBase + '/mobileAppGw/' + env + '/';
+          return urlBase;
+        },
+        header: function(params) {
+          var headers = params || {};
+          //headers['withCredentials'] = 'true';
+          var ApiServiceAuthParams = _.get($sessionStorage, "ApiServiceAuthParams", {});
+          headers['x-appid'] = $sessionStorage.PeleAppId;
+          headers['x-token'] = ApiServiceAuthParams.TOKEN;
+          headers['x-pincode'] = ApiServiceAuthParams.PIN;
+          headers['x-username'] = $sessionStorage.userName;
+          headers['x-msisdn'] = ($sessionStorage.PELE4U_MSISDN || appSettings.config.MSISDN_VALUE) || $localStorage.PELE4U_MSISDN;
+          return headers;
+        }
+      },
       http: $http,
       safeApply: function(scope, fn) {
         (scope.$$phase || scope.$root.$$phase) ? fn(): scope.$apply(fn);
@@ -620,6 +639,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           var lastStateChangeError = self.global.get('lastStateChangeError');
           var lastApiResponse = self.global.get('lastApiResponse');
           var lastApiRequestConfig = self.global.get('lastApiRequestConfig');
+
           if (lastStateChangeStart)
             self.$fileLogger.error("lastStateChangeStart:", lastStateChangeStart);
           if (lastStateChangeError)
@@ -650,6 +670,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         if (category.match(/api|eai|app/i)) {
           message = "API request " + from + " endedd with failure : " + errorString;
         }
+
+        $http.post(self.apiGateway.url() + "public/report", lastError, self.apiGateway.header())
+          .success(function() {})
+          .error(function() {});
+
         if (redirect === true) {
           $state.go("app.error", {
             error: lastError

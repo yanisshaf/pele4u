@@ -26,7 +26,8 @@ angular.module('pele')
 
 
       var getInfo = function() {
-        return _.get($scope.conf, "clientConfig['leads.client.infoModal']")
+        console.log(_.get($scope.conf, "clientConfig", {}))
+        return _.get($scope.conf, "clientConfig", {})
       }
 
 
