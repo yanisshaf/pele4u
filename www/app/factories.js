@@ -602,7 +602,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
         var   network ;
         if ( $cordovaNetwork) {
-          netwrok = $cordovaNetwork.getNetwork();
+          network = $cordovaNetwork.getNetwork();
         } else {
           network = "none";
         }
