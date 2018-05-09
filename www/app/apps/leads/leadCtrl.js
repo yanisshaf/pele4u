@@ -422,6 +422,7 @@ angular.module('pele', ['ngSanitize'])
 
         options.params = params;
         options.chunkedMode = false;
+        options.Connection =  "close";
         var headers = ApiGateway.getHeaders();
         options.headers = headers;
 
