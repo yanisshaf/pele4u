@@ -600,9 +600,11 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           redirect = true;
         }
 
-        var network = "none";
+        var   network ;
         if ( $cordovaNetwork) {
           netwrok = $cordovaNetwork.getNetwork();
+        } else {
+          network = "none";
         }
 
         if ( $cordovaNetwork && !$cordovaNetwork.isOnline()) {
@@ -618,6 +620,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         }
 
         var lastError = {
+          network2:$cordovaNetwork.getNetwork(),
           timestamp: moment().unix(),
           state: $state.current.name,
           created: new Date(),
