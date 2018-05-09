@@ -3,6 +3,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var self = this;
     var _global = {};
     var network = {};
+    var  deviceReady = false ;
     $rootScope.deviceReady = false;
     return {
       apiGateway: {
@@ -92,12 +93,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         this.localStorage = $localStorage;
 
       },
-      cordovaInit: function() {
+        cordovaInit: function() {
         //file in device file system
         $sessionStorage.ApiServiceAuthParams = $sessionStorage.ApiServiceAuthParams || {};
 
         var self = this;
         $rootScope.deviceReady = true;
+        deviceReady = true ;
         self.isAndroid = ionic.Platform.isAndroid();
         self.isIOS = ionic.Platform.isIOS();
         self.cordovaNetwork = $cordovaNetwork;
@@ -269,9 +271,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         //{"Content-Type": "application/json; charset=utf-8"};
         var envUrl = links + "&UserName=" + appSettings.config.userName + "&ID=" + appSettings.config.user;
 
-
         var netInfo = $cordovaNetwork.getNetwork();
-        if (  $cordovaNetwork && (netInfo === "wifi" || netInfo === "none")) {
+        if (  $rootScope.deviceReady && (netInfo === "wifi" || netInfo === "none")) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -307,7 +308,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var version = appSettings.config.APP_VERSION
         var parameters = "/" + appSettings.config.token + "/" + appId + "/" + pin;
         var netInfo = $cordovaNetwork.getNetwork();
-        if ( $cordovaNetwork && (netInfo === "wifi" || netInfo === "none")) {
+        if ( $rootScope.deviceReady && (netInfo === "wifi" || netInfo === "none")) {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -344,7 +345,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
         var retry = links.retry || 0;
         var netInfo = $cordovaNetwork.getNetwork();
-        if ( $cordovaNetwork && (netInfo === "wifi" || netInfo === "none")) {
+        if ($rootScope.deviceReady && (netInfo === "wifi" || netInfo === "none")) {
           retry = 0;
         }
         return $http({
@@ -601,13 +602,13 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         }
 
         var   network ;
-        if ( $cordovaNetwork) {
+        if ($rootScope.deviceReady) {
           network = $cordovaNetwork.getNetwork();
         } else {
           network = "none";
         }
 
-        if ( $cordovaNetwork && !$cordovaNetwork.isOnline()) {
+        if ($rootScope.deviceReady && !$cordovaNetwork.isOnline()) {
           var tryAgain = $ionicPopup.alert({
             title: 'בעיית חיבור נתונים',
             template: "<Div class='text-center'>" + appSettings.config.OFFLINE_MESSAGE + "</div>"
@@ -620,7 +621,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         }
 
         var lastError = {
-          network2:$cordovaNetwork.getNetwork(),
           timestamp: moment().unix(),
           state: $state.current.name,
           created: new Date(),
