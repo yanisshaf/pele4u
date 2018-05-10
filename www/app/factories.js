@@ -5,7 +5,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var _global = {};
     var network = {};
     var deviceReady = false;
-
+    $rootScope.deviceReady = false;
     return {
       http: $http,
       safeApply: function(scope, fn) {
@@ -45,7 +45,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           .join("&");
       },
       ensureOnline: function() {
-        if (deviceReady && !$cordovaNetwork.isOnline()) {
+        if ($cordovaNetworky && !$cordovaNetwork.isOnline()) {
           $ionicPopup.alert({
             title: 'בעיית חיבור נתונים',
             template: appSettings.config.OFFLINE_MESSAGE
@@ -80,6 +80,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         $sessionStorage.ApiServiceAuthParams = $sessionStorage.ApiServiceAuthParams || {};
 
         var self = this;
+        $rootScope.deviceReady = true;
         deviceReady = true;
         self.isAndroid = ionic.Platform.isAndroid();
         self.isIOS = ionic.Platform.isIOS();
@@ -602,14 +603,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           redirect = true;
         }
 
-        var network = "none";
-        if (deviceReady) {
-          netwrok = $cordovaNetwork.getNetwork();
+        var network;
+        if ($rootScope.deviceReady) {
+          network = $cordovaNetwork.getNetwork();
+        } else {
+          network = "none";
         }
 
-
-
-        if (deviceReady && !$cordovaNetwork.isOnline()) {
+        if ($rootScope.deviceReady && !$cordovaNetwork.isOnline()) {
           var tryAgain = $ionicPopup.alert({
             title: 'בעיית חיבור נתונים',
             template: "<Div class='text-center'>" + appSettings.config.OFFLINE_MESSAGE + "</div>"
