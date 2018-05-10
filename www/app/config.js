@@ -27,6 +27,7 @@ const spinConfig = {
 
 const apiConfig = {
   env: env,
+  hostname: "msso.pelephone.co.il",
   uri: "http://msso.pelephone.co.il",
   wifi_uri: "https://msso.pelephone.co.il",
   api: "http://msso.pelephone.co.il/PCBarCode/PrintCenterBar.asmx/WhoMI",

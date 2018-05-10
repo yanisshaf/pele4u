@@ -414,7 +414,7 @@ angular.module('pele', ['ngSanitize'])
 
 
 
-        var uri = encodeURI(ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID));
+        var uri = encodeURI(ApiGateway.getSecureUrl("leads/upload/" + $scope.lead.LEAD_ID));
         var options = new FileUploadOptions();
         var params = {};
         params.file = picFile;

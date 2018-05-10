@@ -1,31 +1,12 @@
 angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova', 'pele.messages'])
   .factory('PelApi', function($cordovaFileTransfer, $cordovaNetwork, $ionicActionSheet, $http, $rootScope, appSettings, $state, $ionicLoading, $filter, $ionicPopup, $timeout, $fileLogger, $sessionStorage, $localStorage, $cordovaFile, messages) {
     var self = this;
+    var PelApiInstance = this;
     var _global = {};
     var network = {};
     var deviceReady = false;
 
-
     return {
-      apiGateway: {
-        url: function() {
-          var env = _.get(appSettings.EnvCodes, appSettings.env).toLowerCase()
-          var urlBase = ($cordovaNetwork.getNetwork() || "none").match(/wifi|nonde/) ? appSettings.apiConfig.wifi_uri : appSettings.apiConfig.uri;
-          var urlBase = urlBase + '/mobileAppGw/' + env + '/';
-          return urlBase;
-        },
-        header: function(params) {
-          var headers = params || {};
-          //headers['withCredentials'] = 'true';
-          var ApiServiceAuthParams = _.get($sessionStorage, "ApiServiceAuthParams", {});
-          headers['x-appid'] = $sessionStorage.PeleAppId;
-          headers['x-token'] = ApiServiceAuthParams.TOKEN;
-          headers['x-pincode'] = ApiServiceAuthParams.PIN;
-          headers['x-username'] = $sessionStorage.userName;
-          headers['x-msisdn'] = ($sessionStorage.PELE4U_MSISDN || appSettings.config.MSISDN_VALUE) || $localStorage.PELE4U_MSISDN;
-          return headers;
-        }
-      },
       http: $http,
       safeApply: function(scope, fn) {
         (scope.$$phase || scope.$root.$$phase) ? fn(): scope.$apply(fn);
@@ -160,7 +141,26 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
         self.registerPushNotification();
       },
-
+      networkInfo: networkInfo,
+      apiGateway: {
+        url: function() {
+          var env = _.get(appSettings.EnvCodes, appSettings.env).toLowerCase()
+          var urlBase = networkInfo.httpChannel() + appSettings.apiConfig.hostname;
+          var urlBase = urlBase + '/mobileAppGw/' + env + '/';
+          return urlBase;
+        },
+        header: function(params) {
+          var headers = params || {};
+          //headers['withCredentials'] = 'true';
+          var ApiServiceAuthParams = _.get($sessionStorage, "ApiServiceAuthParams", {});
+          headers['x-appid'] = $sessionStorage.PeleAppId;
+          headers['x-token'] = ApiServiceAuthParams.TOKEN;
+          headers['x-pincode'] = ApiServiceAuthParams.PIN;
+          headers['x-username'] = $sessionStorage.userName;
+          headers['x-msisdn'] = ($sessionStorage.PELE4U_MSISDN || appSettings.config.MSISDN_VALUE) || $localStorage.PELE4U_MSISDN;
+          return headers;
+        }
+      },
       registerPushNotification: function() {
         //-----------------------------------------
         //--   Registration for Push Notification
@@ -272,8 +272,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var envUrl = links + "&UserName=" + appSettings.config.userName + "&ID=" + appSettings.config.user;
 
 
-        var netInfo = $cordovaNetwork.getNetwork();
-        if (deviceReady && (netInfo === "wifi" || netInfo === "none")) {
+
+        if (self.networkInfo.httpChannel() === "https://") {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -308,8 +308,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         var headers = "";
         var version = appSettings.config.APP_VERSION
         var parameters = "/" + appSettings.config.token + "/" + appId + "/" + pin;
-        var netInfo = $cordovaNetwork.getNetwork();
-        if (deviceReady && (netInfo === "wifi" || netInfo === "none")) {
+
+        if (self.networkInfo.httpChannel() === "https://") {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {
@@ -345,8 +345,8 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         // LOADING
 
         var retry = links.retry || 0;
-        var netInfo = $cordovaNetwork.getNetwork();
-        if (deviceReady && (netInfo === "wifi" || netInfo === "none")) {
+
+        if (self.networkInfo.httpChannel() === "https://") {
           retry = 0;
         }
         return $http({
@@ -925,8 +925,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //----------------------------------------------------------//
       getDocApproveServiceUrl: function(serviceName) {
         var self = this;
-        var currentNetwork = $cordovaNetwork.getNetwork();
-        self.lagger.info("currentNetwork:", currentNetwork)
+
         var serviceConf = appSettings.apiConfig.services[serviceName];
         if (!serviceConf || serviceConf == undefined) {
 
@@ -939,8 +938,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           "VERSION": appSettings.config.APP_VERSION
         };
 
-        var netInfo = $cordovaNetwork.getNetwork();
-        if (deviceReady && (netInfo === "wifi" || netInfo === "none")) {
+        if (self.networkInfo.httpChannel() === "https://") {
           var msisdn = appSettings.config.MSISDN_VALUE || $localStorage.PELE4U_MSISDN;
           if (!msisdn) msisdn = $sessionStorage.PELE4U_MSISDN;
           if (!msisdn) {

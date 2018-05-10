@@ -230,7 +230,7 @@ app.controller('P1_appsListCtrl',
       //-------------------------------//
       var continueFlag = "Y";
 
-      if ("wifi" === appSettings.config.network || appSettings.config.network === "none") {
+      if (PelApi.networkInfo.httpChannel() === "https://") {
         appSettings.config.MSISDN_VALUE = $localStorage.PELE4U_MSISDN;
 
         //appSettings.config.MSISDN_VALUE = $scope.getMSISDN();
@@ -247,7 +247,6 @@ app.controller('P1_appsListCtrl',
             $sessionStorage.user = appSettings.config.GetUserMenu.user;
             $sessionStorage.userName = appSettings.config.GetUserMenu.userName;
             $scope.feeds_categories = appSettings.config.GetUserMenu;
-
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
           }

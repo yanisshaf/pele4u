@@ -69,10 +69,8 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     internal.timeout = internalConfig.timeout = internalConfig.timeout || PelApi.appSettings.api_timeout;
     internalConfig.params = internalConfig.params || {};
 
-    var urlBase = PelApi.cordovaNetwork.getNetwork() === "wifi" ? PelApi.appSettings.apiConfig.wifi_uri : PelApi.appSettings.apiConfig.uri;
-
+    var urlBase = PelApi.networkInfo.httpChannel() + PelApi.appSettings.apiConfig.hostname;
     var ServiceUrl = urlBase + '/' + PelApi.appSettings.SSOEnv[env] + '/CallMobileService';
-
     var authParams = $sessionStorage.ApiServiceAuthParams;
     authParams.APPID = internalConfig.AppId;
     var authParamsString = PelApi.toQueryString($sessionStorage.ApiServiceAuthParams)
@@ -161,13 +159,13 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
         'Content-Type': 'application/json ; charset=utf-8'
       }
     });
-
   };
-}]).service('ApiGateway', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', '$localStorage', function($http, $ionicHistory, PelApi, $sessionStorage, $localStorage) {
+}]).service('ApiGateway', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', '$localStorage', '$cordovaNetwork', function($http, $ionicHistory, PelApi, $sessionStorage, $localStorage, $cordovaNetwork) {
 
   function getUrlBase() {
+    console.log("PelApi.cordovaNetwork.getNetwork():", PelApi.networkInfo.httpChannel());
     var env = _.get(PelApi.appSettings.EnvCodes, PelApi.appSettings.env).toLowerCase()
-    var urlBase = PelApi.cordovaNetwork.getNetwork() === "wifi" ? PelApi.appSettings.apiConfig.wifi_uri : PelApi.appSettings.apiConfig.uri;
+    var urlBase = PelApi.networkInfo.httpChannel() + PelApi.appSettings.apiConfig.hostname;
     var urlBase = urlBase + '/mobileAppGw/' + env + '/';
     return urlBase;
   }
@@ -189,11 +187,16 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     return getUrlBase() + urlStr;
   }
 
+
   //return PelApi.throwError("api", "ApiService.checkResponse-InvalidJsonResponse", "(httpStatus : " + httpStatus + ") " + errorMsg)
   //return PelApi.throwError("api", "ApiService.checkResponse-" + errorMsg, "(httpStatus : " + httpStatus + ") " + JSON.stringify(data), false)
   this.getHeaders = buildHeader;
   this.getUrl = getUrl;
 
+  this.getSecureUrl = function(urlStr) {
+    var secureUrl = getUrlBase() + urlStr;
+    return secureUrl.replace("http://", "https://");
+  }
   this.reauthOnForbidden = function(httpStatus, msg, config) {
     var errmsg = msg || "Auth failed - jump to entry page for reauth"
     if (httpStatus == 401 || httpStatus == 403) {
