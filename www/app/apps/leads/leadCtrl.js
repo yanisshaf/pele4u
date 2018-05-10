@@ -380,7 +380,9 @@ angular.module('pele', ['ngSanitize'])
         }
 
         PelApi.showLoading();
-        ApiGateway.post("leads", $scope.lead).success(function(data) {
+        ApiGateway.post("leads", $scope.lead, {
+          timeout: 20000
+        }).success(function(data) {
           $scope.leadSuccess = true;
           if ($state.params.lead && $state.params.lead.LEAD_ID)
             $scope.successMessage = "הליד נשמר בהצלחה";
