@@ -6,6 +6,38 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
     var network = {};
     var deviceReady = false;
     $rootScope.deviceReady = false;
+
+    var channels = {
+      secure: "https://",
+      insecure: "http://"
+    };
+
+    var networkInfo = {
+      channels: channels,
+      httpChannel: function() {
+        if (!$rootScope.deviceReady)
+          return channels.insecure;
+
+        var ntype = ($cordovaNetwork.getNetwork() || "none").toLowerCase();
+        var channel = "https://";
+        if (ntype.match(/2g|3g|4g/i)) {
+          return channels.insecure;
+        };
+        return channels.secure;
+      },
+      type: function() {
+        if ($rootScope.deviceReady)
+          return ($cordovaNetwork.getNetwork() || "none");
+        return "effective:" + navigator.connection.effectiveType || "none";
+      },
+      isOnline: function() {
+        if ($rootScope.deviceReady)
+          return $cordovaNetwork.isOnline();
+        return false;
+      }
+    };
+
+
     return {
       http: $http,
       safeApply: function(scope, fn) {
@@ -146,7 +178,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       apiGateway: {
         url: function() {
           var env = _.get(appSettings.EnvCodes, appSettings.env).toLowerCase()
-          var urlBase = networkInfo.httpChannel() + appSettings.apiConfig.hostname;
+          var urlBase = networkInfo.channels.secure + appSettings.apiConfig.hostname;
           var urlBase = urlBase + '/mobileAppGw/' + env + '/';
           return urlBase;
         },

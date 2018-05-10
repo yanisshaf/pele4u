@@ -414,7 +414,7 @@ angular.module('pele', ['ngSanitize'])
 
 
 
-        var uri = encodeURI(ApiGateway.getSecureUrl("leads/upload/" + $scope.lead.LEAD_ID));
+        var uri = encodeURI(ApiGateway.getUrl("leads/upload/" + $scope.lead.LEAD_ID));
         var options = new FileUploadOptions();
         var params = {};
         params.file = picFile;
@@ -422,9 +422,7 @@ angular.module('pele', ['ngSanitize'])
 
         options.params = params;
         options.chunkedMode = false;
-
         var headers = ApiGateway.getHeaders();
-        headers.Connection =  "close";
         options.headers = headers;
 
         var ft = new FileTransfer();

@@ -163,9 +163,8 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
 }]).service('ApiGateway', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', '$localStorage', '$cordovaNetwork', function($http, $ionicHistory, PelApi, $sessionStorage, $localStorage, $cordovaNetwork) {
 
   function getUrlBase() {
-    console.log("PelApi.cordovaNetwork.getNetwork():", PelApi.networkInfo.httpChannel());
     var env = _.get(PelApi.appSettings.EnvCodes, PelApi.appSettings.env).toLowerCase()
-    var urlBase = PelApi.networkInfo.httpChannel() + PelApi.appSettings.apiConfig.hostname;
+    var urlBase = PelApi.networkInfo.channels.secure + PelApi.appSettings.apiConfig.hostname;
     var urlBase = urlBase + '/mobileAppGw/' + env + '/';
     return urlBase;
   }
