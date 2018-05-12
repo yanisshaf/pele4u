@@ -40,6 +40,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
     return {
       http: $http,
+      networkInfo : self.networkInfo,
       safeApply: function(scope, fn) {
         (scope.$$phase || scope.$root.$$phase) ? fn(): scope.$apply(fn);
       },
