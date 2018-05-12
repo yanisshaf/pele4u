@@ -12,7 +12,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       insecure: "http://"
     };
 
-    var networkInfo = {
+    self.networkInfo = {
       channels: channels,
       httpChannel: function() {
         if (!$rootScope.deviceReady)
@@ -174,7 +174,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         });
         self.registerPushNotification();
       },
-      networkInfo: networkInfo,
       apiGateway: {
         url: function() {
           var env = _.get(appSettings.EnvCodes, appSettings.env).toLowerCase()
