@@ -22,7 +22,7 @@ const spinConfig = {
   noBackdrop: false,
   minWidth: 50,
   delay: 1000,
-  duration: 1000 * 20
+  duration: 1000 * 30
 };
 
 const apiConfig = {

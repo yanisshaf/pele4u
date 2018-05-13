@@ -40,7 +40,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
 
     return {
       http: $http,
-      networkInfo : self.networkInfo,
+      networkInfo: self.networkInfo,
       safeApply: function(scope, fn) {
         (scope.$$phase || scope.$root.$$phase) ? fn(): scope.$apply(fn);
       },
@@ -178,7 +178,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       apiGateway: {
         url: function() {
           var env = _.get(appSettings.EnvCodes, appSettings.env).toLowerCase()
-          var urlBase = networkInfo.channels.secure + appSettings.apiConfig.hostname;
+          var urlBase = self.networkInfo.channels.secure + appSettings.apiConfig.hostname;
           var urlBase = urlBase + '/mobileAppGw/' + env + '/';
           return urlBase;
         },
