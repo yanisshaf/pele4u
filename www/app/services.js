@@ -201,7 +201,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     if (httpStatus == 401 || httpStatus == 403) {
       PelApi.appSettings.config.IS_TOKEN_VALID = "N";
       PelApi.throwError("api", msg, "httpStatus : " + httpStatus + " (MS:" + config.ms + ")", false)
-      location.href = '/index.html';
+      PelApi.goHome();
     }
     return true;
   }
@@ -211,7 +211,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     if (httpStatus == 401 || httpStatus == 403) {
       PelApi.appSettings.config.IS_TOKEN_VALID = "N";
       PelApi.throwError("api-gateway", "Auth failed - goto to UserMenu  for reauth", "httpStatus : " + httpStatus + msstr, false)
-      location.href = '/index.html';
+      PelApi.goHome();
     } else {
       var errorString = "httpStatus :" + httpStatus + msstr;
       PelApi.throwError("api-gateway", from, errorString, redirect);
