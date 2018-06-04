@@ -17,14 +17,42 @@ app.controller('P1_appsListCtrl',
       }
     })
 
+    $scope.childOf = {};
+    //$scope.tilesEnabled = true;
+    $scope.sort = function(items) {
+
+      /*     items[0].Sorter = "1@cls1 dsds ddssd";
+      items[1].Sorter = "2@cls3";
+      items[2].Sorter = "4.1@cls3";
+      items[2].Path = null;
+      items[3].Sorter = "4.1@wide";
+      //items[3].Path = null;
+
+      items[4].Sorter = "4";
+      items[4].Path = null;
+      */
+      var re = new RegExp("(\\@[a-z]+[\\s\\w]+)", "gi")
+      var idx = 0;
+      var sortedMenu = _.sortBy(items, function(i) {
+        idx++;
+        i.newSorter = (i.Sorter || ("99" + idx).toString()).replace(re, "");
+        i.level = (i.newSorter.match(/\./g) || []).length;
+        i.parent = "mid_" + (i.newSorter.replace(/\.?\w+$/, "") || "0");
+        i.menuId = "mid_" + i.newSorter;
+        $scope.childOf[i.menuId] = i.parent;
+        i.classes = (i.Sorter || "").match(re);
+        if (i.classes) i.classes[0] = i.classes[0].replace('@', '')
+        return i.newSorter;
+      })
+
+      return sortedMenu;
+    }
     //=======================================================//
     //== When        Who         Description               ==//
     //== ----------  ----------  ------------------------- ==//
     //== 27/12/2015  R.W.                                  ==//
     //=======================================================//
     $scope.pushBtnClass = function(event) {
-
-
       if (event === true) {
         return "pele-item-on-release";
       } else {
@@ -103,8 +131,10 @@ app.controller('P1_appsListCtrl',
           strData = strData.replace(/"\"/g, "");
           appSettings.config.GetUserMenu = JSON.parse(strData);
           $scope.feeds_categories = appSettings.config.GetUserMenu;
-          $scope.feeds_categories.menuItems = $scope.insertOnTouchFlag($scope.feeds_categories.menuItems);
 
+          //$scope.feeds_categories.menuItems = $scope.insertOnTouchFlag($scope.feeds_categories.menuItems);
+          $scope.visibleParent = "mid_0";
+          $scope.feeds_categories.menuItems = $scope.sort($scope.feeds_categories.menuItems);
           //---------------------------------------------
           //-- Send User Tag for push notifications
           //---------------------------------------------
@@ -292,7 +322,17 @@ app.controller('P1_appsListCtrl',
     //-----------------------------------------------------------//
     //--                 forwardToApp
     //-----------------------------------------------------------//
+    $scope.remenu = function(parent) {
+      $scope.latestParent = $scope.childOf[parent];
+      $scope.visibleParent = parent;
+    }
     $scope.forwardToApp = function(appConfig) {
+
+      if (!appConfig.Path) {
+        $scope.latestParent = appConfig.parent;
+        $scope.visibleParent = appConfig.menuId;
+        return true;
+      }
 
       $sessionStorage.PeleAppId = appConfig.AppId;
 
