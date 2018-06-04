@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.int-pele.pele4u_dv" version="118.2" versionCode="118.2" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name> PELE4U DV</name>
+<widget id="com.int-pele.pele4u" version="119" versionCode="119" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name> PELE4U</name>
     <description>
     Work form anywhere
   </description>
@@ -106,7 +106,7 @@
     <splash platform="android" qualifier="xxhdpi" src="res/screens/android/screen-xxhdpi-portrait.png" />
     <splash platform="android" qualifier="xxxhdpi" src="res/screens/android/screen-xxxhdpi-portrait.png" />
     <gap:config-file parent="CFBundleShortVersionString" platform="ios">
-        <string>118.2</string>
+        <string>119</string>
     </gap:config-file>
     <access origin="*" />
     <allow-intent href="http://*/*" />
