@@ -33,6 +33,7 @@ angular.module('pele')
     $scope.page = 'form'
 
     $scope.setForm = function() {
+        $ionicNavBarDelegate.showBackButton(true);
       $scope.page = "form"
       $scope.searchResult = {
         cursor: {},
