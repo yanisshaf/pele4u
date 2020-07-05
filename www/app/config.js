@@ -4,6 +4,7 @@ const env = "Q2";
 
 const EnvCodes = {
   PD: "PROD",
+  P2: "PROD",
   DV: "DEV",
   QA: "QA",
   Q2: "QA",
@@ -12,6 +13,7 @@ const EnvCodes = {
 
 const SSOEnv = {
   PD: "PD",
+  P2: "P2",
   DV: "DV",
   QA: "QA",
   Q2: "Q2",
@@ -28,6 +30,7 @@ const spinConfig = {
 };
 
 const apiConfig = {
+
   env: env,
   hostname: "msso.pelephone.co.il",
   uri: "http://msso.pelephone.co.il",
@@ -40,9 +43,9 @@ const apiConfig = {
   menuTimeout: 15000,
   translateFlag: "N",
   flashTime: 2500,
-  authMethods  :{
-    ios:['pincode'],
-    android:['pincode','fingerprint']
+  authMethods: {
+    ios: ['pincode'],
+    android: ['pincode', 'fingerprint']
   },
   OneSignal: {
     DV: {
@@ -65,6 +68,11 @@ const apiConfig = {
       visualLevel: 0,
       logLevel: 0
     },
+    P2: {
+      appId: "1d0135a7-da67-4953-b241-2385bfcedcd9",
+      visualLevel: 0,
+      logLevel: 0
+    },
     LP: {
       appId: "430ad45c-c555-41f5-87c4-46f9d4be0cc1",
       visualLevel: 0,
@@ -74,7 +82,7 @@ const apiConfig = {
   services: {
     ADLogin: {
       timeout: 15000,
-      retry: 2,
+      retry: 0,
       "endpoint": "/" + SSOEnv[env] + "/MobileServices/SSOService.svc/json/ADLogin",
       "RequestHeader": ""
     },
@@ -184,17 +192,18 @@ const apiConfig = {
 
 angular.module('pele.config', [])
   .constant('$ionicLoadingConfig', spinConfig)
-  .value('appSettings', {
+  .value('appSettings', {   
     debug: false,
     EnvCodes: EnvCodes,
     SSOEnv: SSOEnv,
     api_timeout: 20000,
     gw_timeout: 15000,
     config: {
-      bioClientId:"NEVER_CHANGE_THIS_VALUE_BIOPELE4U" ,
-      bioClientSecret:"NEVER_CHANGE_THIS_VALUE",
+      portalUrl:"https://peleportal.pelephone.co.il",
+      bioClientId: "NEVER_CHANGE_THIS_VALUE_BIOPELE4U",
+      bioClientSecret: "NEVER_CHANGE_THIS_VALUE",
       contactIdPrefix: "pelephone",
-      APP_VERSION: "138",
+      APP_VERSION: "149",
       SCAN_PRINT_SCANNING_ERROR: "שגיאה בסריקה",
       PIN_CODE_AUTHENTICATION_REQUIRED_CODE: "10000",
       IS_TOKEN_VALID: "N",
@@ -223,6 +232,7 @@ angular.module('pele.config', [])
         QA: "keen@pelephone.co.il",
         Q2: "keen@pelephone.co.il",
         PD: "Mobile_Admins_HR@pelephone.co.il",
+        P2: "Mobile_Admins_HR@pelephone.co.il",
         LP: "Mobile_Admins_HR@pelephone.co.il",
         DEFAULT: "ghadad@gmail.com",
         DV: "ghadad@gmail.com"

@@ -2,7 +2,8 @@
  * Created by User on 27/01/2016.
  */
 var app = angular.module('pele.services', []);
-app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($http, PelApi, $localStorage) {
+
+app.service('StorageService', ['$http', 'PelApi', '$localStorage', function ($http, PelApi, $localStorage) {
   // ttl - time ( seconds to live)
 
   var yearTtl = 60 * 60 * 24 * 365 * 1000;
@@ -19,7 +20,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
       return true;
     return false;
   }
-  this.set = function(varname, data, ttl) {
+  this.set = function (varname, data, ttl) {
     // default ttl is one year
     if (typeof ttl === 'undefined')
       ttl = yearTtl;
@@ -31,18 +32,18 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     }
     return $localStorage[varname];
   }
-  this.get = function(varname) {
+  this.get = function (varname) {
     return $localStorage[varname];
   };
 
-  this.getData = function(varname, defaultValue) {
+  this.getData = function (varname, defaultValue) {
     defaultValue = defaultValue || null;
     var val = _.get($localStorage[varname], "data", defaultValue);
     if (checkExpired($localStorage[varname]))
       return defaultValue;
     return val;
   }
-}]).service('ApiService', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', function($http, $ionicHistory, PelApi, $sessionStorage) {
+}]).service('ApiService', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', function ($http, $ionicHistory, PelApi, $sessionStorage) {
   var Errors = {
     2: {
       description: "token invalid",
@@ -54,7 +55,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     }
   }
   var env = PelApi.appSettings.env;
-  var isValidJson = function(str) {
+  var isValidJson = function (str) {
     try {
       JSON.stringify(str)
     } catch (err) {
@@ -73,7 +74,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     var ServiceUrl = urlBase + '/' + PelApi.appSettings.SSOEnv[env] + '/CallMobileService';
     var authParams = $sessionStorage.ApiServiceAuthParams || {};
     authParams.APPID = internalConfig.AppId;
-    var authParamsString = PelApi.toQueryString($sessionStorage.ApiServiceAuthParams||{})
+    var authParamsString = PelApi.toQueryString($sessionStorage.ApiServiceAuthParams || {})
 
     internal.url = ServiceUrl + '?' + authParamsString;
     var EnvCode = "MobileApp_" + PelApi.appSettings.EnvCodes[env];
@@ -115,7 +116,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   }
 
 
-  this.checkResponse = function(data, httpStatus, config) {
+  this.checkResponse = function (data, httpStatus, config) {
     var errorMsg = "InvalidJsonResponse";
     var sys = ""
     if (isValidJson(data) == false || !data) {
@@ -142,11 +143,11 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     return data;
   }
 
-  this.get = function() {
+  this.get = function () {
     return $http.get(urlBase);
   };
 
-  this.post = function(ServiceName, AppId, requestParams) {
+  this.post = function (ServiceName, AppId, requestParams) {
 
     var apiConfig = buildServiceCaller(ServiceName, {
       AppId: AppId,
@@ -160,7 +161,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
       }
     });
   };
-}]).service('ApiGateway', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', '$localStorage', '$cordovaNetwork', function($http, $ionicHistory, PelApi, $sessionStorage, $localStorage, $cordovaNetwork) {
+}]).service('ApiGateway', ['$http', '$ionicHistory', 'PelApi', '$sessionStorage', '$localStorage', '$cordovaNetwork', function ($http, $ionicHistory, PelApi, $sessionStorage, $localStorage, $cordovaNetwork) {
 
   function getUrlBase() {
     var env = _.get(PelApi.appSettings.EnvCodes, PelApi.appSettings.env).toLowerCase()
@@ -173,8 +174,8 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     var headers = params || {};
     //headers['withCredentials'] = 'true';
     var ApiServiceAuthParams = _.get($sessionStorage, "ApiServiceAuthParams", {});
-    headers['x-appid'] = $sessionStorage.PeleAppId;
-    headers['x-token'] = ApiServiceAuthParams.TOKEN;
+    headers['x-appid'] = $sessionStorage.PeleAppId || "xyz";
+    headers['x-token'] = ApiServiceAuthParams.TOKEN || $sessionStorage.token;
     headers['x-pincode'] = ApiServiceAuthParams.PIN;
     headers['x-username'] = $sessionStorage.userName;
     headers['x-msisdn'] = ($sessionStorage.PELE4U_MSISDN || PelApi.appSettings.config.MSISDN_VALUE) || $localStorage.PELE4U_MSISDN;
@@ -192,11 +193,11 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
   this.getHeaders = buildHeader;
   this.getUrl = getUrl;
 
-  this.getSecureUrl = function(urlStr) {
+  this.getSecureUrl = function (urlStr) {
     var secureUrl = getUrlBase() + urlStr;
     return secureUrl.replace("http://", "https://");
   }
-  this.reauthOnForbidden = function(httpStatus, msg, config) {
+  this.reauthOnForbidden = function (httpStatus, msg, config) {
     var errmsg = msg || "Auth failed - jump to entry page for reauth"
     if (httpStatus == 401 || httpStatus == 403) {
       PelApi.appSettings.config.IS_TOKEN_VALID = "N";
@@ -206,7 +207,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     return true;
   }
 
-  this.throwError = function(httpStatus, from, config, redirect) {
+  this.throwError = function (httpStatus, from, config, redirect) {
     var msstr = " (MS:" + config.ms + ")";
     if (httpStatus == 401 || httpStatus == 403) {
       PelApi.appSettings.config.IS_TOKEN_VALID = "N";
@@ -218,8 +219,22 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     }
 
   }
-  this.get = function(service, params, config) {
+  this.get = function (service, params, config) {
     var url = getUrlBase() + service;
+    params = params || {};
+    config = config || {};
+    var httpConfig = {
+      retry: (config.retry || 2),
+      timeout: (config.timeout || PelApi.appSettings.gw_timeout || 10000),
+      params: params,
+      headers: buildHeader(config.headers)
+    }
+
+    return $http.get(url, httpConfig);
+  };
+  this.getToken = function (params, config) {
+
+    var url = getUrl("users/token")
     params = params || {};
     config = config || {};
     var httpConfig = {
@@ -230,7 +245,212 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     }
     return $http.get(url, httpConfig);
   };
-  this.post = function(service, params, config) {
+
+  this.getTokenUrl = function (path) {
+    return this.getUrl(path) + $sessionStorage.gwTokensQuery
+  }
+
+  this.setSessionTokens = function () {
+    return this.getToken().success(function (r) {
+      var jwtToken = _.get(r, 'token', "");
+      var userId = PelApi.appSettings.config.user || $sessionStorage.user;
+      if (jwtToken.length > 100) {
+        $sessionStorage.gwTokensQuery = '?jwtToken=' + jwtToken + '&token=' + $sessionStorage.token + '&userId=' + userId;
+      }
+    }).error(function (error, httpStatus, headers, config) {
+      $sessionStorage.jwtToken = "";
+    })
+  }
+
+  this.openInApp = function (url) {
+     if(!window.cordova) {
+       swal({ text: 'האפליקציה מנסה להפעיל תכונה שמתאימה להפעלה בסמארטפון בלבד',});
+       return false;
+    }
+    var swalObject = {
+      type: 'error',
+      title: 'תהליך אימות העובד נכשל',
+      text: 'נא צאו והתחברו שוב ונסו שנית ',
+      showConfirmButton: false,
+      timer: 2500
+    };
+    PelApi.showLoading();
+
+    this.getToken().success(function (r) {
+      var jwtToken = _.get(r, 'token', "");
+      var userId = PelApi.appSettings.config.user || $sessionStorage.user;
+      if (jwtToken.length < 100) {
+        PelApi.hideLoading();
+        swal(swalObject)
+      } else {
+        var extAuth = {
+          token: $sessionStorage.token,
+          userId: PelApi.appSettings.config.user || $sessionStorage.user,
+          jwtToken: jwtToken,
+          backDoor: window.document.location
+        }
+        var qstr = "";
+
+        for (var key in extAuth) {
+          if (qstr != "") {
+            qstr += "&";
+          }
+          qstr += key + "=" + encodeURIComponent(extAuth[key]);
+        }
+
+        var fullUrl = url + '?' + qstr
+
+        var iabOptions = 'toolbar=no,presentationstyle=fullscreen,location=no,zoom=no,footer=no,closebuttoncaption=סגור'; 
+       
+        var inAppBrowserRef = cordova.InAppBrowser.open(fullUrl, '_blank', iabOptions);
+         
+         inAppBrowserRef.addEventListener('loaderror', function () {
+          PelApi.hideLoading();
+          swal(swalObject);
+        });
+
+        inAppBrowserRef.addEventListener("loadstop", function () {
+          var loop = window.setInterval(function () {
+            inAppBrowserRef.executeScript({
+                code: "window.shouldClose || window.closed"
+              },
+              function (values) {
+                if (values[0]) {
+                  inAppBrowserRef.close();
+                  window.clearInterval(loop);
+                }
+              });
+          }, 200);
+        });
+      }
+    }).error(function (error, httpStatus, headers, config) {
+      PelApi.hideLoading();
+      swal(swalObject)
+
+    }).finally(function () {
+
+    });
+  }
+
+
+  this.openPortal = function (url,cred) {
+    //disable it until next production
+    return false ;
+
+    
+    if(!window.cordova) {
+       swal({ text: 'האפליקציה מנסה להפעיל תכונה שמתאימה להפעלה בסמארטפון בלבד',});
+       return false;
+    }
+    var swalObject = {
+      type: 'error',
+      title: 'פתיחת פורטל נכשלה',
+      text: 'נא צא מהאפליקציה ונסה שוב',
+      showConfirmButton: false,
+      timer: 2500
+    };
+
+    PelApi.showLoading({
+      duration: 1000 * 3
+    });
+    var iabOptions =  'clearcache=no,clearsessioncache=no,location=no,hidden=yes,zoom=no,footer=no,closebuttoncaption=סגור'; 
+    if(cred) 
+      iabOptions = "clearcache=yes,clearsessioncache=yes,location=no,hidden=yes";
+    var inAppBrowserRef = window.pele4uInAppBrowserRef = cordova.InAppBrowser.open(encodeURI(url), '_blank',iabOptions);
+       inAppBrowserRef.addEventListener("loaderror", function () {
+          PelApi.hideLoading();
+//           PelApi.showPopup("התחברות  לפורטל נכשלה","צאו והתחברו שוב לאפליקציה",'button-assertive');
+     });
+  //  } //else {
+     // inAppBrowserRef = window.pele4uInAppBrowserRef  ; 
+    //}
+      
+     if(!cred) {
+     //  code = "window.location.href =  '"+url +"'";
+     //  inAppBrowserRef.executeScript({code: code} );
+       var loop = setInterval(function() {
+       inAppBrowserRef.executeScript(
+         {
+             code: "document.getElementById('Log_On')"
+         },
+       function( values ) {
+           var err = values[ 0 ];
+             if ( err ) {
+               clearInterval( loop );
+               //browserRef.close();
+              PelApi.showPopup("התחברות  לפורטל נכשלה","צאו והתחברו שוב לאפליקציה",'button-assertive');
+           }
+       } )},500);
+
+
+      setTimeout(function(){
+        inAppBrowserRef.show();
+      },300) 
+     }
+ 
+
+     if(cred) {
+    inAppBrowserRef.addEventListener("loadstop", function () {
+        PelApi.hideLoading();
+       var   code = "setTimeout(function(){ \
+            var btn = document.getElementById('Log_On') ; \
+            if(btn) { \
+               document.getElementById('login').value = '__username' ; \
+               document.getElementById('passwd').value = '__password' ; \
+               btn.click(); \
+             } \
+            },1500); "
+
+            code = code.replace(/__username/g, cred.UserName );
+            code = code.replace(/__password/g, cred.password );
+      
+           inAppBrowserRef.executeScript({code: code} );
+            var loop = setInterval(function() {
+                inAppBrowserRef.executeScript({
+                     code: "document.getElementById('errorMessageLabel')"
+                 },
+                function( values ) {
+                   var err = values[ 0 ];
+                    if ( err ) {
+                       clearInterval( loop );
+                     // inAppBrowserRef.close();
+                        PelApi.showPopup("התחברות  לפורטל נכשלה","צאו והתחברו שוב לאפליקציה",'button-assertive');
+                  }})
+            },500 );
+    
+    });
+  }
+  }
+
+  this.openBrowser = function (url) {
+    //return   cordova.plugins.browsertab.openUrl(encodeURI(url));
+     var swalObject = {
+      type: 'error',
+      title: 'לא מצליח לפתוח את היישום',
+      text: 'תהליך אימות העובד נכשל ',
+      showConfirmButton: false,
+      timer: 2500
+    };
+      PelApi.showLoading({
+      duration: 1000 * 3
+    });
+
+    this.getToken().success(function (r) {
+      var jwtToken = _.get(r, 'token', "");
+      var userId = PelApi.appSettings.config.user || $sessionStorage.user;
+      if (jwtToken.length < 100) {
+        swal(swalObject)
+      } else {
+        window.open(url + '?jwtToken=' + jwtToken + '&token=' + $sessionStorage.token + '&userId=' + userId, '_system');
+      }
+    }).error(function (error, httpStatus, headers, config) {
+      swal(swalObject)
+    }).finally(function () {
+      PelApi.hideLoading();
+    });
+  }
+
+  this.post = function (service, params, config) {
     var url = getUrlBase() + service;
     config = config || {};
     var headerParams = {
@@ -240,7 +460,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     }
     return $http.post(url, params || {}, headerParams);
   };
-  this.head = function(service, config) {
+  this.head = function (service, config) {
     var url = getUrlBase() + service;
     config = config || {};
     var headerParams = {
@@ -250,7 +470,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     }
     return $http.head(url, headerParams);
   };
-  this.delete = function(service, params, config) {
+  this.delete = function (service, params, config) {
     var url = getUrlBase() + service;
     params = params || {};
     config = config || {};
@@ -263,7 +483,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     return $http.delete(url, headerParams);
   };
 
-  this.put = function(service, params, config) {
+  this.put = function (service, params, config) {
     var url = getUrlBase() + service;
     config = config || {};
     var headerParams = {
@@ -273,10 +493,10 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     }
     return $http.put(url, params || {}, headerParams);
   };
-}]).service('srvShareData', function($window) {
+}]).service('srvShareData', function ($window) {
   var KEY = 'App.SelectedValue';
 
-  var addData = function(newObj) {
+  var addData = function (newObj) {
     var mydata = $window.sessionStorage.getItem(KEY);
     if (mydata) {
       mydata = JSON.parse(mydata);
@@ -287,7 +507,7 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
     $window.sessionStorage.setItem(KEY, JSON.stringify(mydata));
   };
 
-  var getData = function() {
+  var getData = function () {
     var mydata = $window.sessionStorage.getItem(KEY);
     if (mydata) {
       mydata = JSON.parse(mydata);

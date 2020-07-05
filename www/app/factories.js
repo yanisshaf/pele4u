@@ -116,9 +116,21 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       },
       cordovaInit: function () {
         //file in device file system
+        var self = this;
+        if(ionic.Platform.isIOS()) {
+            self.secureStorage  = new cordova.plugins.SecureStorage(
+          function() {
+          },
+          function(error) {
+            self.secureStorage = null; 
+          },
+          "pele4u"
+        );
+        }
+       
+        
         $sessionStorage.ApiServiceAuthParams = $sessionStorage.ApiServiceAuthParams || {};
 
-        var self = this;
         $rootScope.deviceReady = true;
         deviceReady = true;
         self.isAndroid = ionic.Platform.isAndroid();
@@ -142,14 +154,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             isOnline: true,
             network: $cordovaNetwork.getNetwork()
           };
-          if (appSettings.env == "DV") {
-            var alertPopup = $ionicPopup.alert({
-              title: 'Network Changed',
-              template: 'network - DEV only : ' + appSettings.config.network
-            });
-          }
-
-          $rootScope.$apply();
+           $rootScope.$apply();
         })
 
         // listen for Offline event
@@ -381,7 +386,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //--------------------------------------------------------------------//
       //                    GetUserMenu PAGE 1                              //
       //--------------------------------------------------------------------//
-      getMenu: function(links) {
+      getMenu: function (links) {
         var self = this;
         // LOADING
 
@@ -1059,7 +1064,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       //----------------------------------------------------------//
       //                   WI_FI Pop Up
       //----------------------------------------------------------//
-      showPopup: function (title, subTitle) {
+      showPopup: function (title, subTitle,type) {
         $rootScope.data = {}
 
         // An elaborate, custom popup
@@ -1069,7 +1074,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           scope: $rootScope,
           buttons: [{
             text: '<a class="pele-popup-positive-text-collot">אישור</a>',
-            type: 'button-positive',
+            type: type || 'button-positive',
             onTap: function (e) {
               return true;
             }
@@ -1152,8 +1157,14 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       goHome: function (config) {
         options = config || {};
         //$state.go("app.p1_appsLists", options.params || {}, options.options || {});
-        $state.go('app.ldap_login');        
+        $state.go('app.ldap_login');
       },
+      goMenu: function (config) {
+        options = config || {};
+        //$state.go("app.p1_appsLists", options.params || {}, options.options || {});
+        $state.go('app.p1_appsLists');
+      },
+
       goLogIn: function () {
         $state.go("app.login");
       },
@@ -1396,7 +1407,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           }if (action.ACTION_CODE === "CLOSE_CHAT" && action.NOTE) {
             action.short_text = 'ביאור';
             action.right_icon = 'ion-help-circled';            
-          }          
+          }            
           if (!action.ACTION_CODE && action.NOTE) {
             action.display = false;
             action.left_icon = 'ion-chevron-left';
@@ -1517,6 +1528,47 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
         clear: function () {
           this.pinStateData = undefined;
           $localStorage.pinStateData = undefined;
+        }
+      },
+        download: function(uri, targetName) {
+        var self = this;
+       // self.showLoading();
+        var targetPath = self.getAttchDirectory() + '/' + targetName;
+        var timeoutFunction = function () {
+          $ionicLoading.hide();
+          $rootScope.$broadcast('scroll.refreshComplete');
+          self.showPopup(self.appSettings.config.FILE_TIMEOUT, "");
+        };
+         
+         var openDoc2 = function (url, target, propsStr) {
+          var myPopup = window.open(url, target, propsStr);
+          myPopup.addEventListener('loadend', function () {
+            self.hideLoading();
+          }, false);
+        }
+           
+        if (!window.cordova) {
+          self.showPopup("הקובץ ירד לספריית ההורדות במחשב זה", "");
+          window.open(encodeURI(uri), "_system", "location=yes,enableViewportScale=yes,hidden=no");
+      //  }  else if (self.isIOS) {
+       //    window.open(encodeURI(uri), "_system", "charset=utf-8,location=yes,footer=no");
+     //   } else if (self.isAndroid) {
+        } else {
+          var filetimeout = $timeout(timeoutFunction, appSettings.config.ATTACHMENT_TIME_OUT);
+         var fileTransfer = new FileTransfer();
+ 
+          fileTransfer.download(uri, targetPath,function (result) {
+                    $timeout.cancel(filetimeout);
+                     
+                     if (!result.nativeURL) {
+                      self.hideLoading();
+                    } else {
+                      cordova.plugins.fileOpener2.showOpenWithDialog(result.nativeURL, "text/vcard", function(){},function(){});
+                     }
+              },function (error) {
+                self.hideLoading()
+                self.showPopup(self.appSettings.config.FILE_NOT_FOUND, "");
+              });
         }
       },
       openAttachment: function (file, appId) {
@@ -1645,7 +1697,6 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           if ((btn.note && res) || (!btn.note))
             scope.submitUpdateInfo(btn, res);
         });
-
       },
 
       displayNotePopupChat: function (scope, btn) {
@@ -1816,7 +1867,7 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
             }
           });
         }
-        //Yanis adding chat for pay 
+        //Yanis adding chat for pay      
 
     };
 
@@ -1841,42 +1892,45 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
       if (phrase) text = text.replace(new RegExp('(' + phrase + ')', 'gi'), '<span class="highlighted">$1</span>');
       return $sce.trustAsHtml(text)
     }
-  }).factory('BioAuth', function ($q, $sessionStorage, PelApi) {
+  }).factory('BioAuth', function ($q, $sessionStorage, PelApi,$ionicPopup) {
+    var self = this;
 
     var bioOptions = {
       clientId: PelApi.appSettings.config.bioClientId,
       clientSecret: PelApi.appSettings.config.bioClientSecret,
       dialogTitle: "זיהוי באמצעות טביעת אצבע",
       dialogMessage: "הניחו את האצבע על חיישן ההזדהות",
-      dialogHint: "פלאפון תקשורת"
-    }
-
-    var kfail = function (reject) {
-      return function () {
-        return reject("Failed to get/set keychain")
-      }
-    }
-
-    var kwin = function (resolve) {
-      return function (value) {
-        return resolve(value);
-      }
+      dialogHint: "פלאפון תקשורת",
+      iosKeyChainKey: "pele4u"
     }
 
     return {
       isInstalled: function () {
         return (window.BiometricAuth ? true : false);
       },
-      getToken:function() {
+      getToken: function () {
         return _.get(PelApi.localStorage, 'ADAUTH.token', null);
       },
       getMethod: function () {
-        return _.get(PelApi.localStorage, 'ADAUTH.method', "") || "";
+        var method =  _.get(PelApi.localStorage, 'ADAUTH.method', "") || "";
+        if(method.match(/finger/) ) { 
+          bioOptions.description =   "יש להניח את האצבע על חיישן ההזדהות של הטלפון" ;
+        }
+        return method;
       },
-      clear: function () {
-        _.set(PelApi.localStorage, 'ADAUTH', {});
+
+      clear: function (soft) {
+        if (soft && soft == "soft") {
+          var method = _.get(PelApi.localStorage, 'ADAUTH.method', "")
+          _.set(PelApi.localStorage, 'ADAUTH', {
+            method: method
+          });
+        } else {
+          _.set(PelApi.localStorage, 'ADAUTH', {});
+        }
+
         PelApi.localStorage.PELE4U_MSISDN = ""
-        PelApi.sessionStorage.$reset();        
+        PelApi.sessionStorage.$reset();
       },
       setMethod: function (method) {
         // remove old credentials 
@@ -1892,8 +1946,12 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           if (window.BiometricAuth) {
             window.BiometricAuth.isAvailable(function (result) {
               PelApi.localStorage.bioAuthCap = PelApi.sessionStorage.bioAuthCap = result;
+              console.log(result)
               if(result && result.hasEnrolledFingerprints)
-              resolve("finger");
+                return resolve("finger");
+              if(_.isString(result) && result.match(/finger|face/)) 
+                return resolve(result);
+                reject("No biometrich auth capabilties found on device")    
             }, function () {
               PelApi.lagger.info("BiometricAuth not avaialable in device");
               reject("BiometricAuth auth not avaialable in this device");
@@ -1910,8 +1968,18 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           ConfigObject.password = credentials.password;
           window.BiometricAuth.authenticate(
             function (_fingerResult) {
-              console.log("successCallback(): " + JSON.stringify(_fingerResult));
-              resolve(_fingerResult)
+              if (ionic.Platform.isAndroid()) {
+                return resolve(_fingerResult);
+              } else if (ionic.Platform.isIOS()) {
+                if (!bioOptions.iosKeyChainKey)
+                  return reject("missing paramater credentials.keychainKey");
+                  PelApi.secureStorage.set(function() {
+                    resolve({token:bioOptions.iosKeyChainKey})
+                  },function(err) { 
+                    reject(err);
+                  },bioOptions.iosKeyChainKey,
+                  JSON.stringify(credentials))
+              }
             },
             function () {
               return reject("Failed to encrypt user/pass")
@@ -1925,17 +1993,26 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
           ConfigObject.token = token;
           window.BiometricAuth.decrypt(
             function (result) {
-                  result.username  =  username;
-                  if(!result.password)
+              if(ionic.Platform.isAndroid()) { 
+                result.username  =  username;
+                if(!result.password)
                   return reject("cannot get encrypted password");
-                  return resolve(result)
-            },
+                return resolve(result)
+              } else if(ionic.Platform.isIOS()){
+                if(!bioOptions.iosKeyChainKey) 
+                  return reject("missing paramater bioOptions.iosKeyChainKey");
+                  PelApi.secureStorage.get(function(result) {
+                    resolve(JSON.parse(result))
+                  },function(err) { 
+                    reject(err);
+                  },bioOptions.iosKeyChainKey)
+             }
+             },
             function (err) {
-              PelApi.lagger.error("Failed to decrypt credentials:",err)
-              return reject("Failed to decrypt credentials : " + err.stack)
+              return reject("Failed to decrypt credentials : " + err)
             }, ConfigObject)
         })
-      },
+      }
     }
   }).factory('Contact', function ($q) {
     var setContactData = function (deviceContact, info) {

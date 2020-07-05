@@ -1,5 +1,5 @@
 <ion-view cache-view="false" hide-back-button="true">
-  <ion-nav-title>
+    <ion-nav-title>
     <div class="bar bar-header bar-light">
       <div class="title" id="logo">  <h4 class=" white">{{TITLE_LOGIN}} </h4>
       </div>
@@ -17,7 +17,7 @@
               </label>
               <label class="item item-input">
                 <span class="input-label">סיסמה</span>
-                <input type="tel" maxlength="4" placeholder="{{TITLE_OTP_INPUT}}" name="user_pin" ng-model="user.pin" autocomplete="one-time-code" required valid-pin="user.pin" show-hide-input>
+                <input type="tel" maxlength="4" placeholder="{{TITLE_OTP_INPUT}}" name="user_pin" ng-model="user.pin" ng-click="focusMe($event)" required>
               </label>
             </div>
             <div class="item item-body bottom-content">

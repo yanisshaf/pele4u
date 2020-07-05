@@ -3,10 +3,12 @@
  */
 var app = angular.module('pele.authCtrl', ['ngStorage']);
 
-app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootScope, PelApi, $sessionStorage, $ionicLoading, appSettings,BioAuth) {
+app.controller('LoginCtrl', function($scope, $state,  PelApi, $sessionStorage, $ionicLoading, appSettings,$timeout) {
   //------------------------------------------------------------//
   //--                    Get AppId                           --//
   //------------------------------------------------------------//
+  PelApi.lagger.info(" LoginCtrl controller");
+  
   $scope.getAppId = function() {
 
     var menuList = appSettings.config.GetUserMenu;
@@ -32,17 +34,15 @@ app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootSc
 
   } 
   
-  $scope.checkTries = function() { 
-    var tries = _.get(PelApi.sessionStorage,'stat.pinCodeFailed',0);
-    if(tries>=5)    
-        BioAuth.clear();
-    _.set(PelApi.sessionStorage, 'stat.pinCodeFailed',tries+1);
+    
+  $scope.focusMe = function(event) {   
+    var ae =     event.target;
+    $timeout(function() {
+     // document.activeElement.selectionStart = document.activeElement.selectionEnd;
+    //  console.log(document.activeElement.selectionEnd)
+    ae.focus()
+    },300)      
   }
-
-  $scope.resetTries = function() { 
-    var tries = _.set(PelApi.sessionStorage,'stat.pinCodeFailed',0);
-  }
-  
 
   // getAppId
   //------------------------------------------------------------//
@@ -72,7 +72,7 @@ app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootSc
             PelApi.lagger.info(JSON.stringify(data));
 
             if ("Valid" === pinStatus) {
-              $scope.resetTries();
+              
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               appSettings.config.Pin = pin;
@@ -95,27 +95,23 @@ app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootSc
               
               $state.go('app.p1_appsLists');
             } else if ("PWA" === pinStatus) {
-              $scope.checkTries();
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               $scope.user.message = appSettings.config.pinCodeSubTitlePWA;
               $scope.user.pin = "";
             } else if ("PAD" === pinStatus) {
-              $scope.checkTries();
 
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               PelApi.goHome();
 
             } else if ("InValid" === pinStatus) {
-              $scope.checkTries();
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               //$state.go("app.p1_appsLists");
               PelApi.goHome();
 
             } else if ("EAI_ERROR" === pinStatus) {
-              $scope.checkTries();
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               PelApi.showPopup(appSettings.config.EAI_ERROR_DESC, "");
@@ -127,7 +123,6 @@ app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootSc
               PelApi.goHome();
 
             } else if ("ERROR_CODE" === pinStatus) {
-              $scope.checkTries();
               $ionicLoading.hide();
               $scope.$broadcast('scroll.refreshComplete');
               PelApi.showPopup(stat.description, "");
@@ -141,7 +136,6 @@ app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootSc
         //--- ERROR ---//
         ,
         function(response) {
-          $scope.checkTries();
 
           PelApi.lagger.error("========== IsSessionValidJson ERROR ==========");
           PelApi.lagger.error(JSON.stringify(response));
@@ -161,8 +155,6 @@ app.controller('LoginCtrl', function($scope, $state, $templateCache, $q, $rootSc
   $scope.TITLE_LOGIN = appSettings.config.TITLE_LOGIN;
   $scope.TITLE_SEND_OTP = appSettings.config.TITLE_SEND_OTP;
   $scope.TITLE_RESET_PASSWORD_LINK = appSettings.config.TITLE_RESET_PASSWORD_LINK;
-
-
 });
 
 app.controller('ForgotPasswordCtrl', function($scope, $state) {

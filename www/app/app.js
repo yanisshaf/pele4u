@@ -1,9 +1,4 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.controllers' is found in controllers.js
+ 
 angular.module('pele', [
   'ionic',
   'ngCordova',
@@ -23,8 +18,11 @@ angular.module('pele', [
 ])
 
 .run(['$rootScope', '$ionicPlatform', '$state', '$ionicLoading', 'PelApi', 'appSettings', /* 'Idle',*/
+
+
+
   function($rootScope, $ionicPlatform, $state, $ionicLoading, PelApi, appSettings /*, Idle */ ) {
-    PelApi.init();
+     PelApi.init();
     _.set(PelApi.sessionStorage,'stat',{httpRequests:0,httpFailed:0,pinCodeFailed:0,bioFailed:0});
   
 
@@ -73,9 +71,9 @@ angular.module('pele', [
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {});
 
     $ionicPlatform.ready(function() {
-
-      
+    //  window.open = cordova.InAppBrowser.open;
       var model = ionic.Platform.device().model;
+      window.open = cordova.InAppBrowser.open ;
       window.deviceModel = model;
       if (ionic.Platform.isIOS()) {
         var ratio = window.devicePixelRatio || 1;
@@ -88,6 +86,8 @@ angular.module('pele', [
           window.iphonex = true;
         }
       }
+
+ 
 
       //----------------------------------------
       //--    Get Version from config.xml
@@ -115,9 +115,8 @@ angular.module('pele', [
         if (cordova.platformId != 'android') {
           StatusBar.hide();
         }
-      
 
-
+    
       }
       //----------------------------------
       //--    Go To Application List
@@ -126,11 +125,11 @@ angular.module('pele', [
     });
   }
 ])
-.config(function( /* $compileProvider,IdleProvider */ $stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
+.config(function( /* $compileProvider,IdleProvider */ $compileProvider,$stateProvider, $urlRouterProvider, appStates, $ionicConfigProvider) {
   $ionicConfigProvider.backButton.text('')
   $ionicConfigProvider.views.swipeBackEnabled(false);
   $ionicConfigProvider.navBar.alignTitle('center');
-  //$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
   //  IdleProvider.idle(60 * 3);
 
   $stateProvider
@@ -172,6 +171,7 @@ angular.module('pele', [
     //---------------------------------------------------------------------------//
     .state('app.login', {
       url: '/auth',
+      cache:false,
       views: {
         'menuContent': {
           templateUrl: 'templates/auth/login.html',
@@ -335,10 +335,15 @@ angular.module('pele', [
       _.set(PelApi.sessionStorage, 'stat.httpFailed',_.get(PelApi.sessionStroage, 'stat.httpFailed',0)+1);
       rejection.config.responseTimestamp = new Date().getTime();
       rejection.config.ms = rejection.config.responseTimestamp - rejection.config.requestTimestamp;
+      if(rejection.config.url.match(/ADLogin/i)){
+        PelApi.hideLoading();
+        return $q.reject(rejection);
+      }
+      var cloneConfig =  _.cloneDeep(rejection.config) ;
       if (retries < (rejection.config.retry || 0)) {
-        if(rejection.config.data && rejection.config.data.password)
-        rejection.config.data.password = "******";
-        PelApi.lagger.error("Reject & Retry . number :  " + retries, "on Config : ", rejection.config)
+        if(cloneConfig.data && cloneConfig.data.password)
+        cloneConfig.data.password = "******";
+        PelApi.lagger.error("Reject & Retry . number :  " + retries, "on Config : ", cloneConfig)
         retries++;
         return onResponseError(rejection.config);
       }

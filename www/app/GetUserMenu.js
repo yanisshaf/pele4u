@@ -6,7 +6,7 @@ var app = angular.module('pele.GetUserMenu', ['ngStorage', 'ngCordova']);
 //==                         PAGE_1                                  ==//
 //=====================================================================//
 app.controller('GetUserMenuCtrl',
-  function ($scope, $http, $state, $ionicLoading, PelApi, ApiGateway, $rootScope, $ionicPopup, $ionicHistory, $sessionStorage, $localStorage, appSettings, srvShareData, $cordovaNetwork, $ionicNavBarDelegate,BioAuth) {
+  function ($scope, $timeout, $state, $ionicLoading, PelApi, ApiGateway, $rootScope, $ionicPopup, $ionicHistory, $sessionStorage, $localStorage, appSettings, srvShareData, $cordovaNetwork, $ionicNavBarDelegate, BioAuth) {
 
     $ionicNavBarDelegate.showBackButton(true);
     $ionicHistory.clearHistory();
@@ -62,8 +62,15 @@ app.controller('GetUserMenuCtrl',
       items[4].Sorter = "4";
       items[4].Path = null;
       */
+
+      if (appSettings.config.testItems) {
+        appSettings.config.testItems.forEach(function (i) {
+          items.push(i);
+        })
+      }
       var re = new RegExp("(\\@[a-z]+[\\s\\w]+)", "gi")
       var idx = 0;
+
       var sortedMenu = _.sortBy(items, function (i) {
         idx++;
         i.menuLocation = i.Location || "side";
@@ -80,7 +87,9 @@ app.controller('GetUserMenuCtrl',
         return i.newSorter;
       })
 
-      return sortedMenu;
+      return _.uniqBy(sortedMenu, function (elm) {
+        return JSON.stringify(elm)
+      });
     }
     //=======================================================//
     //== When        Who         Description               ==//
@@ -130,7 +139,16 @@ app.controller('GetUserMenuCtrl',
     }
     if ($sessionStorage.PELE4U_MSISDN) {
       appSettings.config.MSISDN_VALUE = $sessionStorage.PELE4U_MSISDN;
+
     }
+
+
+    if (!appSettings.config.MSISDN_VALUE) {
+      $sessionStorage.$reset();
+      $localStorage.$reset();
+      return $state.go('app.ldap_login');
+    }
+
 
     $scope.GetUserMenuMain = function () {
       $rootScope.menuItems = [];
@@ -146,10 +164,11 @@ app.controller('GetUserMenuCtrl',
           window.location = "./index.html";
         }
       }
- 
+
 
 
       reMenu.success(function (data, status, headers, config) {
+
         PelApi.sessionStorage.ApiServiceAuthParams = {}
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -163,18 +182,16 @@ app.controller('GetUserMenuCtrl',
 
         $sessionStorage.PELE4U_MSISDN = appSettings.config.MSISDN_VALUE;
         $localStorage.PELE4U_MSISDN = appSettings.config.MSISDN_VALUE;
-        _.set(PelApi.sessionStorage.ADAUTH,'msisdn',appSettings.config.MSISDN_VALUE);
+        _.set(PelApi.sessionStorage.ADAUTH, 'msisdn', appSettings.config.MSISDN_VALUE);
 
         //$scope.setMSISDN(appSettings.config.MSISDN_VALUE);
 
         var pinCodeStatus = PelApi.GetPinCodeStatus(data, "getMenu");
-        PelApi.lagger.info("GetUserMenu -> pinCodeStatus:", pinCodeStatus)
-        if(PelApi.appSettings.env == 'DV' && data.ActivePin)
-        alert("Pin code:"+data.ActivePin)
-        
+        PelApi.lagger.info("GetUserMenu -> pinCodeStatus:", pinCodeStatus);
+
         if ("Valid" === pinCodeStatus) {
           appSettings.config.token = data.token;
-          
+
           appSettings.config.user = data.user;
           appSettings.config.userName = data.userName;
           var strData = JSON.stringify(data);
@@ -186,9 +203,13 @@ app.controller('GetUserMenuCtrl',
           //$scope.feeds_categories.menuItems = $scope.insertOnTouchFlag($scope.feeds_categories.menuItems);
           $scope.visibleParent = "mid_0";
 
+
+
           $scope.feeds_categories.menuItems = $scope.sort($scope.feeds_categories.menuItems);
+          console.log($scope.feeds_categories.menuItems);
+
           $rootScope.menuItems = $sessionStorage.menuItems = $scope.feeds_categories.menuItems;
-    
+
           //---------------------------------------------
           //-- Send User Tag for push notifications
           //---------------------------------------------
@@ -220,11 +241,15 @@ app.controller('GetUserMenuCtrl',
 
           appSettings.config.Pin = appSettings.config.GetUserMenu.PinCode;
 
+
           if (appSettings.config.PIN_CODE_AUTHENTICATION_REQUIRED_CODE === appSettings.config.Pin) {
-            $state.go('app.login');
+            $timeout(function () {
+              $state.go('app.login', {}, {
+                reload: true
+              });
+            }, 200);
           } else {
-            
-            PelApi.sessionStorage.ADAUTH =appSettings.config.GetUserMenu;
+            PelApi.sessionStorage.ADAUTH = appSettings.config.GetUserMenu;
             appSettings.config.Pin = appSettings.config.GetUserMenu.PinCode;
             appSettings.config.IS_TOKEN_VALID = "Y";
 
@@ -247,9 +272,12 @@ app.controller('GetUserMenuCtrl',
           }
 
         } else if ("PAD" === pinCodeStatus) {
-
           if (appSettings.config.PIN_CODE_AUTHENTICATION_REQUIRED_CODE === appSettings.config.Pin) {
-            $state.go('app.login');
+            $timeout(function () {
+              $state.go('app.login', {}, {
+                reload: true
+              });
+            }, 200);
           }
         } else if ("PCR" === pinCodeStatus) {
           errorMsg = appSettings.PIN_STATUS.PAD;
@@ -262,7 +290,7 @@ app.controller('GetUserMenuCtrl',
           //PelApi.showPopup(appSettings.config.pinCodeSubTitlePWA , "");
         } else if ("OLD" === pinCodeStatus) {
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
-        } 
+        }
       }).error(
         function (errorStr, httpStatus, headers, config) {
           var time = config.responseTimestamp - config.requestTimestamp;
@@ -284,9 +312,18 @@ app.controller('GetUserMenuCtrl',
      *  02/08/2016   R.W.
      *****************************************************************
      */
+    $scope.goToADLogin = function () {
+      //appSettings.config.IS_TOKEN_VALID = "N"
+      return $state.reload();
+      $state.go('app.ldap_login');
+      $ionicLoading.hide();
+      $scope.$broadcast('scroll.refreshComplete');
+    }
+
     $scope.doRefresh = function () {
-      $scope.showMenu =true;
+      $scope.showMenu = true;
       appSettings.config.MSISDN_VALUE = $sessionStorage.PELE4U_MSISDN || $localStorage.PELE4U_MSISDN;
+
       $scope.btn_class = {};
       $scope.btn_class.on_release = true;
 
@@ -319,6 +356,7 @@ app.controller('GetUserMenuCtrl',
           if (appSettings.config.IS_TOKEN_VALID !== "Y") {
             $scope.GetUserMenuMain();
           } else {
+
             $sessionStorage.token = appSettings.config.token;
             $sessionStorage.user = appSettings.config.GetUserMenu.user;
             $sessionStorage.userName = appSettings.config.GetUserMenu.userName;
@@ -399,11 +437,22 @@ app.controller('GetUserMenuCtrl',
         PIN: $sessionStorage.AuthInfo.pinCode,
         TOKEN: $sessionStorage.AuthInfo.token
       };
-      if (appConfig.ApplicationType === "EXT") {
-        window.open(appConfig.Path, '_system');
+      if (appConfig.ApplicationType === "EXT") { 
+         window.open(appConfig.Path, '_system'); //, 'location=yes,footer=no');
+        var iabOptions =  'enableViewportScale=yes,footer=no,closebuttoncaption=סגור'; 
+        window.open(encodeURI(appConfig.Path), '_system',iabOptions);
+      } else if (appConfig.ApplicationType === "IAB") {
+        return ApiGateway.openInApp(appConfig.Path);
+      } else if (appConfig.ApplicationType === "IEB") {
+        return ApiGateway.openBrowser(appConfig.Path);
+      } else if (appConfig.ApplicationType === "IPB") {
+        return ApiGateway.openPortal(appConfig.Path); 
       } else {
-        $scope.appSwitch(i);
+           $scope.appSwitch(i);
       }
+
+     
+
     };
     //-------------------------------//
     //--       Code Section        --//
@@ -415,33 +464,39 @@ app.controller('GetUserMenuCtrl',
 
 
     /** Golan  */
-          
-          
-    if(PelApi.sessionStorage.newValidPinCode) { 
-      appSettings.config.Pin =   PelApi.sessionStorage.newValidPinCode;
-      _.set(PelApi.sessionStorage.ADAUTH,'PinCode',PelApi.sessionStorage.newValidPinCode);
-     delete PelApi.sessionStorage.newValidPinCode;
+
+
+
+    if (PelApi.sessionStorage.newValidPinCode) {
+      appSettings.config.Pin = PelApi.sessionStorage.newValidPinCode;
+      _.set(PelApi.sessionStorage.ADAUTH, 'PinCode', PelApi.sessionStorage.newValidPinCode);
+      delete PelApi.sessionStorage.newValidPinCode;
     }
 
-    var sessionAdauth = PelApi.sessionStorage.ADAUTH || {} ;
+    var sessionAdauth = PelApi.sessionStorage.ADAUTH || {};
     var authMethod = BioAuth.getMethod();
-    if(!authMethod) 
-       return  $state.go('app.ldap_login');
-       
-       
-    if(!sessionAdauth.token && authMethod == 'pincode') {
-      return $scope.doRefresh(); 
+
+
+    if (!authMethod)
+      return $state.go('app.ldap_login');
+
+
+
+    if (!sessionAdauth.token && authMethod == 'pincode') {
+      return $scope.doRefresh();
     }
 
-           
-    if(!sessionAdauth.token && authMethod.match(/finger/)) 
-      return  $state.go('app.ldap_login');
-    
-    var sessionMenuItems =  _.get(sessionAdauth,'menuItems',[]);
 
-    if(sessionMenuItems.length) { 
-      $scope.showMenu=true;
-      $rootScope.menuItems  = $scope.sort(sessionMenuItems);
+    if (!sessionAdauth.token && authMethod.match(/finger|face|bio/))
+      return $state.go('app.ldap_login');
+
+    var sessionMenuItems = _.get(sessionAdauth, 'menuItems', []);
+
+    if (sessionMenuItems.length) {
+      $scope.showMenu = true;
+
+      $rootScope.menuItems = $scope.sort(sessionMenuItems);
+
     }
     /**** Golan : Make GetUserMenu irrelvat when ADlogin return valid menu *****/
 
@@ -453,7 +508,7 @@ app.controller('GetUserMenuCtrl',
     $sessionStorage.userName = sessionAdauth.userName;
     $sessionStorage.AuthInfo = {
       pinCode: appSettings.config.Pin,
-      token: appSettings.config.token,
+      token: appSettings.config.token || $sessionStorage.token,
       user: sessionAdauth.user,
       userName: sessionAdauth.userName,
       timeStamp: new Date().getTime()
@@ -466,14 +521,14 @@ app.controller('GetUserMenuCtrl',
         $localStorage.profile = res.data;
         $localStorage.profile.id = $sessionStorage.user;
         $rootScope.profile = $localStorage.profile;
-      }).catch(function(err){
+      }).catch(function (err) {
         PelApi.lagger.error("Failed to get public profile for user");
       })
     }
 
-   /**************/
-   var menuExists = _.get( $rootScope,'menuItems',null);
+    /**************/
+    var menuExists = _.get($rootScope, 'menuItems', null);
     if (!menuExists && authMethod == 'pincode')
-        return $scope.doRefresh();     
- 
+      return $scope.doRefresh();
+
   })

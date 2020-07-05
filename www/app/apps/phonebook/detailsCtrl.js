@@ -5,8 +5,8 @@ angular.module('pele')
   //=================================================================
   //==                    PAGE_4
   //=================================================================
-  .controller('phonebookDetailsCtrl', ['Contact', 'ApiService', '$state', '$rootScope', '$scope', '$stateParams', '$ionicLoading', 'PelApi', '$cordovaSocialSharing', '$ionicNavBarDelegate',
-    function(Contact, ApiService, $state, $rootScope, $scope, $stateParams, $ionicLoading, PelApi, $cordovaSocialSharing, $ionicNavBarDelegate) {
+  .controller('phonebookDetailsCtrl', ['Contact', 'ApiService', 'ApiGateway', '$state', '$rootScope', '$scope', '$stateParams', '$ionicLoading', 'PelApi', '$cordovaSocialSharing', '$ionicNavBarDelegate',
+    function (Contact, ApiService, ApiGateway, $state, $rootScope, $scope, $stateParams, $ionicLoading, PelApi, $cordovaSocialSharing, $ionicNavBarDelegate) {
       var appId = $stateParams.AppId;
       var personId = $stateParams.personId;
       $scope.today = moment().format('DD/MM');;
@@ -20,7 +20,7 @@ angular.module('pele')
         (scope.$$phase || scope.$root.$$phase) ? fn(): scope.$apply(fn);
       }
 
-      $scope.goSearchForm = function() {
+      $scope.goSearchForm = function () {
         $state.go("app.phonebook", {
           AppId: appId,
           reload: new Date().getTime()
@@ -28,8 +28,11 @@ angular.module('pele')
           reload: true
         })
       }
-
-      $scope.saveContact = function(c, info) {
+      $scope.download = function(vcardUri,fname) {
+        PelApi.download(vcardUri,fname +".vcf");
+      }
+      
+      $scope.saveContact = function (c, info) {
         var deviceContact = c;
         if (c.id) {
           deviceContact = Contact.newContact();
@@ -37,17 +40,17 @@ angular.module('pele')
         }
         deviceContact = Contact.setContactData(deviceContact, info);
 
-        deviceContact.save(function(result) {
+        deviceContact.save(function (result) {
           swal({
             type: 'success',
             title: 'איש הקשר נשמר במכשירכם',
             showConfirmButton: false,
             timer: 1500
           })
-          safeApply($scope, function() {
+          safeApply($scope, function () {
             $scope.view = 'Contact'
           })
-        }, function(err) {
+        }, function (err) {
           PelApi.throwError("app", "saveContact on phonebookDetails", JSON.stringify(err));
           swal({
             text: "שגיאה בניסיון לשמור איש קשר",
@@ -57,59 +60,74 @@ angular.module('pele')
         })
       }
 
-      $scope.swalContact = function(event, c) {
-        swal({
-          html: '<div>' + "שים לב, איש הקשר ישמר בנייד כאיש קשר חדש" + '</div>',
-          showCloseButton: true,
-          showCancelButton: true,
-          focusConfirm: false,
-          confirmButtonText: 'שמירה',
-          confirmButtonAriaLabel: 'Thumbs up, great!',
-          cancelButtonText: 'ביטול',
-          cancelButtonAriaLabel: 'Thumbs down',
-        }).then(function(btn) {
-          if (btn.value) {
-            var targetContact = Contact.setContactData(Contact.newContact(), c);
-            $scope.saveContact(targetContact, c)
-          }
-        })
+
+      $scope.getContactFileUrl = function (c) {
+        return ApiGateway.getTokenUrl("/users/" + c.personId + "/contact.vcf");
+      }
+
+      $scope.swalContact = function (event, c) {
+        try { 
+          swal({
+            html: '<div>' + "שים לב, איש הקשר ישמר בנייד כאיש קשר חדש" + '</div>',
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: 'שמירה',
+            confirmButtonAriaLabel: 'Thumbs up, great!',
+            cancelButtonText: 'ביטול',
+            cancelButtonAriaLabel: 'Thumbs down',
+          }).then(function (btn) {
+            if (btn.value) {
+              var targetContact = Contact.setContactData(Contact.newContact(), c);
+              $scope.saveContact(targetContact, c)
+            }
+          })
+        } catch(e) { 
+          console.log(e)
+        }
+        
       }
 
 
 
-      $scope.shareViaEmail = function(email) {
+      $scope.shareViaEmail = function (email) {
         $cordovaSocialSharing.shareViaEmail(null, null, [email]);
       }
 
-      $scope.shareViaSMS = function(mobilePhone) {
+      $scope.shareViaSMS = function (mobilePhone) {
 
         $cordovaSocialSharing.shareViaSMS(null, mobilePhone);
 
       }
 
-      $scope.shareViaWhatsAppToReceiver = function(mobilePhone) {
+      $scope.shareViaWhatsAppToReceiver = function (mobilePhone) {
         $cordovaSocialSharing.shareViaWhatsAppToReceiver(mobilePhone)
         $cordovaSocialSharing.shareViaWhatsAppToReceiver(100)
       }
 
-      $scope.shareViaWhatsApp = function() {
+      $scope.shareViaWhatsApp = function () {
         alert('shareViaWhatsApp')
         $cordovaSocialSharing.shareViaWhatsApp()
       }
 
-      $scope.empPic = function(base64String) {
+      $scope.empPic = function (base64String) {
         return "data:image/jpg;" + base64String;
       }
 
       $scope.managerInfo = {}
 
-      $scope.getTreeData = function(person) {
+      $scope.getContactFileUrl = function (c) {
+
+        return ApiGateway.getTokenUrl("/users/" + c.personId + "/contact.vcf")
+      }
+
+      $scope.getTreeData = function (person) {
         var tree = {};
 
         tree[person.personId] = person;
         tree[person.personId].members = [];
         $scope.treeHeight = (person.orgTree.length * 31 + 100) + 'px';
-        person.orgTree.forEach(function(c) {
+        person.orgTree.forEach(function (c) {
           if (c.personId == person.directManagerNumber) {
             $scope.managerInfo = c;
             return false;
@@ -127,12 +145,12 @@ angular.module('pele')
         return tree;
       }
 
-      $scope.getContact = function() {
+      $scope.getContact = function () {
         PelApi.showLoading();
         ApiService.post("PhonebookDetails", appId, {
             p1: personId
           })
-          .success(function(data, status, headers, config) {
+          .success(function (data, status, headers, config) {
             var result = ApiService.checkResponse(data, status)
 
             if (!result.section.match(/no\s+sector/))
@@ -149,9 +167,10 @@ angular.module('pele')
             $scope.page = 'result';
             $scope.contact = result;
             $scope.tree = $scope.getTreeData(result)
+            $scope.contact.vcardUrl = $scope.getContactFileUrl($scope.contact);
 
           })
-          .error(function(errorStr, httpStatus, headers, config) {
+          .error(function (errorStr, httpStatus, headers, config) {
             swal({
               text: "! התרחשה שגיאה" + errorStr,
               type: "error",
