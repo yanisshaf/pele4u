@@ -1,7 +1,4 @@
 <ion-view cache-view="true">
-  <ion-nav-buttons side="right">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
   <ion-nav-buttons side="left">
     <a class="button button-icon icon ion-ios-search" ng-click="goSearchForm()"></a>
   </ion-nav-buttons>
@@ -159,7 +156,7 @@
                 </div>
               </li>
               <li class="item item-info no-border contact-icons text-center">
-                <a href="#" ng-click="swalContact($event,contact)">
+                <a href="#" ng-click="getContactFile($event,contact)">
                   <img class="pel_icon medium" src="img/new_icons/purple_add_contact.png "></a>
                 <a ng-show="contact.mobilePhone" ng-href="sms://{{contact.mobilePhone}}">
                   <img class="pel_icon medium" src="img/new_icons/blue_sms.png "></a>
