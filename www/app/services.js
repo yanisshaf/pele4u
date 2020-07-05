@@ -228,7 +228,6 @@ app.service('StorageService', ['$http', 'PelApi', '$localStorage', function($htt
       params: params,
       headers: buildHeader(config.headers)
     }
-    
     return $http.get(url, httpConfig);
   };
   this.post = function(service, params, config) {

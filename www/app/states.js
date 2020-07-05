@@ -200,7 +200,7 @@ angular.module('pele.states', [])
         }
       },
       src: ["app/apps/docApprove/PAY/payDetailsCtrl.js"]
-    }, {
+    }, {      
       state: 'app.chat_list',
       url: "/chat_list/:AppId/:FormType/:Pin",
       views: {
