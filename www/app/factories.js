@@ -1813,7 +1813,10 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
                     forwardUserName: "",
                     text: ""
                   };
-              
+                  
+                  var error = false;
+                  var illegalChars = /[\u0022-\u0027\u002f\u003c\u003e\u0040\u005b-\u005e\u0060\u007b-\u007e]/;
+                  //\U1F600\U1F601\U1F602\U1F60B\U1F60D\U1F923\U1F60A\U1F64F\U1F62D\U1F525\U1F618\U1F44D\U1F60E\U1F606\U1F601\U1F609\U1F914\U1F605\U1F614\U1F644\U1F61C\U2665\U1F60D\U1F618\U1F60B\U1F61B\U1F61C\U1F92A\U1F61D\U1F914\U1F917\U1F60C\U1F614
                   if (!self.isValidNote(scope.actionNote.text)) {
                     e.preventDefault();
                     self.showPopup("יש להזין שאלה", "יש להזין לפחות 2 אותיות");
@@ -1823,6 +1826,9 @@ angular.module('pele.factories', ['ngStorage', 'LocalStorageModule', 'ngCordova'
                   } else if (!self.isValidNote(scope.formData.forwardUserName)) {
                     e.preventDefault();
                     self.showPopup("יש לבחור נמען");
+                  } else if (illegalChars.test(scope.actionNote.text)){
+                    e.preventDefault();
+                    self.showPopup("מנסה להשתמש באחד או יותר סימנים לא חוקים! נא למחוק את הסימן ולהגיש ביאור מחדש");
                   } else {                    
 
                     formQuestion.subject = scope.formData.subject;
