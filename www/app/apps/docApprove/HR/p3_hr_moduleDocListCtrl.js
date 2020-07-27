@@ -4,12 +4,14 @@
 angular.module('pele')
   .controller('p3_hr_moduleDocListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, $cordovaNetwork, $sessionStorage, appSettings) {
 
+    $scope.appId = $stateParams.AppId;
     //---------------------------------
     //--       goHome
     //---------------------------------
     $scope.goHome = function() {
       PelApi.goHome();
     }
+
     //----------------------- REFRESH ------------------------//
     $scope.doRefresh = function() {
 
@@ -38,8 +40,13 @@ angular.module('pele')
 
           if (data.Response.OutParams.ROW[0].DOC_NAME === null) {
             //$state.go("app.p1_appsLists");
-            appSettings.config.IS_TOKEN_VALID = "N";
-            PelApi.goHome();
+            //appSettings.config.IS_TOKEN_VALID = "N";
+            //PelApi.goHome();
+            $state.go("app.p2_moduleList", {
+              "AppId":  $stateParams.AppId,
+              "Title": "",
+              "Pin":  $stateParams.Pin
+            });
           } else {
             $scope.docsGroups = data.Response.OutParams.ROW;
 
@@ -70,8 +77,10 @@ angular.module('pele')
         } else if ("ERROR_CODE" === pinStatus) {
           PelApi.throwError("app", "GetUserFormGroups", JSON.stringify(data));
         }
-      }).error(function(error, httpStatus) {
-        PelApi.throwError("api", "GetUserFormGroups", "httpStatus : " + httpStatus)
+      }).error(function(error, httpStatus, headers, config) {
+        var time = config.responseTimestamp - config.requestTimestamp;
+        var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+        PelApi.throwError("api", "GetUserFormGroups", "httpStatus : " + httpStatus + tr)
       }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -154,7 +163,7 @@ angular.module('pele')
     //--------------------------------------------------------------
     $scope.forwardToDoc = function(docId, docInitId) {
       //var appId = $stateParams.AppId;
-      var appId = appSettings.config.appId;
+      var appId = $scope.appId;
       var statePath = 'app.doc_' + docId;
 
       PelApi.showLoading();
@@ -164,11 +173,8 @@ angular.module('pele')
       var retGetUserNotifications = PelApi.GetUserNotifications(links, appId, docId, docInitId);
       retGetUserNotifications.success(function(data, status, headers, config) {
         data = $scope.fix_json(data)
-
-
         var stat = PelApi.GetPinCodeStatus2(data, "GetUserNotifNew");
         var pinStatus = stat.status;
-        PelApi.lagger.info("pinStatus after get pin code  : ", pinStatus);
 
         if ("Valid" === pinStatus) {
 
@@ -225,10 +231,10 @@ angular.module('pele')
           PelApi.showPopupVersionUpdate(data.StatusDesc, "");
 
         }
-      }).error(function(error) {
-
-        PelApi.throwError("api", "GetUserNotifNew", JSON.stringify(error));
-
+      }).error(function(error, httpStatus, headers, config) {
+        var time = config.responseTimestamp - config.requestTimestamp;
+        var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+        PelApi.throwError("api", "GetUserNotifNew", JSON.stringify(error) + tr);
       }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');

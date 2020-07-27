@@ -1,9 +1,5 @@
 <ion-view class="feed-entries-view">
 
-  <ion-nav-buttons side="right">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon">
-    </button>
-  </ion-nav-buttons>
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
       <div class="title" id="logo">דיווח העדרות
@@ -33,14 +29,14 @@
         <!-------------------------------------------------------------------------------->
 
         <ion-slide on-drag-left="enable('drag')" on-drag-right="disable('drag')">
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
+          <ion-scroll scrollX="false" style="height:80%" delegate-handle="slide1Scroll">
             <div ng-repeat="detail in ACTION_HISTORY" type="item-text-wrap" dir="RTL">
               <!--<div class="item item-divider "> -->
               <a class="item item-divider item-icon-right pele-item-icon-left" ng-click="detail.SHOW_FLAG = !detail.SHOW_FLAG; detail.PUSH_COUNT = PUSH_COUNT +1;">
                 <!-- <i ng-class="detail.SHOW_FLAG ? 'icon-collapse' : 'icon-expand'"></i> -->
                 <i ng-class="showIconCollapseInAcctionHistory(detail.SHOW_FLAG , detail.HIDEN_FLAG)"></i>
                 <p class="text-right pele_rtl">{{detail.SEQUENCE_NUM}}. {{detail.USER_NAME}}</p>
-                <i class="icon icon-left {{getApproveListActionIcon(detail.ACTION , detail.ACTION_DATE , detail.NOTE)}}"></i>
+                <i class="icon pel_icon icon-left {{getApproveListActionIcon(detail.ACTION , detail.ACTION_DATE , detail.NOTE)}}"></i>
               </a>
 
               <label class="item" ng-hide="hidenAcctionHistoryDetails(detail.SHOW_FLAG, detail.HIDEN_FLAG, detail.PUSH_COUNT , detail.NOTE)">
@@ -70,7 +66,7 @@
         <!----------------------------- Doc Details Slide ------------------------------->
         <!------------------------------------------------------------------------------->
         <ion-slide on-drag-right="enable('drag')" on-drag-left="disable('drag')">
-          <ion-scroll style="height:80%" delegate-handle="slide1Scroll">
+          <ion-scroll scrollX="false" style="height:80%" delegate-handle="slide1Scroll">
             <!-- Refresh to get the new posts -->
 
             <label class="item item-thumbnail-left">
@@ -99,7 +95,7 @@
         </label>
               <div ng-repeat="detail in docDetails.DOC_LINES" type="item-text-wrap" dir="RTL">
                 <a class="item item-divider item-icon-right" ng-click="toggleGroup(detail.ATTRIBUTE2)">
-              <i class="icon ion-android-calendar"></i>
+              <i class="icon pel_icon ion-android-calendar"></i>
               <p class="float-right">מ : {{detail.ATTRIBUTE2}}</p>
               <p class="float-right tab">עד: {{detail.ATTRIBUTE3}}</p>
               <i ng-class="isGroupShown(detail.ATTRIBUTE2) ? 'icon-expand' : 'icon-collapse'"></i>

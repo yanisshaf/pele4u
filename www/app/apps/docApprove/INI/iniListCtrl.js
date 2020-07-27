@@ -4,6 +4,7 @@
 angular.module('pele')
   .controller('iniListCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, PelApi, appSettings) {
 
+    $scope.appId = $stateParams.AppId;
 
     $scope.parse = function(data) {
       var mapped = [];
@@ -17,7 +18,7 @@ angular.module('pele')
             task = {}
             PelApi.lagger.error("Failed to parse  JSON  string on docsGroup ")
           }
-          g.TASK = _.get(task, "ROW.ROW", {});
+          g.INFO = _.get(task, "ROW.ROW", {});
         })
         mapped.push(item)
       });
@@ -28,7 +29,7 @@ angular.module('pele')
     $scope.doRefresh = function() {
 
       PelApi.showLoading();
-      $scope.appId = $stateParams.AppId;
+
       $scope.formType = $stateParams.FormType;
       $state.pin = $stateParams.Pin;
 
@@ -39,20 +40,30 @@ angular.module('pele')
       retGetUserFormGroups.success(function(data) {
 
           var apiData = PelApi.checkApiResponse(data);
+          if (apiData.error) return false;
 
           var result = apiData.ROW || [];
           //Cursor if empty
           if (result.length && result[0].DOC_NAME === null) {
-            PelApi.appSettings.config.IS_TOKEN_VALID = 'N'
-            PelApi.goHome();
+            //PelApi.appSettings.config.IS_TOKEN_VALID = 'N'
+            //PelApi.goHome();
+            $state.go("app.p2_moduleList", {
+              "AppId":  $scope.appId,
+              "Title": "",
+              "Pin":  $state.pin
+            });
           }
+          
           $scope.docsGroups = $scope.parse(result);
+
           if ($scope.docsGroups.length) {
             $scope.title = $scope.docsGroups[0].DOC_TYPE;
           }
         })
-        .error(function(error, httpStatus) {
-          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus)
+        .error(function(error, httpStatus, headers, config) {
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus + tr)
         })
         .finally(function(skip) {
           $ionicLoading.hide();
@@ -64,11 +75,11 @@ angular.module('pele')
 
     $scope.forwardToDoc = function(docId, docInitId, notificationId) {
 
-      var statePath = 'app.tsk_details';
+      var statePath = 'app.ini_details';
 
       $state.go(statePath, {
         formType: $scope.formType,
-        appId: $scope.appId,
+        AppId: $scope.appId,
         docId: docId,
         docInitId: notificationId
       });

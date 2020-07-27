@@ -12,6 +12,8 @@ angular.module('pele')
     $scope.goHome = function() {
       PelApi.goHome();
     }
+    $scope.appId = $stateParams.AppId;
+
     //---------------------------------------------------------------------------
     //--                         openExistText
     //---------------------------------------------------------------------------
@@ -276,7 +278,7 @@ angular.module('pele')
     $scope.docApprove = function() {
 
       //var appId = $stateParams.AppId;
-      var appId = appSettings.config.appId;
+      var appId = $scope.appId;
       var notificationId = $scope.NOTIFICATION_ID;
       var actionType = 'APPROVE';
       var note = '';
@@ -319,10 +321,9 @@ angular.module('pele')
                 text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
                 type: 'button-positive',
                 onTap: function(e) {
-                  if (!$scope.data.note) {
-                    //don't allow the user to close unless he enters wifi password
+                  if (!PelApi.isValidNote($scope.data.note)) {
                     e.preventDefault();
-                    PelApi.showPopup("יש להזין הערה", "");
+                    PelApi.showPopup("יש להזין הערה", "יש להזין לפחות 2 אותיות");
                   } else {
                     $scope.data.cancel = false;
                     return $scope.data;
@@ -364,9 +365,11 @@ angular.module('pele')
                   PelApi.showPopupVersionUpdate(data.StatusDesc, "");
                 }
 
-              }).error(function(error,httpStatus) {
-                  PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
-                }).finally(function() {
+              }).error(function(error, httpStatus, headers, config) {
+                var time = config.responseTimestamp - config.requestTimestamp;
+                var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+                PelApi.throwError("api", "SubmitNotif", "httpStatus : " + httpStatus + tr)
+              }).finally(function() {
                 $ionicLoading.hide();
                 $scope.$broadcast('scroll.refreshComplete');
                 //$ionicNavBarDelegate.back();
@@ -392,8 +395,10 @@ angular.module('pele')
 
             }
 
-          }).error(function(error,httpStatus) {
-              PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
+          }).error(function(error, httpStatus, headers, config) {
+            var time = config.responseTimestamp - config.requestTimestamp;
+            var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+            PelApi.throwError("api", "SubmitNotif", "httpStatus : " + httpStatus + tr)
           }).finally(function() {
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
@@ -408,7 +413,7 @@ angular.module('pele')
     $scope.docOK = function() {
 
       //var appId = $stateParams.AppId;
-      var appId = appSettings.config.appId;
+      var appId = $scope.appId;
       var notificationId = $scope.NOTIFICATION_ID;
       var actionType = 'OK';
       var note = '';
@@ -432,8 +437,10 @@ angular.module('pele')
           $ionicHistory.goBack();
         }
       }).error(
-        function(error,httpStatus) {
-            PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
+        function(error, httpStatus, headers, config) {
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+          PelApi.throwError("api", "SubmitNotif", "httpStatus : " + httpStatus + tr)
         }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -445,7 +452,7 @@ angular.module('pele')
     //----------------------------------------
     $scope.docReject = function() {
       //var appId = $stateParams.AppId;
-      var appId = appSettings.config.appId;
+      var appId = $scope.appId;
       var notificationId = $scope.NOTIFICATION_ID;
       var actionType = "REJECT";
 
@@ -462,10 +469,9 @@ angular.module('pele')
               text: '<a class="pele-popup-positive-text-collot">שמירה</a>',
               type: 'button-positive',
               onTap: function(e) {
-                if (!$scope.data.note) {
-                  //don't allow the user to close unless he enters wifi password
+                if (!PelApi.isValidNote($scope.data.note)) {
                   e.preventDefault();
-                  PelApi.showPopup("יש להזין הערה", "");
+                  PelApi.showPopup("יש להזין הערה", "יש להזין לפחות 2 אותיות");
                 } else {
 
                   return $scope.data.note;
@@ -491,7 +497,7 @@ angular.module('pele')
     //--------------------------------------------------------------
     $scope.submitNotif = function(action, note) {
       //var appId = $stateParams.AppId;
-      var appId = appSettings.config.appId;
+      var appId = $scope.appId;
 
       var notificationId = $scope.NOTIFICATION_ID;
       var actionType = action;
@@ -515,8 +521,10 @@ angular.module('pele')
 
           $ionicHistory.goBack();
         }
-      }).error(function(error,httpStatus) {
-          PelApi.throwError("api", "SubmitNotif", "httpStatus : "+httpStatus)
+      }).error(function(error, httpStatus, headers, config) {
+        var time = config.responseTimestamp - config.requestTimestamp;
+        var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+        PelApi.throwError("api", "SubmitNotif", "httpStatus : " + httpStatus + tr)
       }).finally(function() {
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -539,10 +547,9 @@ angular.module('pele')
             text: '<a class="pele-popup-positive-text-collot">המשך</a>',
             type: 'button-positive',
             onTap: function(e) {
-              if (!$scope.data.note) {
-                //don't allow the user to close unless he enters wifi password
+              if (!PelApi.isValidNote($scope.data.note)) {
                 e.preventDefault();
-                PelApi.showPopup("יש להזין הערה", "");
+                PelApi.showPopup("יש להזין הערה", "יש להזין לפחות 2 אותיות");
               } else {
 
                 return $scope.data.note;

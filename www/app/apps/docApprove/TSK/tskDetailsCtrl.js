@@ -8,8 +8,8 @@ angular.module('pele')
   .controller('tskDetailsCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicModal', 'PelApi', '$ionicHistory', '$ionicPopup', '$cordovaFileTransfer',
     function($scope, $stateParams, $ionicLoading, $ionicModal, PelApi, $ionicHistory, $ionicPopup, $cordovaFileTransfer) {
       $scope.actionNote = {};
-      $scope.params = $stateParams;
-      $scope.title = "אישור משימה " + $stateParams.docInitId
+      $scope.appId = $stateParams.AppId;
+
       //    $scope.tabs = appSettings.tabs;
       $scope.tabs = [{
         "text": "סבב מאשרים"
@@ -30,16 +30,21 @@ angular.module('pele')
         PelApi.deleteAttachDirecoty();
 
         var links = PelApi.getDocApproveServiceUrl("GetUserNotifNew");
-        var retGetUserNotifications = PelApi.GetUserNotifications(links, $stateParams.appId, $stateParams.docId, $stateParams.docInitId);
+        var retGetUserNotifications = PelApi.GetUserNotifications(links, $scope.appId, $stateParams.docId, $stateParams.docInitId);
         retGetUserNotifications.success(function(data) {
+
           var apiData = PelApi.checkApiResponse(data);
+
+          if (apiData.error) return false;
           $scope.docDetails = PelApi.getJsonString(apiData.Result, "JSON[0]", true);
           $scope.docDetails.attachments = $scope.docDetails.TASK_ATTACHMENTS_CUR || [];
-          $scope.extendActionHistory($scope.docDetails);
+          PelApi.extendActionHistory($scope.docDetails);
           $scope.buttonsArr = $scope.docDetails.BUTTONS || [];
-          PelApi.lagger.info("scope.docDetails", JSON.stringify($scope.docDetails))
-        }).error(function(error, httpStatus) {
-          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus)
+          $scope.title = "משימה " + $scope.docDetails.TASK_NUMBER;
+        }).error(function(error, httpStatus, headers, config) {
+          var time = config.responseTimestamp - config.requestTimestamp;
+          var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+          PelApi.throwError("api", "GetUserNotifNew", "httpStatus : " + httpStatus + tr)
         }).finally(function() {
           $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
@@ -57,72 +62,15 @@ angular.module('pele')
         $scope.modal.hide();
       };
 
-
       $scope.openAttachment = function(file) {
-        PelApi.openAttachment(file, $scope.params.appId);
+        PelApi.openAttachment(file, $scope.appId);
       }
-
-
-      $scope.toggle = function(element) {
-        element.display = !element.display;
-        if (element.display) element.icon = 'ion-chevron-down';
-        else element.icon = 'ion-chevron-left';
-      }
-
-
-      $scope.toggleInit = function(elementStr, isDisplay) {
-        $scope[elementStr] = {
-          display: false
-        };
-        if (typeof isDisplay === true) {
-          $scope[elementStr] = {
-            display: true
-          };
-        }
-        if ($scope[elementStr].display) $scope[elementStr].icon = 'ion-chevron-down';
-        else $scope[elementStr].icon = 'ion-chevron-left';
-      }
-
 
       $scope.toggleActionItem = function(action) {
         action.display = !action.display;
         if (action.display) action.left_icon = 'ion-chevron-down';
         else action.left_icon = 'ion-chevron-left';
       }
-
-
-      $scope.extendActionHistory = function(doc) {
-        if (!doc.ACTION_HISTORY) return [];
-        doc.ACTION_HISTORY.forEach(function(action) {
-          action.display = false;
-          action.right_icon = "";
-          action.left_icon = "";
-
-          if (typeof action.NOTE != "undefined" && action.NOTE.length) {
-            action.display = true;
-            action.left_icon = 'ion-chevron-down';
-            if (action.ACTION_CODE == "REJECT") {
-              action.right_icon = 'ion-close-circled';
-            }
-          }
-
-          if (action.ACTION_CODE === "FORWARD" || action.ACTION_CODE === "APPROVE") {
-
-            action.left_icon = 'ion-chevron-left';
-            action.right_icon = 'ion-checkmark-circled'
-          }
-          if (action.ACTION_CODE === "NO_ACTION") {
-            action.left_icon = 'ion-chevron-left';
-            action.right_icon = 'ion-minus-circled';
-          }
-          if (!action.ACTION_CODE) {
-            action.display = false;
-            action.right_icon = "";
-            action.left_icon = "";
-          }
-        })
-      }
-
 
       $scope.onSlideMove = function(data) {
         //alert("You have selected " + data.index + " tab");
@@ -138,13 +86,16 @@ angular.module('pele')
 
       $scope.submitUpdateInfo = function(btn, note) {
         PelApi.showLoading();
-        PelApi.SubmitNotification($scope.notifLinks, $scope.params.appId, $scope.docDetails.NOTIFICATION_ID, note, btn.action)
+        PelApi.SubmitNotification($scope.notifLinks, $scope.appId, $scope.docDetails.NOTIFICATION_ID, note, btn.action)
           .success(function(data) {
             var apiData = PelApi.checkApiResponse(data);
+            if (apiData.error) return false;
             $ionicHistory.goBack();
           }).error(
-            function(error, httpStatus) {
-              PelApi.throwError("api", "SubmitNotif", "httpStatus : " + httpStatus)
+            function(error, httpStatus, headers, config) {
+              var time = config.responseTimestamp - config.requestTimestamp;
+              var tr = ' (TS  : ' + (time / 1000) + ' seconds)';
+              PelApi.throwError("api", "SubmitNotif", "httpStatus : " + httpStatus + tr)
             }).finally(function() {
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');

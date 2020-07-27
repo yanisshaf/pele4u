@@ -1,12 +1,15 @@
 {
-  "name": "myApp",
-  "app_id": "",
-  "type": "ionic1",
+  "name": "pele4u",
   "integrations": {
-    "gulp": {}
+    "gulp": {},
+    "cordova": {}
   },
+  "type": "ionic1",
   "watchPatterns": [
-    "scss/**/*"
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
   ],
   "gulp": {
     "enabled": false

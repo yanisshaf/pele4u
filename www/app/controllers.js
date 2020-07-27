@@ -1,13 +1,98 @@
 angular.module('pele.controllers', ['ngStorage'])
-  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory) {
+  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, PelApi, $state, $ionicHistory, $ionicPopup, ApiGateway, $sessionStorage, srvShareData) {
+
     $rootScope.stopLoading = function() {
       PelApi.hideLoading()
     }
 
+    //$scope.menuItems = $sessionStorage.menuItems;
+    $scope.gateway = function() {
+      $scope.gateway_r = "";
+      ApiGateway.get("leads/conf").success(function(data) {
+        $scope.gateway_r = "success";
+      }).error(function(error) {
+        $scope.gateway_r = "error"
+      });
+    }
+
+    $scope.getLocalStorageUsage = function() {
+      return PelApi.getLocalStorageUsage();
+    }
+    $scope.appVersion = PelApi.appSettings.config.APP_VERSION;
+
+    $scope.setLowerVersion = function() {
+
+      var origAppVersion = PelApi.appSettings.config.APP_VERSION;
+      PelApi.appSettings.config.APP_VERSION = "0";
+      $scope.appVersion = PelApi.appSettings.config.APP_VERSION;
+      setTimeout(function() {
+        PelApi.appSettings.config.APP_VERSION = origAppVersion;
+        $scope.appVersion = PelApi.appSettings.config.APP_VERSION;
+      }, 1000 * 60 * 1)
+    }
+
+
+    $scope.getBadgeCount = function() {
+      var badgePlugin = _.get(window, "cordova.plugins.notification.badge");
+      if (!badgePlugin && PelApi.deviceReady) {
+        $ionicPopup.alert({
+          title: PelApi.messages.no_cordova
+        });
+        return false;
+      }
+      if (PelApi.deviceReady)
+        badgePlugin.get(function(cnt) {
+          $scope.badgeCount = cnt;
+        })
+    }
+
+    $scope.setBadge = function(count) {
+      var badgePlugin = _.get(window, "cordova.plugins.notification.badge");
+      if (!badgePlugin) {
+        $ionicPopup.alert({
+          title: PelApi.messages.no_cordova
+        });
+        return false;
+      }
+
+      if (count === 0) {
+        badgePlugin.clear();
+        $ionicPopup.alert({
+          title: "check if badge counter is clear"
+        });
+        setTimeout(function() {
+          $scope.getBadgeCount()
+        }, 2000)
+        return true;
+      }
+
+      badgePlugin.set(count)
+
+      setTimeout(function() {
+        $scope.getBadgeCount()
+      }, 2000)
+
+      $ionicPopup.alert({
+        title: "check if badge counter is = " + count
+      });
+    }
+
+
+    $scope.appDebug = PelApi.global.get('debugFlag', true)
+
+    $scope.setDebug = function(flag) {
+
+      PelApi.global.set('debugFlag', flag, true)
+      $scope.appDebug = flag;
+    }
+
+
+    $scope.storage_PELE4U_MSISDN = window.localStorage.getItem('PELE4U_MSISDN');
+    $scope.config_PELE4U_MSISDN = PelApi.appSettings.config.MSISDN_VALUE;
 
     $scope.clearLogFile = function() {
       PelApi.lagger.deleteLogfile().then(function() {
-        PelApi.lagger.info('Logfile deleted - start new log');
+        PelApi.$fileLogger.info('Logfile deleted - start new log');
         $scope.checkClear = true;
         $timeout(function() {
           $scope.checkClear = false;
@@ -22,7 +107,7 @@ angular.module('pele.controllers', ['ngStorage'])
       $scope.storageCheckClear = true;
       $timeout(function() {
         $scope.storageCheckClear = false;
-      }, 1000)
+      }, 60000)
     }
 
     $scope.displayErrors = function() {
@@ -36,6 +121,45 @@ angular.module('pele.controllers', ['ngStorage'])
     $scope.forwardTo = function(statePath) {
       $state.go(statePath);
     }
+    $scope.updateAuthMethod = function(){
+      $state.go("app.ldap_login",{reset:true});
+    }
+
+    $scope.forwardToApp = function(appConfig) {
+      if (!appConfig.Path) {
+        $scope.latestParent = appConfig.parent;
+        $scope.visibleParent = appConfig.menuId;
+        return true;
+      }
+
+      $sessionStorage.PeleAppId = appConfig.AppId;
+
+      srvShareData.addData({
+        "PeleNetwork": PelApi.appSettings.config.network,
+        "PeleMsisdnValue": PelApi.appSettings.config.MSISDN_VALUE,
+        "PeleAppId": appConfig.AppId
+      });
+
+      var i = {};
+      i.Path = appConfig.Path;
+      i.AppId = appConfig.AppId;
+      i.Title = appConfig.DisplayName;
+      i.Pin = PelApi.appSettings.config.Pin;
+
+      PelApi.sessionStorage.ApiServiceAuthParams = {
+        PIN: $sessionStorage.AuthInfo.pinCode,
+        TOKEN: $sessionStorage.AuthInfo.token
+      };
+      if (appConfig.ApplicationType === "EXT") {
+        window.open(appConfig.Path, '_system');
+      } else {
+        $state.go(appConfig.Path, {
+          "AppId": appConfig.AppId,
+          "Title": appConfig.DisplayName,
+          "Pin": $sessionStorage.AuthInfo.pinCode
+        });
+      }
+    };
 
     $scope.goBack = function() {
       $ionicHistory.goBack();
@@ -77,8 +201,9 @@ angular.module('pele.controllers', ['ngStorage'])
   .controller('SettingsListCtrl', ['$scope', '$fileLogger', '$cordovaFile', '$timeout', '$state', 'PelApi', '$ionicPopup', '$cordovaSocialSharing', 'appSettings',
     function($scope, $fileLogger, $cordovaFile, $timeout, $state, PelApi, $ionicPopup, $cordovaSocialSharing, appSettings) {
 
-      $scope.stateParams = $state.params;
 
+      $scope.stateParams = $state.params;
+      $scope.env = PelApi.appSettings.env;
       $scope.sendMail = function() {
         if (!window.cordova) {
           $ionicPopup.alert({
@@ -89,7 +214,7 @@ angular.module('pele.controllers', ['ngStorage'])
 
         $cordovaFile.readAsDataURL(cordova.file.dataDirectory, appSettings.config.LOG_FILE_NAME)
           .then(function(data) {
-            var env = appSettings.config.env;
+            var env = $scope.env;
             var recipient = appSettings.config.LOG_FILE_MAIL_RECIPIENT[env] || "";
 
             data = data.replace(";base64", ".txt;base64");
@@ -119,7 +244,7 @@ angular.module('pele.controllers', ['ngStorage'])
         if (ionic.Platform.isAndroid()) {
           window.open(appSettings.GOOGLE_PLAY_APP_LINK, '_system', 'location=yes');
         } else if (isIOS) {
-          window.open(appSettings.APPLE_STORE_APP_LING, '_system', 'location=yes');
+          window.open(appSettings.APPLE_STORE_APP_LINK, '_system', 'location=yes');
         }
       } // updateAppVersion
 
@@ -135,8 +260,8 @@ angular.module('pele.controllers', ['ngStorage'])
 
         $timeout(function() {
           $scope.devCounter = 0;
-        }, 2000)
-      if ($scope.devCounter >= 3) $state.go("app.dev")
+        }, 10000)
+      if ($scope.devCounter >= 2) $state.go("app.dev")
     }
 
     $scope.APP_VERSION = appSettings.config.APP_VERSION;

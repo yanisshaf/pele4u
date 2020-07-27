@@ -1,14 +1,11 @@
 <ion-view name="dddddd" cache-view="false" hide-back-button="true">
-  <ion-nav-buttons side="right">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon">
-    </button>
-  </ion-nav-buttons>
+
   <ion-nav-title>
     <div class="bar bar-header bar-positive">
       <div class="title">הגדרות</div>
     </div>
   </ion-nav-title>
-  <ion-content class="pele-background">
+  <ion-content class="pele-background" scroll="false">
 
     <div class="list">
 
@@ -17,9 +14,10 @@
         שליחת נתונים לתחקור
       </a>
 
-      <a ng-show="false" class="item  item-icon-right" ui-sref="app.dev">
+      <a ng-show="env!='PD'" class="item  item-icon-right" ui-sref="app.dev">
         <i class="icon ion-code-working"></i>
       תפריט מפתחים
+      <span><strong class="alert">(סביבה : {{env}})</strong></span>
       </a>
 
       <!--
@@ -32,7 +30,17 @@
         <i class="icon ion-help-buoy"></i>
         אודות אפליקציה
       </a>
-
+      
+       <a class="item item-icon-right" ng-click="updateAuthMethod()">
+          <img class="icon-sm icon" src="img/new_icons/fingerprint.png" style="top:10px"> 
+          איפוס ושינוי שיטת הזדהות
+        </a>
+        <!--a class="item item-icon-right" ui-sref="app.ldap_login({reset:true,ts})"
+        ui-sref-opts="{reload: true, notify: true}">
+          <img class="icon-sm icon" src="img/new_icons/fingerprint.png" style="top:10px"> 
+          איפוס ושינוי שיטת הזדהות
+        </a-->
+        
     </div>
 
   </ion-content>
