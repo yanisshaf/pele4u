@@ -65,12 +65,12 @@
                     </div> 
                     <div><strong> מספר ספק: </strong>{{supplier.VENDOR_NUMBER}}</div>
                     <div><strong> כמות חשבוניות: </strong>{{supplier.INVOICE_COUNT}}</div>
-                    <div><strong> סכום חשבוניות: {{supplier.SUM_INVOICES}}</strong></div>
+                    <div><strong> סכום לתשלום: {{supplier.SUM_INVOICES}}</strong></div>
                     <div ng-hide="supplier.PAY_THRU_DATE == null"><strong> תאריך פירעון : </strong>{{supplier.PAY_THRU_DATE|peldate | date : 'HH:mm dd-MM-yyyy'}}</div>
                 </ion-item> 
                 
                 <ion-item id={{supplier.INVOICES_DETAILS[0].INVOICE_NUM}} class="docs-menu-details item-icon-left pele_rtl" ng-repeat="invoice in supplier.INVOICES_DETAILS | filter:searchText as filtered" ng-show="activeGroup == supplier.VENDOR_NAME" >
-                    <div class="pele_rtl item-text-wrap text-right" ><strong> סכום חשבונית: {{invoice.INVOICE_AMOUNT}}</strong></div>
+                    <div class="pele_rtl item-text-wrap text-right" ><strong> סכום לתשלום: {{invoice.INVOICE_AMOUNT}}</strong></div>
                     <div class="pele_rtl item-text-wrap text-right" ><strong> מספר חשבונית: </strong>{{invoice.INVOICE_NUM}}</div>                    
                     <div class="pele_rtl item-text-wrap text-right" ><strong> תיאור: </strong>{{invoice.INVOICE_DESCRIPTION}}</div>
                 </ion-item>
